@@ -3,3 +3,4 @@ Debug
 bin
 obj
 **/[Pp]ackages/*
+*.DotSettings.user

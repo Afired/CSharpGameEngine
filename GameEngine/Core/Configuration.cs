@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using GameEngine.Rendering;
 
 namespace GameEngine.Core; 
 
@@ -10,5 +11,7 @@ public static class Configuration {
 
     public static int WindowHeight = 800;
     public static int WindowWidth = 1000;
+
+    public static Color DefaultBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 1f);
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using GameEngine.Core;
+using GameEngine.Rendering;
 using GameEngine.Rendering.Camera2D;
 
 namespace ExampleGame;

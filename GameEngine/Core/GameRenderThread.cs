@@ -116,7 +116,7 @@ public sealed partial class Game {
     }
 
     private void RenderBackground() {
-        GL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
     }
     

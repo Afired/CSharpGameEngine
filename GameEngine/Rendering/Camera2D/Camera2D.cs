@@ -4,7 +4,8 @@ using GameEngine.Core;
 namespace GameEngine.Rendering.Camera2D; 
 
 public class Camera2D {
-    
+
+    public Color BackgroundColor;
     public Vector2 FocusPosition { get; set; }
     public float Zoom { get; set; }
 
@@ -12,6 +13,7 @@ public class Camera2D {
     public Camera2D(Vector2 focusPosition, float zoom) {
         FocusPosition = focusPosition;
         Zoom = zoom;
+        BackgroundColor = Configuration.DefaultBackgroundColor;
     }
 
     public Matrix4x4 GetProjectionMatrix() {

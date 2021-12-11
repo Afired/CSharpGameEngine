@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using GameEngine.Core;
 using GLFW;
 using OpenGL;
 
@@ -6,7 +7,11 @@ namespace GameEngine.Rendering;
 
 internal static class WindowFactory {
 
-    public static Window CreateWindow(int width, int height, string title, bool vsync) {
+    public static Window CreateWindow(string title, bool vsync) {
+        return CreateWindow(Configuration.WindowWidth, Configuration.WindowHeight, title, vsync);
+    }
+
+    private static Window CreateWindow(int width, int height, string title, bool vsync) {
 
         Glfw.Init();
         

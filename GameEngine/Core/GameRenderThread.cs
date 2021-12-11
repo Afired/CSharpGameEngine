@@ -1,4 +1,7 @@
-﻿using GameEngine.Rendering;
+﻿using System;
+using System.Numerics;
+using GameEngine.Rendering;
+using GameEngine.Rendering.Camera2D;
 using GameEngine.Rendering.Shaders;
 using GLFW;
 using OpenGL;
@@ -8,7 +11,7 @@ namespace GameEngine.Core;
 public sealed partial class Game {
     
     private void StartRenderThread() {
-        Window window = WindowFactory.CreateWindow(900, 600, "Window Title", false);
+        Window window = WindowFactory.CreateWindow("Window Title", false);
         
         Load();
 
@@ -22,22 +25,26 @@ public sealed partial class Game {
     private uint _vao;
     private uint _vbo;
     private Shader _shader;
+    private Camera2D _camera2D;
     
     private const string VERTEX_SHADER = @"#version 330 core
                                     layout (location = 0) in vec2 aPosition;
                                     layout (location = 1) in vec3 aColor;
                                     out vec4 vertexColor;
-    
+                                    
+                                    uniform mat4 projection;
+                                    uniform mat4 model;
+                                    
                                     void main() 
                                     {
                                         vertexColor = vec4(aColor.rgb, 1.0);
-                                        gl_Position = vec4(aPosition.xy, 0, 1.0);
+                                        gl_Position = projection * model * vec4(aPosition.xy, 0, 1.0);
                                     }";
 
     private const string FRAGMENT_SHADER = @"#version 330 core
                                     out vec4 FragColor;
                                     in vec4 vertexColor;
-
+                                    
                                     void main() 
                                     {
                                         FragColor = vertexColor;
@@ -78,13 +85,26 @@ public sealed partial class Game {
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);
         }
+
+        _camera2D = new Camera2D(new Vector2(Configuration.WindowWidth, Configuration.WindowHeight) / 2.0f, 1f);
     }
 
     private void Render(Window window) {
         GL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+
+        Vector2 position = new Vector2(400, 300);
+        Vector2 scale = new Vector2(100, 100);
+        float rotation = (float) Math.PI / 4.0f;
+
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(position.X, position.Y, 0);
+        Matrix4x4 sca = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
+        Matrix4x4 rot = Matrix4x4.CreateRotationZ(rotation);
+        
+        _shader.SetMatrix4x4("model", sca * rot * trans);
         
         _shader.Use();
+        _shader.SetMatrix4x4("projection", _camera2D.GetProjectionMatrix());
         
         GL.glBindVertexArray(_vao);
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);

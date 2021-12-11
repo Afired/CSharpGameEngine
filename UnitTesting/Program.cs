@@ -24,6 +24,8 @@ internal static class Program {
             updateLoopCalled++;
         };
         
+        game.Start();
+        
         Thread.Sleep(TimeSpan.FromSeconds(testForSeconds));
         Console.WriteLine($"UpdateLoop called {updateLoopCalled} in {testForSeconds} seconds");
         Assert.Greater(updateLoopCalled, 10);
@@ -41,6 +43,8 @@ internal static class Program {
         Game.OnFixedUpdate += fixedDeltaTime => {
             fixedUpdateLoopCalled++;
         };
+        
+        game.Start();
         
         Thread.Sleep(TimeSpan.FromSeconds(testForSeconds));
         Console.WriteLine($"FixedUpdateLoop called {fixedUpdateLoopCalled} in {testForSeconds} seconds");

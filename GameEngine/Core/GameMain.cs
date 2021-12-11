@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading;
-using GameEngine.Rendering;
-using GLFW;
-using OpenGL;
+﻿using System.Threading;
 
 namespace GameEngine.Core;
 

@@ -19,7 +19,7 @@ public class Game {
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
         while(IsRunning) {
-            float deltaTime = stopwatch.Elapsed.Seconds;
+            float deltaTime = (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
             OnUpdate?.Invoke(deltaTime);
         }

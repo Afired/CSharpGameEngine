@@ -1,9 +1,11 @@
 ﻿using System.Threading;
+using GameEngine.Rendering.Camera2D;
 
 namespace GameEngine.Core;
 
 public sealed partial class Game {
-    
+
+    public static Camera2D CurrentCamera { get; private set; }
     private bool _isRunning;
     private Thread _updateLoopThread;
     private Thread _physicsThread;
@@ -21,6 +23,10 @@ public sealed partial class Game {
         _updateLoopThread.Start();
         _physicsThread.Start();
         _renderThread.Start();
+    }
+
+    public static void SetActiveCamera(Camera2D camera2D) {
+        CurrentCamera = camera2D;
     }
     
     private void Terminate() {

@@ -6,9 +6,13 @@ using GameEngine.Rendering.Shaders;
 using GLFW;
 using OpenGL;
 
-namespace GameEngine.Core; 
+namespace GameEngine.Core;
+
+public delegate void OnDraw(float fixedDeltaTime);
 
 public sealed partial class Game {
+    
+    public static event OnDraw OnDraw;
     
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow("Window Title", false);
@@ -25,7 +29,6 @@ public sealed partial class Game {
     private uint _vao;
     private uint _vbo;
     private Shader _shader;
-    private Camera2D _camera2D;
     
     private const string VERTEX_SHADER = @"#version 330 core
                                     layout (location = 0) in vec2 aPosition;
@@ -85,14 +88,14 @@ public sealed partial class Game {
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);
         }
-
-        _camera2D = new Camera2D(new Vector2(Configuration.WindowWidth, Configuration.WindowHeight) / 2.0f, 1f);
+        
     }
 
     private void Render(Window window) {
-        GL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-
+        RenderBackground();
+        
+        _shader.Use();
+        
         Vector2 position = new Vector2(400, 300);
         Vector2 scale = new Vector2(100, 100);
         float rotation = (float) Math.PI / 4.0f;
@@ -100,17 +103,20 @@ public sealed partial class Game {
         Matrix4x4 trans = Matrix4x4.CreateTranslation(position.X, position.Y, 0);
         Matrix4x4 sca = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
         Matrix4x4 rot = Matrix4x4.CreateRotationZ(rotation);
-        
+
         _shader.SetMatrix4x4("model", sca * rot * trans);
-        
-        _shader.Use();
-        _shader.SetMatrix4x4("projection", _camera2D.GetProjectionMatrix());
+        _shader.SetMatrix4x4("projection", CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray(_vao);
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
         GL.glBindVertexArray(0);
         
         Glfw.SwapBuffers(window);
+    }
+
+    private void RenderBackground() {
+        GL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
     }
     
 }

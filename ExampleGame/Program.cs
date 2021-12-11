@@ -1,4 +1,6 @@
-﻿using GameEngine.Core;
+﻿using System.Numerics;
+using GameEngine.Core;
+using GameEngine.Rendering.Camera2D;
 
 namespace ExampleGame;
 
@@ -16,6 +18,9 @@ internal class Program {
         };
         
         game.Initialize();
+        
+        Game.SetActiveCamera(new Camera2D(new Vector2(Configuration.WindowWidth, Configuration.WindowHeight) / 2.0f, 1f));
+        
         game.Start();
         
         return 0;

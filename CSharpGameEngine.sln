@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame", "ExampleGame\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{473F03F1-F5FC-4212-849B-5FC471C30587}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLFW", "GLFW\GLFW.csproj", "{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{473F03F1-F5FC-4212-849B-5FC471C30587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473F03F1-F5FC-4212-849B-5FC471C30587}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473F03F1-F5FC-4212-849B-5FC471C30587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

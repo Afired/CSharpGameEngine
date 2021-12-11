@@ -4,7 +4,7 @@ using OpenGL;
 
 namespace GameEngine.Rendering; 
 
-public static class WindowFactory {
+internal static class WindowFactory {
 
     public static Window CreateWindow(int width, int height, string title, bool vsync) {
 

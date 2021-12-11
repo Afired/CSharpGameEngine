@@ -23,9 +23,16 @@ public class Game {
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
         while(IsRunning) {
-            float deltaTime = (float) stopwatch.Elapsed.TotalSeconds;
+            float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+            if(Configuration.TargetFrameRate > 0) {
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - elapsedTime);
+                if(timeOut.TotalSeconds > 0) {
+                    Thread.Sleep(timeOut);
+                    elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+                }
+            }
             stopwatch.Restart();
-            OnUpdate?.Invoke(deltaTime);
+            OnUpdate?.Invoke(elapsedTime);
         }
     }
     

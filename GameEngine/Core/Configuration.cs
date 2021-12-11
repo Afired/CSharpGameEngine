@@ -4,5 +4,6 @@
 public static class Configuration {
 
     public static float FixedTimeStep = 0.2f;
+    public static float TargetFrameRate = 30f;
 
 }

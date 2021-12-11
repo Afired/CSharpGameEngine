@@ -21,7 +21,8 @@ public sealed partial class Game {
 
         while(!Glfw.WindowShouldClose(window)) {
             Glfw.PollEvents();
-            Render(window);
+            if(CurrentCamera != null)
+                Render(window);
         }
         Terminate();
     }

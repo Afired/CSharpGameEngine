@@ -49,7 +49,9 @@
         <Compile Include="Core\GameRenderThread.cs" />
         <Compile Include="Core\GameUpdateThread.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Rendering\Camera2D\Camera2D.cs" />
+        <Compile Include="Rendering\Cameras\Camera2D.cs" />
+        <Compile Include="Rendering\Cameras\Camera3D.cs" />
+        <Compile Include="Rendering\Cameras\BaseCamera.cs" />
         <Compile Include="Rendering\Color.cs" />
         <Compile Include="Rendering\Shaders\Shader.cs" />
         <Compile Include="Rendering\WindowFactory.cs" />

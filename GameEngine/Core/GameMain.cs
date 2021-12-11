@@ -5,7 +5,7 @@ namespace GameEngine.Core;
 
 public sealed partial class Game {
 
-    public static Camera2D CurrentCamera { get; private set; }
+    public static BaseCamera CurrentCamera { get; private set; }
     private bool _isRunning;
     private Thread _updateLoopThread;
     private Thread _physicsThread;

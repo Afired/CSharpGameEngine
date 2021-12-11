@@ -3,20 +3,11 @@ using GameEngine.Core;
 
 namespace GameEngine.Rendering.Camera2D; 
 
-public class Camera2D {
-
-    public Color BackgroundColor;
-    public Vector2 FocusPosition { get; set; }
-    public float Zoom { get; set; }
-
-
-    public Camera2D(Vector2 focusPosition, float zoom) {
-        FocusPosition = focusPosition;
-        Zoom = zoom;
-        BackgroundColor = Configuration.DefaultBackgroundColor;
-    }
-
-    public Matrix4x4 GetProjectionMatrix() {
+public class Camera2D : BaseCamera {
+    
+    public Camera2D(Vector2 focusPosition, float zoom) : base(focusPosition, zoom) { }
+    
+    public override Matrix4x4 GetProjectionMatrix() {
         float left = FocusPosition.X - Configuration.WindowWidth / 2.0f;
         float right = FocusPosition.X + Configuration.WindowHeight / 2.0f;
         float top = FocusPosition.Y - Configuration.WindowHeight / 2.0f;

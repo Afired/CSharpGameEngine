@@ -1,4 +1,5 @@
-﻿using GameEngine.Core;
+﻿using System;
+using GameEngine.Core;
 using GameEngine.Geometry;
 using GameEngine.Rendering.Camera2D;
 
@@ -20,8 +21,6 @@ internal class Program {
     
     private static void InitializeWorld() {
         Camera2D camera = new Camera2D(10.0f);
-        camera.Transform.Position.X = 0;
-        Game.OnUpdate += deltaTime => camera.Transform.Position.X += deltaTime;
         Game.SetActiveCamera(camera);
 
         Sprite sprite1 = new Sprite();
@@ -29,6 +28,8 @@ internal class Program {
         Game.OnUpdate += deltaTime => sprite1.Transform.Position.Y += deltaTime;
         Sprite sprite2 = new Sprite();
         sprite2.Transform.Position.Y = -4;
+        Sprite sprite3 = new Sprite();
+        Game.OnUpdate += deltaTime => sprite3.Transform.Position.X = (float) Math.Sin(Time.TotalTimeElapsed * 5f);
     }
     
 }

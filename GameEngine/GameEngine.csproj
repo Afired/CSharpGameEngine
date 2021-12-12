@@ -48,6 +48,7 @@
         <Compile Include="Core\GamePhysicsThread.cs" />
         <Compile Include="Core\GameRenderThread.cs" />
         <Compile Include="Core\GameUpdateThread.cs" />
+        <Compile Include="Core\Time.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Rendering\Cameras\Camera2D.cs" />
         <Compile Include="Rendering\Cameras\Camera3D.cs" />

@@ -12,6 +12,7 @@ public sealed partial class Game {
     
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
+        stopwatch.Start();
         while(_isRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {
@@ -21,6 +22,7 @@ public sealed partial class Game {
                     elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
                 }
             }
+            Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
             OnUpdate?.Invoke(elapsedTime);
         }

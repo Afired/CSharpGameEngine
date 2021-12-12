@@ -14,8 +14,14 @@ public struct Vector2 {
     }
     
     public float Magnitude => (float) Math.Sqrt(X * X + Y * Y);
-    public Vector2 Normalized => this / Magnitude;
-    
+
+    public Vector2 Normalized {
+        get {
+            float magnitude = Magnitude;
+            return magnitude == 0f ? Zero : this / magnitude;
+        }
+    }
+
     public Vector3 XY_ => new Vector3(X, Y, 0f);
     public Vector3 X_Y => new Vector3(X, 0f, Y);
     public Vector3 _XY => new Vector3(0f, X, Y);

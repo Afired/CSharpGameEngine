@@ -11,7 +11,7 @@ internal class Program {
     public static int Main(string[] args) {
         Game game = new Game();
 
-        Configuration.TargetFrameRate = 144;
+        SetConfig();
         
         game.Initialize();
         
@@ -20,6 +20,12 @@ internal class Program {
         game.Start();
         
         return 0;
+    }
+
+    private static void SetConfig() {
+        Configuration.TargetFrameRate = 144;
+        Configuration.WindowTitle = "Example Game";
+        Configuration.DoUseVsync = true;
     }
     
     private static void InitializeWorld() {

@@ -1,4 +1,5 @@
-﻿using GameEngine.Rendering;
+﻿using System;
+using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
 using OpenGL;
@@ -16,15 +17,26 @@ public sealed partial class Game {
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow("Window Title", false);
 
+        //SetUpInputCallback(window);
+
         DefaultShader.Initialize();
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {
-            Glfw.PollEvents();
             if(CurrentCamera != null)
                 Render(window);
+            Glfw.PollEvents();
+            Console.WriteLine(Glfw.GetKey(window, Keys.Space).ToString());
         }
         Terminate();
+    }
+    
+    private void SetUpInputCallback(Window window) {
+        Glfw.SetKeyCallback(window, KeyCallback);
+    }
+
+    private void KeyCallback(Window window, Keys key, int scancode, InputState state, ModifierKeys mods) {
+        
     }
 
     private void Render(Window window) {

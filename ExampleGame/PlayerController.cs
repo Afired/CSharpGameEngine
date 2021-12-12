@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using GameEngine;
 using GameEngine.Core;
-using GameEngine.Debug;
+using GameEngine.Debugging;
 using GameEngine.Input;
 
 namespace ExampleGame; 

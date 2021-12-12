@@ -13,13 +13,13 @@ public sealed partial class Game {
     
     
     public void Initialize() {
-        _isRunning = true;
         _updateLoopThread = new Thread(UpdateLoop);
         _physicsThread = new Thread(FixedUpdateLoop);
         _renderThread = new Thread(StartRenderThread);
     }
     
     public void Start() {
+        _isRunning = true;
         _updateLoopThread.Start();
         _physicsThread.Start();
         _renderThread.Start();

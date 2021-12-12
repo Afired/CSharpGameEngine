@@ -64,13 +64,9 @@ public class Plane : ITransform, IGeometry, IRendered {
     public void OnDraw() {
         ShaderRegister.Get("default").Use();
         
-        Vector2 position = new Vector2(0, 0);
-        Vector2 scale = new Vector2(1, 1);
-        float rotation = 0; //(float) Math.PI / 4.0f;
-        
-        Matrix4x4 trans = Matrix4x4.CreateTranslation(position.X, position.Y, 0);
-        Matrix4x4 sca = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
-        Matrix4x4 rot = Matrix4x4.CreateRotationZ(rotation);
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(Transform.Position.X, Transform.Position.Y, Transform.Position.Z);
+        Matrix4x4 sca = Matrix4x4.CreateScale(Transform.Scale.X, Transform.Scale.Y, Transform.Scale.Z);
+        Matrix4x4 rot = Matrix4x4.CreateRotationZ(0);
         
         ShaderRegister.Get("default").SetMatrix4x4("model", sca * rot * trans);
         ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());

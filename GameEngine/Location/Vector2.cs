@@ -1,4 +1,6 @@
-﻿namespace GameEngine; 
+﻿using System;
+
+namespace GameEngine; 
 
 public struct Vector2 {
     
@@ -10,6 +12,9 @@ public struct Vector2 {
         X = x;
         Y = y;
     }
+    
+    public float Magnitude => (float) Math.Sqrt(X * X + Y * Y);
+    public Vector2 Normalized => this / Magnitude;
     
     public Vector3 XY_ => new Vector3(X, Y, 0f);
     public Vector3 X_Y => new Vector3(X, 0f, Y);
@@ -29,6 +34,10 @@ public struct Vector2 {
     
     public static Vector2 operator *(Vector2 v, float f) {
         return new Vector2(v.X * f, v.Y * f);
+    }
+    
+    public static Vector2 operator /(Vector2 v, float f) {
+        return new Vector2(v.X / f, v.Y / f);
     }
     
     public static implicit operator System.Numerics.Vector2(Vector2 v) => new System.Numerics.Vector2(v.X, v.Y);

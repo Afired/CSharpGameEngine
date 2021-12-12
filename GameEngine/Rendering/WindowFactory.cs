@@ -8,10 +8,10 @@ namespace GameEngine.Rendering;
 internal static class WindowFactory {
 
     public static Window CreateWindow() {
-        return CreateWindow(Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.WindowIsResizeable, Configuration.DoUseVsync);
+        return CreateWindow(Configuration.WindowWidth, Configuration.WindowHeight, Configuration.WindowTitle, Configuration.WindowIsResizable, Configuration.DoUseVsync);
     }
 
-    private static Window CreateWindow(int width, int height, string title, bool isResizeable, bool vsync) {
+    private static Window CreateWindow(int width, int height, string title, bool isResizable, bool vsync) {
 
         Glfw.Init();
         
@@ -20,7 +20,7 @@ internal static class WindowFactory {
         Glfw.WindowHint(Hint.OpenglProfile, Profile.Core);
         
         Glfw.WindowHint(Hint.Focused, true);
-        Glfw.WindowHint(Hint.Resizable, Configuration.WindowIsResizeable);
+        Glfw.WindowHint(Hint.Resizable, Configuration.WindowIsResizable);
 
         Window window = Glfw.CreateWindow(width, height, title, Monitor.None, Window.None);
 

@@ -11,7 +11,7 @@ public static class Configuration {
     public static string WindowTitle = "Window Title";
     public static int WindowHeight = 800;
     public static int WindowWidth = 1000;
-    public static bool WindowIsResizeable = false;
+    public static bool WindowIsResizable = false;
     public static bool DoUseVsync = false;
     
     public static Color DefaultBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 1f);

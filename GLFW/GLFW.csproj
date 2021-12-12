@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{1C17BAF1-7A6E-46AD-BAA7-11150CB8F5EB}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GLFW</RootNamespace>
+        <AssemblyName>GLFW</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Prefer32bit>false</Prefer32bit>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Prefer32bit>false</Prefer32bit>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="GL.cs" />
+        <Compile Include="GLFW\CharEventArgs.cs" />
+        <Compile Include="GLFW\ContentScaleEventArgs.cs" />
+        <Compile Include="GLFW\Delegates.cs" />
+        <Compile Include="GLFW\Exception.cs" />
+        <Compile Include="GLFW\FileDropEventArgs.cs" />
+        <Compile Include="GLFW\GameWindow.cs" />
+        <Compile Include="GLFW\Glfw.cs" />
+        <Compile Include="GLFW\Jetbrains.annotations.cs" />
+        <Compile Include="GLFW\KeyEventArgs.cs" />
+        <Compile Include="GLFW\MaximizeEventArgs.cs" />
+        <Compile Include="GLFW\MouseButtonEventArgs.cs" />
+        <Compile Include="GLFW\MouseMoveEventArgs.cs" />
+        <Compile Include="GLFW\Native.cs" />
+        <Compile Include="GLFW\NativeWindow.cs" />
+        <Compile Include="GLFW\SizeChangeEventArgs.cs" />
+        <Compile Include="GLFW\Util.cs" />
+        <Compile Include="GLFW\Vulkan.cs" />
+        <Compile Include="GLFW\Enums\ClientApi.cs" />
+        <Compile Include="GLFW\Enums\ConnectionStatus.cs" />
+        <Compile Include="GLFW\Enums\Constants.cs" />
+        <Compile Include="GLFW\Enums\ContextApi.cs" />
+        <Compile Include="GLFW\Enums\ContextAttributes.cs" />
+        <Compile Include="GLFW\Enums\CursorMode.cs" />
+        <Compile Include="GLFW\Enums\CursorType.cs" />
+        <Compile Include="GLFW\Enums\ErrorCode.cs" />
+        <Compile Include="GLFW\Enums\GamePadAxis.cs" />
+        <Compile Include="GLFW\Enums\GamePadButton.cs" />
+        <Compile Include="GLFW\Enums\Hat.cs" />
+        <Compile Include="GLFW\Enums\Hint.cs" />
+        <Compile Include="GLFW\Enums\InputMode.cs" />
+        <Compile Include="GLFW\Enums\InputState.cs" />
+        <Compile Include="GLFW\Enums\Joystick.cs" />
+        <Compile Include="GLFW\Enums\Keys.cs" />
+        <Compile Include="GLFW\Enums\ModifierKeys.cs" />
+        <Compile Include="GLFW\Enums\MouseButton.cs" />
+        <Compile Include="GLFW\Enums\Profile.cs" />
+        <Compile Include="GLFW\Enums\ReleaseBehavior.cs" />
+        <Compile Include="GLFW\Enums\Robustness.cs" />
+        <Compile Include="GLFW\Enums\WindowAttribute.cs" />
+        <Compile Include="GLFW\Structs\Cursor.cs" />
+        <Compile Include="GLFW\Structs\EGLContext.cs" />
+        <Compile Include="GLFW\Structs\EGLDisplay.cs" />
+        <Compile Include="GLFW\Structs\EGLSurface.cs" />
+        <Compile Include="GLFW\Structs\GamePadState.cs" />
+        <Compile Include="GLFW\Structs\GammaRamp.cs" />
+        <Compile Include="GLFW\Structs\GammaRampInternal.cs" />
+        <Compile Include="GLFW\Structs\GLXContext.cs" />
+        <Compile Include="GLFW\Structs\HGLRC.cs" />
+        <Compile Include="GLFW\Structs\Image.cs" />
+        <Compile Include="GLFW\Structs\Monitor.cs" />
+        <Compile Include="GLFW\Structs\NSOpenGLContext.cs" />
+        <Compile Include="GLFW\Structs\OSMesaContext.cs" />
+        <Compile Include="GLFW\Structs\VideoMode.cs" />
+        <Compile Include="GLFW\Structs\Window.cs" />
+        <Compile Include="GLFW\Strings.Designer.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

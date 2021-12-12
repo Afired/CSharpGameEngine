@@ -5,7 +5,7 @@ using OpenGL;
 
 namespace GameEngine.Geometry; 
 
-public class Plane : ITransform, IGeometry, IRendered {
+public class Sprite : ITransform, IGeometry, IRendered {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
@@ -14,7 +14,7 @@ public class Plane : ITransform, IGeometry, IRendered {
     private uint _vbo;
 
 
-    public Plane() {
+    public Sprite() {
         Transform = new Transform();
         Game.OnDraw += OnDraw;
         Game.OnLoad += OnLoad;
@@ -32,8 +32,7 @@ public class Plane : ITransform, IGeometry, IRendered {
         GL.glBindVertexArray(_vao);
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, _vbo);
         
-        float[] vertices =
-        {
+        float[] vertices = {
             -0.5f, 0.5f, 1f, 0f, 0f,  // top left
             0.5f, 0.5f, 0f, 1f, 0f,   // top right
             -0.5f, -0.5f, 0f, 0f, 1f, // bottom left

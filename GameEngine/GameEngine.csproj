@@ -56,7 +56,7 @@
         <Compile Include="Rendering\Geometry\Geometry.cs" />
         <Compile Include="Rendering\Geometry\IGeometry.cs" />
         <Compile Include="Rendering\Geometry\IRendered.cs" />
-        <Compile Include="Rendering\Geometry\Plane.cs" />
+        <Compile Include="Rendering\Geometry\Sprite.cs" />
         <Compile Include="Rendering\IRendered.cs" />
         <Compile Include="Rendering\Shaders\DefaultShader.cs" />
         <Compile Include="Rendering\Shaders\Shader.cs" />

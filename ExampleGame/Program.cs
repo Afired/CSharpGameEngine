@@ -27,6 +27,8 @@ internal class Program {
         Plane plane1 = new Plane();
         Game.OnUpdate += deltaTime => plane1.Transform.Position.X += deltaTime;
         Game.OnUpdate += deltaTime => plane1.Transform.Position.Y += deltaTime;
+        Plane plane2 = new Plane();
+        plane2.Transform.Position.Y = -4;
     }
     
 }

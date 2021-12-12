@@ -27,13 +27,12 @@ internal class Program {
         Game.SetActiveCamera(camera);
         
         Sprite sprite1 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite1.Transform.Position.X += deltaTime;
-        Game.OnUpdate += deltaTime => sprite1.Transform.Position.Y += deltaTime;
+        Game.OnUpdate += deltaTime => sprite1.Transform.Position += new Vector3(1f, 1f, 0) * deltaTime;
         Sprite sprite2 = new Sprite();
-        sprite2.Transform.Position.Y = -4;
+        sprite2.Transform.Position = new Vector3(0f, -4f, 0f);
         PlayerController playerController = new PlayerController(sprite2);
         Sprite sprite3 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite3.Transform.Position.X = (float) Math.Sin(Time.TotalTimeElapsed * 5f);
+        Game.OnUpdate += deltaTime => sprite3.Transform.Position = new Vector3((float) Math.Sin(Time.TotalTimeElapsed * 5f), 0, 0);
     }
     
 }

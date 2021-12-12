@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GameEngine.Debugging;
 
 namespace GameEngine.Rendering.Shaders; 
 
@@ -21,7 +21,7 @@ public static class ShaderRegister {
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;
         else
-            throw new Exception($"Shader '{name}' not found");
+            throw new ShaderNotFoundException(name);
     }
     
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using GameEngine.Debugging;
 using OpenGL;
 
 namespace GameEngine.Rendering.Shaders; 
@@ -24,7 +24,7 @@ public class Shader {
         int[] status = GL.glGetShaderiv(vs, GL.GL_COMPILE_STATUS, 1);
         if(status[0] == 0) {
             string error = GL.glGetShaderInfoLog(vs);
-            Console.WriteLine($"FAILED TO COMPILE VERTEX SHADER: {error}");
+            throw new ShaderFailedToCompileException(error);
         }
         
         uint fs = GL.glCreateShader(GL.GL_FRAGMENT_SHADER);
@@ -34,7 +34,7 @@ public class Shader {
         status = GL.glGetShaderiv(fs, GL.GL_COMPILE_STATUS, 1);
         if(status[0] == 0) {
             string error = GL.glGetShaderInfoLog(fs);
-            Console.WriteLine($"FAILED TO COMPILE FRAGMENT SHADER: {error}");
+            throw new ShaderFailedToCompileException(error);
         }
 
         ProgramID = GL.glCreateProgram();

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using GameEngine.Core;
+using GameEngine.Debugging;
 using GLFW;
 using OpenGL;
 
@@ -25,7 +26,7 @@ internal static class WindowFactory {
         Window window = Glfw.CreateWindow(width, height, title, Monitor.None, Window.None);
 
         if(window == Window.None) {
-            throw new System.Exception();
+            throw new WindowFailedToLoadException();
         }
 
         Rectangle screen = Glfw.PrimaryMonitor.WorkArea;

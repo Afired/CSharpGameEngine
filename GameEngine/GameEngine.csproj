@@ -50,6 +50,7 @@
         <Compile Include="Core\GameUpdateThread.cs" />
         <Compile Include="Core\Time.cs" />
         <Compile Include="Debugging\Console.cs" />
+        <Compile Include="Debugging\Exceptions.cs" />
         <Compile Include="Geometry\Geometry.cs" />
         <Compile Include="Geometry\IGeometry.cs" />
         <Compile Include="Geometry\IRendered.cs" />

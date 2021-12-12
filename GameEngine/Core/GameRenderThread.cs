@@ -1,4 +1,5 @@
 ﻿using System;
+using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
@@ -18,6 +19,7 @@ public sealed partial class Game {
         Window window = WindowFactory.CreateWindow("Window Title", false);
 
         //SetUpInputCallback(window);
+        InputHandler inputHandler = new InputHandler();
 
         DefaultShader.Initialize();
         OnLoad?.Invoke();
@@ -26,7 +28,7 @@ public sealed partial class Game {
             if(CurrentCamera != null)
                 Render(window);
             Glfw.PollEvents();
-            Console.WriteLine(Glfw.GetKey(window, Keys.Space).ToString());
+            inputHandler.HandleInput(window);
         }
         Terminate();
     }

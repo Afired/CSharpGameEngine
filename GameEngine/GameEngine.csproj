@@ -49,6 +49,7 @@
         <Compile Include="Core\GameRenderThread.cs" />
         <Compile Include="Core\GameUpdateThread.cs" />
         <Compile Include="Core\Time.cs" />
+        <Compile Include="Debugging\Console.cs" />
         <Compile Include="Input\Input.cs" />
         <Compile Include="Input\InputHandler.cs" />
         <Compile Include="Input\KeyCode.cs" />

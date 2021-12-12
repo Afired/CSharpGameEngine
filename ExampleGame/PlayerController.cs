@@ -1,7 +1,7 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using GameEngine;
 using GameEngine.Core;
+using GameEngine.Debug;
 using GameEngine.Input;
 
 namespace ExampleGame; 
@@ -29,6 +29,7 @@ public class PlayerController {
         _inputAxis.X += Input.IsKeyDown(KeyCode.D) ? 1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
+        Console.LogSuccess(_inputAxis.X + " | " + _inputAxis.Y);
     }
 
     private void UpdatePosition(float deltaTime) {

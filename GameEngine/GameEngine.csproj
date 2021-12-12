@@ -44,7 +44,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Core\Configuration.cs" />
-        <Compile Include="Core\GameMain.cs" />
+        <Compile Include="Core\GameMainThread.cs" />
         <Compile Include="Core\GamePhysicsThread.cs" />
         <Compile Include="Core\GameRenderThread.cs" />
         <Compile Include="Core\GameUpdateThread.cs" />

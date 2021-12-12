@@ -27,10 +27,11 @@ public class PlayerController {
         _inputAxis.X += Input.IsKeyDown(KeyCode.D) ? 1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
+        
     }
 
     private void UpdatePosition(float deltaTime) {
-        _objectToBeMoved.Transform.Position += _inputAxis.XY_ * deltaTime * _speed;
+        _objectToBeMoved.Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
 }

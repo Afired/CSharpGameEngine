@@ -29,7 +29,6 @@ public class PlayerController {
         _inputAxis.X += Input.IsKeyDown(KeyCode.D) ? 1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
-        Console.WriteLine(_inputAxis.X + " | " + _inputAxis.Y);
     }
 
     private void UpdatePosition(float deltaTime) {

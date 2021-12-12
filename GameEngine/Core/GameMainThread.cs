@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using GameEngine.Rendering.Camera2D;
+using GameEngine.Rendering.Cameras;
 
 namespace GameEngine.Core;
 

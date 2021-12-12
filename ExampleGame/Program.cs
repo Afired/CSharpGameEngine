@@ -2,7 +2,7 @@
 using GameEngine;
 using GameEngine.Core;
 using GameEngine.Geometry;
-using GameEngine.Rendering.Camera2D;
+using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame;
 

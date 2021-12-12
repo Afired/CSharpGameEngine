@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using GameEngine.Core;
 
-namespace GameEngine.Rendering.Camera2D; 
+namespace GameEngine.Rendering.Cameras; 
 
 public abstract class BaseCamera : ITransform {
 

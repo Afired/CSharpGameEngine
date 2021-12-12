@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace GameEngine.Rendering.Camera2D; 
+namespace GameEngine.Rendering.Cameras;
 
 public class Camera3D : BaseCamera {
     

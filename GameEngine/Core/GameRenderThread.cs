@@ -1,4 +1,5 @@
 ﻿using GameEngine.Rendering;
+using GameEngine.Rendering.Shaders;
 using GLFW;
 using OpenGL;
 
@@ -15,7 +16,7 @@ public sealed partial class Game {
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow("Window Title", false);
 
-        InitializeDefaultShader();
+        DefaultShader.Initialize();
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {

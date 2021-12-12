@@ -44,7 +44,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Core\Configuration.cs" />
-        <Compile Include="Core\GameInitDefaultShader.cs" />
         <Compile Include="Core\GameMain.cs" />
         <Compile Include="Core\GamePhysicsThread.cs" />
         <Compile Include="Core\GameRenderThread.cs" />
@@ -59,6 +58,7 @@
         <Compile Include="Rendering\Geometry\IRendered.cs" />
         <Compile Include="Rendering\Geometry\Plane.cs" />
         <Compile Include="Rendering\IRendered.cs" />
+        <Compile Include="Rendering\Shaders\DefaultShader.cs" />
         <Compile Include="Rendering\Shaders\Shader.cs" />
         <Compile Include="Rendering\Location\IPosition.cs" />
         <Compile Include="Rendering\Location\IRotation.cs" />

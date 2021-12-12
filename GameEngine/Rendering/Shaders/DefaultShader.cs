@@ -1,10 +1,7 @@
-﻿using GameEngine.Rendering.Shaders;
-using OpenGL;
+﻿namespace GameEngine.Rendering.Shaders; 
 
-namespace GameEngine.Core; 
-
-public sealed partial class Game {
-
+internal static class DefaultShader {
+    
     private const string VERTEX_SHADER = @"#version 330 core
                                     layout (location = 0) in vec2 aPosition;
                                     layout (location = 1) in vec3 aColor;
@@ -28,7 +25,7 @@ public sealed partial class Game {
                                         FragColor = vertexColor;
                                     }";
 
-    private void InitializeDefaultShader() {
+    internal static void Initialize() {
         Shader shader = new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
         ShaderRegister.Register("default", shader);
         shader.Load();

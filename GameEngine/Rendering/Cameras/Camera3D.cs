@@ -5,7 +5,7 @@ namespace GameEngine.Rendering.Camera2D;
 
 public class Camera3D : BaseCamera {
     
-    public Camera3D(Vector2 focusPosition, float zoom) : base(focusPosition, zoom) { }
+    public Camera3D(float zoom) : base(zoom) { }
     
     public override Matrix4x4 GetProjectionMatrix() {
         throw new NotImplementedException();

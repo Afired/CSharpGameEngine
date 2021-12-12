@@ -1,6 +1,7 @@
-﻿using System.Numerics;
+﻿using System;
+using GameEngine;
 using GameEngine.Core;
-using GameEngine.Rendering;
+using GameEngine.Geometry;
 using GameEngine.Rendering.Camera2D;
 
 namespace ExampleGame;
@@ -19,8 +20,20 @@ internal class Program {
         };
         
         game.Initialize();
+
+        Camera2D camera = new Camera2D(10.0f);
+        camera.Transform.Position.X = 0;
+        Game.SetActiveCamera(camera);
+
+        Plane plane = new Plane();
         
-        Game.SetActiveCamera(new Camera2D(new Vector2(Configuration.WindowWidth, Configuration.WindowHeight) / 2.0f, 1f));
+        
+        Game.OnUpdate += deltaTime => {
+            //Game.CurrentCamera.Transform.Position.X += deltaTime * 1;
+            //Console.WriteLine(camera.Transform.Position.X);
+            //Game.CurrentCamera.Zoom += deltaTime * 5.0f;
+            Game.CurrentCamera.Transform.Position.X += deltaTime;
+        };
         
         game.Start();
         

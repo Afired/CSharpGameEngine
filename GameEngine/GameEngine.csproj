@@ -53,7 +53,20 @@
         <Compile Include="Rendering\Cameras\Camera3D.cs" />
         <Compile Include="Rendering\Cameras\BaseCamera.cs" />
         <Compile Include="Rendering\Color.cs" />
+        <Compile Include="Rendering\Geometry\Geometry.cs" />
+        <Compile Include="Rendering\Geometry\IGeometry.cs" />
+        <Compile Include="Rendering\Geometry\IRendered.cs" />
+        <Compile Include="Rendering\Geometry\Plane.cs" />
+        <Compile Include="Rendering\IRendered.cs" />
         <Compile Include="Rendering\Shaders\Shader.cs" />
+        <Compile Include="Rendering\Location\IPosition.cs" />
+        <Compile Include="Rendering\Location\IRotation.cs" />
+        <Compile Include="Rendering\Location\IScale.cs" />
+        <Compile Include="Rendering\Location\ITransform.cs" />
+        <Compile Include="Rendering\Location\Position.cs" />
+        <Compile Include="Rendering\Location\Rotation.cs" />
+        <Compile Include="Rendering\Location\Scale.cs" />
+        <Compile Include="Rendering\Location\Transform.cs" />
         <Compile Include="Rendering\WindowFactory.cs" />
     </ItemGroup>
     <ItemGroup>

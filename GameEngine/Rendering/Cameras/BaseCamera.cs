@@ -3,19 +3,18 @@ using GameEngine.Core;
 
 namespace GameEngine.Rendering.Camera2D; 
 
-public abstract class BaseCamera {
-    
+public abstract class BaseCamera : ITransform {
+
+    public Transform Transform { get; set; }
     public Color BackgroundColor { get; set; }
-    public Vector2 FocusPosition { get; set; }
     public float Zoom { get; set; }
     
     
-    public BaseCamera(Vector2 focusPosition, float zoom) {
-        FocusPosition = focusPosition;
+    public BaseCamera(float zoom) {
         Zoom = zoom;
         BackgroundColor = Configuration.DefaultBackgroundColor;
+        Transform = new Transform();
     }
     
     public abstract Matrix4x4 GetProjectionMatrix();
-    
 }

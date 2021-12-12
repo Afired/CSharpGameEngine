@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Numerics;
+using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras;
 

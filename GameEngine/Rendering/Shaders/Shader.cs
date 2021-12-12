@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using GameEngine.Debugging;
+﻿using GameEngine.Debugging;
+using GameEngine.Numerics;
 using OpenGL;
 
 namespace GameEngine.Rendering.Shaders; 

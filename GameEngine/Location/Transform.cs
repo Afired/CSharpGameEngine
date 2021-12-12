@@ -1,4 +1,6 @@
-﻿namespace GameEngine; 
+﻿using GameEngine.Numerics;
+
+namespace GameEngine; 
 
 public class Transform {
     

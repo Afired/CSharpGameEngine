@@ -44,6 +44,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Core\Configuration.cs" />
+        <Compile Include="Core\GameInitDefaultShader.cs" />
         <Compile Include="Core\GameMain.cs" />
         <Compile Include="Core\GamePhysicsThread.cs" />
         <Compile Include="Core\GameRenderThread.cs" />
@@ -67,6 +68,7 @@
         <Compile Include="Rendering\Location\Rotation.cs" />
         <Compile Include="Rendering\Location\Scale.cs" />
         <Compile Include="Rendering\Location\Transform.cs" />
+        <Compile Include="Rendering\Shaders\ShaderRegister.cs" />
         <Compile Include="Rendering\WindowFactory.cs" />
     </ItemGroup>
     <ItemGroup>

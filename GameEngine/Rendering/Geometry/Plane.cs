@@ -9,45 +9,23 @@ public class Plane : ITransform, IGeometry, IRendered {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
-    
-    
+    public Shader Shader { get; set; }
+    private uint _vao;
+    private uint _vbo;
+
+
     public Plane() {
         Transform = new Transform();
         Game.OnDraw += OnDraw;
-        Game.OnLoadShader += OnLoadShader;
+        Game.OnLoad += OnLoad;
     }
 
-    private uint _vao;
-    private uint _vbo;
-    private Shader _shader;
-    
-    private const string VERTEX_SHADER = @"#version 330 core
-                                    layout (location = 0) in vec2 aPosition;
-                                    layout (location = 1) in vec3 aColor;
-                                    out vec4 vertexColor;
-                                    
-                                    uniform mat4 projection;
-                                    uniform mat4 model;
-                                    
-                                    void main() 
-                                    {
-                                        vertexColor = vec4(aColor.rgb, 1.0);
-                                        gl_Position = projection * model * vec4(aPosition.xy, 0, 1.0);
-                                    }";
+    private void OnLoad() {
+        Shader = ShaderRegister.Get("default");
+        InitializeGeometry();
+    }
 
-    private const string FRAGMENT_SHADER = @"#version 330 core
-                                    out vec4 FragColor;
-                                    in vec4 vertexColor;
-                                    
-                                    void main() 
-                                    {
-                                        FragColor = vertexColor;
-                                    }";
-
-    private void OnLoadShader() {
-        _shader = new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
-        _shader.Load();
-
+    private void InitializeGeometry() {
         _vao = GL.glGenVertexArray();
         _vbo = GL.glGenBuffer();
         
@@ -81,9 +59,10 @@ public class Plane : ITransform, IGeometry, IRendered {
         }
         
     }
+    
 
     public void OnDraw() {
-        _shader.Use();
+        ShaderRegister.Get("default").Use();
         
         Vector2 position = new Vector2(0, 0);
         Vector2 scale = new Vector2(1, 1);
@@ -93,8 +72,8 @@ public class Plane : ITransform, IGeometry, IRendered {
         Matrix4x4 sca = Matrix4x4.CreateScale(scale.X, scale.Y, 1);
         Matrix4x4 rot = Matrix4x4.CreateRotationZ(rotation);
         
-        _shader.SetMatrix4x4("model", sca * rot * trans);
-        _shader.SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
+        ShaderRegister.Get("default").SetMatrix4x4("model", sca * rot * trans);
+        ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray(_vao);
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);

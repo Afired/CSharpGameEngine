@@ -5,17 +5,18 @@ using OpenGL;
 namespace GameEngine.Core;
 
 public delegate void OnDraw();
-public delegate void OnLoadShader();
+public delegate void OnLoad();
 
 public sealed partial class Game {
     
     public static event OnDraw OnDraw;
-    public static event OnLoadShader OnLoadShader;
+    public static event OnLoad OnLoad;
     
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow("Window Title", false);
-        
-        OnLoadShader?.Invoke();
+
+        InitializeDefaultShader();
+        OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {
             Glfw.PollEvents();

@@ -34,9 +34,11 @@ internal class Program {
         
         Sprite sprite1 = new Sprite();
         Game.OnUpdate += deltaTime => sprite1.Transform.Position += new Vector3(1f, 1f, 0) * deltaTime;
+        
         Sprite sprite2 = new Sprite();
         sprite2.Transform.Position = new Vector3(0f, -4f, 0f);
-        PlayerController playerController = new PlayerController(sprite2);
+        new PlayerController(sprite2);
+        
         Sprite sprite3 = new Sprite();
         Game.OnUpdate += deltaTime => sprite3.Transform.Position = new Vector3((float) Math.Sin(Time.TotalTimeElapsed * 5f), 0, 0);
     }

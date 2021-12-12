@@ -16,7 +16,7 @@ public sealed partial class Game {
     public static event OnLoad OnLoad;
     
     private void StartRenderThread() {
-        Window window = WindowFactory.CreateWindow("Window Title", false);
+        Window window = WindowFactory.CreateWindow();
 
         //SetUpInputCallback(window);
         InputHandler inputHandler = new InputHandler();

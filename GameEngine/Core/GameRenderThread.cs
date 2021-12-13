@@ -16,7 +16,11 @@ public sealed partial class Game {
     
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow();
-
+        
+        GL.glEnable(GL.GL_DEPTH);
+        GL.glEnable(GL.GL_DEPTH_TEST);
+        GL.glDepthFunc(GL.GL_LEQUAL);
+        
         //SetUpInputCallback(window);
         InputHandler inputHandler = new InputHandler();
 
@@ -41,6 +45,7 @@ public sealed partial class Game {
     }
 
     private void Render(Window window) {
+        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         RenderBackground();
         
         OnDraw?.Invoke();
@@ -50,7 +55,6 @@ public sealed partial class Game {
 
     private void RenderBackground() {
         GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
     }
     
 }

@@ -42,8 +42,8 @@ public sealed partial class Game {
         Console.LogSuccess("Started");
     }
 
-    public static void SetActiveCamera(Camera2D camera2D) {
-        CurrentCamera = camera2D;
+    public static void SetActiveCamera(BaseCamera camera) {
+        CurrentCamera = camera;
     }
     
     private void Terminate() {

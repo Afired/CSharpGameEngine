@@ -30,7 +30,7 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        Camera3D camera3d = new Camera3D();
+        Camera3D camera3d = new Camera3D(90);
         camera3d.Transform.Position = new Vector3(0, 0, -5f);
         Game.SetActiveCamera(camera3d);
         

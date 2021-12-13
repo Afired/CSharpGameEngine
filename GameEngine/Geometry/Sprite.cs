@@ -33,9 +33,30 @@ public class Sprite : ITransform, IGeometry, IRendered {
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, _vbo);
         
         float[] vertices = {
-            0, 1, 0.5f, 0.5f, 0.5f,  // top
-            1, -1, 0.5f, 0.5f, 0.5f,   // bottom right
-            -1, -1, 0.5f, 0.5f, 0.5f, // bottom left
+            //walls
+            0, 1, 0, 0.5f, 0.5f, 1.5f,   // top
+            1, -1, 1, 0.5f, 0.5f, 1.5f,  // bottom right
+            -1, -1, 1, 0.5f, 0.5f, 1.5f, // bottom left
+            
+            0, 1, 0, 0.5f, 1.5f, 0.5f,   // top
+            -1, -1, 1, 0.5f, 1.5f, 0.5f,  // bottom right
+            -1, -1, -1, 0.5f, 1.5f, 0.5f, // bottom left
+            
+            0, 1, 0, 1.5f, 0.5f, 0.5f,    // top
+            -1, -1, -1, 1.5f, 0.5f, 0.5f, // bottom right
+            1, -1, -1, 1.5f, 0.5f, 0.5f,  // bottom left
+            
+            0, 1, 0, 0.5f, 0.5f, 0.5f,   // top
+            1, -1, -1, 0.5f, 0.5f, 0.5f, // bottom right
+            1, -1, 1, 0.5f, 0.5f, 0.5f,  // bottom left
+            //base
+            -1, -1, -1, 0.5f, 0.5f, 0.5f,
+            1, -1, -1, 0.5f, 0.5f, 0.5f,
+            -1, -1, 1, 0.5f, 0.5f, 0.5f,
+            
+            1, -1, 1, 0.5f, 0.5f, 0.5f,
+            1, -1, -1, 0.5f, 0.5f, 0.5f,
+            -1, -1, 1, 0.5f, 0.5f, 0.5f,
         };
 
         unsafe {
@@ -43,10 +64,12 @@ public class Sprite : ITransform, IGeometry, IRendered {
                 GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, v, GL.GL_STATIC_DRAW);
             }
             
-            GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+            //xyz
+            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 6 * sizeof(float), (void*) (0 * sizeof(float)));
             GL.glEnableVertexAttribArray(0);
             
-            GL.glVertexAttribPointer(1, 3, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (2 * sizeof(float)));
+            //rgb
+            GL.glVertexAttribPointer(1, 3, GL.GL_FLOAT, false, 6 * sizeof(float), (void*) (3 * sizeof(float)));
             GL.glEnableVertexAttribArray(1);
             
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
@@ -67,7 +90,7 @@ public class Sprite : ITransform, IGeometry, IRendered {
         ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray(_vao);
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 18);
         GL.glBindVertexArray(0);
     }
     

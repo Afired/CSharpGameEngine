@@ -7,11 +7,9 @@ public abstract class BaseCamera : ITransform {
 
     public Transform Transform { get; set; }
     public Color BackgroundColor { get; set; }
-    public float Zoom { get; set; }
     
     
-    public BaseCamera(float zoom) {
-        Zoom = zoom;
+    public BaseCamera() {
         BackgroundColor = Configuration.DefaultBackgroundColor;
         Transform = new Transform();
     }

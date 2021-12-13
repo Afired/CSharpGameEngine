@@ -45,9 +45,9 @@ public sealed partial class Game {
     }
 
     private void Render(Window window) {
+        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         RenderBackground();
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-        GL.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        
         OnDraw?.Invoke();
         
         Glfw.SwapBuffers(window);

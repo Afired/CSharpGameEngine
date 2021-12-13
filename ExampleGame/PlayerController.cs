@@ -1,7 +1,9 @@
-﻿using GameEngine;
+﻿using System;
+using GameEngine;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
+using Console = GameEngine.Debugging.Console;
 
 namespace ExampleGame;
 
@@ -20,6 +22,7 @@ public class PlayerController {
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
+        UpdateRotation(deltaTime);
     }
 
     private void UpdateInputAxis() {
@@ -32,6 +35,11 @@ public class PlayerController {
 
     private void UpdatePosition(float deltaTime) {
         _objectToBeMoved.Transform.Position += new Vector3(0, 0, _inputAxis.Y) * deltaTime * _speed;
+    }
+
+    private void UpdateRotation(float deltaTime) {
+        _objectToBeMoved.Transform.Rotation += new Vector3(0, deltaTime * 4, 0);
+        Console.Log(_objectToBeMoved.Transform.Rotation.ToString());
     }
     
 }

@@ -33,6 +33,7 @@ internal class Program {
         Camera2D camera2d = new Camera2D(10.0f, true);
         Camera3D camera3d = new Camera3D();
         camera3d.Transform.Position = new Vector3(0, 0, -10);
+        Game.OnUpdate += deltaTime => camera3d.Transform.Rotation += Vector3.Up * deltaTime;
         Game.SetActiveCamera(camera3d);
         
         Sprite sprite1 = new Sprite();

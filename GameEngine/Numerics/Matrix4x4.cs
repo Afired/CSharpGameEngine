@@ -54,6 +54,15 @@ public struct Matrix4x4 : IEquatable<Matrix4x4> {
         M31 = 0f; M32 = 0f; M33 = 1f; M34 = 0f;
         M41 = value.M31; M42 = value.M32; M43 = 0f; M44 = 1f;
     }
+    
+    public float[] ToArray() {
+        return new float[] {
+            M11, M12, M13, M14,
+            M21, M22, M23, M24,
+            M31, M32, M33, M34,
+            M41, M42, M43, M44
+        };
+    }
 
     /// <summary>
     /// Creates a spherical billboard that rotates around a specified object position.

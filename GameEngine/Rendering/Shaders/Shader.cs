@@ -5,8 +5,8 @@ using OpenGL;
 namespace GameEngine.Rendering.Shaders; 
 
 public class Shader {
-    
-    public uint ProgramID { get; set; }
+
+    private uint _programID;
     private string _vertexCode;
     private string _fragmentCode;
 
@@ -37,36 +37,27 @@ public class Shader {
             throw new ShaderFailedToCompileException(error);
         }
 
-        ProgramID = GL.glCreateProgram();
-        GL.glAttachShader(ProgramID, vs);
-        GL.glAttachShader(ProgramID, fs);
+        _programID = GL.glCreateProgram();
+        GL.glAttachShader(_programID, vs);
+        GL.glAttachShader(_programID, fs);
         
-        GL.glLinkProgram(ProgramID);
+        GL.glLinkProgram(_programID);
         
         // Delete Shaders
         
-        GL.glDetachShader(ProgramID, vs);
-        GL.glDetachShader(ProgramID, fs);
+        GL.glDetachShader(_programID, vs);
+        GL.glDetachShader(_programID, fs);
         GL.glDeleteShader(vs);
         GL.glDeleteShader(fs);
     }
 
     public void Use() {
-        GL.glUseProgram(ProgramID);
+        GL.glUseProgram(_programID);
     }
 
     public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
-        int location = GL.glGetUniformLocation(ProgramID, uniformName);
-        GL.glUniformMatrix4fv(location, 1, false, GetMatrix4x4Values(mat));
+        int location = GL.glGetUniformLocation(_programID, uniformName);
+        GL.glUniformMatrix4fv(location, 1, false, mat.ToArray());
     }
-    
-    private float[] GetMatrix4x4Values(Matrix4x4 mat) {
-        return new float[] {
-            mat.M11, mat.M12, mat.M13, mat.M14,
-            mat.M21, mat.M22, mat.M23, mat.M24,
-            mat.M31, mat.M32, mat.M33, mat.M34,
-            mat.M41, mat.M42, mat.M43, mat.M44
-        };
-    }
-    
+
 }

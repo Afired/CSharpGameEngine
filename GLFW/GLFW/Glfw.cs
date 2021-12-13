@@ -376,7 +376,7 @@ namespace GLFW
                 var offset = 0;
                 for (var i = 0; i < count; i++, offset += IntPtr.Size)
                 {
-                    monitors[i] = Marshal.PtrToStructure<Monitor>(ptr + offset);
+                    monitors[i] = (Monitor) Marshal.PtrToStructure(ptr + offset,  typeof(Monitor));
                 }
 
                 return monitors;
@@ -1542,7 +1542,7 @@ namespace GLFW
         /// <returns>The current gamma ramp, or empty structure if an error occurred.</returns>
         public static GammaRamp GetGammaRamp(Monitor monitor)
         {
-            return (GammaRamp) Marshal.PtrToStructure<GammaRampInternal>(GetGammaRampInternal(monitor));
+            return (GammaRamp) Marshal.PtrToStructure(GetGammaRampInternal(monitor), typeof(GammaRampInternal));
         }
 
         /// <summary>
@@ -1688,7 +1688,7 @@ namespace GLFW
         public static VideoMode GetVideoMode(Monitor monitor)
         {
             var ptr = GetVideoModeInternal(monitor);
-            return Marshal.PtrToStructure<VideoMode>(ptr);
+            return (VideoMode) Marshal.PtrToStructure(ptr, typeof(VideoMode));
         }
 
         /// <summary>
@@ -1704,8 +1704,8 @@ namespace GLFW
         {
             var pointer = GetVideoModes(monitor, out var count);
             var modes = new VideoMode[count];
-            for (var i = 0; i < count; i++, pointer += Marshal.SizeOf<VideoMode>())
-                modes[i] = Marshal.PtrToStructure<VideoMode>(pointer);
+            for (var i = 0; i < count; i++, pointer += Marshal.SizeOf(typeof(VideoMode)))
+                modes[i] = (VideoMode) Marshal.PtrToStructure(pointer, typeof(VideoMode));
             return modes;
         }
 

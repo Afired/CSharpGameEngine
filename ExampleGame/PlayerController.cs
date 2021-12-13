@@ -1,11 +1,12 @@
 ﻿using GameEngine;
 using GameEngine.Core;
 using GameEngine.Input;
+using GameEngine.Numerics;
 
-namespace ExampleGame; 
+namespace ExampleGame;
 
 public class PlayerController {
-    
+
     private ITransform _objectToBeMoved;
     private Vector2 _inputAxis;
     private float _speed = 10f;

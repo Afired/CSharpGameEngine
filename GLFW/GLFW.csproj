@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>GLFW</RootNamespace>
         <AssemblyName>GLFW</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <TargetFramework>net6.0</TargetFramework>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <LangVersion>10</LangVersion>
@@ -43,65 +43,6 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Drawing" />
         <Reference Include="System.Xml" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="GL.cs" />
-        <Compile Include="GLFW\CharEventArgs.cs" />
-        <Compile Include="GLFW\ContentScaleEventArgs.cs" />
-        <Compile Include="GLFW\Delegates.cs" />
-        <Compile Include="GLFW\Exception.cs" />
-        <Compile Include="GLFW\FileDropEventArgs.cs" />
-        <Compile Include="GLFW\GameWindow.cs" />
-        <Compile Include="GLFW\Glfw.cs" />
-        <Compile Include="GLFW\Jetbrains.annotations.cs" />
-        <Compile Include="GLFW\KeyEventArgs.cs" />
-        <Compile Include="GLFW\MaximizeEventArgs.cs" />
-        <Compile Include="GLFW\MouseButtonEventArgs.cs" />
-        <Compile Include="GLFW\MouseMoveEventArgs.cs" />
-        <Compile Include="GLFW\Native.cs" />
-        <Compile Include="GLFW\NativeWindow.cs" />
-        <Compile Include="GLFW\SizeChangeEventArgs.cs" />
-        <Compile Include="GLFW\Util.cs" />
-        <Compile Include="GLFW\Vulkan.cs" />
-        <Compile Include="GLFW\Enums\ClientApi.cs" />
-        <Compile Include="GLFW\Enums\ConnectionStatus.cs" />
-        <Compile Include="GLFW\Enums\Constants.cs" />
-        <Compile Include="GLFW\Enums\ContextApi.cs" />
-        <Compile Include="GLFW\Enums\ContextAttributes.cs" />
-        <Compile Include="GLFW\Enums\CursorMode.cs" />
-        <Compile Include="GLFW\Enums\CursorType.cs" />
-        <Compile Include="GLFW\Enums\ErrorCode.cs" />
-        <Compile Include="GLFW\Enums\GamePadAxis.cs" />
-        <Compile Include="GLFW\Enums\GamePadButton.cs" />
-        <Compile Include="GLFW\Enums\Hat.cs" />
-        <Compile Include="GLFW\Enums\Hint.cs" />
-        <Compile Include="GLFW\Enums\InputMode.cs" />
-        <Compile Include="GLFW\Enums\InputState.cs" />
-        <Compile Include="GLFW\Enums\Joystick.cs" />
-        <Compile Include="GLFW\Enums\Keys.cs" />
-        <Compile Include="GLFW\Enums\ModifierKeys.cs" />
-        <Compile Include="GLFW\Enums\MouseButton.cs" />
-        <Compile Include="GLFW\Enums\Profile.cs" />
-        <Compile Include="GLFW\Enums\ReleaseBehavior.cs" />
-        <Compile Include="GLFW\Enums\Robustness.cs" />
-        <Compile Include="GLFW\Enums\WindowAttribute.cs" />
-        <Compile Include="GLFW\Structs\Cursor.cs" />
-        <Compile Include="GLFW\Structs\EGLContext.cs" />
-        <Compile Include="GLFW\Structs\EGLDisplay.cs" />
-        <Compile Include="GLFW\Structs\EGLSurface.cs" />
-        <Compile Include="GLFW\Structs\GamePadState.cs" />
-        <Compile Include="GLFW\Structs\GammaRamp.cs" />
-        <Compile Include="GLFW\Structs\GammaRampInternal.cs" />
-        <Compile Include="GLFW\Structs\GLXContext.cs" />
-        <Compile Include="GLFW\Structs\HGLRC.cs" />
-        <Compile Include="GLFW\Structs\Image.cs" />
-        <Compile Include="GLFW\Structs\Monitor.cs" />
-        <Compile Include="GLFW\Structs\NSOpenGLContext.cs" />
-        <Compile Include="GLFW\Structs\OSMesaContext.cs" />
-        <Compile Include="GLFW\Structs\VideoMode.cs" />
-        <Compile Include="GLFW\Structs\Window.cs" />
-        <Compile Include="GLFW\Strings.Designer.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,7 +1,7 @@
 ﻿using System;
-using GameEngine;
 using GameEngine.Core;
 using GameEngine.Geometry;
+using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame;

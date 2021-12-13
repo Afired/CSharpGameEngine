@@ -1,6 +1,6 @@
 # Simple C# Game Engine
 ![C# 10](https://img.shields.io/badge/-C%23_10-b5faaa)
-![.NET Framework 4.8](https://img.shields.io/badge/-.NET_Framework_4.8-acfcf0)
+![.NET 6.0](https://img.shields.io/badge/-.NET_6.0-acfcf0)
 ![GLFW](https://img.shields.io/badge/-GLFW-e1aafa)
 ![OpenGL 3.3](https://img.shields.io/badge/-OpenGL_3.3-faaaaa)
 

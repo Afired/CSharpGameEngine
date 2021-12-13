@@ -1,5 +1,4 @@
-﻿using System;
-using GameEngine.Input;
+﻿using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;

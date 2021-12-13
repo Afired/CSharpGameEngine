@@ -33,13 +33,9 @@ public class Sprite : ITransform, IGeometry, IRendered {
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, _vbo);
         
         float[] vertices = {
-            -0.5f, 0.5f, 1f, 0f, 0f,  // top left
-            0.5f, 0.5f, 0f, 1f, 0f,   // top right
-            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
-
-            0.5f, 0.5f, 0f, 1f, 0f,   // top right
-            0.5f, -0.5f, 0f, 1f, 1f,  // bottom right
-            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
+            0, 1, 0.5f, 0.5f, 0.5f,  // top
+            1, -1, 0.5f, 0.5f, 0.5f,   // bottom right
+            -1, -1, 0.5f, 0.5f, 0.5f, // bottom left
         };
 
         unsafe {

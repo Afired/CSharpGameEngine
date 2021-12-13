@@ -22,7 +22,6 @@ public class PlayerController {
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
-        UpdateRotation(deltaTime);
     }
 
     private void UpdateInputAxis() {
@@ -37,9 +36,4 @@ public class PlayerController {
         _objectToBeMoved.Transform.Position += new Vector3(0, 0, _inputAxis.Y) * deltaTime * _speed;
     }
 
-    private void UpdateRotation(float deltaTime) {
-        _objectToBeMoved.Transform.Rotation += new Vector3(0, deltaTime * 4, 0);
-        Console.Log(_objectToBeMoved.Transform.Rotation.ToString());
-    }
-    
 }

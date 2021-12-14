@@ -42,6 +42,7 @@ internal static class WindowFactory {
         
         Cursor cursor = Glfw.CreateStandardCursor(CursorType.Crosshair);
         Glfw.SetCursor(window, cursor);
+        Glfw.SetCursorPosition(window, (double) Configuration.WindowWidth / 2d, (double) Configuration.WindowHeight / 2d);
         //Glfw.SetInputMode(window, InputMode.Cursor, 1 << 3);
         /*
          GLFW_CURSOR_NORMAL makes the cursor visible and behaving normally.

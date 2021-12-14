@@ -28,15 +28,15 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        Camera3D camera3d = new Camera3D(75);
-        camera3d.Transform.Position = new Vector3(0, 0, -5f);
-        Game.SetActiveCamera(camera3d);
-        new CameraController(camera3d);
+        BaseCamera camera = new Camera3D(75);
+        camera.Transform.Position = new Vector3(0, 0, -5f);
+        Game.SetActiveCamera(camera);
+        new CameraController(camera);
         
         Pyramid sprite2 = new Pyramid();
         sprite2.Transform.Position = new Vector3(0f, 0f, 0f);
         
-        Game.OnUpdate += deltaTime => sprite2.Transform.Rotation += new Vector3(deltaTime * 4, 0, 0);
+        Game.OnUpdate += deltaTime => sprite2.Transform.Rotation *= new Quaternion(0, 1 * deltaTime, 0, 1f).Normalized;
         //new PlayerController(sprite2);
     }
     

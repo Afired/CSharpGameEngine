@@ -10,7 +10,7 @@ public class CameraController {
 
     private BaseCamera _camera;
     private Vector2 _inputAxis;
-    private float _speed = 10f;
+    private float _speed = 30f;
     
     
     public CameraController(BaseCamera camera) {
@@ -33,11 +33,15 @@ public class CameraController {
     }
 
     private void UpdatePosition(float deltaTime) {
-        _camera.Transform.Position += _inputAxis.X_Y.Normalized * deltaTime * _speed;
+        
     }
 
     private void UpdateRotation() {
-        _camera.Transform.Rotation += Input.MouseDelta.XY_ * 0.001f;
+        Quaternion up = Quaternion.CreateFromAxisAngle(Vector3.Up, Input.MouseDelta.X * 0.005f);
+        Quaternion right = Quaternion.CreateFromAxisAngle(Vector3.Right, Input.MouseDelta.Y * 0.005f);
+
+        _camera.Transform.Rotation *= right;
+        _camera.Transform.Rotation = up * _camera.Transform.Rotation;
     }
     
 }

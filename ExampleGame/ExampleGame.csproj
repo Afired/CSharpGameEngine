@@ -1,56 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{DEF3E22C-8735-4687-98C8-6DC2704BA153}</ProjectGuid>
-        <OutputType>Exe</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>ExampleGame</RootNamespace>
-        <AssemblyName>ExampleGame</AssemblyName>
         <TargetFramework>net6.0</TargetFramework>
-        <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>x64</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <Prefer32bit>false</Prefer32bit>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>x64</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <Prefer32bit>false</Prefer32bit>
-    </PropertyGroup>
+
     <ItemGroup>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Xml" />
+      <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\GameEngine\GameEngine.csproj">
-        <Project>{863ff67b-9c3f-4e5e-9353-ad88cd9f77d2}</Project>
-        <Name>GameEngine</Name>
-      </ProjectReference>
-    </ItemGroup>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
 
 </Project>

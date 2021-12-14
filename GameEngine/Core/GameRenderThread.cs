@@ -21,7 +21,7 @@ public sealed partial class Game {
         GL.glEnable(GL.GL_DEPTH_TEST);
         GL.glDepthFunc(GL.GL_LEQUAL);
         
-        //SetUpInputCallback(window);
+        SetUpInputCallback(window);
         InputHandler inputHandler = new InputHandler();
 
         DefaultShader.Initialize();
@@ -37,7 +37,7 @@ public sealed partial class Game {
     }
     
     private void SetUpInputCallback(Window window) {
-        Glfw.SetKeyCallback(window, KeyCallback);
+        //Glfw.SetKeyCallback(window, KeyCallback);
     }
 
     private void KeyCallback(Window window, Keys key, int scancode, InputState state, ModifierKeys mods) {
@@ -45,9 +45,9 @@ public sealed partial class Game {
     }
 
     private void Render(Window window) {
+        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         RenderBackground();
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-        GL.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        
         OnDraw?.Invoke();
         
         Glfw.SwapBuffers(window);

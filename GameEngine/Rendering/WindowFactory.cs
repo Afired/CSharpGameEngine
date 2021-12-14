@@ -39,7 +39,17 @@ internal static class WindowFactory {
         
         GL.glViewport(0, 0, width, height);
         Glfw.SwapInterval(vsync ? 1 : 0);
-
+        
+        Cursor cursor = Glfw.CreateStandardCursor(CursorType.Crosshair);
+        Glfw.SetCursor(window, cursor);
+        Glfw.SetCursorPosition(window, (double) Configuration.WindowWidth / 2d, (double) Configuration.WindowHeight / 2d);
+        //Glfw.SetInputMode(window, InputMode.Cursor, 1 << 3);
+        /*
+         GLFW_CURSOR_NORMAL makes the cursor visible and behaving normally.
+        GLFW_CURSOR_HIDDEN makes the cursor invisible when it is over the content area of the window but does not restrict the cursor from leaving.
+        GLFW_CURSOR_DISABLED hides and grabs the cursor, providing virtual and unlimited cursor movement. This is useful for implementing for example 3D camera controls.
+         */
+        
         return window;
     }
     

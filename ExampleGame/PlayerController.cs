@@ -1,7 +1,9 @@
-﻿using GameEngine;
+﻿using System;
+using GameEngine;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
+using Console = GameEngine.Debugging.Console;
 
 namespace ExampleGame;
 
@@ -33,5 +35,5 @@ public class PlayerController {
     private void UpdatePosition(float deltaTime) {
         _objectToBeMoved.Transform.Position += new Vector3(0, 0, _inputAxis.Y) * deltaTime * _speed;
     }
-    
+
 }

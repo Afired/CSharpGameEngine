@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using GameEngine.Numerics;
 
 namespace GameEngine.Input; 
 
 public static class Input {
     
+    public static Vector2 MouseDelta { get; internal set; }
     private static Dictionary<KeyCode, bool> _inputData;
     
     

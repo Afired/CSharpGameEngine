@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace GameEngine.Numerics;
 
-public struct Quaternion : IEquatable<Quaternion> {
+public partial struct Quaternion : IEquatable<Quaternion> {
     
     public float X { get; set; }
     public float Y { get; set; }

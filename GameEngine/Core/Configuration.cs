@@ -6,7 +6,7 @@ namespace GameEngine.Core;
 public static class Configuration {
     
     public static float FixedTimeStep = 0.2f;
-    public static float TargetFrameRate = 30f;
+    public static float TargetFrameRate = 144f;
 
     public static string WindowTitle = "Window Title";
     public static int WindowHeight = 800;

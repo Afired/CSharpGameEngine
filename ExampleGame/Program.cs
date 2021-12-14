@@ -1,9 +1,7 @@
-﻿using System;
-using GameEngine.Core;
+﻿using GameEngine.Core;
 using GameEngine.Geometry;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
-using Console = GameEngine.Debugging.Console;
 
 namespace ExampleGame;
 
@@ -30,20 +28,16 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        Camera2D camera2d = new Camera2D(10.0f, true);
-        Camera3D camera3d = new Camera3D();
-        camera3d.Transform.Position = new Vector3(0, 0, -10);
-        Game.SetActiveCamera(camera3d);
+        BaseCamera camera = new Camera3D(75);
+        camera.Transform.Position = new Vector3(0, 0, -5f);
+        Game.SetActiveCamera(camera);
+        new CameraController(camera);
         
-        Sprite sprite1 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite1.Transform.Position += new Vector3(1f, 1f, 0) * deltaTime;
-        
-        Sprite sprite2 = new Sprite();
+        Pyramid sprite2 = new Pyramid();
         sprite2.Transform.Position = new Vector3(0f, 0f, 0f);
-        new PlayerController(sprite2);
         
-        Sprite sprite3 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite3.Transform.Position = new Vector3((float) Math.Sin(Time.TotalTimeElapsed * 5f), 0, 0);
+        Game.OnUpdate += deltaTime => sprite2.Transform.Rotation *= new Quaternion(0, 1 * deltaTime, 0, 1f).Normalized;
+        //new PlayerController(sprite2);
     }
     
 }

@@ -5,7 +5,7 @@ using OpenGL;
 
 namespace GameEngine.Geometry; 
 
-public class Sprite : ITransform, IGeometry, IRendered {
+public class Pyramid : ITransform, IGeometry, IRendered {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
@@ -14,7 +14,7 @@ public class Sprite : ITransform, IGeometry, IRendered {
     private uint _vbo;
 
 
-    public Sprite() {
+    public Pyramid() {
         Transform = new Transform();
         Game.OnDraw += OnDraw;
         Game.OnLoad += OnLoad;

@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GLFW\GLFW.csproj" />
+      <ProjectReference Include="..\GLFWPackageTesting\GLFWPackageTesting.csproj" />
     </ItemGroup>
 
 </Project>

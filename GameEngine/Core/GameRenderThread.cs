@@ -16,23 +16,24 @@ public sealed partial class Game {
     public static event OnLoad OnLoad;
     
     private void StartRenderThread() {
-        Window window = WindowFactory.CreateWindow();
+        
+        Glfw.MakeContextCurrent(_window);
         
         GL.glEnable(GL.GL_DEPTH);
         GL.glEnable(GL.GL_DEPTH_TEST);
         GL.glDepthFunc(GL.GL_LEQUAL);
         
-        SetUpInputCallback(window);
+        SetUpInputCallback(_window);
         InputHandler inputHandler = new InputHandler();
 
         DefaultShader.Initialize();
         OnLoad?.Invoke();
         
-        while(!Glfw.WindowShouldClose(window)) {
+        while(!Glfw.WindowShouldClose(_window)) {
             if(CurrentCamera != null)
-                Render(window);
+                Render(_window);
             Glfw.PollEvents();
-            inputHandler.HandleInput(window);
+            inputHandler.HandleInput(_window);
         }
         Terminate();
     }

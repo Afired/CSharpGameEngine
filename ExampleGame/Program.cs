@@ -37,7 +37,7 @@ internal class Program {
         sprite2.Transform.Position = new Vector3(0f, 0f, 0f);
         
         Game.OnUpdate += deltaTime => sprite2.Transform.Rotation *= new Quaternion(0, 1 * deltaTime, 0, 1f).Normalized;
-        //new PlayerController(sprite2);
+        new PlayerController(sprite2);
     }
     
 }

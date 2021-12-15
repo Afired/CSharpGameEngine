@@ -16,34 +16,30 @@ public sealed partial class Game {
     public static event OnLoad OnLoad;
     
     private void StartRenderThread() {
+        Window window = WindowFactory.CreateWindow();
         
-        Glfw.MakeContextCurrent(_window);
-        
+        Glfw.MakeContextCurrent(window);
+
+        GL.Import(Glfw.GetProcAddress);
+        GL.glViewport(0, 0, Configuration.WindowWidth, Configuration.WindowHeight);
         GL.glEnable(GL.GL_DEPTH);
         GL.glEnable(GL.GL_DEPTH_TEST);
         GL.glDepthFunc(GL.GL_LEQUAL);
         
-        SetUpInputCallback(_window);
+        //SetUpInputCallback(_window);
         InputHandler inputHandler = new InputHandler();
+        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         DefaultShader.Initialize();
         OnLoad?.Invoke();
         
-        while(!Glfw.WindowShouldClose(_window)) {
+        while(!Glfw.WindowShouldClose(window)) {
             if(CurrentCamera != null)
-                Render(_window);
+                Render(window);
             Glfw.PollEvents();
-            inputHandler.HandleInput(_window);
+            inputHandler.HandleInput(window);
         }
         Terminate();
-    }
-    
-    private void SetUpInputCallback(Window window) {
-        Glfw.SetKeyCallback(window, KeyCallback);
-    }
-
-    private void KeyCallback(IntPtr window, Keys key, int scancode, InputState state, ModifierKeys mods) {
-        Console.WriteLine(key.ToString());
     }
 
     private void Render(Window window) {

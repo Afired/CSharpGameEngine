@@ -13,15 +13,9 @@ public sealed partial class Game {
     private Thread _updateLoopThread;
     private Thread _physicsThread;
     private Thread _renderThread;
-
-    private Window _window;
     
     
     public void Initialize() {
-        
-        _window = WindowFactory.CreateWindow();
-        Glfw.MakeContextCurrent(Window.None);
-        
         Console.Log("Initializing...");
         Console.Log("Initializing engine...");
         _updateLoopThread = new Thread(UpdateLoop);

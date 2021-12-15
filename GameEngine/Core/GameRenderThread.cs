@@ -1,4 +1,5 @@
-﻿using GameEngine.Input;
+﻿using System;
+using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
@@ -37,11 +38,11 @@ public sealed partial class Game {
     }
     
     private void SetUpInputCallback(Window window) {
-        //Glfw.SetKeyCallback(window, KeyCallback);
+        Glfw.SetKeyCallback(window, KeyCallback);
     }
 
-    private void KeyCallback(Window window, Keys key, int scancode, InputState state, ModifierKeys mods) {
-        
+    private void KeyCallback(IntPtr window, Keys key, int scancode, InputState state, ModifierKeys mods) {
+        Console.WriteLine(key.ToString());
     }
 
     private void Render(Window window) {

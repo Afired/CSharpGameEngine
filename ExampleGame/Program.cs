@@ -28,8 +28,10 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        Pyramid myCamera = new Pyramid();
-        myCamera.Transform.Position = new Vector3(0, 0, -5f);
+        new Pyramid().Transform.Position = new Vector3(0, 0, -5);
+        new Pyramid().Transform.Position = new Vector3(0, 0, 5);
+        new Pyramid().Transform.Position = new Vector3(-5, 0, 0);
+        new Pyramid().Transform.Position = new Vector3(5, 0, 0);
         
         Player player = new Player();
         Game.SetActiveCamera(player.Camera3D);

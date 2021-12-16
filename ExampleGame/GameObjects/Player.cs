@@ -4,6 +4,7 @@ using GameEngine.Rendering.Cameras;
 namespace GameEngine.Components; 
 
 public class Player : GameObject, ITransform, IPlayerController, ICamera3D, ICameraController {
+    
     public Transform Transform { get; set; }
     public PlayerController PlayerController { get; set; }
     public Camera3D Camera3D { get; set; }

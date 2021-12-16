@@ -1,5 +1,4 @@
-﻿using GameEngine;
-using GameEngine.Components;
+﻿using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
@@ -35,6 +34,6 @@ public class PlayerController : Component {
 
 }
 
-public interface IPlayerController {
+public interface IPlayerController : ITransform {
     public PlayerController PlayerController { get; set; }
 }

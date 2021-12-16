@@ -45,6 +45,6 @@ public class CameraController : Component {
     
 }
 
-public interface ICameraController {
+public interface ICameraController : ITransform {
     CameraController CameraController { get; set; }
 }

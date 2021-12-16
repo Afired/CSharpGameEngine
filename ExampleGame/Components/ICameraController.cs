@@ -1,20 +1,19 @@
-﻿using GameEngine.Core;
-using GameEngine.Debugging;
+﻿using GameEngine.Components;
+using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
-using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame; 
 
-public class CameraController {
-
-    private BaseCamera _camera;
+public class CameraController : Component {
+    
     private Vector2 _inputAxis;
     private float _speed = 30f;
+
+    private Transform Transform => (GameObject as ITransform).Transform;
     
     
-    public CameraController(BaseCamera camera) {
-        _camera = camera;
+    public CameraController(GameObject gameObject) : base(gameObject) {
         Game.OnUpdate += OnUpdate;
     }
 
@@ -40,8 +39,12 @@ public class CameraController {
         Quaternion up = Quaternion.CreateFromAxisAngle(Vector3.Up, Input.MouseDelta.X * 0.005f);
         Quaternion right = Quaternion.CreateFromAxisAngle(Vector3.Right, Input.MouseDelta.Y * 0.005f);
 
-        _camera.Transform.Rotation *= right;
-        _camera.Transform.Rotation = up * _camera.Transform.Rotation;
+        Transform.Rotation *= right;
+        Transform.Rotation = up * Transform.Rotation;
     }
     
+}
+
+public interface ICameraController : ITransform {
+    CameraController CameraController { get; set; }
 }

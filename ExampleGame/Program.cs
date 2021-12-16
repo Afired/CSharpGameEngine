@@ -1,5 +1,5 @@
-﻿using GameEngine.Core;
-using GameEngine.Geometry;
+﻿using GameEngine.Components;
+using GameEngine.Core;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 
@@ -13,11 +13,11 @@ internal class Program {
         SetConfig();
         
         game.Initialize();
-        
+
         InitializeWorld();
         
         game.Start();
-        
+
         return 0;
     }
 
@@ -28,16 +28,13 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        BaseCamera camera = new Camera3D(75);
-        camera.Transform.Position = new Vector3(0, 0, -5f);
-        Game.SetActiveCamera(camera);
-        new CameraController(camera);
+        new Pyramid().Transform.Position = new Vector3(0, 0, -5);
+        new Pyramid().Transform.Position = new Vector3(0, 0, 5);
+        new Pyramid().Transform.Position = new Vector3(-5, 0, 0);
+        new Pyramid().Transform.Position = new Vector3(5, 0, 0);
         
-        Pyramid sprite2 = new Pyramid();
-        sprite2.Transform.Position = new Vector3(0f, 0f, 0f);
-        
-        Game.OnUpdate += deltaTime => sprite2.Transform.Rotation *= new Quaternion(0, 1 * deltaTime, 0, 1f).Normalized;
-        new PlayerController(sprite2);
+        Player player = new Player();
+        Game.SetActiveCamera(player.Camera3D);
     }
     
 }

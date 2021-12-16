@@ -1,21 +1,17 @@
-﻿using System;
-using GameEngine;
+﻿using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
-using Console = GameEngine.Debugging.Console;
 
 namespace ExampleGame;
 
-public class PlayerController {
-
-    private ITransform _objectToBeMoved;
+public class PlayerController : Component {
+    
     private Vector2 _inputAxis;
     private float _speed = 10f;
     
     
-    public PlayerController(ITransform objectToBeMoved) {
-        _objectToBeMoved = objectToBeMoved;
+    public PlayerController(GameObject gameObject) : base(gameObject) {
         Game.OnUpdate += OnUpdate;
     }
     
@@ -33,7 +29,11 @@ public class PlayerController {
     }
 
     private void UpdatePosition(float deltaTime) {
-        _objectToBeMoved.Transform.Position += new Vector3(0, 0, _inputAxis.Y) * deltaTime * _speed;
+        (GameObject as ITransform).Transform.Position += _inputAxis.X_Y * deltaTime * _speed;
     }
 
+}
+
+public interface IPlayerController : ITransform {
+    public PlayerController PlayerController { get; set; }
 }

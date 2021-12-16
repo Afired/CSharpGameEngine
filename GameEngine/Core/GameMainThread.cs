@@ -8,7 +8,7 @@ namespace GameEngine.Core;
 
 public sealed partial class Game {
 
-    public static BaseCamera CurrentCamera { get; private set; }
+    public static BaseCamera CurrentBaseCamera { get; private set; }
     private static bool _isRunning;
     private Thread _updateLoopThread;
     private Thread _physicsThread;
@@ -44,8 +44,8 @@ public sealed partial class Game {
         Console.LogSuccess("Started");
     }
 
-    public static void SetActiveCamera(BaseCamera camera) {
-        CurrentCamera = camera;
+    public static void SetActiveCamera(BaseCamera baseCamera) {
+        CurrentBaseCamera = baseCamera;
     }
     
     public static void Terminate() {

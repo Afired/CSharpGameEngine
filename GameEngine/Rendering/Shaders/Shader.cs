@@ -61,3 +61,9 @@ public class Shader {
     }
 
 }
+
+public interface IShader {
+    
+    public Shader Shader { get; set; }
+    
+}

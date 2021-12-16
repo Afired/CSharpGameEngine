@@ -1,21 +1,20 @@
-﻿using GameEngine.Core;
+﻿using GameEngine.Components;
+using GameEngine.Core;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Shaders;
 using OpenGL;
 
 namespace GameEngine.Geometry; 
 
-public class Pyramid : ITransform, IGeometry, IRendered {
+public class Pyramid : Component {
     
-    public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
     public Shader Shader { get; set; }
     private uint _vao;
     private uint _vbo;
 
 
-    public Pyramid() {
-        Transform = new Transform();
+    public Pyramid(GameObject gameObject) : base(gameObject) {
         Game.OnDraw += OnDraw;
         Game.OnLoad += OnLoad;
     }
@@ -81,10 +80,12 @@ public class Pyramid : ITransform, IGeometry, IRendered {
 
     public void OnDraw() {
         ShaderRegister.Get("default").Use();
+
+        ITransform transform = GameObject as ITransform;
         
-        Matrix4x4 trans = Matrix4x4.CreateTranslation(Transform.Position.X, Transform.Position.Y, Transform.Position.Z);
-        Matrix4x4 sca = Matrix4x4.CreateScale(Transform.Scale.X, Transform.Scale.Y, Transform.Scale.Z);
-        Matrix4x4 rot = Matrix4x4.CreateFromQuaternion(Transform.Rotation);
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(transform.Transform.Position.X, transform.Transform.Position.Y, transform.Transform.Position.Z);
+        Matrix4x4 sca = Matrix4x4.CreateScale(transform.Transform.Scale.X, transform.Transform.Scale.Y, transform.Transform.Scale.Z);
+        Matrix4x4 rot = Matrix4x4.CreateFromQuaternion(transform.Transform.Rotation);
         
         ShaderRegister.Get("default").SetMatrix4x4("model", rot * sca * trans);
         ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());

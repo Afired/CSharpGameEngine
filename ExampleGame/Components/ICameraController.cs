@@ -44,3 +44,7 @@ public class CameraController : Component {
     }
     
 }
+
+public interface ICameraController {
+    CameraController CameraController { get; set; }
+}

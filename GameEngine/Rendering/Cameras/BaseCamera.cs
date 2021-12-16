@@ -4,15 +4,13 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras; 
 
-public abstract class BaseCamera : GameObject, ITransform {
-
-    public Transform Transform { get; set; }
+public abstract class BaseCamera : Component {
+    
     public Color BackgroundColor { get; set; }
     
     
-    public BaseCamera() {
+    public BaseCamera(GameObject gameObject) : base(gameObject) {
         BackgroundColor = Configuration.DefaultBackgroundColor;
-        Transform = new Transform(this);
     }
     
     public abstract Matrix4x4 GetProjectionMatrix();

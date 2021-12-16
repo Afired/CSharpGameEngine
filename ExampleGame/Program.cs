@@ -28,12 +28,11 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        BaseCamera camera = new Camera3D(75);
-        camera.Transform.Position = new Vector3(0, 0, -5f);
-        Game.SetActiveCamera(camera);
-        new CameraController(camera);
+        Pyramid myCamera = new Pyramid();
+        myCamera.Transform.Position = new Vector3(0, 0, -5f);
         
-        new Player();
+        Player player = new Player();
+        Game.SetActiveCamera(player.Camera3D);
     }
     
 }

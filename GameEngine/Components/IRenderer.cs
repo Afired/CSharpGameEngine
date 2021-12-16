@@ -21,7 +21,7 @@ public class Renderer : Component {
         Matrix4x4 rot = Matrix4x4.CreateFromQuaternion(transform.Transform.Rotation);
         
         ShaderRegister.Get("default").SetMatrix4x4("model", rot * sca * trans);
-        ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
+        ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentBaseCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray((GameObject as IGeometry).Geometry.Vao);
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 18);

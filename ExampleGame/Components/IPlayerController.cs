@@ -30,7 +30,7 @@ public class PlayerController : Component {
     }
 
     private void UpdatePosition(float deltaTime) {
-        (GameObject as ITransform).Transform.Position += new Vector3(0, 0, _inputAxis.Y) * deltaTime * _speed;
+        (GameObject as ITransform).Transform.Position += _inputAxis.X_Y * deltaTime * _speed;
     }
 
 }

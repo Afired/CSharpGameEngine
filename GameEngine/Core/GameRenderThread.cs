@@ -1,5 +1,4 @@
-﻿using System;
-using GameEngine.Input;
+﻿using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
@@ -37,7 +36,7 @@ public sealed partial class Game {
             if(CurrentBaseCamera != null)
                 Render(window);
             Glfw.PollEvents();
-            inputHandler.HandleInput(window);
+            inputHandler.HandleMouseInput(window);
         }
         Terminate();
     }

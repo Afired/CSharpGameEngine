@@ -1,9 +1,5 @@
 ﻿namespace GameEngine.Input; 
 
-public enum KeyCodeOld {
-    A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,Space,Escape
-}
-
 
 public enum KeyCode {
     Unknown = -1, // 0xFFFFFFFF

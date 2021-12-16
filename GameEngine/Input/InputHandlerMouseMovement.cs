@@ -12,12 +12,12 @@ internal partial class InputHandler {
         Input.MouseDelta = Vector2.Zero;
     }
 
-    static InputHandler() {
+    public InputHandler() {
         _windowCenter = new Vector2(Configuration.WindowWidth / 2, Configuration.WindowHeight / 2);
     }
     
     
-    internal static void HandleMouseInput(Window window) {
+    internal void HandleMouseInput(Window window) {
         Glfw.GetCursorPosition(window, out double x, out double y);
         Vector2 mousePos = new Vector2((int) x, (int) y);
         Input.MouseDelta += mousePos - _windowCenter;

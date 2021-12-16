@@ -34,3 +34,7 @@ public class PlayerController : Component {
     }
 
 }
+
+public interface IPlayerController {
+    public PlayerController PlayerController { get; set; }
+}

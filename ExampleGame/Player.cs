@@ -1,17 +1,19 @@
 using ExampleGame;
-using GameEngine.Geometry;
 
 namespace GameEngine.Components; 
 
-public class Player : GameObject, ITransform, IPlayerController, IPyramid {
-    public Transform Transform { get; }
+public class Player : GameObject, ITransform, IPlayerController, IGeometry, IRenderer {
+    public Transform Transform { get; set; }
     public PlayerController PlayerController { get; set; }
-    public Pyramid Pyramid { get; set; }
-
+    public Geometry Geometry { get; set; }
+    public Renderer Renderer { get; set; }
+    
+    
     public Player() {
         Transform = new Transform(this);
         PlayerController = new PlayerController(this);
-        Pyramid = new Pyramid(this);
+        Geometry = new Geometry(this);
+        Renderer = new Renderer(this);
     }
     
 }

@@ -1,6 +1,4 @@
-using GameEngine.Components;
-
-namespace GameEngine; 
+namespace GameEngine.Components;
 
 public class Component {
 

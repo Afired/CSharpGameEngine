@@ -1,7 +1,6 @@
-﻿using GameEngine.Components;
-using GameEngine.Numerics;
+﻿using GameEngine.Numerics;
 
-namespace GameEngine; 
+namespace GameEngine.Components;
 
 public class Transform : Component {
     
@@ -16,4 +15,8 @@ public class Transform : Component {
         Rotation = new Quaternion(0f, 0f, 0f, 1f).Normalized;
     }
     
+}
+
+public interface ITransform {
+    public Transform Transform { get; set; }
 }

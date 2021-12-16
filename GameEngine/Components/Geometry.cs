@@ -1,35 +1,35 @@
-﻿using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Numerics;
-using GameEngine.Rendering.Shaders;
+﻿using GameEngine.Core;
 using OpenGL;
 
-namespace GameEngine.Geometry; 
+namespace GameEngine.Components; 
 
-public class Pyramid : Component {
+public class Geometry : Component {
+
+    public uint Vao { get; private set; }
+    public uint Vbo { get; private set; }
+    private float[] Vertices { get; set; }
     
-    public Geometry Geometry { get; set; }
-    public Shader Shader { get; set; }
-    private uint _vao;
-    private uint _vbo;
+    
+    public Geometry(GameObject gameObject) : base(gameObject) {
+        Vertices = new[] {
+            -0.5f, 0.5f, 1f, 0f, 0f,  // top left
+            0.5f, 0.5f, 0f, 1f, 0f,   // top right
+            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
 
-
-    public Pyramid(GameObject gameObject) : base(gameObject) {
-        Game.OnDraw += OnDraw;
-        Game.OnLoad += OnLoad;
-    }
-
-    private void OnLoad() {
-        Shader = ShaderRegister.Get("default");
-        InitializeGeometry();
+            0.5f, 0.5f, 0f, 1f, 0f,   // top right
+            0.5f, -0.5f, 0f, 1f, 1f,  // bottom right
+            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
+        };
+        Game.OnLoad += InitializeGeometry;
     }
 
     private void InitializeGeometry() {
-        _vao = GL.glGenVertexArray();
-        _vbo = GL.glGenBuffer();
         
-        GL.glBindVertexArray(_vao);
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, _vbo);
+        Vao = GL.glGenVertexArray();
+        Vbo = GL.glGenBuffer();
+        
+        GL.glBindVertexArray(Vao);
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, Vbo);
         
         float[] vertices = {
             //walls
@@ -77,22 +77,8 @@ public class Pyramid : Component {
         
     }
     
+}
 
-    public void OnDraw() {
-        ShaderRegister.Get("default").Use();
-
-        ITransform transform = GameObject as ITransform;
-        
-        Matrix4x4 trans = Matrix4x4.CreateTranslation(transform.Transform.Position.X, transform.Transform.Position.Y, transform.Transform.Position.Z);
-        Matrix4x4 sca = Matrix4x4.CreateScale(transform.Transform.Scale.X, transform.Transform.Scale.Y, transform.Transform.Scale.Z);
-        Matrix4x4 rot = Matrix4x4.CreateFromQuaternion(transform.Transform.Rotation);
-        
-        ShaderRegister.Get("default").SetMatrix4x4("model", rot * sca * trans);
-        ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
-        
-        GL.glBindVertexArray(_vao);
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 18);
-        GL.glBindVertexArray(0);
-    }
-    
+public interface IGeometry {
+    public Geometry Geometry { get; set; }
 }

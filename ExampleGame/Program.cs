@@ -13,11 +13,11 @@ internal class Program {
         SetConfig();
         
         game.Initialize();
-        
+
         InitializeWorld();
         
         game.Start();
-        
+
         return 0;
     }
 

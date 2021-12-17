@@ -28,13 +28,14 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        new Pyramid().Transform.Position = new Vector3(0, 0, -5);
-        new Pyramid().Transform.Position = new Vector3(0, 0, 5);
-        new Pyramid().Transform.Position = new Vector3(-5, 0, 0);
-        new Pyramid().Transform.Position = new Vector3(5, 0, 0);
+        new Quad().Transform.Position = new Vector3(0, 0, -5);
+        new Quad().Transform.Position = new Vector3(0, 0, 5);
+        new Quad().Transform.Position = new Vector3(-5, 0, 0);
+        new Quad().Transform.Position = new Vector3(5, 0, 0);
         
         Player player = new Player();
-        Game.SetActiveCamera(player.Camera3D);
+        player.Transform.Position = new Vector3(0, 0, -10);
+        Game.SetActiveCamera(player.Camera2D);
     }
     
 }

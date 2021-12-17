@@ -10,16 +10,8 @@ public class Geometry : Component {
     private float[] Vertices { get; set; }
     
     
-    public Geometry(GameObject gameObject) : base(gameObject) {
-        Vertices = new[] {
-            -0.5f, 0.5f, 1f, 0f, 0f,  // top left
-            0.5f, 0.5f, 0f, 1f, 0f,   // top right
-            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
-
-            0.5f, 0.5f, 0f, 1f, 0f,   // top right
-            0.5f, -0.5f, 0f, 1f, 1f,  // bottom right
-            -0.5f, -0.5f, 0f, 0f, 1f, // bottom left
-        };
+    public Geometry(GameObject gameObject, float[] vertices) : base(gameObject) {
+        Vertices = vertices;
         Game.OnLoad += InitializeGeometry;
     }
 
@@ -31,36 +23,10 @@ public class Geometry : Component {
         GL.glBindVertexArray(Vao);
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, Vbo);
         
-        float[] vertices = {
-            //walls
-            0, 1, 0, 0.5f, 0.5f, 1.5f,   // top
-            1, -1, 1, 0.5f, 0.5f, 1.5f,  // bottom right
-            -1, -1, 1, 0.5f, 0.5f, 1.5f, // bottom left
-            
-            0, 1, 0, 0.5f, 1.5f, 0.5f,   // top
-            -1, -1, 1, 0.5f, 1.5f, 0.5f,  // bottom right
-            -1, -1, -1, 0.5f, 1.5f, 0.5f, // bottom left
-            
-            0, 1, 0, 1.5f, 0.5f, 0.5f,    // top
-            -1, -1, -1, 1.5f, 0.5f, 0.5f, // bottom right
-            1, -1, -1, 1.5f, 0.5f, 0.5f,  // bottom left
-            
-            0, 1, 0, 0.5f, 0.5f, 0.5f,   // top
-            1, -1, -1, 0.5f, 0.5f, 0.5f, // bottom right
-            1, -1, 1, 0.5f, 0.5f, 0.5f,  // bottom left
-            //base
-            -1, -1, -1, 0.5f, 0.5f, 0.5f,
-            1, -1, -1, 0.5f, 0.5f, 0.5f,
-            -1, -1, 1, 0.5f, 0.5f, 0.5f,
-            
-            1, -1, 1, 0.5f, 0.5f, 0.5f,
-            1, -1, -1, 0.5f, 0.5f, 0.5f,
-            -1, -1, 1, 0.5f, 0.5f, 0.5f,
-        };
 
         unsafe {
-            fixed(float* v = &vertices[0]) {
-                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * vertices.Length, v, GL.GL_STATIC_DRAW);
+            fixed(float* v = &Vertices[0]) {
+                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * Vertices.Length, v, GL.GL_STATIC_DRAW);
             }
             
             //xyz

@@ -1,6 +1,6 @@
 namespace GameEngine.Components; 
 
-public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
+public class Quad : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
@@ -8,7 +8,7 @@ public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody 
     public RigidBody RigidBody { get; set; }
 
 
-    public Pyramid() {
+    public Quad() {
         Transform = new Transform(this);
         Geometry = new Geometry(this);
         Renderer = new Renderer(this);

@@ -6,20 +6,26 @@ using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
+using Console = GameEngine.Debugging.Console;
 
 namespace GameEngine.Core;
 
 public delegate void OnFixedUpdate(float fixedDeltaTime);
 
+public delegate void OnRegisterRigidBody();
+
 public sealed partial class Game {
+
+    public static World World;
     
     public static event OnFixedUpdate OnFixedUpdate;
-    
+    public static event OnRegisterRigidBody OnRegisterRigidBody;
+
     private void FixedUpdateLoop() {
         
         //world
         Vector2 gravity = new Vector2(0, -9.81f);
-        World world = new World(gravity);
+        World = new World(gravity);
         
         //ground
         PolygonShape groundBox = new PolygonShape();
@@ -27,12 +33,12 @@ public sealed partial class Game {
         
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyType.Static;
-        groundBodyDef.position = new Vector2(0, -5f);
+        groundBodyDef.position = new Vector2(0, -12f);
 
         FixtureDef groundFixtureDef = new FixtureDef();
         groundFixtureDef.shape = groundBox;
 
-        Body ground = world.CreateBody(groundBodyDef);
+        Body ground = World.CreateBody(groundBodyDef);
         ground.CreateFixture(groundFixtureDef);
         
         //dynamic object
@@ -48,9 +54,11 @@ public sealed partial class Game {
         dynamicFixtureDef.density = 1.0f;
         dynamicFixtureDef.friction = 0.3f;
 
-        Body dynamicBody = world.CreateBody(dynamicBodyDef);
+        Body dynamicBody = World.CreateBody(dynamicBodyDef);
 
         dynamicBody.CreateFixture(dynamicFixtureDef);
+        
+        OnRegisterRigidBody?.Invoke();
         
         int velocityIterations = 6;
         int positionIterations = 2;
@@ -60,14 +68,13 @@ public sealed partial class Game {
         while(_isRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             TimeSpan timeOut = TimeSpan.FromSeconds(Configuration.FixedTimeStep - elapsedTime);
-            Thread.Sleep(timeOut);
+            //Console.LogWarning(timeOut.TotalSeconds.ToString());
+            if(timeOut.TotalSeconds > 0)
+                Thread.Sleep(timeOut);
             stopwatch.Restart();
+            
+            World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
             OnFixedUpdate?.Invoke(Configuration.FixedTimeStep);
-            
-            world.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-            Console.WriteLine(dynamicBody.GetPosition());
-            
-            
         }
     }
     

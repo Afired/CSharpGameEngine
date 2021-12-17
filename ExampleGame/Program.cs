@@ -34,7 +34,8 @@ internal class Program {
         new Pyramid().Transform.Position = new Vector3(5, 0, 0);
         
         Player player = new Player();
-        Game.SetActiveCamera(player.Camera3D);
+        player.Transform.Position = new Vector3(0, 0, -10);
+        Game.SetActiveCamera(player.Camera2D);
     }
     
 }

@@ -5,7 +5,7 @@ namespace GameEngine.Core;
 //TODO: create and deserialize configuration file when loading
 public static class Configuration {
     
-    public static float FixedTimeStep = 0.2f;
+    public static float FixedTimeStep = 0.02f;
     public static float TargetFrameRate = 144f;
 
     public static string WindowTitle = "Window Title";

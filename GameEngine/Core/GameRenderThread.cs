@@ -33,7 +33,7 @@ public sealed partial class Game {
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {
-            if(CurrentBaseCamera != null)
+            if(CurrentCamera != null)
                 Render(window);
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
@@ -51,7 +51,7 @@ public sealed partial class Game {
     }
 
     private void RenderBackground() {
-        GL.glClearColor(CurrentBaseCamera.BackgroundColor.R, CurrentBaseCamera.BackgroundColor.G, CurrentBaseCamera.BackgroundColor.B, CurrentBaseCamera.BackgroundColor.A);
+        GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }
     
 }

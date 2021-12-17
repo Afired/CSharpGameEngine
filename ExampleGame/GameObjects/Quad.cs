@@ -11,13 +11,13 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
     public Quad() {
         
         float[] vertices = {
-            -0.5f, 0.5f, 1f, 1f, 1f, 1f,  // top left
-            0.5f, 0.5f, 0f, 1f, 1f, 1f,   // top right
-            -0.5f, -0.5f, 0f, 1f, 1f, 1f, // bottom left
+            -0.5f, 0.5f, 1f,  // top left
+            0.5f, 0.5f, 0f,   // top right
+            -0.5f, -0.5f, 0f, // bottom left
 
-            0.5f, 0.5f, 0f, 1f, 1f, 1f,   // top right
-            0.5f, -0.5f, 0f, 1f, 1f, 1f,  // bottom right
-            -0.5f, -0.5f, 0f, 1f, 1f, 1f, // bottom left
+            0.5f, 0.5f, 0f,   // top right
+            0.5f, -0.5f, 0f,  // bottom right
+            -0.5f, -0.5f, 0f, // bottom left
         };
         
         Transform = new Transform(this);

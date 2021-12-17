@@ -12,29 +12,29 @@ public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody 
         
         float[] vertices = {
             //walls
-            0, 1, 0, 0.5f, 0.5f, 1.5f,   // top
-            1, -1, 1, 0.5f, 0.5f, 1.5f,  // bottom right
-            -1, -1, 1, 0.5f, 0.5f, 1.5f, // bottom left
+            0, 1, 0,   // top
+            1, -1, 1,  // bottom right
+            -1, -1, 1, // bottom left
             
-            0, 1, 0, 0.5f, 1.5f, 0.5f,   // top
-            -1, -1, 1, 0.5f, 1.5f, 0.5f,  // bottom right
-            -1, -1, -1, 0.5f, 1.5f, 0.5f, // bottom left
+            0, 1, 0,   // top
+            -1, -1, 1,  // bottom right
+            -1, -1, -1, // bottom left
             
-            0, 1, 0, 1.5f, 0.5f, 0.5f,    // top
-            -1, -1, -1, 1.5f, 0.5f, 0.5f, // bottom right
-            1, -1, -1, 1.5f, 0.5f, 0.5f,  // bottom left
+            0, 1, 0,    // top
+            -1, -1, -1, // bottom right
+            1, -1, -1,  // bottom left
             
-            0, 1, 0, 0.5f, 0.5f, 0.5f,   // top
-            1, -1, -1, 0.5f, 0.5f, 0.5f, // bottom right
-            1, -1, 1, 0.5f, 0.5f, 0.5f,  // bottom left
+            0, 1, 0,   // top
+            1, -1, -1, // bottom right
+            1, -1, 1,  // bottom left
             //base
-            -1, -1, -1, 0.5f, 0.5f, 0.5f,
-            1, -1, -1, 0.5f, 0.5f, 0.5f,
-            -1, -1, 1, 0.5f, 0.5f, 0.5f,
+            -1, -1, -1,
+            1, -1, -1,
+            -1, -1, 1,
             
-            1, -1, 1, 0.5f, 0.5f, 0.5f,
-            1, -1, -1, 0.5f, 0.5f, 0.5f,
-            -1, -1, 1, 0.5f, 0.5f, 0.5f,
+            1, -1, 1,
+            1, -1, -1,
+            -1, -1, 1,
         };
         
         Transform = new Transform(this);

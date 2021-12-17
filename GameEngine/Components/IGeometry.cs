@@ -30,13 +30,9 @@ public class Geometry : Component {
             }
             
             //xyz
-            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 6 * sizeof(float), (void*) (0 * sizeof(float)));
+            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 3 * sizeof(float), (void*) (0 * sizeof(float)));
             GL.glEnableVertexAttribArray(0);
-            
-            //rgb
-            GL.glVertexAttribPointer(1, 3, GL.GL_FLOAT, false, 6 * sizeof(float), (void*) (3 * sizeof(float)));
-            GL.glEnableVertexAttribArray(1);
-            
+
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);
         }

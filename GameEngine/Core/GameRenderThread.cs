@@ -1,6 +1,7 @@
 ﻿using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
+using GameEngine.Rendering.Textures;
 using GLFW;
 using OpenGL;
 
@@ -31,6 +32,8 @@ public sealed partial class Game {
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         DefaultShader.Initialize();
+        TextureRegister.Register("Test", new Texture2D("Test.png"));
+        TextureRegister.Register("Checkerboard", new Texture2D("Checkerboard.png"));
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {

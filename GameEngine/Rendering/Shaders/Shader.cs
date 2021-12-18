@@ -60,6 +60,11 @@ public class Shader {
         GL.glUniformMatrix4fv(location, 1, false, mat.ToArray());
     }
 
+    public void SetInt(string uniformName, int value) {
+        int location = GL.glGetUniformLocation(_programID, uniformName);
+        GL.glUniform1i(location, value);
+    }
+
 }
 
 public interface IShader {

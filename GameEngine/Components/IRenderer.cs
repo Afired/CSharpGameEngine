@@ -1,6 +1,7 @@
 using GameEngine.Core;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Shaders;
+using GLFW;
 using OpenGL;
 
 namespace GameEngine.Components; 
@@ -24,6 +25,10 @@ public class Renderer : Component {
         ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray((GameObject as IGeometry).Geometry.Vao);
+        
+        TextureRegister.Get("Checkerboard").Bind();
+        ShaderRegister.Get("default").SetInt("u_Texture", 0);
+
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, (GameObject as IGeometry).Geometry.VertexCount);
         GL.glBindVertexArray(0);
     }

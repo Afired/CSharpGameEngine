@@ -1,5 +1,6 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Debugging;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -29,7 +30,8 @@ public class PlayerController : Component {
     }
 
     private void UpdatePosition(float deltaTime) {
-        (GameObject as ITransform).Transform.Position += _inputAxis.X_Y * deltaTime * _speed;
+        Console.Log((GameObject as ITransform).Transform.Position.ToString());
+        (GameObject as ITransform).Transform.Position += _inputAxis.XY_ * deltaTime * _speed;
     }
 
 }

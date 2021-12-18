@@ -30,7 +30,6 @@ public class PlayerController : Component {
     }
 
     private void UpdatePosition(float deltaTime) {
-        Console.Log((GameObject as ITransform).Transform.Position.ToString());
         (GameObject as ITransform).Transform.Position += _inputAxis.XY_ * deltaTime * _speed;
     }
 

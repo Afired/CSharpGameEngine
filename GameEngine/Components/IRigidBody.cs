@@ -26,7 +26,7 @@ public class RigidBody : Component {
         dynamicBodyDef.angle = (GameObject as ITransform).Transform.Rotation;
 
         PolygonShape dynamicBox = new PolygonShape();
-        dynamicBox.SetAsBox(1f, 1f);
+        dynamicBox.SetAsBox(0.5f, 0.5f);
 
         FixtureDef dynamicFixtureDef = new FixtureDef();
         dynamicFixtureDef.shape = dynamicBox;

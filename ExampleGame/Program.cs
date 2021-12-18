@@ -28,7 +28,11 @@ internal class Program {
     
     private static void InitializeWorld() {
         new Quad().Transform.Position = new Vector3(0, 10, 0);
-        new Quad().Transform.Position = new Vector3(0, 15, 0);
+        new Quad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new Quad().Transform.Position = new Vector3(0, 10, 0);
+        new Quad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new Quad().Transform.Position = new Vector3(0, 10, 0);
+        new Quad().Transform.Position = new Vector3(0.5f, 15, 0);
         
         Player player = new Player();
         player.Transform.Position = new Vector3(0, 0, -10);

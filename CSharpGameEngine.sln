@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "GameEngine\Ga
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame", "ExampleGame\ExampleGame.csproj", "{DEF3E22C-8735-4687-98C8-6DC2704BA153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLFWPackageTesting", "GLFWPackageTesting\GLFWPackageTesting.csproj", "{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bindings", "Bindings\Bindings.csproj", "{E3BDF185-59C5-488A-A2CA-A1D007BD8C31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{E828E771-EDDF-46CF-A984-5926C1E6C0B3}"
 EndProject

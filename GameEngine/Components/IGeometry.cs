@@ -7,11 +7,13 @@ public class Geometry : Component {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
-    private float[] Vertices { get; set; }
-    
-    
-    public Geometry(GameObject gameObject, float[] vertices) : base(gameObject) {
-        Vertices = vertices;
+    public int VertexCount { get; }
+    private float[] VertexData { get; set; }
+
+
+    public Geometry(GameObject gameObject, float[] vertexData) : base(gameObject) {
+        VertexData = vertexData;
+        VertexCount = vertexData.Length / 5;
         Game.OnLoad += InitializeGeometry;
     }
 
@@ -25,13 +27,17 @@ public class Geometry : Component {
         
 
         unsafe {
-            fixed(float* v = &Vertices[0]) {
-                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * Vertices.Length, v, GL.GL_STATIC_DRAW);
+            fixed(float* v = &VertexData[0]) {
+                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * VertexData.Length, v, GL.GL_STATIC_DRAW);
             }
             
-            //xyz
-            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 3 * sizeof(float), (void*) (0 * sizeof(float)));
+            // xyz
+            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
             GL.glEnableVertexAttribArray(0);
+            
+            // texture coordinates
+            GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+            GL.glEnableVertexAttribArray(1);
 
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);

@@ -19,8 +19,7 @@ public class CameraController : Component {
 
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
-        UpdatePosition(deltaTime);
-        UpdateRotation();
+        UpdatePosition();
     }
 
     private void UpdateInputAxis() {
@@ -31,16 +30,10 @@ public class CameraController : Component {
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
 
-    private void UpdatePosition(float deltaTime) {
-        
-    }
-
-    private void UpdateRotation() {
-        Quaternion up = Quaternion.CreateFromAxisAngle(Vector3.Up, Input.MouseDelta.X * 0.005f);
-        Quaternion right = Quaternion.CreateFromAxisAngle(Vector3.Right, Input.MouseDelta.Y * 0.005f);
-
-        Transform.Rotation *= right;
-        Transform.Rotation = up * Transform.Rotation;
+    private void UpdatePosition() {
+        if(Input.IsKeyDown(KeyCode.F)) {
+            (GameObject as ITransform).Transform.Position += -Input.MouseDelta.XY_ * 0.00005f;
+        }
     }
     
 }

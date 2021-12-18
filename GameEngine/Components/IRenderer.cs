@@ -18,9 +18,9 @@ public class Renderer : Component {
         
         Matrix4x4 trans = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, transform.Position.Z);
         Matrix4x4 sca = Matrix4x4.CreateScale(transform.Scale.X, transform.Scale.Y, transform.Scale.Z);
-        Matrix4x4 rot = Matrix4x4.CreateFromQuaternion(transform.Rotation);
+        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(transform.Rotation);
         
-        ShaderRegister.Get("default").SetMatrix4x4("model", rot * sca * trans);
+        ShaderRegister.Get("default").SetMatrix4x4("model", sca * rotMat * trans);
         ShaderRegister.Get("default").SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray((GameObject as IGeometry).Geometry.Vao);

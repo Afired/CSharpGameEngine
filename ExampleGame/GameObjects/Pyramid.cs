@@ -1,4 +1,6 @@
-namespace GameEngine.Components; 
+using GameEngine.Components;
+
+namespace ExampleGame.GameObjects; 
 
 public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
     

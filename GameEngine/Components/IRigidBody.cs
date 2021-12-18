@@ -22,7 +22,8 @@ public class RigidBody : Component {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef();
         dynamicBodyDef.type = BodyType.Dynamic;
-        dynamicBodyDef.position = new Vector2(0, 40f);
+        dynamicBodyDef.position = new Vector2((GameObject as ITransform).Transform.Position.X, (GameObject as ITransform).Transform.Position.Y);
+        dynamicBodyDef.angle = (GameObject as ITransform).Transform.Rotation;
 
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(1f, 1f);
@@ -39,6 +40,7 @@ public class RigidBody : Component {
 
     private void OnFixedUpdate(float fixedDeltaTime) {
         (GameObject as ITransform).Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, (GameObject as ITransform).Transform.Position.Z);
+        (GameObject as ITransform).Transform.Rotation = _body.GetAngle();
     }
 
 }

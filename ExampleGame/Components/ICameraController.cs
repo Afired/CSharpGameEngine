@@ -3,7 +3,7 @@ using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
-namespace ExampleGame; 
+namespace ExampleGame.Components; 
 
 public class CameraController : Component {
     
@@ -31,8 +31,8 @@ public class CameraController : Component {
     }
 
     private void UpdatePosition() {
-        if(Input.IsKeyDown(KeyCode.F)) {
-            (GameObject as ITransform).Transform.Position += -Input.MouseDelta.XY_ * 0.00005f;
+        if(Input.IsKeyDown(KeyCode.LeftAlt)) {
+            (GameObject as ITransform).Transform.Position += -Input.MouseDelta.XY_ * 0.005f;
         }
     }
     

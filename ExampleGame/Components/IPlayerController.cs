@@ -3,7 +3,7 @@ using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
-namespace ExampleGame;
+namespace ExampleGame.Components; 
 
 public class PlayerController : Component {
     

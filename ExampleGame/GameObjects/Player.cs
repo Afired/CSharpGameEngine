@@ -1,7 +1,8 @@
-using ExampleGame;
+using ExampleGame.Components;
+using GameEngine.Components;
 using GameEngine.Rendering.Cameras;
 
-namespace GameEngine.Components; 
+namespace ExampleGame.GameObjects; 
 
 public class Player : GameObject, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
     

@@ -1,7 +1,6 @@
-using GameEngine.Core;
-using GameEngine.Numerics;
+using GameEngine.Components;
 
-namespace GameEngine.Components; 
+namespace ExampleGame.GameObjects; 
 
 public class Quad : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
     
@@ -26,13 +25,7 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer, IRigidBody {
         Transform = new Transform(this);
         Geometry = new Geometry(this, vertices);
         Renderer = new Renderer(this);
-        //RigidBody = new RigidBody(this);
-
-        Game.OnUpdate += OnUpdate;
-    }
-
-    private void OnUpdate(float deltaTime) {
-        Transform.Position += Vector3.Right * deltaTime;
+        RigidBody = new RigidBody(this);
     }
     
 }

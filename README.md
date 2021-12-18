@@ -3,9 +3,18 @@
 ![.NET 6.0](https://img.shields.io/badge/-.NET_6.0-acfcf0)
 ![GLFW](https://img.shields.io/badge/-GLFW-e1aafa)
 ![OpenGL 3.3](https://img.shields.io/badge/-OpenGL_3.3-faaaaa)
+![Box2D](https://img.shields.io/badge/-Box2D-fad5aa)
 
 ## About
-Goal of this project is to create a simple game engine, providing the basics like receiving managed game loop and input callbacks as well as rendering simple information.
+Goal of this project is to create a game engine with an entity component system,
+**capable of inheritance** and **composition** patterns while at the same time
+enforcing implementation to provide **type-safety** and avoiding anonymous game
+objects. Although this is also preventing run-time changes like adding new components,
+it brings the advantage of being able to cast game objects into it's components
+`(GameObject as ITransform)` instead of having to retrieve it through some generic
+getter method `(GetComponent<T>)`. Since casts are not creating much overhead, there
+is **no need to cache references** to components like it is common in other game engines.
+This also prevents null references, should a component be switched out with another instance.
 
 ## Branches
 - master
@@ -15,9 +24,9 @@ Goal of this project is to create a simple game engine, providing the basics lik
 
 ## Setup
 1. Clone the repo.
-2. Download pre-compiled GLFW 64-bit binaries for Windows on the official site [glfw.org](https://www.glfw.org/).
-3. Unpack the archive and copy the glfw3.dll out of the lib-vs2022 folder.
-4. Paste the dll file into the output folder of your project.
+2. Download pre-compiled GLFW 64-bit binaries for Windows from the official website [glfw.org](https://www.glfw.org/).
+3. Unpack the archive and copy the glfw3.dll from the lib-vs2022 folder.
+4. Paste the dll file into the output folder of your project and rename it to glfw.dll.
 
 ## UML-Planning
 The UML is created by using the open-source [drawio project](https://github.com/jgraph/drawio). 

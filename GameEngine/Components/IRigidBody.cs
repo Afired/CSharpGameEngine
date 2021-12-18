@@ -1,4 +1,3 @@
-using System;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
@@ -17,7 +16,7 @@ public class RigidBody : Component {
         Game.OnRegisterRigidBody += CreateBody;
         Game.OnFixedUpdate += OnFixedUpdate;
     }
-
+    
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef();
@@ -37,12 +36,12 @@ public class RigidBody : Component {
         
         _body.CreateFixture(dynamicFixtureDef);
     }
-
+    
     private void OnFixedUpdate(float fixedDeltaTime) {
         (GameObject as ITransform).Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, (GameObject as ITransform).Transform.Position.Z);
         (GameObject as ITransform).Transform.Rotation = _body.GetAngle();
     }
-
+    
 }
 
 public interface IRigidBody : ITransform {

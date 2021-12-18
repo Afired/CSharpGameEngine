@@ -1,13 +1,11 @@
 ﻿using System.Threading;
 using GameEngine.Debugging;
-using GameEngine.Rendering;
 using GameEngine.Rendering.Cameras;
-using GLFW;
 
 namespace GameEngine.Core;
 
 public sealed partial class Game {
-
+    
     public static BaseCamera CurrentCamera { get; private set; }
     private static bool _isRunning;
     private Thread _updateLoopThread;
@@ -43,7 +41,7 @@ public sealed partial class Game {
         Console.LogSuccess("Initialized render engine (3/3)");
         Console.LogSuccess("Started");
     }
-
+    
     public static void SetActiveCamera(BaseCamera baseCamera) {
         CurrentCamera = baseCamera;
     }

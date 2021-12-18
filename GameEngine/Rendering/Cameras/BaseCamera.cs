@@ -14,4 +14,5 @@ public abstract class BaseCamera : Component {
     }
     
     public abstract Matrix4x4 GetProjectionMatrix();
+    
 }

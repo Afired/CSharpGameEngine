@@ -14,6 +14,7 @@ public sealed partial class Game {
     public static event OnDraw OnDraw;
     public static event OnLoad OnLoad;
     
+    
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow();
         

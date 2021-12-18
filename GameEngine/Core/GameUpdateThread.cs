@@ -11,6 +11,7 @@ public sealed partial class Game {
     
     public static event OnUpdate OnUpdate;
     
+    
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
         stopwatch.Start();

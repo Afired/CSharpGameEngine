@@ -1,5 +1,4 @@
 ﻿using GameEngine.Core;
-using GameEngine.Debugging;
 using GameEngine.Numerics;
 using GLFW;
 
@@ -8,11 +7,11 @@ namespace GameEngine.Input;
 internal partial class InputHandler {
     
     private Vector2 _windowCenter;
-
+    
     internal static void ResetMouseDelta() {
         Input.MouseDelta = Vector2.Zero;
     }
-
+    
     public InputHandler() {
         _windowCenter = new Vector2(Configuration.WindowWidth / 2, -Configuration.WindowHeight / 2);
     }

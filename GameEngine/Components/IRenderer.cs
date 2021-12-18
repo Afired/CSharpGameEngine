@@ -10,7 +10,7 @@ public class Renderer : Component {
     public Renderer(GameObject gameObject) : base(gameObject) {
         Game.OnDraw += OnDraw;
     }
-
+    
     public void OnDraw() {
         ShaderRegister.Get("default").Use();
 

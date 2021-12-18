@@ -8,8 +8,8 @@ public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody 
     public Geometry Geometry { get; set; }
     public Renderer Renderer { get; set; }
     public RigidBody RigidBody { get; set; }
-
-
+    
+    
     public Pyramid() {
         
         float[] vertices = {

@@ -15,12 +15,12 @@ public delegate void OnFixedUpdate(float fixedDeltaTime);
 public delegate void OnRegisterRigidBody();
 
 public sealed partial class Game {
-
-    public static World World;
     
+    public static World World;
     public static event OnFixedUpdate OnFixedUpdate;
     public static event OnRegisterRigidBody OnRegisterRigidBody;
-
+    
+    
     private void FixedUpdateLoop() {
         
         //world

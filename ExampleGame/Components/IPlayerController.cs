@@ -1,6 +1,5 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
-using GameEngine.Debugging;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -20,7 +19,7 @@ public class PlayerController : Component {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
     }
-
+    
     private void UpdateInputAxis() {
         _inputAxis = new Vector2();
         _inputAxis.X += Input.IsKeyDown(KeyCode.A) ? -1 : 0;
@@ -28,11 +27,11 @@ public class PlayerController : Component {
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
-
+    
     private void UpdatePosition(float deltaTime) {
         (GameObject as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
-
+    
 }
 
 public interface IPlayerController : ITransform {

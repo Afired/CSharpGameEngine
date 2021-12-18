@@ -1,6 +1,5 @@
 ﻿namespace GameEngine.Input; 
 
-
 public enum KeyCode {
     Unknown = -1, // 0xFFFFFFFF
     Space = 32, // 0x00000020

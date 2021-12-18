@@ -4,7 +4,7 @@ using OpenGL;
 namespace GameEngine.Components; 
 
 public class Geometry : Component {
-
+    
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
     private float[] Vertices { get; set; }

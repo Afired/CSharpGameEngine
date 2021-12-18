@@ -7,8 +7,8 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer {
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }
     public Renderer Renderer { get; set; }
-
-
+    
+    
     public Quad() {
         
         float[] vertices = {

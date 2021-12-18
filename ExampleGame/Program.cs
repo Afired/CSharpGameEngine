@@ -1,8 +1,6 @@
-﻿using System;
-using GameEngine;
+﻿using ExampleGame.GameObjects;
 using GameEngine.Core;
-using GameEngine.Geometry;
-using GameEngine.Rendering.Cameras;
+using GameEngine.Numerics;
 
 namespace ExampleGame;
 
@@ -14,11 +12,11 @@ internal class Program {
         SetConfig();
         
         game.Initialize();
-        
+
         InitializeWorld();
         
         game.Start();
-        
+
         return 0;
     }
 
@@ -29,18 +27,34 @@ internal class Program {
     }
     
     private static void InitializeWorld() {
-        Camera2D camera = new Camera2D(10.0f);
-        Game.SetActiveCamera(camera);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsQuad().Transform.Position = new Vector3(0.5f, 15, 0);
         
-        Sprite sprite1 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite1.Transform.Position += new Vector3(1f, 1f, 0) * deltaTime;
-        
-        Sprite sprite2 = new Sprite();
-        sprite2.Transform.Position = new Vector3(0f, -4f, 0f);
-        new PlayerController(sprite2);
-        
-        Sprite sprite3 = new Sprite();
-        Game.OnUpdate += deltaTime => sprite3.Transform.Position = new Vector3((float) Math.Sin(Time.TotalTimeElapsed * 5f), 0, 0);
+        Player player = new Player();
+        player.Transform.Position = new Vector3(0, 0, -10);
+        Game.SetActiveCamera(player.Camera2D);
     }
     
 }

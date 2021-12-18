@@ -1,5 +1,4 @@
-﻿using System;
-using GameEngine.Input;
+﻿using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
@@ -15,11 +14,21 @@ public sealed partial class Game {
     public static event OnDraw OnDraw;
     public static event OnLoad OnLoad;
     
+    
     private void StartRenderThread() {
         Window window = WindowFactory.CreateWindow();
+        
+        Glfw.MakeContextCurrent(window);
 
-        //SetUpInputCallback(window);
+        GL.Import(Glfw.GetProcAddress);
+        GL.glViewport(0, 0, Configuration.WindowWidth, Configuration.WindowHeight);
+        GL.glEnable(GL.GL_DEPTH);
+        GL.glEnable(GL.GL_DEPTH_TEST);
+        GL.glDepthFunc(GL.GL_LEQUAL);
+        
+        //SetUpInputCallback(_window);
         InputHandler inputHandler = new InputHandler();
+        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         DefaultShader.Initialize();
         OnLoad?.Invoke();
@@ -28,20 +37,13 @@ public sealed partial class Game {
             if(CurrentCamera != null)
                 Render(window);
             Glfw.PollEvents();
-            inputHandler.HandleInput(window);
+            inputHandler.HandleMouseInput(window);
         }
         Terminate();
     }
-    
-    private void SetUpInputCallback(Window window) {
-        Glfw.SetKeyCallback(window, KeyCallback);
-    }
-
-    private void KeyCallback(Window window, Keys key, int scancode, InputState state, ModifierKeys mods) {
-        
-    }
 
     private void Render(Window window) {
+        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         RenderBackground();
         
         OnDraw?.Invoke();
@@ -51,7 +53,6 @@ public sealed partial class Game {
 
     private void RenderBackground() {
         GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
     }
     
 }

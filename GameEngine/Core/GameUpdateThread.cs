@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using GameEngine.Input;
 
 namespace GameEngine.Core;
 
@@ -9,6 +10,7 @@ public delegate void OnUpdate(float deltaTime);
 public sealed partial class Game {
     
     public static event OnUpdate OnUpdate;
+    
     
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
@@ -25,6 +27,7 @@ public sealed partial class Game {
             Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
             OnUpdate?.Invoke(elapsedTime);
+            InputHandler.ResetMouseDelta();
         }
     }
     

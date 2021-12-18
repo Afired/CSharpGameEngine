@@ -5,9 +5,9 @@ using GameEngine.Rendering.Cameras;
 namespace GameEngine.Core;
 
 public sealed partial class Game {
-
+    
     public static BaseCamera CurrentCamera { get; private set; }
-    private bool _isRunning;
+    private static bool _isRunning;
     private Thread _updateLoopThread;
     private Thread _physicsThread;
     private Thread _renderThread;
@@ -41,12 +41,12 @@ public sealed partial class Game {
         Console.LogSuccess("Initialized render engine (3/3)");
         Console.LogSuccess("Started");
     }
-
-    public static void SetActiveCamera(Camera2D camera2D) {
-        CurrentCamera = camera2D;
+    
+    public static void SetActiveCamera(BaseCamera baseCamera) {
+        CurrentCamera = baseCamera;
     }
     
-    private void Terminate() {
+    public static void Terminate() {
         _isRunning = false;
         Console.Log("Terminating...");
     }

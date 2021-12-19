@@ -29,12 +29,8 @@ public static class TextureRegister {
 
     public static void Load() {
         foreach(string path in AssetManager.GetAllTexturePaths()) {
-            Register(ExtractFileName(path), new Texture2D(path));
+            Register(Path.GetFileNameWithoutExtension(path), new Texture2D(path));
         }
-    }
-
-    private static string ExtractFileName(string path) {
-        return Path.GetFileNameWithoutExtension(path);
     }
     
 }

@@ -32,8 +32,8 @@ public sealed partial class Game {
         
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
-
-        DefaultShader.Initialize();
+        
+        ShaderRegister.Load();
         TextureRegister.Load();
         OnLoad?.Invoke();
         

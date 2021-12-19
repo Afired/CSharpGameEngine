@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using GameEngine.AssetManagement;
 using GameEngine.Debugging;
+using GameEngine.Rendering.Textures;
 
 namespace GameEngine.Rendering.Shaders; 
 
@@ -22,6 +25,13 @@ public static class ShaderRegister {
             return shader;
         else
             throw new ShaderNotFoundException(name);
+    }
+
+    public static void Load() {
+        DefaultShader.Initialize();
+        foreach(string path in AssetManager.GetAllShaderPaths()) {
+            Register(Path.GetFileNameWithoutExtension(path), new Shader(path));
+        }
     }
     
 }

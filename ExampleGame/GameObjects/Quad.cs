@@ -9,7 +9,7 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer {
     public Renderer Renderer { get; set; }
     
     
-    public Quad() {
+    public Quad(string texture) {
         
         float[] vertexData = {
             -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
@@ -23,7 +23,7 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer {
         
         Transform = new Transform(this);
         Geometry = new Geometry(this, vertexData);
-        Renderer = new Renderer(this);
+        Renderer = new Renderer(this, texture);
     }
     
 }

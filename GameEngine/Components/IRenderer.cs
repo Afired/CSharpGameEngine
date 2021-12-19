@@ -7,9 +7,13 @@ using OpenGL;
 namespace GameEngine.Components; 
 
 public class Renderer : Component {
+
+    private string _texture;
     
-    public Renderer(GameObject gameObject) : base(gameObject) {
+    
+    public Renderer(GameObject gameObject, string texture) : base(gameObject) {
         Game.OnDraw += OnDraw;
+        _texture = texture;
     }
     
     public void OnDraw() {
@@ -26,7 +30,7 @@ public class Renderer : Component {
         
         GL.glBindVertexArray((GameObject as IGeometry).Geometry.Vao);
         
-        TextureRegister.Get("Checkerboard").Bind();
+        TextureRegister.Get(_texture).Bind();
         ShaderRegister.Get("default").SetInt("u_Texture", 0);
 
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, (GameObject as IGeometry).Geometry.VertexCount);

@@ -9,6 +9,8 @@ namespace GameEngine.Rendering.Shaders;
 public static class ShaderRegister {
     
     private static Dictionary<string, Shader> _shaderRegister;
+
+    private static Shader _invalidShaderShader;
     
     
     static ShaderRegister() {
@@ -23,8 +25,10 @@ public static class ShaderRegister {
     public static Shader Get(string name) {
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;
-        else
-            throw new ShaderNotFoundException(name);
+        else {
+            Console.LogWarning($"Shader not found '{name}'");
+            return _invalidShaderShader;
+        }
     }
 
     public static void Load() {
@@ -32,6 +36,7 @@ public static class ShaderRegister {
         foreach(string path in AssetManager.GetAllShaderPaths()) {
             Register(Path.GetFileNameWithoutExtension(path), new Shader(path));
         }
+        _invalidShaderShader = InvalidShader.Create();
     }
     
 }

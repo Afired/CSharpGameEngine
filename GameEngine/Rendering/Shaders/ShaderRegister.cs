@@ -23,6 +23,7 @@ public static class ShaderRegister {
     }
 
     public static Shader Get(string name) {
+        name = name.ToLower();
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;
         else {
@@ -34,7 +35,7 @@ public static class ShaderRegister {
     public static void Load() {
         DefaultShader.Initialize();
         foreach(string path in AssetManager.GetAllShaderPaths()) {
-            Register(Path.GetFileNameWithoutExtension(path), new Shader(path));
+            Register(Path.GetFileNameWithoutExtension(path).ToLower(), new Shader(path));
         }
         _invalidShaderShader = InvalidShader.Create();
     }

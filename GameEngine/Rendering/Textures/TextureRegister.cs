@@ -21,6 +21,7 @@ public static class TextureRegister {
     }
 
     public static Texture Get(string name) {
+        name = name.ToLower();
         if(_textureRegister.TryGetValue(name, out Texture texture))
             return texture;
         else
@@ -29,7 +30,7 @@ public static class TextureRegister {
 
     public static void Load() {
         foreach(string path in AssetManager.GetAllTexturePaths()) {
-            Register(Path.GetFileNameWithoutExtension(path), new Texture2D(path));
+            Register(Path.GetFileNameWithoutExtension(path).ToLower(), new Texture2D(path));
         }
     }
     

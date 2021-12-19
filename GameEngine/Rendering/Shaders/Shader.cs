@@ -27,19 +27,20 @@ public static class StringExtension {
 public class Shader {
 
     private uint _programID;
-    private string _vertexCode;
-    private string _fragmentCode;
 
 
     public Shader(string vertexCode, string fragmentCode) {
-        _vertexCode = vertexCode;
-        _fragmentCode = fragmentCode;
+        (GLEnum shaderType, string shaderSrc)[] shaderInfo = new[] { (GLEnum.VertexShader, vertexCode), (GLEnum.FragmentShader, fragmentCode) };
+        Compile(shaderInfo);
     }
     
     public Shader(string filePath) {
         string contents = ReadFileWithFileStream(filePath);
         var shaderInfo = SplitIntoShader(contents);
-        
+        Compile(shaderInfo);
+    }
+
+    private void Compile((GLEnum shaderType, string shaderSrc)[] shaderInfo) {
         //compile
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
@@ -72,7 +73,6 @@ public class Shader {
             GL.glDetachShader(_programID, shaderIDs[i]);
             GL.glDeleteShader(shaderIDs[i]);
         }
-        
     }
 
     private static string ReadFileWithFileStream(string filePath) {
@@ -111,42 +111,7 @@ public class Shader {
         "pixel" => GLEnum.FragmentShader,
         _ => throw new Exception($"unsupported shader type: '{type}'")
     };
-
-    public void Compile() {
-        uint vs = GL.glCreateShader(GL.GL_VERTEX_SHADER);
-        GL.glShaderSource(vs, _vertexCode);
-        GL.glCompileShader(vs);
-
-        int[] status = GL.glGetShaderiv(vs, GL.GL_COMPILE_STATUS, 1);
-        if(status[0] == 0) {
-            string error = GL.glGetShaderInfoLog(vs);
-            throw new ShaderFailedToCompileException(error);
-        }
-        
-        uint fs = GL.glCreateShader(GL.GL_FRAGMENT_SHADER);
-        GL.glShaderSource(fs, _fragmentCode);
-        GL.glCompileShader(fs);
-        
-        status = GL.glGetShaderiv(fs, GL.GL_COMPILE_STATUS, 1);
-        if(status[0] == 0) {
-            string error = GL.glGetShaderInfoLog(fs);
-            throw new ShaderFailedToCompileException(error);
-        }
-
-        _programID = GL.glCreateProgram();
-        GL.glAttachShader(_programID, vs);
-        GL.glAttachShader(_programID, fs);
-        
-        GL.glLinkProgram(_programID);
-        
-        // Delete Shaders
-        
-        GL.glDetachShader(_programID, vs);
-        GL.glDetachShader(_programID, fs);
-        GL.glDeleteShader(vs);
-        GL.glDeleteShader(fs);
-    }
-
+    
     public void Use() {
         GL.glUseProgram(_programID);
     }

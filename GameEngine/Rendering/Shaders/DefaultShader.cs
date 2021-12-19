@@ -42,7 +42,6 @@ void main()
     internal static void Initialize() {
         Shader shader = new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
         ShaderRegister.Register("default", shader);
-        shader.Compile();
     }
     
 }

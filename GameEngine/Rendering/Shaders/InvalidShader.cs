@@ -38,9 +38,7 @@ void main()
 ";
 
     internal static Shader Create() {
-        Shader shader = new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
-        shader.Compile();
-        return shader;
+        return new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
     }
     
 }

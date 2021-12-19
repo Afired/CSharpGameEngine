@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using GameEngine.AssetManagement;
 using GameEngine.Debugging;
+using GameEngine.Rendering.Textures;
 
 namespace GameEngine.Rendering.Shaders; 
 
 public static class ShaderRegister {
     
     private static Dictionary<string, Shader> _shaderRegister;
+
+    private static Shader _invalidShaderShader;
     
     
     static ShaderRegister() {
@@ -18,10 +23,21 @@ public static class ShaderRegister {
     }
 
     public static Shader Get(string name) {
+        name = name.ToLower();
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;
-        else
-            throw new ShaderNotFoundException(name);
+        else {
+            Console.LogWarning($"Shader not found '{name}'");
+            return _invalidShaderShader;
+        }
+    }
+
+    public static void Load() {
+        DefaultShader.Initialize();
+        foreach(string path in AssetManager.GetAllShaderPaths()) {
+            Register(Path.GetFileNameWithoutExtension(path).ToLower(), new Shader(path));
+        }
+        _invalidShaderShader = InvalidShader.Create();
     }
     
 }

@@ -1,6 +1,6 @@
-﻿namespace GameEngine.Rendering.Shaders; 
+namespace GameEngine.Rendering.Shaders; 
 
-internal static class DefaultShader {
+internal static class InvalidShader {
     
     private const string VERTEX_SHADER = @"
 
@@ -9,7 +9,6 @@ layout (location = 0) in vec3 aPosition;
 layout (location = 1) in vec2 aTexCoord;
 out vec4 vertexColor;
 out vec2 vTexCoord;
-
 uniform mat4 projection;
 uniform mat4 model;
 
@@ -28,20 +27,18 @@ void main()
 out vec4 FragColor;
 in vec4 vertexColor;
 in vec2 vTexCoord;
-
 uniform sampler2D u_Texture;
 
 void main() 
 {
-    //FragColor = vec4(vTexCoord, 0.0, 0.0);
-    FragColor = texture(u_Texture, vTexCoord);
+    vec4 magenta = vec4(1.0, 0.0, 1.0, 1.0);
+    FragColor = magenta;
 }
 
 ";
 
-    internal static void Initialize() {
-        Shader shader = new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
-        ShaderRegister.Register("default", shader);
+    internal static Shader Create() {
+        return new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
     }
     
 }

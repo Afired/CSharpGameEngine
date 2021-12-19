@@ -36,9 +36,9 @@ public sealed partial class Game {
         Console.Log("Starting physics engine...");
         _physicsThread.Start();
         Console.LogSuccess("Started physics engine (2/3)");
-        Console.Log("Initializing render engine...");
+        Console.Log("Started render engine...");
         _renderThread.Start();
-        Console.LogSuccess("Initialized render engine (3/3)");
+        Console.LogSuccess("Started render engine (3/3)");
         Console.LogSuccess("Started");
     }
     

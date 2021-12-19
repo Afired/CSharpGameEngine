@@ -1,71 +1,70 @@
-using System;
-using System.IO;
+using System.Runtime.InteropServices;
 using GLFW;
-using OpenGL;
 using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
-using SixLabors.ImageSharp.ColorSpaces;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
-using Console = GameEngine.Debugging.Console;
-using GL = Silk.NET.OpenGL.GL;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace GameEngine.Rendering.Textures;
 
 public class Texture2D : Texture {
-
-    private int _width;
-    private int _height;
+    
+    private uint _width;
+    private uint _height;
     private uint _textureID;
-
-    public Texture2D(string path) {
-        using var image = Image.Load(path);
-        _width = image.Width;
-        _height = image.Height;
-
+    
+    public unsafe Texture2D( string path) {
         GL gl = GL.GetApi(Glfw.GetProcAddress);
-        gl.CreateTextures(TextureTarget.Texture2D, 1, out _textureID);
-        gl.TextureStorage2D(_textureID, 1, SizedInternalFormat.Rgb8, (uint) _width, (uint) _height);
         
-        gl.TextureParameterI(_textureID, TextureParameterName.TextureMinFilter, OpenGL.GL.GL_NEAREST);
-        gl.TextureParameterI(_textureID, TextureParameterName.TextureMagFilter, OpenGL.GL.GL_NEAREST);
+        //Loading an image using imagesharp.
+        Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
+        _width = (uint) img.Width;
+        _height = (uint) img.Height;
         
-        unsafe {
-
-            byte[] arr = image.ToArray(PngFormat.Instance);
-            
-            fixed(byte* b = arr) {
-                gl.TextureSubImage2D(_textureID, 0, 0, 0, (uint) _width, (uint) _height, PixelFormat.Rgb, PixelType.Byte, b);
-            }
+        // OpenGL has image origin in the bottom-left corner.
+        fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0))) {
+            //Loading the actual image.
+            Load(gl, data, _width, _height);
         }
-             
-        image.Dispose();
+
+        //Deleting the img from imagesharp.
+        img.Dispose();
+    }
+    
+    private unsafe void Load(GL gl, void* data, uint width, uint height) {
+        
+        //Generating the opengl handle;
+        _textureID = gl.GenTexture();
+        Bind();
+
+        //Setting the data of a texture.
+        gl.TexImage2D(TextureTarget.Texture2D, 0, (int) InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+        //Setting some texture perameters so the texture behaves as expected.
+        gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) GLEnum.Repeat);
+        gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GLEnum.Repeat);
+        gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.Nearest); // linear, nearest
+        gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Nearest);
+        
+        //Generating mipmaps.
+        //gl.GenerateMipmap(TextureTarget.Texture2D);
     }
     
     ~Texture2D() {
+        Dispose();
+    }
+
+    public void Dispose() {
         GL gl = GL.GetApi(Glfw.GetProcAddress);
         gl.DeleteTexture(_textureID);
     }
 
     public override void Bind(uint slot = 0) {
         GL gl = GL.GetApi(Glfw.GetProcAddress);
-        gl.BindTextureUnit(slot, _textureID);
+        
+        //When we bind a texture we can choose which textureslot we can bind it to.
+        TextureUnit textureSlot = TextureUnit.Texture0;
+        gl.ActiveTexture((TextureUnit)slot);
+        gl.BindTexture(TextureTarget.Texture2D, _textureID);
     }
     
-}
-
-public static class ImageSharpExtensions
-{
-    public static byte[] ToArray(this Image image, IImageFormat imageFormat)
-    {
-        using (var memoryStream = new MemoryStream())
-        {
-            var imageEncoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(imageFormat);
-            image.Save(memoryStream, imageEncoder);
-            return memoryStream.ToArray();
-        }
-    }
 }

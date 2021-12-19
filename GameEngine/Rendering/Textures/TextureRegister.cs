@@ -22,7 +22,7 @@ public static class TextureRegister {
         if(_textureRegister.TryGetValue(name, out Texture texture))
             return texture;
         else
-            throw new ShaderNotFoundException(name);
+            throw new ShaderNotFoundException(name); //todo: texturenotfoundexception
     }
     
 }

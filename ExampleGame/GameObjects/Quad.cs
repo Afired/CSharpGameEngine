@@ -9,21 +9,21 @@ public class Quad : GameObject, ITransform, IGeometry, IRenderer {
     public Renderer Renderer { get; set; }
     
     
-    public Quad() {
+    public Quad(string texture) {
         
-        float[] vertices = {
-            -0.5f, 0.5f, 1f,  // top left
-            0.5f, 0.5f, 0f,   // top right
-            -0.5f, -0.5f, 0f, // bottom left
+        float[] vertexData = {
+            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
+            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
+            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
 
-            0.5f, 0.5f, 0f,   // top right
-            0.5f, -0.5f, 0f,  // bottom right
-            -0.5f, -0.5f, 0f, // bottom left
+            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  // bottom left
         };
         
         Transform = new Transform(this);
-        Geometry = new Geometry(this, vertices);
-        Renderer = new Renderer(this);
+        Geometry = new Geometry(this, vertexData);
+        Renderer = new Renderer(this, texture);
     }
     
 }

@@ -6,7 +6,7 @@ public class PhysicsQuad : Quad, IRigidBody {
     
     public RigidBody RigidBody { get; set; }
 
-    public PhysicsQuad() : base() {
+    public PhysicsQuad(string texture) : base(texture) {
         RigidBody = new RigidBody(this);
     }
     

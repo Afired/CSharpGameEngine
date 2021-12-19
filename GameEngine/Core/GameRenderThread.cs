@@ -1,8 +1,11 @@
-﻿using GameEngine.Input;
+﻿using GameEngine.Debugging;
+using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
+using GameEngine.Rendering.Textures;
 using GLFW;
-using OpenGL;
+using Silk.NET.OpenGL;
+using GL = OpenGL.GL;
 
 namespace GameEngine.Core;
 
@@ -21,16 +24,18 @@ public sealed partial class Game {
         Glfw.MakeContextCurrent(window);
 
         GL.Import(Glfw.GetProcAddress);
+        
         GL.glViewport(0, 0, Configuration.WindowWidth, Configuration.WindowHeight);
         GL.glEnable(GL.GL_DEPTH);
         GL.glEnable(GL.GL_DEPTH_TEST);
         GL.glDepthFunc(GL.GL_LEQUAL);
         
-        //SetUpInputCallback(_window);
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         DefaultShader.Initialize();
+        TextureRegister.Register("Checkerboard", new Texture2D("Checkerboard.png"));
+        TextureRegister.Register("Box", new Texture2D("Box.png"));
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {

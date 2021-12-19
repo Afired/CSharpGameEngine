@@ -34,8 +34,7 @@ public sealed partial class Game {
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         DefaultShader.Initialize();
-        TextureRegister.Register("Checkerboard", new Texture2D("Checkerboard.png"));
-        TextureRegister.Register("Box", new Texture2D("Box.png"));
+        TextureRegister.Load();
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {

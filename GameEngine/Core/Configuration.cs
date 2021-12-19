@@ -20,5 +20,10 @@ public static class Configuration {
     public static bool DoDebugWarnings = true;
     public static bool DoDebugErrors = true;
     public static bool DoDebugSuccess = true;
-    
+
+    public static string RootPath = "";
+    public static string AssetFolderName = "Assets";
+    public static string TextureFolderName = "Textures";
+    public static string ShaderFolderName = "Shaders";
+
 }

@@ -26,18 +26,19 @@ public static class ShaderRegister {
         name = name.ToLower();
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;
-        else {
-            Console.LogWarning($"Shader not found '{name}'");
-            return _invalidShaderShader;
-        }
+        Console.LogWarning($"Shader not found '{name}'");
+        return _invalidShaderShader;
     }
-
+    
     public static void Load() {
-        DefaultShader.Initialize();
-        foreach(string path in AssetManager.GetAllShaderPaths()) {
-            Register(Path.GetFileNameWithoutExtension(path).ToLower(), new Shader(path));
-        }
+        Console.Log($"Compiling shaders...");
         _invalidShaderShader = InvalidShader.Create();
+        DefaultShader.Initialize();
+        string[] paths = AssetManager.GetAllShaderPaths();
+        for (int i = 0; i < paths.Length; i++) {
+            Register(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), new Shader(paths[i]));
+            Console.LogSuccess($"Compiling shaders ({i + 1}/{paths.Length}) '{paths[i]}'");
+        }
     }
     
 }

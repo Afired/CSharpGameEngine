@@ -68,8 +68,8 @@ public sealed partial class Game {
         RenderBackground();
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         // use shader
-        ShaderRegister.Get("screenshader").Use();
-        ShaderRegister.Get("screenshader").SetFloat("time", Time.TotalTimeElapsed);
+        ShaderRegister.Get("bloomscreenshader").Use();
+        ShaderRegister.Get("bloomscreenshader").SetFloat("time", Time.TotalTimeElapsed);
         GL.glBindVertexArray(vao);
         GL.glDisable(GL.GL_DEPTH_TEST);
         GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);

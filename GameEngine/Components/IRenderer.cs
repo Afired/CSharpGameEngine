@@ -12,10 +12,10 @@ public class Renderer : Component {
     private string _shader;
     
     
-    public Renderer(GameObject gameObject, string texture) : base(gameObject) {
+    public Renderer(GameObject gameObject, string texture, string shader) : base(gameObject) {
         Game.OnDraw += OnDraw;
         _texture = texture;
-        _shader = "CustomShader";
+        _shader = shader;
     }
     
     public void OnDraw() {

@@ -123,6 +123,11 @@ public class Shader {
         GL.glUniform1i(location, value);
     }
 
+    public void SetFloat(string uniformName, float value) {
+        int location = GL.glGetUniformLocation(_programID, "time");
+        GL.glUniform1f(location, value);
+    }
+
 }
 
 public interface IShader {

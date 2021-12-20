@@ -26,4 +26,6 @@ public static class Configuration {
     public static string TextureFolderName = "Textures";
     public static string ShaderFolderName = "Shaders";
 
+    public static bool UseHDR = true;
+
 }

@@ -69,6 +69,7 @@ public sealed partial class Game {
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         // use shader
         ShaderRegister.Get("screenshader").Use();
+        ShaderRegister.Get("screenshader").SetFloat("time", Time.TotalTimeElapsed);
         GL.glBindVertexArray(vao);
         GL.glDisable(GL.GL_DEPTH_TEST);
         GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
@@ -93,7 +94,10 @@ public sealed partial class Game {
         textureColorBuffer = GL.glGenTexture();
         GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
         unsafe {
-            GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, Configuration.WindowWidth, Configuration.WindowHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, null);
+            if(Configuration.UseHDR)
+                GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, (int) InternalFormat.Rgb16f, Configuration.WindowWidth, Configuration.WindowHeight, 0, (int) PixelFormat.Rgb, GL.GL_FLOAT, null);
+            else
+                GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, (int) InternalFormat.Rgb, Configuration.WindowWidth, Configuration.WindowHeight, 0, (int) PixelFormat.Rgb, GL.GL_UNSIGNED_BYTE, null);
         }
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);

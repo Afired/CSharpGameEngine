@@ -30,18 +30,17 @@ public class Shader {
 
 
     public Shader(string vertexCode, string fragmentCode) {
-        (GLEnum shaderType, string shaderSrc)[] shaderInfo = new[] { (GLEnum.VertexShader, vertexCode), (GLEnum.FragmentShader, fragmentCode) };
+        (GLEnum shaderType, string shaderSrc)[] shaderInfo = { (GLEnum.VertexShader, vertexCode), (GLEnum.FragmentShader, fragmentCode) };
         Compile(shaderInfo);
     }
     
     public Shader(string filePath) {
         string contents = ReadFileWithFileStream(filePath);
-        var shaderInfo = SplitIntoShader(contents);
+        (GLEnum, string)[] shaderInfo = SplitIntoShader(contents);
         Compile(shaderInfo);
     }
 
     private void Compile((GLEnum shaderType, string shaderSrc)[] shaderInfo) {
-        //compile
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
         for(int i = 0; i < shaderInfo.Length; i++) {
@@ -56,7 +55,7 @@ public class Shader {
             int[] status = GL.glGetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             if(status[0] == 0) {
                 string error = GL.glGetShaderInfoLog(shaderIDs[i]);
-                throw new ShaderFailedToCompileException(error);
+                throw new Exception($"Shader failed to compile {error}");
             }
             
         }
@@ -65,7 +64,6 @@ public class Shader {
         for(int i = 0; i < shaderIDs.Length; i++) {
             GL.glAttachShader(_programID, shaderIDs[i]);
         }
-        
         GL.glLinkProgram(_programID);
         
         // Delete Shaders
@@ -84,9 +82,8 @@ public class Shader {
     }
     
     private static string ReadFileWithStreamReader(string filePath) {
-        string result;
         using StreamReader sr = File.OpenText(filePath);
-        result = sr.ReadToEnd();
+        string result = sr.ReadToEnd();
         sr.Dispose();
         return result;
     }

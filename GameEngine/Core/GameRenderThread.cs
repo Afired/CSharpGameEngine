@@ -37,20 +37,20 @@ public sealed partial class Game {
         TextureRegister.Load();
         
         SetupFrameBuffers(out uint framebuffer, out uint textureColorBuffer);
-        InitializeQuadVao();
+        uint vao = GetQuadVao();
         
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {
             if(CurrentCamera != null)
-                Render(window, framebuffer, textureColorBuffer);
+                Render(window, framebuffer, textureColorBuffer, vao);
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
         }
         Terminate();
     }
 
-    private void Render(Window window, uint framebuffer, uint textureColorBuffer) {
+    private void Render(Window window, uint framebuffer, uint textureColorBuffer, uint vao) {
         // first pass
         // bind to custom framebuffer
         GL.glBindFramebuffer(framebuffer);
@@ -69,7 +69,7 @@ public sealed partial class Game {
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         // use shader
         ShaderRegister.Get("screenshader").Use();
-        GL.glBindVertexArray(Vao);
+        GL.glBindVertexArray(vao);
         GL.glDisable(GL.GL_DEPTH_TEST);
         GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6); 
@@ -116,19 +116,15 @@ public sealed partial class Game {
         
         //check for framebuffer status
         if(GL.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER) == GL.GL_FRAMEBUFFER_COMPLETE)
-            Console.LogSuccess("FRAMEBUFFER SUCCESS");
+            Console.LogSuccess("Framebuffer setup succeeded");
         else
-            Console.LogError("Framebuffer is not complete!");
+            Console.LogError("Framebuffer is not complete");
         
         // bind default frame buffer so we dont accidentally rendering to the wrong framebuffer
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
     }
-    
-    
-    private uint Vao { get; set; }
-    private uint Vbo { get; set; }
-    
-    private void InitializeQuadVao() {
+
+    private uint GetQuadVao() {
         
         float[] vertexData = {
             -1, 1f, 0f, 0f, 1f,   // top left
@@ -140,8 +136,8 @@ public sealed partial class Game {
             -1f, -1f, 0f, 0f, 0f,  // bottom left
         };
         
-        Vao = GL.glGenVertexArray();
-        Vbo = GL.glGenBuffer();
+        uint Vao = GL.glGenVertexArray();
+        uint Vbo = GL.glGenBuffer();
         
         GL.glBindVertexArray(Vao);
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, Vbo);
@@ -163,7 +159,7 @@ public sealed partial class Game {
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);
         }
-        
+        return Vao;
     }
     
 }

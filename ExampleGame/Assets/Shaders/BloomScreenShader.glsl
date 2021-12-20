@@ -18,16 +18,22 @@ in vec2 TexCoords;
 uniform sampler2D screenTexture;
 uniform float time;
 
-const float blurSizeH = 1.0 / 300.0;
-const float blurSizeV = 1.0 / 200.0;
+const float threshold = 3.0;
+
+const float blurSizeH = 1.0 / 500.0;
+const float blurSizeV = 1.0 / 500.0;
 void main()
 {
     //todo: replace with better blur -> downsample, upsample
     vec4 sum = vec4(0.0);
-    for (int x = -4; x <= 4; x++)
-        for (int y = -4; y <= 4; y++)
-            sum += texture(screenTexture, vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV)) / 81.0;
+    sum += texture(screenTexture, TexCoords);
+    for (int x = -8; x <= 8; x++) {
+        for (int y = -8; y <= 8; y++) {
+            vec4 neighboringPixel = texture(screenTexture, vec2(TexCoords.x + x * blurSizeH, TexCoords.y + y * blurSizeV));
+            if(length(neighboringPixel.rgb) > threshold)
+                sum += neighboringPixel / 400.0;
+        }
+    }
     FragColor = sum;
-    
     //todo: tonemapping
 }

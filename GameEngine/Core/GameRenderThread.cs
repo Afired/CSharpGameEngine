@@ -35,23 +35,43 @@ public sealed partial class Game {
         
         ShaderRegister.Load();
         TextureRegister.Load();
+        
+        SetupFrameBuffers(out uint framebuffer, out uint textureColorBuffer);
+        InitializeQuadVao();
+        
         OnLoad?.Invoke();
         
         while(!Glfw.WindowShouldClose(window)) {
             if(CurrentCamera != null)
-                Render(window);
+                Render(window, framebuffer, textureColorBuffer);
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
         }
         Terminate();
     }
 
-    private void Render(Window window) {
-        uint framebuffer = SetupFrameBuffers();
+    private void Render(Window window, uint framebuffer, uint textureColorBuffer) {
+        // first pass
+        // bind to custom framebuffer
+        GL.glBindFramebuffer(framebuffer);
         GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
+        GL.glEnable(GL.GL_DEPTH_TEST); // reenable depth test
+        
         RenderBackground();
         
         OnDraw?.Invoke();
+        
+        // second pass
+        // bind to default framebuffer
+        GL.glBindFramebuffer(0);
+        GL.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+        // use shader
+        ShaderRegister.Get("screenshader").Use();
+        GL.glBindVertexArray(Vao);
+        GL.glDisable(GL.GL_DEPTH_TEST);
+        GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6); 
         
         Glfw.SwapBuffers(window);
     }
@@ -60,23 +80,23 @@ public sealed partial class Game {
         GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }
 
-    private uint SetupFrameBuffers() {
+    private void SetupFrameBuffers(out uint framebuffer, out uint textureColorBuffer) {
         // create and bind frame buffer object
-        uint framebuffer = GL.glGenFramebuffer();
+        framebuffer = GL.glGenFramebuffer();
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, framebuffer);
 
         // delete framebuffer when all framebuffer operations are done
         //GL.glDeleteBuffer(framebuffer);
         
         // attach textures buffer object
-        uint texture = GL.glGenTexture();
-        GL.glBindTexture(GL.GL_TEXTURE_2D, texture);
+        textureColorBuffer = GL.glGenTexture();
+        GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
         unsafe {
             GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, Configuration.WindowWidth, Configuration.WindowHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, null);
         }
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-        GL.glFramebufferTexture2D(GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_TEXTURE_2D, texture, 0);
+        GL.glFramebufferTexture2D(GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_TEXTURE_2D, textureColorBuffer, 0);
         
         // attach depth stencil buffer
         //unsafe {
@@ -101,8 +121,48 @@ public sealed partial class Game {
         
         // bind default frame buffer so we dont accidentally rendering to the wrong framebuffer
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+    }
+    
+    
+    private uint Vao { get; set; }
+    private uint Vbo { get; set; }
+    
+    private void InitializeQuadVao() {
+        
+        float[] vertexData = {
+            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
+            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
+            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
 
-        return framebuffer;
+            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
+            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  // bottom left
+        };
+        
+        Vao = GL.glGenVertexArray();
+        Vbo = GL.glGenBuffer();
+        
+        GL.glBindVertexArray(Vao);
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, Vbo);
+        
+
+        unsafe {
+            fixed(float* v = &vertexData[0]) {
+                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * vertexData.Length, v, GL.GL_STATIC_DRAW);
+            }
+            
+            // xyz
+            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+            GL.glEnableVertexAttribArray(0);
+            
+            // texture coordinates
+            GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+            GL.glEnableVertexAttribArray(1);
+
+            GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+            GL.glBindVertexArray(0);
+        }
+        
     }
     
 }

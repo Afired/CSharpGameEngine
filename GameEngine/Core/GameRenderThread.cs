@@ -57,14 +57,15 @@ public sealed partial class Game {
         GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         GL.glEnable(GL.GL_DEPTH_TEST); // reenable depth test
         
-        RenderBackground();
+        //RenderBackground();
         
         OnDraw?.Invoke();
         
         // second pass
         // bind to default framebuffer
         GL.glBindFramebuffer(0);
-        GL.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        //GL.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderBackground();
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         // use shader
         ShaderRegister.Get("screenshader").Use();
@@ -130,13 +131,13 @@ public sealed partial class Game {
     private void InitializeQuadVao() {
         
         float[] vertexData = {
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
-            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
+            -1, 1f, 0f, 0f, 1f,   // top left
+            1f, 1f, 0f, 1f, 1f,    // top right
+            -1f, -1f, 0f, 0f , 0f, // bottom left
 
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  // bottom left
+            1f, 1f, 0f, 1f, 1f,    // top right
+            1f, -1f, 0f, 1f, 0f,   // bottom right
+            -1f, -1f, 0f, 0f, 0f,  // bottom left
         };
         
         Vao = GL.glGenVertexArray();

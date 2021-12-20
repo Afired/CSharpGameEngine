@@ -45,8 +45,8 @@ internal static class WindowFactory {
         Glfw.SetInputMode(window, InputMode.Cursor, (int) CursorMode.Hidden);
         
         // MSAA
-        Glfw.WindowHint(Hint.Samples, 4);
-        GL.glEnable(GL.GL_MULTISAMPLE);
+        //Glfw.WindowHint(Hint.Samples, 4);
+        //GL.glEnable(GL.GL_MULTISAMPLE);
         
         return window;
     }

@@ -21,9 +21,9 @@ internal class Program {
     }
 
     private static void SetConfig() {
-        Configuration.TargetFrameRate = 144;
+        Configuration.TargetFrameRate = 1000;
         Configuration.WindowTitle = "Example Game";
-        Configuration.DoUseVsync = true;
+        Configuration.DoUseVsync = false;
     }
     
     private static void InitializeWorld() {

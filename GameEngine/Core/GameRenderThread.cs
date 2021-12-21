@@ -26,7 +26,7 @@ public sealed partial class Game {
         // render loop
         while(!Glfw.WindowShouldClose(window)) {
             
-            // render frame
+            // render and draw frame
             if(CurrentCamera != null)
                 Render(window, framebuffer, textureColorBuffer, vao);
             
@@ -41,26 +41,18 @@ public sealed partial class Game {
 
     private void Setup(out Window window, out uint framebuffer, out uint textureColorBuffer, out uint vao) {
         window = WindowFactory.CreateWindow();
-        
-        // more open gl setup
-        Glfw.MakeContextCurrent(window);
-        GL.Import(Glfw.GetProcAddress);
-        GL.glViewport(0, 0, Configuration.WindowWidth, Configuration.WindowHeight);
-        GL.glEnable(GL.GL_DEPTH);
-        GL.glEnable(GL.GL_DEPTH_TEST);
-        GL.glDepthFunc(GL.GL_LEQUAL);
-        
+
         SetupFrameBuffers(out framebuffer, out textureColorBuffer);
         
         vao = GetFullScreenRenderQuadVao();
         
         LoadResources();
-        OnLoad?.Invoke();
     }
 
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
+        OnLoad?.Invoke();
     }
 
     private void Render(Window window, uint framebuffer, uint textureColorBuffer, uint vao) {
@@ -70,7 +62,7 @@ public sealed partial class Game {
     }
 
     private void RenderFirstPass(uint framebuffer) {
-        // bind drawing to custom framebuffer
+        // bind custom framebuffer to render to
         GL.glBindFramebuffer(framebuffer);
         GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         GL.glEnable(GL.GL_DEPTH_TEST); // reenable depth test
@@ -78,7 +70,7 @@ public sealed partial class Game {
     }
     
     private void RenderSecondPass(uint textureColorBuffer, uint vao) {
-        // bind drawing to default framebuffer
+        // bind default framebuffer to render to
         GL.glBindFramebuffer(0);
         
         RenderBackground();
@@ -138,7 +130,7 @@ public sealed partial class Game {
         else
             Console.LogError("Framebuffer is not complete");
         
-        // bind default frame buffer so we dont accidentally rendering to the wrong framebuffer
+        // bind default frame buffer to render to
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
     }
 
@@ -154,11 +146,11 @@ public sealed partial class Game {
             -1f, -1f, 0f, 0f, 0f,  // bottom left
         };
         
-        uint Vao = GL.glGenVertexArray();
-        uint Vbo = GL.glGenBuffer();
+        uint vao = GL.glGenVertexArray();
+        uint vbo = GL.glGenBuffer();
         
-        GL.glBindVertexArray(Vao);
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, Vbo);
+        GL.glBindVertexArray(vao);
+        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
         
 
         unsafe {
@@ -177,7 +169,7 @@ public sealed partial class Game {
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
             GL.glBindVertexArray(0);
         }
-        return Vao;
+        return vao;
     }
     
 }

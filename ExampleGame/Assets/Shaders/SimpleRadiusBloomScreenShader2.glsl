@@ -19,8 +19,8 @@ uniform sampler2D screenTexture;
 uniform float time;
 
 const float threshold = 2.0;
-const float samples = 5.0;
-const float radius = 0.05;
+const float samples = 10.0;
+const float radius = 0.1;
 const float bloomStrength = 1.0;
 
 void main()

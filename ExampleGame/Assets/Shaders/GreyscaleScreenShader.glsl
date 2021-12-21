@@ -20,9 +20,10 @@ uniform float time;
 
 const float greyscaleFactor = 1.0;
 
+// credit: https://gist.github.com/Volcanoscar/4a9500d240497d3c0228f663593d167a
 void main()																
 {
 	vec4 sample =  texture(screenTexture, TexCoords);
 	float grey = 0.21 * sample.r + 0.71 * sample.g + 0.07 * sample.b;
 	FragColor = vec4(sample.rgb * (1.0 - greyscaleFactor) + (grey * greyscaleFactor), 1.0);
-}	
+}

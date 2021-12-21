@@ -22,6 +22,8 @@ internal class Program {
 
     private static void SetConfig() {
         Configuration.TargetFrameRate = 1000;
+        Configuration.WindowHeight = 800;
+        Configuration.WindowWidth = 800;
         Configuration.WindowTitle = "Example Game";
         Configuration.DoUseVsync = false;
     }

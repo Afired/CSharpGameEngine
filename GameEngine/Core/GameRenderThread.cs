@@ -2,69 +2,85 @@
 using GameEngine.Input;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
-using GameEngine.Rendering.Textures;
 using GLFW;
 using Silk.NET.OpenGL;
 using GL = OpenGL.GL;
 
 namespace GameEngine.Core;
 
-public delegate void OnDraw();
 public delegate void OnLoad();
+public delegate void OnDraw();
 
 public sealed partial class Game {
     
-    public static event OnDraw OnDraw;
     public static event OnLoad OnLoad;
+    public static event OnDraw OnDraw;
     
     
     private void StartRenderThread() {
-        Window window = WindowFactory.CreateWindow();
+        // initial setup
+        Setup(out Window window, out uint framebuffer, out uint textureColorBuffer, out uint vao);
+        InputHandler inputHandler = new InputHandler();
+        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
         
-        Glfw.MakeContextCurrent(window);
+        // render loop
+        while(!Glfw.WindowShouldClose(window)) {
+            
+            // render frame
+            if(CurrentCamera != null)
+                Render(window, framebuffer, textureColorBuffer, vao);
+            
+            // handle input
+            Glfw.PollEvents();
+            inputHandler.HandleMouseInput(window);
+            
+        }
+        
+        Terminate();
+    }
 
-        GL.Import(Glfw.GetProcAddress);
+    private void Setup(out Window window, out uint framebuffer, out uint textureColorBuffer, out uint vao) {
+        window = WindowFactory.CreateWindow();
         
+        // more open gl setup
+        Glfw.MakeContextCurrent(window);
+        GL.Import(Glfw.GetProcAddress);
         GL.glViewport(0, 0, Configuration.WindowWidth, Configuration.WindowHeight);
         GL.glEnable(GL.GL_DEPTH);
         GL.glEnable(GL.GL_DEPTH_TEST);
         GL.glDepthFunc(GL.GL_LEQUAL);
         
-        InputHandler inputHandler = new InputHandler();
-        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
+        SetupFrameBuffers(out framebuffer, out textureColorBuffer);
         
+        vao = GetFullScreenRenderQuadVao();
+        
+        LoadResources();
+        OnLoad?.Invoke();
+    }
+
+    private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
-        
-        SetupFrameBuffers(out uint framebuffer, out uint textureColorBuffer);
-        uint vao = GetQuadVao();
-        
-        OnLoad?.Invoke();
-        
-        while(!Glfw.WindowShouldClose(window)) {
-            if(CurrentCamera != null)
-                Render(window, framebuffer, textureColorBuffer, vao);
-            Glfw.PollEvents();
-            inputHandler.HandleMouseInput(window);
-        }
-        Terminate();
     }
 
     private void Render(Window window, uint framebuffer, uint textureColorBuffer, uint vao) {
-        // first pass
-        // bind to custom framebuffer
+        RenderFirstPass(framebuffer);
+        RenderSecondPass(textureColorBuffer, vao);
+        Glfw.SwapBuffers(window);
+    }
+
+    private void RenderFirstPass(uint framebuffer) {
+        // bind drawing to custom framebuffer
         GL.glBindFramebuffer(framebuffer);
         GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
         GL.glEnable(GL.GL_DEPTH_TEST); // reenable depth test
-        
-        //RenderBackground();
-        
         OnDraw?.Invoke();
-        
-        // second pass
-        // bind to default framebuffer
+    }
+    
+    private void RenderSecondPass(uint textureColorBuffer, uint vao) {
+        // bind drawing to default framebuffer
         GL.glBindFramebuffer(0);
-        //GL.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        
         RenderBackground();
         GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         // use shader
@@ -73,9 +89,7 @@ public sealed partial class Game {
         GL.glBindVertexArray(vao);
         GL.glDisable(GL.GL_DEPTH_TEST);
         GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6); 
-        
-        Glfw.SwapBuffers(window);
+        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
     }
 
     private void RenderBackground() {
@@ -128,7 +142,7 @@ public sealed partial class Game {
         GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
     }
 
-    private uint GetQuadVao() {
+    private uint GetFullScreenRenderQuadVao() {
         
         float[] vertexData = {
             -1, 1f, 0f, 0f, 1f,   // top left

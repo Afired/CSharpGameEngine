@@ -21,6 +21,9 @@
         <None Update="Assets\Shaders\SoftVignetteScreenShader.glsl">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Assets\Shaders\CrazyDistortionShader.glsl">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

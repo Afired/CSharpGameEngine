@@ -20,7 +20,7 @@ uniform float time;
 
 vec4 applyVignette(vec4 color)
 {
-    vec2 position = (gl_FragCoord.xy / 800.0) - vec2(0.5);           
+    vec2 position = (gl_FragCoord.xy / 1000.0) - vec2(0.5);           
     float dist = length(position);
 
     float radius = 0.5;

@@ -1,6 +1,7 @@
 ﻿using ExampleGame.GameObjects;
 using GameEngine.Core;
 using GameEngine.Numerics;
+using GameEngine.Rendering;
 
 namespace ExampleGame;
 
@@ -21,9 +22,9 @@ internal class Program {
     }
 
     private static void SetConfig() {
-        Configuration.TargetFrameRate = 1000;
-        Configuration.WindowHeight = 800;
-        Configuration.WindowWidth = 800;
+        Configuration.TargetFrameRate = -1;
+        Configuration.WindowHeight = 1000;
+        Configuration.WindowWidth = 1000;
         Configuration.WindowTitle = "Example Game";
         Configuration.DoUseVsync = false;
     }
@@ -57,6 +58,7 @@ internal class Program {
         Player player = new Player();
         player.Transform.Position = new Vector3(0, 0, -10);
         Game.SetActiveCamera(player.Camera2D);
+        player.Camera2D.BackgroundColor = new Color(0.05f, 0.05f, 0.05f, 1.0f);
     }
     
 }

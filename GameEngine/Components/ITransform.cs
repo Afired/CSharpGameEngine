@@ -1,4 +1,5 @@
-﻿using GameEngine.Numerics;
+﻿using GameEngine.Entities;
+using GameEngine.Numerics;
 
 namespace GameEngine.Components;
 
@@ -9,7 +10,7 @@ public class Transform : Component {
     public float Rotation { get; set; }
     
     
-    public Transform(GameObject gameObject) : base(gameObject) {
+    public Transform(Entity entity) : base(entity) {
         Position = new Vector3(0f, 0f, 0f);
         Scale = new Vector3(1f, 1f, 1f);
         Rotation = new float();

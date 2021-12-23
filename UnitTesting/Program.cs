@@ -1,4 +1,5 @@
 ﻿using GameEngine.Core;
+using GameEngine.Physics;
 using NUnit.Framework;
 
 namespace UnitTesting;
@@ -36,7 +37,7 @@ internal static class Program {
 
         int fixedUpdateLoopCalled = 0;
         
-        Game.OnFixedUpdate += fixedDeltaTime => {
+        PhysicsEngine.OnFixedUpdate += fixedDeltaTime => {
             fixedUpdateLoopCalled++;
         };
         

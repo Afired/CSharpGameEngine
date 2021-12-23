@@ -1,5 +1,6 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Entities;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -11,7 +12,7 @@ public class PlayerController : Component {
     private float _speed = 10f;
     
     
-    public PlayerController(GameObject gameObject) : base(gameObject) {
+    public PlayerController(Entity entity) : base(entity) {
         Game.OnUpdate += OnUpdate;
     }
     
@@ -29,7 +30,7 @@ public class PlayerController : Component {
     }
     
     private void UpdatePosition(float deltaTime) {
-        (GameObject as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+        (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
 }

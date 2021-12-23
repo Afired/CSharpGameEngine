@@ -1,4 +1,4 @@
-namespace ExampleGame.GameObjects; 
+namespace ExampleGame.Entities; 
 
 public class PhysicsCheckerboard : PhysicsQuad {
     

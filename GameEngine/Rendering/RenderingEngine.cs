@@ -1,29 +1,33 @@
-﻿using GameEngine.Debugging;
+using GameEngine.Core;
 using GameEngine.Input;
-using GameEngine.Rendering;
+using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GLFW;
-using Silk.NET.OpenGL;
 using GL = OpenGL.GL;
 
-namespace GameEngine.Core;
+namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
 public delegate void OnDraw();
 
-public sealed partial class Game {
+public sealed class RenderingEngine {
     
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
+    public static BaseCamera CurrentCamera { get; private set; }
     
     
-    private void StartRenderThread() {
-        // initial setup
+    internal void Initialize() {
+        
         Setup(out Window window, out FrameBuffer frameBuffer, out uint vao);
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
         
-        // render loop
+        RenderLoop(window, frameBuffer, vao, inputHandler);
+    }
+    
+    private void RenderLoop(Window window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
+        
         while(!Glfw.WindowShouldClose(window)) {
             
             // render and draw frame
@@ -33,10 +37,10 @@ public sealed partial class Game {
             // handle input
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
-            
+
         }
         
-        Terminate();
+        Game.Terminate();
     }
 
     private void Setup(out Window window, out FrameBuffer frameBuffer, out uint vao) {
@@ -125,6 +129,10 @@ public sealed partial class Game {
             GL.glBindVertexArray(0);
         }
         return vao;
+    }
+    
+    public static void SetActiveCamera(BaseCamera baseCamera) {
+        CurrentCamera = baseCamera;
     }
     
 }

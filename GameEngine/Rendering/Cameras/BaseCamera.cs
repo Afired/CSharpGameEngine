@@ -1,5 +1,6 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Entities;
 using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras; 
@@ -9,7 +10,7 @@ public abstract class BaseCamera : Component {
     public Color BackgroundColor { get; set; }
     
     
-    public BaseCamera(GameObject gameObject) : base(gameObject) {
+    public BaseCamera(Entity entity) : base(entity) {
         BackgroundColor = Configuration.DefaultBackgroundColor;
     }
     

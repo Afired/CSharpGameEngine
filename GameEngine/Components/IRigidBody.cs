@@ -3,6 +3,7 @@ using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using GameEngine.Core;
 using GameEngine.Numerics;
+using GameEngine.Physics;
 using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Components; 

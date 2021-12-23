@@ -6,9 +6,9 @@ using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
-using Console = GameEngine.Debugging.Console;
+using GameEngine.Core;
 
-namespace GameEngine.Core;
+namespace GameEngine.Physics;
 
 public delegate void OnFixedUpdate(float fixedDeltaTime);
 

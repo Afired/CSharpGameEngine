@@ -1,5 +1,6 @@
 using GameEngine.Core;
 using GameEngine.Numerics;
+using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GLFW;
 using OpenGL;

@@ -1,11 +1,11 @@
+using GameEngine.Core;
 using GameEngine.Input;
-using GameEngine.Rendering;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GLFW;
 using GL = OpenGL.GL;
 
-namespace GameEngine.Core;
+namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
 public delegate void OnDraw();
@@ -15,18 +15,19 @@ public sealed class RenderingEngine {
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
     public static BaseCamera CurrentCamera { get; private set; }
-
-    internal void Initialize() {
-        StartRenderThread();
-    }
     
-    private void StartRenderThread() {
-        // initial setup
+    
+    internal void Initialize() {
+        
         Setup(out Window window, out FrameBuffer frameBuffer, out uint vao);
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
         
-        // render loop
+        RenderLoop(window, frameBuffer, vao, inputHandler);
+    }
+    
+    private void RenderLoop(Window window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
+        
         while(!Glfw.WindowShouldClose(window)) {
             
             // render and draw frame
@@ -36,7 +37,7 @@ public sealed class RenderingEngine {
             // handle input
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
-            
+
         }
         
         Game.Terminate();

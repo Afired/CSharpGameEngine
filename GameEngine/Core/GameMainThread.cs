@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using GameEngine.Debugging;
-using GameEngine.Rendering.Cameras;
+using GameEngine.Physics;
+using GameEngine.Rendering;
 
 namespace GameEngine.Core;
 
@@ -18,12 +19,10 @@ public sealed partial class Game {
         _updateLoopThread = new Thread(UpdateLoop);
         Console.LogSuccess("Initialized engine (1/3)");
         Console.Log("Initializing physics engine...");
-        PhysicsEngine physicsEngine = new PhysicsEngine();
-        _physicsThread = new Thread(physicsEngine.Initialize);
+        _physicsThread = new Thread(new PhysicsEngine().Initialize);
         Console.LogSuccess("Initialized physics engine (2/3)");
         Console.Log("Initializing render engine...");
-        RenderingEngine renderingEngine = new RenderingEngine();
-        _renderThread = new Thread(renderingEngine.Initialize);
+        _renderThread = new Thread(new RenderingEngine().Initialize);
         Console.LogSuccess("Initialized render engine (3/3)");
         Console.LogSuccess("Initialization complete");
     }

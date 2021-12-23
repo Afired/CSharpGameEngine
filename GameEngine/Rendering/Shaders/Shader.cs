@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using GameEngine.Debugging;
 using GameEngine.Numerics;
 using Silk.NET.OpenGL;
-using Console = GameEngine.Debugging.Console;
 using GL = OpenGL.GL;
 
 namespace GameEngine.Rendering.Shaders;

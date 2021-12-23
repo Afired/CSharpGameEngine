@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using GameEngine.AssetManagement;
 using GameEngine.Rendering.Textures;
-using Console = GameEngine.Debugging.Console;
 
 namespace GameEngine.Rendering.Shaders; 
 

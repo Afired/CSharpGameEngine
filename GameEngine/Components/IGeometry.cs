@@ -1,4 +1,5 @@
 ﻿using GameEngine.Core;
+using GameEngine.Rendering;
 using OpenGL;
 
 namespace GameEngine.Components; 

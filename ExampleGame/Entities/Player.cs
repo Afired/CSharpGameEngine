@@ -1,10 +1,11 @@
 using ExampleGame.Components;
 using GameEngine.Components;
+using GameEngine.Entities;
 using GameEngine.Rendering.Cameras;
 
-namespace ExampleGame.GameObjects; 
+namespace ExampleGame.Entities; 
 
-public class Player : GameObject, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
+public class Player : Entity, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
     
     public Transform Transform { get; set; }
     public PlayerController PlayerController { get; set; }

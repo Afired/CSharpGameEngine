@@ -1,4 +1,4 @@
-﻿using GameEngine.Core;
+﻿using GameEngine.Entities;
 using GameEngine.Rendering;
 using OpenGL;
 
@@ -12,7 +12,7 @@ public class Geometry : Component {
     private float[] VertexData { get; set; }
 
 
-    public Geometry(GameObject gameObject, float[] vertexData) : base(gameObject) {
+    public Geometry(Entity entity, float[] vertexData) : base(entity) {
         VertexData = vertexData;
         VertexCount = vertexData.Length / 5;
         RenderingEngine.OnLoad += InitializeGeometry;

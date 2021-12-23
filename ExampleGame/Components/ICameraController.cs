@@ -1,5 +1,6 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Entities;
 using GameEngine.Input;
 
 namespace ExampleGame.Components; 
@@ -9,7 +10,7 @@ public class CameraController : Component {
     private float _speed = 0.005f;
     
     
-    public CameraController(GameObject gameObject) : base(gameObject) {
+    public CameraController(Entity entity) : base(entity) {
         Game.OnUpdate += OnUpdate;
     }
     
@@ -19,7 +20,7 @@ public class CameraController : Component {
     
     private void UpdatePosition() {
         if(Input.IsKeyDown(KeyCode.LeftAlt))
-            (GameObject as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
+            (Entity as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
     }
     
 }

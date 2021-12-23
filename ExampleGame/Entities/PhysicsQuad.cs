@@ -1,6 +1,6 @@
 using GameEngine.Components;
 
-namespace ExampleGame.GameObjects; 
+namespace ExampleGame.Entities; 
 
 public class PhysicsQuad : Quad, IRigidBody {
     

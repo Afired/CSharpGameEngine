@@ -1,4 +1,4 @@
-﻿using ExampleGame.GameObjects;
+﻿using ExampleGame.Entities;
 using GameEngine.Core;
 using GameEngine.Numerics;
 using GameEngine.Rendering;

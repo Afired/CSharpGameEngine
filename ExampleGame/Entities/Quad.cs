@@ -1,8 +1,9 @@
 using GameEngine.Components;
+using GameEngine.Entities;
 
-namespace ExampleGame.GameObjects; 
+namespace ExampleGame.Entities; 
 
-public class Quad : GameObject, ITransform, IGeometry, IRenderer {
+public class Quad : Entity, ITransform, IGeometry, IRenderer {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }

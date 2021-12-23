@@ -1,9 +1,8 @@
-﻿using GameEngine.Debugging;
 using GameEngine.Input;
 using GameEngine.Rendering;
+using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GLFW;
-using Silk.NET.OpenGL;
 using GL = OpenGL.GL;
 
 namespace GameEngine.Core;
@@ -11,11 +10,15 @@ namespace GameEngine.Core;
 public delegate void OnLoad();
 public delegate void OnDraw();
 
-public sealed partial class Game {
+public sealed class RenderingEngine {
     
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
-    
+    public static BaseCamera CurrentCamera { get; private set; }
+
+    internal void Initialize() {
+        StartRenderThread();
+    }
     
     private void StartRenderThread() {
         // initial setup
@@ -36,7 +39,7 @@ public sealed partial class Game {
             
         }
         
-        Terminate();
+        Game.Terminate();
     }
 
     private void Setup(out Window window, out FrameBuffer frameBuffer, out uint vao) {
@@ -125,6 +128,10 @@ public sealed partial class Game {
             GL.glBindVertexArray(0);
         }
         return vao;
+    }
+    
+    public static void SetActiveCamera(BaseCamera baseCamera) {
+        CurrentCamera = baseCamera;
     }
     
 }

@@ -13,7 +13,7 @@ public class Renderer : Component {
     
     
     public Renderer(GameObject gameObject, string texture, string shader) : base(gameObject) {
-        Game.OnDraw += OnDraw;
+        RenderingEngine.OnDraw += OnDraw;
         _texture = texture;
         _shader = shader;
     }
@@ -28,7 +28,7 @@ public class Renderer : Component {
         Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(transform.Rotation);
         
         ShaderRegister.Get(_shader).SetMatrix4x4("model", sca * rotMat * trans);
-        ShaderRegister.Get(_shader).SetMatrix4x4("projection", Game.CurrentCamera.GetProjectionMatrix());
+        ShaderRegister.Get(_shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
         
         GL.glBindVertexArray((GameObject as IGeometry).Geometry.Vao);
         

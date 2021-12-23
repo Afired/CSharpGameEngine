@@ -6,7 +6,6 @@ namespace GameEngine.Core;
 
 public sealed partial class Game {
     
-    public static BaseCamera CurrentCamera { get; private set; }
     public static bool _isRunning { get; private set; }
     private Thread _updateLoopThread;
     private Thread _physicsThread;
@@ -23,7 +22,8 @@ public sealed partial class Game {
         _physicsThread = new Thread(physicsEngine.Initialize);
         Console.LogSuccess("Initialized physics engine (2/3)");
         Console.Log("Initializing render engine...");
-        _renderThread = new Thread(StartRenderThread);
+        RenderingEngine renderingEngine = new RenderingEngine();
+        _renderThread = new Thread(renderingEngine.Initialize);
         Console.LogSuccess("Initialized render engine (3/3)");
         Console.LogSuccess("Initialization complete");
     }
@@ -41,10 +41,6 @@ public sealed partial class Game {
         _renderThread.Start();
         Console.LogSuccess("Started render engine (3/3)");
         Console.LogSuccess("Started");
-    }
-    
-    public static void SetActiveCamera(BaseCamera baseCamera) {
-        CurrentCamera = baseCamera;
     }
     
     public static void Terminate() {

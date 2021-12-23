@@ -57,7 +57,7 @@ internal class Program {
         
         Player player = new Player();
         player.Transform.Position = new Vector3(0, 0, -10);
-        Game.SetActiveCamera(player.Camera2D);
+        RenderingEngine.SetActiveCamera(player.Camera2D);
         player.Camera2D.BackgroundColor = new Color(0.05f, 0.05f, 0.05f, 1.0f);
     }
     

@@ -14,7 +14,7 @@ public class Geometry : Component {
     public Geometry(GameObject gameObject, float[] vertexData) : base(gameObject) {
         VertexData = vertexData;
         VertexCount = vertexData.Length / 5;
-        Game.OnLoad += InitializeGeometry;
+        RenderingEngine.OnLoad += InitializeGeometry;
     }
 
     private void InitializeGeometry() {

@@ -1,6 +1,7 @@
 ﻿using ExampleGame.GameObjects;
 using GameEngine.Core;
 using GameEngine.Numerics;
+using GameEngine.Rendering;
 
 namespace ExampleGame;
 
@@ -21,40 +22,43 @@ internal class Program {
     }
 
     private static void SetConfig() {
-        Configuration.TargetFrameRate = 144;
+        Configuration.TargetFrameRate = -1;
+        Configuration.WindowHeight = 1000;
+        Configuration.WindowWidth = 1000;
         Configuration.WindowTitle = "Example Game";
-        Configuration.DoUseVsync = true;
+        Configuration.DoUseVsync = false;
     }
     
     private static void InitializeWorld() {
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Checkerboard").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsQuad("Box").Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
+        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
         
         Player player = new Player();
         player.Transform.Position = new Vector3(0, 0, -10);
         Game.SetActiveCamera(player.Camera2D);
+        player.Camera2D.BackgroundColor = new Color(0.05f, 0.05f, 0.05f, 1.0f);
     }
     
 }

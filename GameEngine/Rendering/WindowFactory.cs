@@ -41,8 +41,20 @@ internal static class WindowFactory {
         
         Cursor cursor = Glfw.CreateStandardCursor(CursorType.Crosshair);
         Glfw.SetCursor(window, cursor);
-        Glfw.SetCursorPosition(window, (double) Configuration.WindowWidth / 2d, (double) Configuration.WindowHeight / 2d);
+        Glfw.SetCursorPosition(window, (double) width / 2d, (double) height / 2d);
         Glfw.SetInputMode(window, InputMode.Cursor, (int) CursorMode.Hidden);
+        
+        // MSAA
+        //Glfw.WindowHint(Hint.Samples, 4);
+        //GL.glEnable(GL.GL_MULTISAMPLE);
+        
+        // more open gl setup
+        Glfw.MakeContextCurrent(window);
+        GL.Import(Glfw.GetProcAddress);
+        GL.glViewport(0, 0, width, height);
+        GL.glEnable(GL.GL_DEPTH);
+        GL.glEnable(GL.GL_DEPTH_TEST);
+        GL.glDepthFunc(GL.GL_LEQUAL);
         
         return window;
     }

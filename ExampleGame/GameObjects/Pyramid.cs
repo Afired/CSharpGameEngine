@@ -10,7 +10,7 @@ public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody 
     public RigidBody RigidBody { get; set; }
     
     
-    public Pyramid(string texture) {
+    public Pyramid(string texture, string shader) {
         
         float[] vertices = {
             //walls
@@ -41,7 +41,7 @@ public class Pyramid : GameObject, ITransform, IGeometry, IRenderer, IRigidBody 
         
         Transform = new Transform(this);
         Geometry = new Geometry(this, vertices);
-        Renderer = new Renderer(this, texture);
+        Renderer = new Renderer(this, texture, shader);
         RigidBody = new RigidBody(this);
     }
     

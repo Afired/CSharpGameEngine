@@ -21,8 +21,10 @@ in vec4 vertexColor;
 in vec2 vTexCoord;
 uniform sampler2D u_Texture;
 
+
+float emission = 10.0;
+
 void main() 
 {
-    //FragColor = vec4(vTexCoord, 0.0, 0.0);
-    FragColor = texture(u_Texture, vTexCoord);
+    FragColor = texture(u_Texture, vTexCoord) * emission;
 }

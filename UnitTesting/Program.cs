@@ -36,7 +36,7 @@ internal static class Program {
 
         int fixedUpdateLoopCalled = 0;
         
-        Game.OnFixedUpdate += fixedDeltaTime => {
+        PhysicsEngine.OnFixedUpdate += fixedDeltaTime => {
             fixedUpdateLoopCalled++;
         };
         

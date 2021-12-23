@@ -13,8 +13,8 @@ public class RigidBody : Component {
     
     
     public RigidBody(GameObject gameObject) : base(gameObject) {
-        Game.OnRegisterRigidBody += CreateBody;
-        Game.OnFixedUpdate += OnFixedUpdate;
+        PhysicsEngine.OnRegisterRigidBody += CreateBody;
+        PhysicsEngine.OnFixedUpdate += OnFixedUpdate;
     }
     
     private void CreateBody() {
@@ -32,7 +32,7 @@ public class RigidBody : Component {
         dynamicFixtureDef.density = 1.0f;
         dynamicFixtureDef.friction = 0.3f;
 
-        _body = Game.World.CreateBody(dynamicBodyDef);
+        _body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
         
         _body.CreateFixture(dynamicFixtureDef);
     }

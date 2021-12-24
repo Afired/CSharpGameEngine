@@ -10,7 +10,6 @@ namespace Dear_ImGui_Sample
 {
     static class Util {
         private static GL GL = RenderingEngine.Gl;
-        private static Glfw Glfw = RenderingEngine.Glfw;
         
         [Pure]
         public static float Clamp(float value, float min, float max)
@@ -27,50 +26,50 @@ namespace Dear_ImGui_Sample
                 Debug.Print($"{title}: {error}");
             }
         }
-/*
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void LabelObject(ObjectLabelIdentifier objLabelIdent, int glObject, string name)
+        public static void LabelObject(ObjectIdentifier objectIdentifier, int glObject, string name)
         {
-            GL.ObjectLabel(objLabelIdent, glObject, name.Length, name);
+            GL.ObjectLabel(objectIdentifier, (uint) glObject, (uint) name.Length, name);
         }
-*/
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateTexture(TextureTarget target, string Name, out int Texture)
+        public static void CreateTexture(TextureTarget target, string Name, out uint Texture)
         {
             //GL.CreateTextures(target, 1, out Texture);
-            Texture = (int) GL.GenTexture();
-            //LabelObject(ObjectLabelIdentifier.Texture, Texture, $"Texture: {Name}");
+            Texture = GL.GenTexture();
+            LabelObject(ObjectIdentifier.Texture, (int) Texture, $"Texture: {Name}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateProgram(string Name, out int Program) {
-            Program = (int) GL.CreateProgram();
-            //LabelObject(ObjectLabelIdentifier.Program, Program, $"Program: {Name}");
+        public static void CreateProgram(string Name, out uint Program) {
+            Program = GL.CreateProgram();
+            LabelObject(ObjectIdentifier.Program, (int) Program, $"Program: {Name}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateShader(ShaderType type, string Name, out int Shader)
+        public static void CreateShader(ShaderType type, string Name, out uint Shader)
         {
-            Shader = (int) GL.CreateShader(type);
-            //LabelObject(ObjectLabelIdentifier.Shader, Shader, $"Shader: {type}: {Name}");
+            Shader = GL.CreateShader(type);
+            LabelObject(ObjectIdentifier.Shader, (int) Shader, $"Shader: {type}: {Name}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateBuffer(string Name, out int Buffer) {
-            Buffer = (int) GL.GenBuffer();
-            //LabelObject(ObjectLabelIdentifier.Buffer, Buffer, $"Buffer: {Name}");
+        public static void CreateBuffer(string Name, out uint Buffer) {
+            Buffer = GL.GenBuffer();
+            LabelObject(ObjectIdentifier.Buffer, (int) Buffer, $"Buffer: {Name}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateVertexBuffer(string Name, out int Buffer) => CreateBuffer($"VBO: {Name}", out Buffer);
+        public static void CreateVertexBuffer(string Name, out uint Buffer) => CreateBuffer($"VBO: {Name}", out Buffer);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateElementBuffer(string Name, out int Buffer) => CreateBuffer($"EBO: {Name}", out Buffer);
+        public static void CreateElementBuffer(string Name, out uint Buffer) => CreateBuffer($"EBO: {Name}", out Buffer);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void CreateVertexArray(string Name, out int VAO) {
-            VAO = (int) GL.GenVertexArray();
-            //LabelObject(ObjectLabelIdentifier.VertexArray, VAO, $"VAO: {Name}");
+        public static void CreateVertexArray(string Name, out uint VAO) {
+            VAO = GL.GenVertexArray();
+            LabelObject(ObjectIdentifier.VertexArray, (int) VAO, $"VAO: {Name}");
         }
     }
 }

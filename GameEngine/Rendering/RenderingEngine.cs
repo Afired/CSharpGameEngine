@@ -1,9 +1,14 @@
+using Dear_ImGui_Sample;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
+using ImGuiNET;
 using Silk.NET.GLFW;
+using Silk.NET.Input;
 using Silk.NET.OpenGL;
+using Silk.NET.OpenGL.Extensions.ImGui;
+using Silk.NET.Windowing;
 
 namespace GameEngine.Rendering;
 
@@ -17,13 +22,19 @@ public sealed unsafe class RenderingEngine {
     public static BaseCamera CurrentCamera { get; private set; }
     public static GL Gl;
     public static Glfw Glfw;
-    
+
+    public GlfwImGuiController controller;
     
     internal void Initialize() {
         
         Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao);
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
+
+        //GUI.GUI gui = new GUI.GUI();
+        //gui.Attach();
+
+        controller = new GlfwImGuiController((int) Configuration.WindowWidth, (int) Configuration.WindowHeight);
 
         RenderLoop(window, frameBuffer, vao, inputHandler);
     }
@@ -62,17 +73,21 @@ public sealed unsafe class RenderingEngine {
     }
 
     private void Render(WindowHandle* window, FrameBuffer frameBuffer, uint vao) {
-        RenderFirstPass(frameBuffer.ID);
+        RenderFirstPass(frameBuffer.ID, window);
         RenderSecondPass(frameBuffer.TextureColorBuffer, vao);
         Glfw.SwapBuffers(window);
     }
 
-    private void RenderFirstPass(uint frameBuffer) {
+    private void RenderFirstPass(uint frameBuffer, WindowHandle* window) {
         // bind custom framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
         OnDraw?.Invoke();
+        
+        controller.Update(window, 0.1f);
+        ImGui.ShowDemoWindow();
+        controller.Render();
     }
     
     private void RenderSecondPass(uint textureColorBuffer, uint vao) {

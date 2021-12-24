@@ -2,7 +2,7 @@ using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
-using GLFW;
+using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Rendering;
@@ -10,24 +10,25 @@ namespace GameEngine.Rendering;
 public delegate void OnLoad();
 public delegate void OnDraw();
 
-public sealed class RenderingEngine {
+public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
     public static BaseCamera CurrentCamera { get; private set; }
     public static GL Gl;
+    public static Glfw Glfw;
     
     
     internal void Initialize() {
         
-        Setup(out Window window, out FrameBuffer frameBuffer, out uint vao);
+        Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao);
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
 
         RenderLoop(window, frameBuffer, vao, inputHandler);
     }
     
-    private void RenderLoop(Window window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
+    private void RenderLoop(WindowHandle* window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
         
         while(!Glfw.WindowShouldClose(window)) {
             
@@ -44,8 +45,8 @@ public sealed class RenderingEngine {
         Game.Terminate();
     }
 
-    private void Setup(out Window window, out FrameBuffer frameBuffer, out uint vao) {
-        window = WindowFactory.CreateWindow(out Gl);
+    private void Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao) {
+        window = WindowFactory.CreateWindow(out Gl, out Glfw);
         
         frameBuffer = new FrameBuffer();
         
@@ -60,7 +61,7 @@ public sealed class RenderingEngine {
         OnLoad?.Invoke();
     }
 
-    private void Render(Window window, FrameBuffer frameBuffer, uint vao) {
+    private void Render(WindowHandle* window, FrameBuffer frameBuffer, uint vao) {
         RenderFirstPass(frameBuffer.ID);
         RenderSecondPass(frameBuffer.TextureColorBuffer, vao);
         Glfw.SwapBuffers(window);

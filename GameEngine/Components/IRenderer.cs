@@ -2,7 +2,7 @@ using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
-using OpenGL;
+using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
@@ -10,6 +10,7 @@ public class Renderer : Component {
 
     private string _texture;
     private string _shader;
+    private GL GL => RenderingEngine.Gl;
     
     
     public Renderer(Entity entity, string texture, string shader) : base(entity) {
@@ -30,13 +31,13 @@ public class Renderer : Component {
         ShaderRegister.Get(_shader).SetMatrix4x4("model", sca * rotMat * trans);
         ShaderRegister.Get(_shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
         
-        GL.glBindVertexArray((Entity as IGeometry).Geometry.Vao);
+        GL.BindVertexArray((Entity as IGeometry).Geometry.Vao);
         
         TextureRegister.Get(_texture).Bind();
         ShaderRegister.Get(_shader).SetInt("u_Texture", 0);
 
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, (Entity as IGeometry).Geometry.VertexCount);
-        GL.glBindVertexArray(0);
+        GL.DrawArrays(PrimitiveType.Triangles, 0, (uint) (Entity as IGeometry).Geometry.VertexCount);
+        GL.BindVertexArray(0);
     }
     
 }

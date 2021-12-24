@@ -9,8 +9,8 @@ public static class Configuration {
     public static float TargetFrameRate = 144f;
     
     public static string WindowTitle = "Window Title";
-    public static int WindowHeight = 800;
-    public static int WindowWidth = 1000;
+    public static uint WindowHeight = 800;
+    public static uint WindowWidth = 1000;
     public static bool WindowIsResizable = false;
     public static bool DoUseVsync = false;
     

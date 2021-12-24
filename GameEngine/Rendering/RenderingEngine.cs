@@ -81,11 +81,14 @@ public sealed unsafe class RenderingEngine {
     private void RenderFirstPass(uint frameBuffer, WindowHandle* window) {
         // bind custom framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
+        
+        controller.Update(window, 0.1f);
+        
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
         OnDraw?.Invoke();
         
-        controller.Update(window, 0.1f);
+        //controller.Update(window, 0.1f);
         ImGui.ShowDemoWindow();
         controller.Render();
     }

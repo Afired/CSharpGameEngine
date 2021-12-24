@@ -47,6 +47,7 @@ namespace Dear_ImGui_Sample
             ImGui.SetCurrentContext(context);
             var io = ImGui.GetIO();
             io.Fonts.AddFontDefault();
+            ImGui.StyleColorsLight();
 
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 

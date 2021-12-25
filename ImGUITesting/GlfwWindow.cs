@@ -13,93 +13,67 @@ public sealed unsafe class GlfwWindow : IDisposable {
     
     public WindowHandle* Handle => GlfwWindowing.GetHandle(_window);
     private IWindow _window;
-    private Glfw _glfw;
-    private ImGuiController _imGuiController;
-    private GL _gl;
+    public Glfw Glfw;
+    public ImGuiController ImGuiController;
+    public GL Gl;
     private IInputContext _inputContext;
     
-
+    
     WindowOptions windowOptions = new WindowOptions() {
-                Position = new Vector2D<int>(-1, -1), // ? doesnt work
-                Samples = 1, // multisample anti aliasing?
-                Size = new Vector2D<int>(1600, 900), // size of the window in pixel
-                Title = "Title", // title of the window
-                IsVisible = true, // ?
-                TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
-                VideoMode = VideoMode.Default,
-                VSync = true, // vertical synchronisation
-                WindowBorder = WindowBorder.Fixed, // window border type
-                WindowClass = "idk", // ?
-                WindowState = WindowState.Normal, // window state
-                API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
-                FramesPerSecond = -1, // fps
-                IsEventDriven = true, // ?
-                PreferredBitDepth = new Vector4D<int>(255, 255, 255, 255), // ?
-                ShouldSwapAutomatically = false, // if true swaps frame buffers at the end of rendering automatically
-                UpdatesPerSecond = 1, // ? polling?
-                IsContextControlDisabled = true, // ?
-                PreferredDepthBufferBits = 255, // ?
-                PreferredStencilBufferBits = 255, // ?
-            };
+        Position = new Vector2D<int>(-1, -1), // ? doesnt work
+        Samples = 1, // multisample anti aliasing?
+        Size = new Vector2D<int>(1600, 900), // size of the window in pixel
+        Title = "Title", // title of the window
+        IsVisible = true, // ?
+        TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
+        VideoMode = VideoMode.Default,
+        VSync = true, // vertical synchronisation
+        WindowBorder = WindowBorder.Fixed, // window border type
+        WindowClass = "idk", // ?
+        WindowState = WindowState.Normal, // window state
+        API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
+        FramesPerSecond = -1, // fps
+        IsEventDriven = true, // ?
+        PreferredBitDepth = new Vector4D<int>(255, 255, 255, 255), // ?
+        ShouldSwapAutomatically = false, // if true swaps frame buffers at the end of rendering automatically
+        UpdatesPerSecond = 1, // ? polling?
+        IsContextControlDisabled = true, // ?
+        PreferredDepthBufferBits = 255, // ?
+        PreferredStencilBufferBits = 255, // ?
+    };
 
-    public GlfwWindow() { 
+    public GlfwWindow() {
+        
+        // use glfw for window api
         GlfwWindowing.Use();
         
-        // Create Silk.NET window with window options
+        // create and initialize window
         _window = Window.Create(windowOptions);
+        _window.Initialize();
         
-        // Our loading function
-        _window.Load += () => {
-            _imGuiController = new ImGuiController(_gl = _window.CreateOpenGL(), _window, _inputContext = _window.CreateInput());
-            _glfw = Glfw.GetApi();
-            _glfw.Init();
-        };
-        
+        // once window has been initialized, create ImGUI controller, get gl context, get input context and initialize glfw api
+        Gl = _window.CreateOpenGL();
+        _inputContext = _window.CreateInput();
+        ImGuiController = new ImGuiController(Gl, _window, _inputContext);
+        Glfw = Glfw.GetApi();
+        Glfw.Init();
+
         // Handle resizes
-        _window.FramebufferResize += s =>
-        {
+        _window.FramebufferResize += s => {
             // Adjust the viewport to the new window size
-            _gl.Viewport(s);
+            Gl.Viewport(s);
         };
-        
-        // The render function
-        _window.Render += delta =>
-        {
-            // Make sure ImGui is up-to-date
-            _imGuiController.Update((float) delta);
-        
-            // This is where you'll do any rendering beneath the ImGui context
-            // Here, we just have a blank screen.
-            // gl.ClearColor(Color.FromArgb(255, (int) (.45f * 255), (int) (.55f * 255), (int) (.60f * 255)));
-            _gl.Clear((uint) ClearBufferMask.ColorBufferBit);
-        
-            // This is where you'll do all of your ImGUi rendering
-            // Here, we're just showing the ImGui built-in demo window.
-            ImGuiNET.ImGui.ShowDemoWindow();
-        
-            // Make sure ImGui renders too!
-            _imGuiController.Render();
-            _window.SwapBuffers();
-        };
-        
-        // The closing function
-        _window.Closing += () =>
-        {
-            // Dispose our controller first
-            _imGuiController?.Dispose();
-        
-            // Dispose the input context
-            _inputContext?.Dispose();
-        
-            // Unload OpenGL
-            _gl?.Dispose();
-        };
-        
-        // Now that everything's defined, let's run this bad boy!
-        _window.Run();
+
+        // dispose components when window is closing
+        _window.Closing += Dispose;
+
     }
 
     public void Dispose() {
+        Glfw.Dispose();
+        Gl.Dispose();
+        _inputContext.Dispose();
+        ImGuiController.Dispose();
         _window.Dispose();
     }
     

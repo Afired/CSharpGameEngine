@@ -11,11 +11,13 @@ namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
 public delegate void OnDraw();
+public delegate void OnImGui();
 
 public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
+    public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
     public static GlfwWindow GlfwWindow;
@@ -84,6 +86,7 @@ public sealed unsafe class RenderingEngine {
         OnDraw?.Invoke();
         
         ImGui.ShowDemoWindow();
+        OnImGui?.Invoke();
         GlfwWindow.ImGuiController.Render();
     }
     

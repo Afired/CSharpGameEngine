@@ -1,14 +1,11 @@
-using Dear_ImGui_Sample;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
+using GameEngine.Rendering.Window;
 using ImGuiNET;
 using Silk.NET.GLFW;
-using Silk.NET.Input;
 using Silk.NET.OpenGL;
-using Silk.NET.OpenGL.Extensions.ImGui;
-using Silk.NET.Windowing;
 
 namespace GameEngine.Rendering;
 
@@ -20,23 +17,28 @@ public sealed unsafe class RenderingEngine {
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
     public static BaseCamera CurrentCamera { get; private set; }
-    public static GL Gl;
-    public static Glfw Glfw;
+    
+    public static GL Gl => GlfwWindow.Gl;
+    public static Glfw Glfw => GlfwWindow.Glfw;
 
-    public GlfwImGuiController controller;
+    public static GlfwWindow GlfwWindow;
+    
     
     internal void Initialize() {
         
-        Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao);
+        //Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao);
+        GlfwWindow = new GlfwWindow();
+        FrameBuffer frameBuffer = new FrameBuffer();
+        uint vao = GetFullScreenRenderQuadVao();
+        LoadResources();
+        
         InputHandler inputHandler = new InputHandler();
-        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
+        Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
 
         //GUI.GUI gui = new GUI.GUI();
         //gui.Attach();
-
-        controller = new GlfwImGuiController((int) Configuration.WindowWidth, (int) Configuration.WindowHeight);
-
-        RenderLoop(window, frameBuffer, vao, inputHandler);
+        
+        RenderLoop(GlfwWindow.Handle, frameBuffer, vao, inputHandler);
     }
     
     private void RenderLoop(WindowHandle* window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
@@ -55,7 +57,7 @@ public sealed unsafe class RenderingEngine {
         
         Game.Terminate();
     }
-
+/*
     private void Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao) {
         window = WindowFactory.CreateWindow(out Gl, out Glfw);
         
@@ -65,7 +67,7 @@ public sealed unsafe class RenderingEngine {
         
         LoadResources();
     }
-
+*/
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
@@ -82,7 +84,7 @@ public sealed unsafe class RenderingEngine {
         // bind custom framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
         
-        controller.Update(window, 0.1f);
+        GlfwWindow.ImGuiController.Update(0.1f);
         
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
@@ -90,7 +92,7 @@ public sealed unsafe class RenderingEngine {
         
         //controller.Update(window, 0.1f);
         ImGui.ShowDemoWindow();
-        controller.Render();
+        GlfwWindow.ImGuiController.Render();
     }
     
     private void RenderSecondPass(uint textureColorBuffer, uint vao) {

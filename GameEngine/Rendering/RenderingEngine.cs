@@ -18,36 +18,33 @@ public sealed unsafe class RenderingEngine {
     public static event OnDraw OnDraw;
     public static BaseCamera CurrentCamera { get; private set; }
     
+    public static GlfwWindow GlfwWindow;
     public static GL Gl => GlfwWindow.Gl;
     public static Glfw Glfw => GlfwWindow.Glfw;
+    
+    private FrameBuffer _frameBuffer;
+    private uint _fullscreenVao;
+    
+    private string _screenShader = "ScreenShader";
+    
 
-    public static GlfwWindow GlfwWindow;
-    
-    
     internal void Initialize() {
-        
-        //Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao);
-        GlfwWindow = new GlfwWindow();
-        FrameBuffer frameBuffer = new FrameBuffer();
-        uint vao = GetFullScreenRenderQuadVao();
-        LoadResources();
-        
+        Setup();
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
-
-        //GUI.GUI gui = new GUI.GUI();
-        //gui.Attach();
         
-        RenderLoop(GlfwWindow.Handle, frameBuffer, vao, inputHandler);
+        RenderLoop(GlfwWindow.Handle, inputHandler);
+        
+        Game.Terminate();
     }
     
-    private void RenderLoop(WindowHandle* window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
+    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
         
         while(!Glfw.WindowShouldClose(window)) {
             
             // render and draw frame
             if(CurrentCamera != null)
-                Render(window, frameBuffer, vao);
+                Render(window);
             
             // handle input
             Glfw.PollEvents();
@@ -55,34 +52,30 @@ public sealed unsafe class RenderingEngine {
 
         }
         
-        Game.Terminate();
     }
-/*
-    private void Setup(out WindowHandle* window, out FrameBuffer frameBuffer, out uint vao) {
-        window = WindowFactory.CreateWindow(out Gl, out Glfw);
-        
-        frameBuffer = new FrameBuffer();
-        
-        vao = GetFullScreenRenderQuadVao();
-        
+
+    private void Setup() {
+        GlfwWindow = new GlfwWindow();
+        _frameBuffer = new FrameBuffer();
+        _fullscreenVao = GetFullScreenRenderQuadVao();
         LoadResources();
     }
-*/
+    
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
         OnLoad?.Invoke();
     }
 
-    private void Render(WindowHandle* window, FrameBuffer frameBuffer, uint vao) {
-        RenderFirstPass(frameBuffer.ID, window);
-        RenderSecondPass(frameBuffer.TextureColorBuffer, vao);
+    private void Render(WindowHandle* window) {
+        RenderFirstPass();
+        RenderSecondPass();
         Glfw.SwapBuffers(window);
     }
 
-    private void RenderFirstPass(uint frameBuffer, WindowHandle* window) {
+    private void RenderFirstPass() {
         // bind custom framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, frameBuffer);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _frameBuffer.ID);
         
         GlfwWindow.ImGuiController.Update(0.1f);
         
@@ -90,24 +83,22 @@ public sealed unsafe class RenderingEngine {
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
         OnDraw?.Invoke();
         
-        //controller.Update(window, 0.1f);
         ImGui.ShowDemoWindow();
         GlfwWindow.ImGuiController.Render();
     }
     
-    private void RenderSecondPass(uint textureColorBuffer, uint vao) {
+    private void RenderSecondPass() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         
         RenderBackground();
         Gl.Clear(ClearBufferMask.ColorBufferBit);
-        // use shader
-        string screenShader = "ScreenShader";
-        ShaderRegister.Get(screenShader).Use();
-        ShaderRegister.Get(screenShader).SetFloat("time", Time.TotalTimeElapsed);
-        Gl.BindVertexArray(vao);
+        // use screen shader
+        ShaderRegister.Get(_screenShader).Use();
+        ShaderRegister.Get(_screenShader).SetFloat("time", Time.TotalTimeElapsed);
+        Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, textureColorBuffer);
+        Gl.BindTexture(TextureTarget.Texture2D, _frameBuffer.TextureColorBuffer);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
 

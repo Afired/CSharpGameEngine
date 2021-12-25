@@ -65,7 +65,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         };
 
         // dispose components when window is closing
-        _window.Closing += Dispose;
+        //_window.Closing += Dispose;
 
     }
 

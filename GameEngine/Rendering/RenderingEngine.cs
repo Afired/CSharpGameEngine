@@ -72,6 +72,7 @@ public sealed unsafe class RenderingEngine {
     private void Render(WindowHandle* window) {
         RenderFirstPass();
         RenderSecondPass();
+        RenderOverlay();
         Glfw.SwapBuffers(window);
     }
 
@@ -84,10 +85,6 @@ public sealed unsafe class RenderingEngine {
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
         OnDraw?.Invoke();
-        
-        ImGui.ShowDemoWindow();
-        OnImGui?.Invoke();
-        GlfwWindow.ImGuiController.Render();
     }
     
     private void RenderSecondPass() {
@@ -103,6 +100,21 @@ public sealed unsafe class RenderingEngine {
         Gl.Disable(EnableCap.DepthTest);
         Gl.BindTexture(TextureTarget.Texture2D, _frameBuffer.TextureColorBuffer);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+    }
+
+    private void RenderOverlay() {
+        // bind default framebuffer to render to
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        
+        ImGui.ShowDemoWindow();
+        
+        ImGui.Begin("Title");
+        ImGui.Text("Text");
+        ImGui.End();
+        
+        OnImGui?.Invoke();
+        
+        GlfwWindow.ImGuiController.Render();
     }
 
     private void RenderBackground() {

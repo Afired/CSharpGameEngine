@@ -1,5 +1,6 @@
 using System;
 using GameEngine.Core;
+using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
@@ -57,6 +58,8 @@ public sealed unsafe class GlfwWindow : IDisposable {
         Gl = _window.CreateOpenGL();
         _inputContext = _window.CreateInput();
         ImGuiController = new ImGuiController(Gl, _window, _inputContext);
+        //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.ViewportsEnable; // enable ImGui multi window viewports || currently not supported with OpenGl as rendering context?
+        ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable; // enable ImGui docking
         Glfw = Glfw.GetApi();
         Glfw.Init();
 

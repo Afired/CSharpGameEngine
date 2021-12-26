@@ -9,8 +9,13 @@ internal partial class InputHandler {
     
     private Vector2 _windowCenter;
     private Glfw Glfw => RenderingEngine.Glfw;
+
+    private static bool _catchCursor = false;
+    
     
     internal static void ResetMouseDelta() {
+        if(!_catchCursor)
+            return;
         Input.MouseDelta = Vector2.Zero;
     }
     
@@ -20,6 +25,8 @@ internal partial class InputHandler {
     
     
     internal unsafe void HandleMouseInput(WindowHandle* window) {
+        if(!_catchCursor)
+            return;
         Glfw.GetCursorPos(window, out double x, out double y);
         Vector2 mousePos = new Vector2((int) x, -(int) y);
         Input.MouseDelta += mousePos - _windowCenter;

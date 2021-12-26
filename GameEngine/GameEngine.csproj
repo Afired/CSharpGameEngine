@@ -6,11 +6,7 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Bindings\Bindings.csproj" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <PackageReference Include="Box2D.NetStandard" Version="2.4.2-alpha" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />

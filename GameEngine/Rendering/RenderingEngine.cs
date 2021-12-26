@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
@@ -106,13 +107,19 @@ public sealed unsafe class RenderingEngine {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         
-        ImGui.ShowDemoWindow();
-        
-        ImGui.Begin("Title");
-        ImGui.Text("Text");
-        ImGui.End();
+        //ImGui.ShowDemoWindow();
+        //ImGui.DockSpaceOverViewport();
         
         OnImGui?.Invoke();
+        
+        // select post processing shader window
+        ImGui.Begin("Post Processing");
+        ImGui.InputText("shader", ref _screenShader, 40);
+        foreach(KeyValuePair<string, Shaders.Shader> shader in ShaderRegister._shaderRegister) {
+            if(ImGui.Button(shader.Key))
+                _screenShader = shader.Key;
+        }
+        ImGui.End();
         
         GlfwWindow.ImGuiController.Render();
     }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using GameEngine.Numerics;
 using Silk.NET.OpenGL;
-using GL = OpenGL.GL;
 
 namespace GameEngine.Rendering.Shaders;
 
@@ -24,49 +23,50 @@ public static class StringExtension {
 public class Shader {
 
     private uint _programID;
+    private GL GL => RenderingEngine.Gl;
 
 
     public Shader(string vertexCode, string fragmentCode) {
-        (GLEnum shaderType, string shaderSrc)[] shaderInfo = { (GLEnum.VertexShader, vertexCode), (GLEnum.FragmentShader, fragmentCode) };
+        (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
         Compile(shaderInfo);
     }
     
     public Shader(string filePath) {
         string contents = ReadFileWithFileStream(filePath);
-        (GLEnum, string)[] shaderInfo = SplitIntoShader(contents);
+        (ShaderType, string)[] shaderInfo = SplitIntoShader(contents);
         Compile(shaderInfo);
     }
 
-    private void Compile((GLEnum shaderType, string shaderSrc)[] shaderInfo) {
+    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo) {
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
         for(int i = 0; i < shaderInfo.Length; i++) {
 
-            int type = (int) shaderInfo[i].shaderType;
+            ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
 
-            shaderIDs[i] = GL.glCreateShader(type);
-            GL.glShaderSource(shaderIDs[i], src);
-            GL.glCompileShader(shaderIDs[i]);
+            shaderIDs[i] = GL.CreateShader(type);
+            GL.ShaderSource(shaderIDs[i], src);
+            GL.CompileShader(shaderIDs[i]);
 
-            int[] status = GL.glGetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
-            if(status[0] == 0) {
-                string error = GL.glGetShaderInfoLog(shaderIDs[i]);
-                throw new Exception($"Shader failed to compile {error}");
-            }
+            //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
+            //if(status[0] == 0) {
+            //    string error = GL.GetShaderInfoLog(shaderIDs[i]);
+            //    throw new Exception($"Shader failed to compile {error}");
+            //}
             
         }
         
-        _programID = GL.glCreateProgram();
+        _programID = GL.CreateProgram();
         for(int i = 0; i < shaderIDs.Length; i++) {
-            GL.glAttachShader(_programID, shaderIDs[i]);
+            GL.AttachShader(_programID, shaderIDs[i]);
         }
-        GL.glLinkProgram(_programID);
+        GL.LinkProgram(_programID);
         
         // Delete Shaders
         for(int i = 0; i < shaderIDs.Length; i++) {
-            GL.glDetachShader(_programID, shaderIDs[i]);
-            GL.glDeleteShader(shaderIDs[i]);
+            GL.DetachShader(_programID, shaderIDs[i]);
+            GL.DeleteShader(shaderIDs[i]);
         }
     }
 
@@ -85,10 +85,10 @@ public class Shader {
         return result;
     }
 
-    private static (GLEnum shaderType, string shaderSrc)[] SplitIntoShader(string contents) {
+    private static (ShaderType shaderType, string shaderSrc)[] SplitIntoShader(string contents) {
         const string SHADER_TYPE_KEYWORD = "#type";
         string[] shaderSrcs = contents.Split(SHADER_TYPE_KEYWORD, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        (GLEnum shaderType, string shaderSrc)[] result = new (GLEnum shaderType, string shaderSrc)[shaderSrcs.Length];
+        (ShaderType shaderType, string shaderSrc)[] result = new (ShaderType shaderType, string shaderSrc)[shaderSrcs.Length];
         for(int i = 0; i < shaderSrcs.Length; i++) {
             string keyword = shaderSrcs[i].GetFirstWord();
             Debug.Assert(!string.IsNullOrEmpty(keyword));
@@ -99,30 +99,30 @@ public class Shader {
         return result;
     }
 
-    private static GLEnum ShaderTypeFromString(string type) => type switch {
-        "vertex" => GLEnum.VertexShader,
-        "fragment" => GLEnum.FragmentShader,
-        "pixel" => GLEnum.FragmentShader,
+    private static ShaderType ShaderTypeFromString(string type) => type switch {
+        "vertex" => ShaderType.VertexShader,
+        "fragment" => ShaderType.FragmentShader,
+        "pixel" => ShaderType.FragmentShader,
         _ => throw new Exception($"unsupported shader type: '{type}'")
     };
     
     public void Use() {
-        GL.glUseProgram(_programID);
+        GL.UseProgram(_programID);
     }
 
     public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
-        int location = GL.glGetUniformLocation(_programID, uniformName);
-        GL.glUniformMatrix4fv(location, 1, false, mat.ToArray());
+        int location = GL.GetUniformLocation(_programID, uniformName);
+        GL.UniformMatrix4(location, 1, false, mat.ToArray());
     }
 
     public void SetInt(string uniformName, int value) {
-        int location = GL.glGetUniformLocation(_programID, uniformName);
-        GL.glUniform1i(location, value);
+        int location = GL.GetUniformLocation(_programID, uniformName);
+        GL.Uniform1(location, value);
     }
 
     public void SetFloat(string uniformName, float value) {
-        int location = GL.glGetUniformLocation(_programID, "time");
-        GL.glUniform1f(location, value);
+        int location = GL.GetUniformLocation(_programID, "time");
+        GL.Uniform1(location, value);
     }
 
 }

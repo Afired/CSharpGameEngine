@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using GameEngine.Numerics;
-using GLFW;
+using Silk.NET.GLFW;
 
 namespace GameEngine.Input; 
 
@@ -16,7 +16,8 @@ public static class Input {
         _inputData = new Dictionary<Keys, bool>();
 
         foreach (Keys keyCode in GetEnumValues<Keys>()) {
-            _inputData.Add(keyCode, false);
+            if(!_inputData.ContainsKey(keyCode))
+                _inputData.Add(keyCode, false);
         }
     }
     

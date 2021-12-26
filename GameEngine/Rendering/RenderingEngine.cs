@@ -1,38 +1,53 @@
+using System.Collections.Generic;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
-using GLFW;
-using GL = OpenGL.GL;
+using GameEngine.Rendering.Window;
+using ImGuiNET;
+using Silk.NET.GLFW;
+using Silk.NET.OpenGL;
 
 namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
 public delegate void OnDraw();
+public delegate void OnImGui();
 
-public sealed class RenderingEngine {
+public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
     public static event OnDraw OnDraw;
+    public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
+    public static GlfwWindow GlfwWindow;
+    public static GL Gl => GlfwWindow.Gl;
+    public static Glfw Glfw => GlfwWindow.Glfw;
     
+    private FrameBuffer _frameBuffer;
+    private uint _fullscreenVao;
+    
+    private string _screenShader = "ScreenShader";
+    
+
     internal void Initialize() {
-        
-        Setup(out Window window, out FrameBuffer frameBuffer, out uint vao);
+        Setup();
         InputHandler inputHandler = new InputHandler();
-        Glfw.SetKeyCallback(window, inputHandler.OnKeyAction);
+        Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
         
-        RenderLoop(window, frameBuffer, vao, inputHandler);
+        RenderLoop(GlfwWindow.Handle, inputHandler);
+        
+        Game.Terminate();
     }
     
-    private void RenderLoop(Window window, FrameBuffer frameBuffer, uint vao, InputHandler inputHandler) {
+    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
         
         while(!Glfw.WindowShouldClose(window)) {
             
             // render and draw frame
             if(CurrentCamera != null)
-                Render(window, frameBuffer, vao);
+                Render(window);
             
             // handle input
             Glfw.PollEvents();
@@ -40,57 +55,77 @@ public sealed class RenderingEngine {
 
         }
         
-        Game.Terminate();
     }
 
-    private void Setup(out Window window, out FrameBuffer frameBuffer, out uint vao) {
-        window = WindowFactory.CreateWindow();
-        
-        frameBuffer = new FrameBuffer();
-        
-        vao = GetFullScreenRenderQuadVao();
-        
+    private void Setup() {
+        GlfwWindow = new GlfwWindow();
+        _frameBuffer = new FrameBuffer();
+        _fullscreenVao = GetFullScreenRenderQuadVao();
         LoadResources();
     }
-
+    
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
         OnLoad?.Invoke();
     }
 
-    private void Render(Window window, FrameBuffer frameBuffer, uint vao) {
-        RenderFirstPass(frameBuffer.ID);
-        RenderSecondPass(frameBuffer.TextureColorBuffer, vao);
+    private void Render(WindowHandle* window) {
+        RenderFirstPass();
+        RenderSecondPass();
+        RenderOverlay();
         Glfw.SwapBuffers(window);
     }
 
-    private void RenderFirstPass(uint frameBuffer) {
+    private void RenderFirstPass() {
         // bind custom framebuffer to render to
-        GL.glBindFramebuffer(frameBuffer);
-        GL.glClear(GL.GL_DEPTH_BUFFER_BIT | GL.GL_COLOR_BUFFER_BIT);
-        GL.glEnable(GL.GL_DEPTH_TEST); // reenable depth test
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _frameBuffer.ID);
+        
+        GlfwWindow.ImGuiController.Update(0.1f);
+        
+        Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        Gl.Enable(EnableCap.DepthTest); // reenable depth test
         OnDraw?.Invoke();
     }
     
-    private void RenderSecondPass(uint textureColorBuffer, uint vao) {
+    private void RenderSecondPass() {
         // bind default framebuffer to render to
-        GL.glBindFramebuffer(0);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         
         RenderBackground();
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-        // use shader
-        string screenShader = "ScreenShader";
-        ShaderRegister.Get(screenShader).Use();
-        ShaderRegister.Get(screenShader).SetFloat("time", Time.TotalTimeElapsed);
-        GL.glBindVertexArray(vao);
-        GL.glDisable(GL.GL_DEPTH_TEST);
-        GL.glBindTexture(GL.GL_TEXTURE_2D, textureColorBuffer);
-        GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
+        Gl.Clear(ClearBufferMask.ColorBufferBit);
+        // use screen shader
+        ShaderRegister.Get(_screenShader).Use();
+        ShaderRegister.Get(_screenShader).SetFloat("time", Time.TotalTimeElapsed);
+        Gl.BindVertexArray(_fullscreenVao);
+        Gl.Disable(EnableCap.DepthTest);
+        Gl.BindTexture(TextureTarget.Texture2D, _frameBuffer.TextureColorBuffer);
+        Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+    }
+
+    private void RenderOverlay() {
+        // bind default framebuffer to render to
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        
+        //ImGui.ShowDemoWindow();
+        //ImGui.DockSpaceOverViewport();
+        
+        OnImGui?.Invoke();
+        
+        // select post processing shader window
+        ImGui.Begin("Post Processing");
+        ImGui.InputText("shader", ref _screenShader, 40);
+        foreach(KeyValuePair<string, Shaders.Shader> shader in ShaderRegister._shaderRegister) {
+            if(ImGui.Button(shader.Key))
+                _screenShader = shader.Key;
+        }
+        ImGui.End();
+        
+        GlfwWindow.ImGuiController.Render();
     }
 
     private void RenderBackground() {
-        GL.glClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
+        Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }
 
     private uint GetFullScreenRenderQuadVao() {
@@ -105,28 +140,28 @@ public sealed class RenderingEngine {
             -1f, -1f, 0f, 0f, 0f,  // bottom left
         };
         
-        uint vao = GL.glGenVertexArray();
-        uint vbo = GL.glGenBuffer();
+        uint vao = Gl.GenVertexArray();
+        uint vbo = Gl.GenBuffer();
         
-        GL.glBindVertexArray(vao);
-        GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vbo);
+        Gl.BindVertexArray(vao);
+        Gl.BindBuffer(GLEnum.ArrayBuffer, vbo);
         
 
         unsafe {
             fixed(float* v = &vertexData[0]) {
-                GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * vertexData.Length, v, GL.GL_STATIC_DRAW);
+                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
             }
             
             // xyz
-            GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
-            GL.glEnableVertexAttribArray(0);
+            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+            Gl.EnableVertexAttribArray(0);
             
             // texture coordinates
-            GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-            GL.glEnableVertexAttribArray(1);
+            Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+            Gl.EnableVertexAttribArray(1);
 
-            GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
-            GL.glBindVertexArray(0);
+            Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+            Gl.BindVertexArray(0);
         }
         return vao;
     }

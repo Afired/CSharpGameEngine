@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using GLFW;
 using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -12,9 +11,9 @@ public class Texture2D : Texture {
     private uint _width;
     private uint _height;
     private uint _textureID;
+    private GL gl = RenderingEngine.Gl;
     
     public unsafe Texture2D( string path) {
-        GL gl = GL.GetApi(Glfw.GetProcAddress);
         
         //Loading an image using imagesharp.
         Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
@@ -54,13 +53,10 @@ public class Texture2D : Texture {
     }
 
     public void Dispose() {
-        GL gl = GL.GetApi(Glfw.GetProcAddress);
         gl.DeleteTexture(_textureID);
     }
 
     public override void Bind(uint slot = 0) {
-        GL gl = GL.GetApi(Glfw.GetProcAddress);
-        
         //When we bind a texture we can choose which textureslot we can bind it to.
         TextureUnit textureSlot = TextureUnit.Texture0;
         gl.ActiveTexture((TextureUnit)slot);

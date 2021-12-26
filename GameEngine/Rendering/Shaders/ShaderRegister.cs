@@ -8,7 +8,7 @@ namespace GameEngine.Rendering.Shaders;
 
 public static class ShaderRegister {
     
-    private static Dictionary<string, Shader> _shaderRegister;
+    internal static Dictionary<string, Shader> _shaderRegister;
 
     private static Shader _invalidShaderShader;
     

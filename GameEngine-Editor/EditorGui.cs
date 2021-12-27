@@ -10,8 +10,12 @@ public class EditorGui {
     
     private void Initialize() {
         new EditorDockSpace();
-        new EditorWindow();
         new HierarchyWindow();
+        new ViewportWindow();
+        new InspectorWindow();
+        new ConsoleWindow();
+        new AssetBrowserWindow();
+        new ProjectSettingsWindow();
     }
     
 }

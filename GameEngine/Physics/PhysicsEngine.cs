@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading;
@@ -6,19 +6,23 @@ using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
-using Console = GameEngine.Debugging.Console;
+using GameEngine.Core;
 
-namespace GameEngine.Core;
+namespace GameEngine.Physics;
 
 public delegate void OnFixedUpdate(float fixedDeltaTime);
 
 public delegate void OnRegisterRigidBody();
 
-public sealed partial class Game {
+public sealed class PhysicsEngine {
     
     public static World World;
     public static event OnFixedUpdate OnFixedUpdate;
     public static event OnRegisterRigidBody OnRegisterRigidBody;
+
+    internal void Initialize() {
+        FixedUpdateLoop();
+    }
     
     
     private void FixedUpdateLoop() {
@@ -65,7 +69,7 @@ public sealed partial class Game {
         
         
         Stopwatch stopwatch = new();
-        while(_isRunning) {
+        while(Game._isRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             TimeSpan timeOut = TimeSpan.FromSeconds(Configuration.FixedTimeStep - elapsedTime);
             //Console.LogWarning(timeOut.TotalSeconds.ToString());

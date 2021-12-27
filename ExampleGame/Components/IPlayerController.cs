@@ -1,7 +1,10 @@
 ﻿using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Entities;
 using GameEngine.Input;
 using GameEngine.Numerics;
+using GameEngine.Rendering;
+using ImGuiNET;
 
 namespace ExampleGame.Components; 
 
@@ -11,8 +14,15 @@ public class PlayerController : Component {
     private float _speed = 10f;
     
     
-    public PlayerController(GameObject gameObject) : base(gameObject) {
+    public PlayerController(Entity entity) : base(entity) {
         Game.OnUpdate += OnUpdate;
+        RenderingEngine.OnImGui += OnImGui;
+    }
+
+    private void OnImGui() {
+        ImGui.Begin("PlayerController Component");
+        ImGui.SliderFloat("Speed", ref _speed, 0f, 50f);
+        ImGui.End();
     }
     
     private void OnUpdate(float deltaTime) {
@@ -29,7 +39,7 @@ public class PlayerController : Component {
     }
     
     private void UpdatePosition(float deltaTime) {
-        (GameObject as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+        (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
 }

@@ -1,14 +1,19 @@
 ﻿using GameEngine.Core;
 using GameEngine.Numerics;
-using GLFW;
+using WindowHandle = Silk.NET.GLFW.WindowHandle;
 
 namespace GameEngine.Input; 
 
 internal partial class InputHandler {
     
     private Vector2 _windowCenter;
+
+    private static bool _catchCursor = false;
+    
     
     internal static void ResetMouseDelta() {
+        if(!_catchCursor)
+            return;
         Input.MouseDelta = Vector2.Zero;
     }
     
@@ -17,11 +22,13 @@ internal partial class InputHandler {
     }
     
     
-    internal void HandleMouseInput(Window window) {
-        Glfw.GetCursorPosition(window, out double x, out double y);
+    internal unsafe void HandleMouseInput(WindowHandle* window) {
+        if(!_catchCursor)
+            return;
+        Glfw.GetCursorPos(window, out double x, out double y);
         Vector2 mousePos = new Vector2((int) x, -(int) y);
         Input.MouseDelta += mousePos - _windowCenter;
-        Glfw.SetCursorPosition(window, (double) Configuration.WindowWidth / 2d, (double) Configuration.WindowHeight / 2d);
+        Glfw.SetCursorPos(window, (double) Configuration.WindowWidth / 2d, (double) Configuration.WindowHeight / 2d);
     }
     
 }

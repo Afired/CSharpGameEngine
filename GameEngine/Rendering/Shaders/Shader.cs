@@ -1,63 +1,127 @@
-﻿using GameEngine.Debugging;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 using GameEngine.Numerics;
-using OpenGL;
+using Silk.NET.OpenGL;
 
-namespace GameEngine.Rendering.Shaders; 
+namespace GameEngine.Rendering.Shaders;
+
+public static class StringExtension {
+    /// <summary>
+    /// returns first word
+    /// if no word is found returns null
+    /// </summary>
+    /// <param name="contents"></param>
+    /// <returns></returns>
+    public static string GetFirstWord(this string contents) {
+        string[] splits = contents.Split(new string[]{" ", "\r\n"}, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        return splits.Length > 0 ? splits[0] : default;
+    }
+}
 
 public class Shader {
 
     private uint _programID;
-    private string _vertexCode;
-    private string _fragmentCode;
 
 
     public Shader(string vertexCode, string fragmentCode) {
-        _vertexCode = vertexCode;
-        _fragmentCode = fragmentCode;
+        (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
+        Compile(shaderInfo);
+    }
+    
+    public Shader(string filePath) {
+        string contents = ReadFileWithFileStream(filePath);
+        (ShaderType, string)[] shaderInfo = SplitIntoShader(contents);
+        Compile(shaderInfo);
     }
 
-    public void Load() {
-        uint vs = GL.glCreateShader(GL.GL_VERTEX_SHADER);
-        GL.glShaderSource(vs, _vertexCode);
-        GL.glCompileShader(vs);
+    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo) {
+        uint[] shaderIDs = new uint[shaderInfo.Length];
+        
+        for(int i = 0; i < shaderInfo.Length; i++) {
 
-        int[] status = GL.glGetShaderiv(vs, GL.GL_COMPILE_STATUS, 1);
-        if(status[0] == 0) {
-            string error = GL.glGetShaderInfoLog(vs);
-            throw new ShaderFailedToCompileException(error);
+            ShaderType type = shaderInfo[i].shaderType;
+            string src = shaderInfo[i].shaderSrc;
+
+            shaderIDs[i] = Gl.CreateShader(type);
+            Gl.ShaderSource(shaderIDs[i], src);
+            Gl.CompileShader(shaderIDs[i]);
+
+            //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
+            //if(status[0] == 0) {
+            //    string error = GL.GetShaderInfoLog(shaderIDs[i]);
+            //    throw new Exception($"Shader failed to compile {error}");
+            //}
+            
         }
         
-        uint fs = GL.glCreateShader(GL.GL_FRAGMENT_SHADER);
-        GL.glShaderSource(fs, _fragmentCode);
-        GL.glCompileShader(fs);
-        
-        status = GL.glGetShaderiv(fs, GL.GL_COMPILE_STATUS, 1);
-        if(status[0] == 0) {
-            string error = GL.glGetShaderInfoLog(fs);
-            throw new ShaderFailedToCompileException(error);
+        _programID = Gl.CreateProgram();
+        for(int i = 0; i < shaderIDs.Length; i++) {
+            Gl.AttachShader(_programID, shaderIDs[i]);
         }
-
-        _programID = GL.glCreateProgram();
-        GL.glAttachShader(_programID, vs);
-        GL.glAttachShader(_programID, fs);
-        
-        GL.glLinkProgram(_programID);
+        Gl.LinkProgram(_programID);
         
         // Delete Shaders
-        
-        GL.glDetachShader(_programID, vs);
-        GL.glDetachShader(_programID, fs);
-        GL.glDeleteShader(vs);
-        GL.glDeleteShader(fs);
+        for(int i = 0; i < shaderIDs.Length; i++) {
+            Gl.DetachShader(_programID, shaderIDs[i]);
+            Gl.DeleteShader(shaderIDs[i]);
+        }
     }
 
+    private static string ReadFileWithFileStream(string filePath) {
+        using FileStream fs = File.OpenRead(filePath);
+        byte[] buffer = new byte[fs.Length];
+        fs.Read(buffer, 0, (int) fs.Length);
+        fs.Dispose();
+        return Encoding.Default.GetString(buffer);
+    }
+    
+    private static string ReadFileWithStreamReader(string filePath) {
+        using StreamReader sr = File.OpenText(filePath);
+        string result = sr.ReadToEnd();
+        sr.Dispose();
+        return result;
+    }
+
+    private static (ShaderType shaderType, string shaderSrc)[] SplitIntoShader(string contents) {
+        const string SHADER_TYPE_KEYWORD = "#type";
+        string[] shaderSrcs = contents.Split(SHADER_TYPE_KEYWORD, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        (ShaderType shaderType, string shaderSrc)[] result = new (ShaderType shaderType, string shaderSrc)[shaderSrcs.Length];
+        for(int i = 0; i < shaderSrcs.Length; i++) {
+            string keyword = shaderSrcs[i].GetFirstWord();
+            Debug.Assert(!string.IsNullOrEmpty(keyword));
+
+            result[i].shaderType = ShaderTypeFromString(keyword);
+            result[i].shaderSrc = shaderSrcs[i].Replace(keyword, "");
+        }
+        return result;
+    }
+
+    private static ShaderType ShaderTypeFromString(string type) => type switch {
+        "vertex" => ShaderType.VertexShader,
+        "fragment" => ShaderType.FragmentShader,
+        "pixel" => ShaderType.FragmentShader,
+        _ => throw new Exception($"unsupported shader type: '{type}'")
+    };
+    
     public void Use() {
-        GL.glUseProgram(_programID);
+        Gl.UseProgram(_programID);
     }
 
     public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
-        int location = GL.glGetUniformLocation(_programID, uniformName);
-        GL.glUniformMatrix4fv(location, 1, false, mat.ToArray());
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        Gl.UniformMatrix4(location, 1, false, mat.ToArray());
+    }
+
+    public void SetInt(string uniformName, int value) {
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        Gl.Uniform1(location, value);
+    }
+
+    public void SetFloat(string uniformName, float value) {
+        int location = Gl.GetUniformLocation(_programID, "time");
+        Gl.Uniform1(location, value);
     }
 
 }

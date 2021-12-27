@@ -1,12 +1,12 @@
 using GameEngine.Components;
 
-namespace ExampleGame.GameObjects; 
+namespace ExampleGame.Entities; 
 
 public class PhysicsQuad : Quad, IRigidBody {
     
     public RigidBody RigidBody { get; set; }
 
-    public PhysicsQuad() : base() {
+    public PhysicsQuad(string texture, string shader) : base(texture, shader) {
         RigidBody = new RigidBody(this);
     }
     

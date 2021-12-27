@@ -1,3 +1,4 @@
+using GameEngine.Core;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -13,7 +14,7 @@ public class EditorMenubar {
             if(ImGui.BeginMenu("Application")) {
                 
                 if(ImGui.MenuItem("Quit")) {
-                    
+                    Application.Terminate();
                 }
                 
                 ImGui.EndMenu();

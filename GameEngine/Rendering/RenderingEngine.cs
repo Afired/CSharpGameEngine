@@ -43,7 +43,7 @@ public sealed unsafe class RenderingEngine {
     
     private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
         
-        while(!Glfw.WindowShouldClose(window)) {
+        while(Application.IsRunning) {
             
             Render(window);
             
@@ -51,6 +51,8 @@ public sealed unsafe class RenderingEngine {
             Glfw.PollEvents();
             inputHandler.HandleMouseInput(window);
 
+            if(Glfw.WindowShouldClose(window))
+                Application.Terminate();
         }
         
     }

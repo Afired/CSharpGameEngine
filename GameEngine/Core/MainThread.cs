@@ -7,7 +7,7 @@ namespace GameEngine.Core;
 
 public sealed partial class Application {
     
-    public static bool _isRunning { get; private set; }
+    public static bool IsRunning { get; private set; }
     private Thread _updateLoopThread;
     private Thread _physicsThread;
     private Thread _renderThread;
@@ -28,7 +28,7 @@ public sealed partial class Application {
     }
     
     public void Start() {
-        _isRunning = true;
+        IsRunning = true;
         Console.Log("Starting...");
         Console.Log("Starting engine...");
         _updateLoopThread.Start();
@@ -43,7 +43,7 @@ public sealed partial class Application {
     }
     
     public static void Terminate() {
-        _isRunning = false;
+        IsRunning = false;
         Console.Log("Terminating...");
     }
     

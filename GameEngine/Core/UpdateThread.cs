@@ -15,7 +15,7 @@ public sealed partial class Application {
     private void UpdateLoop() {
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        while(_isRunning) {
+        while(IsRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {
                 TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - elapsedTime);

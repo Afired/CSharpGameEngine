@@ -5,7 +5,7 @@ using GameEngine.Rendering;
 
 namespace GameEngine.Core;
 
-public sealed partial class Game {
+public sealed partial class Application {
     
     public static bool _isRunning { get; private set; }
     private Thread _updateLoopThread;

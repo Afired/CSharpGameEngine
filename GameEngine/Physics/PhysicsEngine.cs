@@ -69,7 +69,7 @@ public sealed class PhysicsEngine {
         
         
         Stopwatch stopwatch = new();
-        while(Game._isRunning) {
+        while(Application._isRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             TimeSpan timeOut = TimeSpan.FromSeconds(Configuration.FixedTimeStep - elapsedTime);
             //Console.LogWarning(timeOut.TotalSeconds.ToString());

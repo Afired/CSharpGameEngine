@@ -8,15 +8,15 @@ namespace ExampleGame;
 internal class Program {
     
     public static int Main(string[] args) {
-        Game game = new Game();
+        Application application = new Application();
 
         SetConfig();
         
-        game.Initialize();
+        application.Initialize();
 
         InitializeWorld();
         
-        game.Start();
+        application.Start();
 
         return 0;
     }

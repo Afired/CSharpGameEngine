@@ -7,7 +7,7 @@ namespace GameEngine.Core;
 
 public delegate void OnUpdate(float deltaTime);
 
-public sealed partial class Game {
+public sealed partial class Application {
     
     public static event OnUpdate OnUpdate;
     

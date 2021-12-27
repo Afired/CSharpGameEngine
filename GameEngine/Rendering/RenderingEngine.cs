@@ -38,7 +38,7 @@ public sealed unsafe class RenderingEngine {
         
         RenderLoop(GlfwWindow.Handle, inputHandler);
         
-        Game.Terminate();
+        Application.Terminate();
     }
     
     private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {

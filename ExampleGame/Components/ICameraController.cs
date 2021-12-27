@@ -11,7 +11,7 @@ public class CameraController : Component {
     
     
     public CameraController(Entity entity) : base(entity) {
-        Game.OnUpdate += OnUpdate;
+        Application.OnUpdate += OnUpdate;
     }
     
     private void OnUpdate(float deltaTime) {

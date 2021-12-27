@@ -15,7 +15,7 @@ public class PlayerController : Component {
     
     
     public PlayerController(Entity entity) : base(entity) {
-        Game.OnUpdate += OnUpdate;
+        Application.OnUpdate += OnUpdate;
         RenderingEngine.OnImGui += OnImGui;
     }
 

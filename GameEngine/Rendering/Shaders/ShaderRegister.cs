@@ -2,6 +2,7 @@
 using System.IO;
 using GameEngine.AssetManagement;
 using GameEngine.Debugging;
+using GameEngine.Guard;
 using GameEngine.Rendering.Textures;
 
 namespace GameEngine.Rendering.Shaders; 
@@ -18,7 +19,7 @@ public static class ShaderRegister {
     }
 
     public static void Register(string name, Shader shader) {
-        //todo: throw new duplicate shader exception
+        Throw.If(_shaderRegister.ContainsKey(name), "duplicate shader");
         _shaderRegister.Add(name, shader);
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using GameEngine.Debugging;
+using GameEngine.Guard;
 using GameEngine.Physics;
 using GameEngine.Rendering;
 
@@ -31,12 +32,15 @@ public sealed partial class Application {
         IsRunning = true;
         Console.Log("Starting...");
         Console.Log("Starting engine...");
+        Throw.IfNull(_updateLoopThread);
         _updateLoopThread.Start();
         Console.LogSuccess("Started engine (1/3)");
         Console.Log("Starting physics engine...");
+        Throw.IfNull(_physicsThread);
         _physicsThread.Start();
         Console.LogSuccess("Started physics engine (2/3)");
         Console.Log("Started render engine...");
+        Throw.IfNull(_renderThread);
         _renderThread.Start();
         Console.LogSuccess("Started render engine (3/3)");
         Console.LogSuccess("Started");

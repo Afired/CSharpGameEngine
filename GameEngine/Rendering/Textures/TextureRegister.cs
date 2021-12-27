@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using GameEngine.AssetManagement;
+using GameEngine.Guard;
 using GameEngine.Rendering.Textures;
 
 namespace GameEngine.Rendering.Shaders; 
@@ -17,7 +17,7 @@ public static class TextureRegister {
     }
     
     private static void Register(string name, Texture texture) {
-        Debug.Assert(!_textureRegister.ContainsKey(name), "duplicate shader");
+        Throw.If(_textureRegister.ContainsKey(name), "duplicate texture");
         _textureRegister.Add(name, texture);
     }
     

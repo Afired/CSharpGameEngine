@@ -8,21 +8,21 @@ namespace GameEngine.Rendering.Textures;
 
 public class Texture2D : Texture {
     
-    private uint _width;
-    private uint _height;
-    private uint _textureID;
+    public uint Width { get; init; }
+    public uint Height { get; init; }
+    public uint ID { get; private set; }
     
     public unsafe Texture2D( string path) {
         
         //Loading an image using imagesharp.
         Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
-        _width = (uint) img.Width;
-        _height = (uint) img.Height;
+        Width = (uint) img.Width;
+        Height = (uint) img.Height;
         
         // OpenGL has image origin in the bottom-left corner.
         fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0))) {
             //Loading the actual image.
-            Load(Gl, data, _width, _height);
+            Load(Gl, data, Width, Height);
         }
 
         //Deleting the img from imagesharp.
@@ -32,7 +32,7 @@ public class Texture2D : Texture {
     private unsafe void Load(GL gl, void* data, uint width, uint height) {
         
         //Generating the opengl handle;
-        _textureID = gl.GenTexture();
+        ID = gl.GenTexture();
         Bind();
 
         //Setting the data of a texture.
@@ -52,14 +52,14 @@ public class Texture2D : Texture {
     }
 
     public void Dispose() {
-        Gl.DeleteTexture(_textureID);
+        Gl.DeleteTexture(ID);
     }
 
     public override void Bind(uint slot = 0) {
         //When we bind a texture we can choose which textureslot we can bind it to.
         TextureUnit textureSlot = TextureUnit.Texture0;
         Gl.ActiveTexture((TextureUnit)slot);
-        Gl.BindTexture(TextureTarget.Texture2D, _textureID);
+        Gl.BindTexture(TextureTarget.Texture2D, ID);
     }
     
 }

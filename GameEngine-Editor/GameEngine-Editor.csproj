@@ -12,4 +12,10 @@
       <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Assets\Textures\Checkerboard.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

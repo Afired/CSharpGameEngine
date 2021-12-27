@@ -1,4 +1,4 @@
-using ImGuiNET;
+using GameEngine.Editor.EditorWindows;
 
 namespace GameEngine.Editor; 
 
@@ -9,12 +9,8 @@ public class EditorGui {
     }
     
     private void Initialize() {
-        OnImGui += OnImGuiDraw;
-    }
-    
-    private void OnImGuiDraw() {
-        //ImGui.DockSpaceOverViewport();
-        ImGui.ShowDemoWindow();
+        new EditorDockSpace();
+        new EditorWindow();
     }
     
 }

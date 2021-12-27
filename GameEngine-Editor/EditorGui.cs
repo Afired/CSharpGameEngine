@@ -11,6 +11,7 @@ public class EditorGui {
     private void Initialize() {
         new EditorDockSpace();
         new EditorWindow();
+        new HierarchyWindow();
     }
     
 }

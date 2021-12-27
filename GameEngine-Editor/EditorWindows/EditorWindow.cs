@@ -4,12 +4,14 @@ namespace GameEngine.Editor.EditorWindows;
 
 public class EditorWindow {
 
+    protected string Title = "Title";
+
     public EditorWindow() {
         OnImGui += DrawWindow;
     }
 
     private void DrawWindow() {
-        ImGui.Begin("Window Title");
+        ImGui.Begin(Title);
         Draw();
         ImGui.End();
     }

@@ -23,7 +23,6 @@ public static class StringExtension {
 public class Shader {
 
     private uint _programID;
-    private GL GL => RenderingEngine.Gl;
 
 
     public Shader(string vertexCode, string fragmentCode) {
@@ -45,9 +44,9 @@ public class Shader {
             ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
 
-            shaderIDs[i] = GL.CreateShader(type);
-            GL.ShaderSource(shaderIDs[i], src);
-            GL.CompileShader(shaderIDs[i]);
+            shaderIDs[i] = Gl.CreateShader(type);
+            Gl.ShaderSource(shaderIDs[i], src);
+            Gl.CompileShader(shaderIDs[i]);
 
             //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             //if(status[0] == 0) {
@@ -57,16 +56,16 @@ public class Shader {
             
         }
         
-        _programID = GL.CreateProgram();
+        _programID = Gl.CreateProgram();
         for(int i = 0; i < shaderIDs.Length; i++) {
-            GL.AttachShader(_programID, shaderIDs[i]);
+            Gl.AttachShader(_programID, shaderIDs[i]);
         }
-        GL.LinkProgram(_programID);
+        Gl.LinkProgram(_programID);
         
         // Delete Shaders
         for(int i = 0; i < shaderIDs.Length; i++) {
-            GL.DetachShader(_programID, shaderIDs[i]);
-            GL.DeleteShader(shaderIDs[i]);
+            Gl.DetachShader(_programID, shaderIDs[i]);
+            Gl.DeleteShader(shaderIDs[i]);
         }
     }
 
@@ -107,22 +106,22 @@ public class Shader {
     };
     
     public void Use() {
-        GL.UseProgram(_programID);
+        Gl.UseProgram(_programID);
     }
 
     public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
-        int location = GL.GetUniformLocation(_programID, uniformName);
-        GL.UniformMatrix4(location, 1, false, mat.ToArray());
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        Gl.UniformMatrix4(location, 1, false, mat.ToArray());
     }
 
     public void SetInt(string uniformName, int value) {
-        int location = GL.GetUniformLocation(_programID, uniformName);
-        GL.Uniform1(location, value);
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        Gl.Uniform1(location, value);
     }
 
     public void SetFloat(string uniformName, float value) {
-        int location = GL.GetUniformLocation(_programID, "time");
-        GL.Uniform1(location, value);
+        int location = Gl.GetUniformLocation(_programID, "time");
+        Gl.Uniform1(location, value);
     }
 
 }

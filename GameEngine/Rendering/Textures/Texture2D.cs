@@ -11,7 +11,6 @@ public class Texture2D : Texture {
     private uint _width;
     private uint _height;
     private uint _textureID;
-    private GL gl = RenderingEngine.Gl;
     
     public unsafe Texture2D( string path) {
         
@@ -23,7 +22,7 @@ public class Texture2D : Texture {
         // OpenGL has image origin in the bottom-left corner.
         fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0))) {
             //Loading the actual image.
-            Load(gl, data, _width, _height);
+            Load(Gl, data, _width, _height);
         }
 
         //Deleting the img from imagesharp.
@@ -53,14 +52,14 @@ public class Texture2D : Texture {
     }
 
     public void Dispose() {
-        gl.DeleteTexture(_textureID);
+        Gl.DeleteTexture(_textureID);
     }
 
     public override void Bind(uint slot = 0) {
         //When we bind a texture we can choose which textureslot we can bind it to.
         TextureUnit textureSlot = TextureUnit.Texture0;
-        gl.ActiveTexture((TextureUnit)slot);
-        gl.BindTexture(TextureTarget.Texture2D, _textureID);
+        Gl.ActiveTexture((TextureUnit)slot);
+        Gl.BindTexture(TextureTarget.Texture2D, _textureID);
     }
     
 }

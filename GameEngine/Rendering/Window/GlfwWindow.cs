@@ -15,11 +15,11 @@ namespace GameEngine.Rendering.Window;
 public sealed unsafe class GlfwWindow : IDisposable {
     
     public WindowHandle* Handle => GlfwWindowing.GetHandle(_window);
-    private IWindow _window;
-    public Glfw Glfw;
-    public ImGuiController ImGuiController;
-    public GL Gl;
-    private IInputContext _inputContext;
+    private readonly IWindow _window;
+    public readonly Glfw Glfw;
+    public readonly ImGuiController ImGuiController;
+    public readonly GL Gl;
+    private readonly IInputContext _inputContext;
     
     
     WindowOptions windowOptions = new WindowOptions() {

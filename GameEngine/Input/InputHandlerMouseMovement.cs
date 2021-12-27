@@ -1,14 +1,12 @@
 ﻿using GameEngine.Core;
 using GameEngine.Numerics;
-using GameEngine.Rendering;
-using Silk.NET.GLFW;
+using WindowHandle = Silk.NET.GLFW.WindowHandle;
 
 namespace GameEngine.Input; 
 
 internal partial class InputHandler {
     
     private Vector2 _windowCenter;
-    private Glfw Glfw => RenderingEngine.Glfw;
 
     private static bool _catchCursor = false;
     

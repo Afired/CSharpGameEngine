@@ -10,7 +10,6 @@ public class Geometry : Component {
     public uint Vbo { get; private set; }
     public int VertexCount { get; }
     private float[] VertexData { get; set; }
-    private GL GL => RenderingEngine.Gl;
 
 
     public Geometry(Entity entity, float[] vertexData) : base(entity) {
@@ -21,28 +20,28 @@ public class Geometry : Component {
 
     private void InitializeGeometry() {
         
-        Vao = GL.GenVertexArray();
-        Vbo = GL.GenBuffer();
+        Vao = Gl.GenVertexArray();
+        Vbo = Gl.GenBuffer();
         
-        GL.BindVertexArray(Vao);
-        GL.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
+        Gl.BindVertexArray(Vao);
+        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
         
 
         unsafe {
             fixed(float* v = &VertexData[0]) {
-                GL.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * VertexData.Length), v, BufferUsageARB.StaticDraw);
+                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * VertexData.Length), v, BufferUsageARB.StaticDraw);
             }
             
             // xyz
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
-            GL.EnableVertexAttribArray(0);
+            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+            Gl.EnableVertexAttribArray(0);
             
             // texture coordinates
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-            GL.EnableVertexAttribArray(1);
+            Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+            Gl.EnableVertexAttribArray(1);
 
-            GL.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
+            Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+            Gl.BindVertexArray(0);
         }
         
     }

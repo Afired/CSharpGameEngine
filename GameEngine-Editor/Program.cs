@@ -1,4 +1,5 @@
-﻿using GameEngine.Core;
+﻿using ExampleGame.Entities;
+using GameEngine.Core;
 
 namespace GameEngine.Editor;
 
@@ -11,10 +12,13 @@ public static class Program {
         SetConfig();
         
         application.Initialize();
-        
-        EditorGui editorGui = new EditorGui();
+
+        new PhysicsCheckerboard();
+        SetActiveCamera(new Player().Camera2D);
         
         application.Start();
+        
+        EditorGui editorGui = new EditorGui();
         
         return 0;
     }

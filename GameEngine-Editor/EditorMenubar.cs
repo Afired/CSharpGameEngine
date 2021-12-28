@@ -1,6 +1,8 @@
 using System.Numerics;
 using Editor;
 using GameEngine.Core;
+using GameEngine.Rendering.Shaders;
+using GameEngine.Rendering.Textures;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -30,23 +32,34 @@ public class EditorMenubar {
     
 
     private void Draw() {
+        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
         if(ImGui.BeginMainMenuBar()) {
 
+            Texture2D texture = TextureRegister.Get("Checkerboard") as Texture2D;
+            ImGui.SetCursorPos(new Vector2(8, 8));
+            ImGui.Image((IntPtr) texture.ID, new Vector2(16, 16));
+            
+            ImGui.SetCursorPos(new Vector2(32, 0));
+            
+            // start draw menu items
             if(ImGui.BeginMenu("Application")) {
-                
-                if(ImGui.MenuItem("Quit")) {
+                if(ImGui.MenuItem("Quit"))
                     Application.Terminate();
-                }
-
                 ImGui.EndMenu();
-            }
+            } // end draw menu items
             
             ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
             
+            ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
+            if(ImGui.ImageButton((IntPtr) texture.ID, new Vector2(16, 16))) {
+                Application.Terminate();
+            }
+
             //push style to make invisible
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 0));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0, 0, 0, 0));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 0));
+            //ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 0));
+            //ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0, 0, 0, 0));
+            //ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 0));
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0);
             ImGui.SetCursorPos(new Vector2(0, 0));
             ImGui.Button("", ImGui.GetWindowSize());
             if(ImGui.IsItemActive()) {
@@ -66,9 +79,13 @@ public class EditorMenubar {
             } else {
                 _dragging = false;
             }
+            //pop button drag area alpha
+            ImGui.PopStyleVar();
 
             ImGui.EndMainMenuBar();   
         }
+        //pop main menu bar size
+        ImGui.PopStyleVar();
         
     }
     

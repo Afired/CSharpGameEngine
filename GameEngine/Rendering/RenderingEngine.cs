@@ -36,8 +36,6 @@ public sealed unsafe class RenderingEngine {
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
         
         RenderLoop(GlfwWindow.Handle, inputHandler);
-        
-        Application.Terminate();
     }
     
     private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {

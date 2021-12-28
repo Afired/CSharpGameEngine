@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
-using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
@@ -25,7 +23,8 @@ public sealed unsafe class RenderingEngine {
     public static GL Gl => GlfwWindow.Gl;
     public static Glfw Glfw => GlfwWindow.Glfw;
     
-    private FrameBuffer _frameBuffer;
+    public static SomeFrameBuffer SomeFrameBuffer { get; private set; }
+    public static FrameBuffer FinalFrameBuffer { get; private set; }
     private uint _fullscreenVao;
     
     public static string ScreenShader = "ScreenShader";
@@ -59,7 +58,8 @@ public sealed unsafe class RenderingEngine {
 
     private void Setup() {
         GlfwWindow = new GlfwWindow();
-        _frameBuffer = new FrameBuffer();
+        SomeFrameBuffer = new SomeFrameBuffer();
+        FinalFrameBuffer = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight });
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LoadResources();
     }
@@ -83,16 +83,17 @@ public sealed unsafe class RenderingEngine {
 
     private void RenderFirstPass() {
         // bind custom framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _frameBuffer.ID);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, SomeFrameBuffer.ID);
         
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth test
+        Gl.ClearColor(System.Drawing.Color.Aqua);
         OnDraw?.Invoke();
     }
     
     private void RenderSecondPass() {
         // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, FinalFrameBuffer.ID);
         
         RenderBackground();
         Gl.Clear(ClearBufferMask.ColorBufferBit);
@@ -101,7 +102,7 @@ public sealed unsafe class RenderingEngine {
         ShaderRegister.Get(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, _frameBuffer.TextureColorBuffer);
+        Gl.BindTexture(TextureTarget.Texture2D, SomeFrameBuffer.TextureColorBuffer);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
 

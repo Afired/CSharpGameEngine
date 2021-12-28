@@ -27,7 +27,7 @@ internal class Program {
         Configuration.DoUseVsync = false;
     }
     
-    private static void InitializeWorld() {
+    public static void InitializeWorld() {
         new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
         new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
         new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);

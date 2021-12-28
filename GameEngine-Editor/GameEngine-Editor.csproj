@@ -9,13 +9,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ExampleGame\ExampleGame.csproj" />
       <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Assets\Textures\Checkerboard.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="Assets\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

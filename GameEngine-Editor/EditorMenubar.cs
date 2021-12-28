@@ -35,9 +35,9 @@ public class EditorMenubar {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
         if(ImGui.BeginMainMenuBar()) {
 
-            Texture2D texture = TextureRegister.Get("Checkerboard") as Texture2D;
+            Texture2D icon = TextureRegister.Get("Checkerboard") as Texture2D;
             ImGui.SetCursorPos(new Vector2(8, 8));
-            ImGui.Image((IntPtr) texture.ID, new Vector2(16, 16));
+            ImGui.Image((IntPtr) icon.ID, new Vector2(16, 16));
             
             ImGui.SetCursorPos(new Vector2(32, 0));
             
@@ -46,12 +46,25 @@ public class EditorMenubar {
                 if(ImGui.MenuItem("Quit"))
                     Application.Terminate();
                 ImGui.EndMenu();
+            }
+            if(ImGui.BeginMenu("Project")) {
+                if(ImGui.MenuItem("Settings")) { }
+                if(ImGui.MenuItem("Open")) { }
+                ImGui.EndMenu();
+            }
+            if(ImGui.BeginMenu("Windows")) {
+                if(ImGui.MenuItem("AssetBrowser")) new AssetBrowserWindow();
+                if(ImGui.MenuItem("Console")) new ConsoleWindow();
+                if(ImGui.MenuItem("Hierarchy")) new HierarchyWindow();
+                if(ImGui.MenuItem("Inspector")) new InspectorWindow();
+                if(ImGui.MenuItem("Viewport")) new ViewportWindow();
+                ImGui.EndMenu();
             } // end draw menu items
             
             ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
             
             ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
-            if(ImGui.ImageButton((IntPtr) texture.ID, new Vector2(16, 16))) {
+            if(ImGui.ImageButton((IntPtr) icon.ID, new Vector2(16, 16))) {
                 Application.Terminate();
             }
 

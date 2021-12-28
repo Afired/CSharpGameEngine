@@ -70,24 +70,29 @@ public class EditorMenubar {
     }
 
     private static void DrawWindowHandleButtons() {
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
         Texture2D icon = TextureRegister.Get("Checkerboard") as Texture2D;
         if(ImGui.ImageButton((IntPtr) icon.ID, new Vector2(16, 16))) {
             Application.Terminate();
         }
+        ImGui.PopStyleColor(3);
     }
 
     private static void DrawMenuItems() {
         ImGui.SetCursorPos(new Vector2(32, 0));
         
         if(ImGui.BeginMenu("Application")) {
+            if(ImGui.MenuItem("Preferences")) { }
             if(ImGui.MenuItem("Quit")) Application.Terminate();
             ImGui.EndMenu();
         }
         
         if(ImGui.BeginMenu("Project")) {
-            if(ImGui.MenuItem("Settings")) { }
-            if(ImGui.MenuItem("Open")) { }
+            if(ImGui.MenuItem("Project Settings")) { }
+            if(ImGui.MenuItem("Open Project")) { }
             ImGui.EndMenu();
         }
         

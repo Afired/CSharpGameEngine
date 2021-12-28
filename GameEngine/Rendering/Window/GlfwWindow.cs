@@ -31,7 +31,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
         VideoMode = VideoMode.Default,
         VSync = true, // vertical synchronisation
-        WindowBorder = WindowBorder.Fixed, // window border type
+        WindowBorder = WindowBorder.Hidden, // window border type
         WindowClass = "idk", // ?
         WindowState = WindowState.Normal, // window state
         API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
@@ -62,6 +62,15 @@ public sealed unsafe class GlfwWindow : IDisposable {
         ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable; // enable ImGui docking
         Glfw = Glfw.GetApi();
         Glfw.Init();
+        
+        // set to middle of the screen
+        Silk.NET.GLFW.Monitor* monitor = Glfw.GetPrimaryMonitor();
+        Glfw.GetMonitorWorkarea(monitor, out int width, out int height, out int x, out int y);
+        int middleMonitorX = (x + width) / 2;
+        int middleMonitorY = (y + height) / 2;
+        int windowOffsetX = ((int)Configuration.WindowWidth / 2);
+        int windowOffsetY = ((int)Configuration.WindowHeight / 2);
+        Glfw.SetWindowPos(Handle, (middleMonitorX - windowOffsetX), (middleMonitorY - windowOffsetY));
 
         // Handle resizes
         _window.FramebufferResize += s => {

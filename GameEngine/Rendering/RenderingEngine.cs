@@ -19,7 +19,7 @@ public sealed unsafe class RenderingEngine {
     public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
-    private static GlfwWindow GlfwWindow;
+    public static GlfwWindow GlfwWindow;
     public static GL Gl => GlfwWindow.Gl;
     public static Glfw Glfw => GlfwWindow.Glfw;
     

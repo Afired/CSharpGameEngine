@@ -26,7 +26,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         Position = new Vector2D<int>(-1, -1), // ? doesnt work
         Samples = 1, // multisample anti aliasing?
         Size = new Vector2D<int>((int) Configuration.WindowWidth, (int) Configuration.WindowHeight), // size of the window in pixel
-        Title = "Title", // title of the window
+        Title = Configuration.WindowTitle, // title of the window
         IsVisible = true, // ?
         TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
         VideoMode = VideoMode.Default,

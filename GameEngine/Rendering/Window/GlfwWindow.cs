@@ -1,3 +1,5 @@
+//ref https://gist.github.com/tgfrerer/0d2b92763111a4e5da17
+//ref https://stackoverflow.com/questions/1554674/subclassing-a-external-window-in-c-sharp-net
 using System;
 using GameEngine.Core;
 using ImGuiNET;
@@ -37,14 +39,14 @@ public sealed unsafe class GlfwWindow : IDisposable {
         API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
         FramesPerSecond = -1, // fps
         IsEventDriven = true, // ?
-        PreferredBitDepth = new Vector4D<int>(255, 255, 255, 255), // ?
+        PreferredBitDepth = null, // ?
         ShouldSwapAutomatically = false, // if true swaps frame buffers at the end of rendering automatically
         UpdatesPerSecond = 1, // ? polling?
         IsContextControlDisabled = true, // ?
-        PreferredDepthBufferBits = 255, // ?
-        PreferredStencilBufferBits = 255, // ?
+        PreferredDepthBufferBits = null, // ?
+        PreferredStencilBufferBits = null, // ?
     };
-
+    
     public GlfwWindow() {
         
         // use glfw for window api

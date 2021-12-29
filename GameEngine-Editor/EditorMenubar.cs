@@ -85,7 +85,6 @@ public class EditorMenubar {
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-                Console.Log(SetCapture(hwnd).ToString() + " | " + hwnd);
                 SetForegroundWindow(hwnd);
                 SetFocus(hwnd);
                 SendMessage(hwnd, WM_LBUTTONDOWN, 0, 0);
@@ -105,8 +104,8 @@ public class EditorMenubar {
     private static void DrawWindowHandleButtons() {
         
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
         Texture2D icon2 = TextureRegister.Get("Box") as Texture2D;
         if(ImGui.ImageButton((IntPtr) icon2.ID, new Vector2(16, 16))) {

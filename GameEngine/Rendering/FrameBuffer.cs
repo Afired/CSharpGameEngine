@@ -4,7 +4,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Rendering;
 
-public struct FrameBufferConfig {
+public class FrameBufferConfig {
     public uint Width { get; set; }
     public uint Height { get; set; }
 }
@@ -30,6 +30,12 @@ public class FrameBuffer : IDisposable {
     }
     
     public void Update(FrameBufferConfig config) {
+
+        if(ID != 0) {
+            Dispose();
+        }
+        
+        
         Config = config;
         
         ID = Gl.CreateFramebuffer();
@@ -39,6 +45,12 @@ public class FrameBuffer : IDisposable {
         DepthAttachment = CreateRenderBuffer();
 
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+    }
+
+    public void Resize(uint width, uint height) {
+        Config.Width = width;
+        Config.Height = height;
+        Update(Config);
     }
 
     private uint CreateColorAttachment() {
@@ -72,6 +84,8 @@ public class FrameBuffer : IDisposable {
 
     public void Dispose() {
         Gl.DeleteFramebuffer(ID);
+        Gl.DeleteTextures(1, ColorAttachment);
+        Gl.DeleteTextures(1, DepthAttachment);
     }
     
 }

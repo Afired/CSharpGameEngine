@@ -1,5 +1,6 @@
 using GameEngine.Core;
 using GameEngine.Input;
+using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;

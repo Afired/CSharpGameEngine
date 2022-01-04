@@ -5,6 +5,8 @@ using Silk.NET.OpenGL;
 namespace GameEngine.Rendering;
 
 public class FrameBufferConfig {
+    public bool AutomaticResize { get; set; }
+    //todo: scale multiplier for resizing
     public uint Width { get; set; }
     public uint Height { get; set; }
 }
@@ -35,7 +37,6 @@ public class FrameBuffer : IDisposable {
             Dispose();
         }
         
-        
         Config = config;
         
         ID = Gl.CreateFramebuffer();
@@ -45,6 +46,9 @@ public class FrameBuffer : IDisposable {
         DepthAttachment = CreateRenderBuffer();
 
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        
+        if(Config.AutomaticResize)
+            GlfwWindow.OnResize += Resize;
     }
 
     public void Resize(uint width, uint height) {
@@ -86,6 +90,7 @@ public class FrameBuffer : IDisposable {
         Gl.DeleteFramebuffer(ID);
         Gl.DeleteTextures(1, ColorAttachment);
         Gl.DeleteTextures(1, DepthAttachment);
+        GlfwWindow.OnResize -= Resize;
     }
     
 }

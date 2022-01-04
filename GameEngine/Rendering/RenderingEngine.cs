@@ -24,9 +24,25 @@ public sealed unsafe class RenderingEngine {
     public static Glfw Glfw => GlfwWindow.Glfw;
     
     // this frame buffer is the main frame buffer to render to, it is also used for any drawing of post processing when ping ponging (ping pong frame buffer 1)
-    public static SomeFrameBuffer MainFrameBuffer1 { get; private set; }
+    public static FrameBuffer MainFrameBuffer1 { get; private set; }
     // this frame buffer is used for post processing (ping pong frame buffer 2)
     public static FrameBuffer MainFrameBuffer2 { get; private set; }
+
+    public FrameBuffer ActiveFrameBuffer { get; private set; }
+
+    public void SetActiveFrameBuffer(FrameBuffer frameBufferToBeActive) {
+        ActiveFrameBuffer = frameBufferToBeActive;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
+    }
+
+    public void SwapActiveFrameBuffer() {
+        if(ActiveFrameBuffer == MainFrameBuffer1)
+            ActiveFrameBuffer = MainFrameBuffer2;
+        else if(ActiveFrameBuffer == MainFrameBuffer2)
+            ActiveFrameBuffer = MainFrameBuffer1;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
+        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+    }
     
     private uint _fullscreenVao;
     
@@ -62,7 +78,7 @@ public sealed unsafe class RenderingEngine {
 
     private void Setup() {
         GlfwWindow = new GlfwWindow();
-        MainFrameBuffer1 = new SomeFrameBuffer();
+        MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight });
         MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight });
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LoadResources();
@@ -77,7 +93,7 @@ public sealed unsafe class RenderingEngine {
     private void Render(WindowHandle* window) {
         
         // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
+        SetActiveFrameBuffer(MainFrameBuffer1);
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         Gl.Enable(EnableCap.DepthTest); // reenable depth
         
@@ -92,7 +108,7 @@ public sealed unsafe class RenderingEngine {
         }
         
         GlfwWindow.ImGuiController.Update(0.1f);
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
+        SwapActiveFrameBuffer();
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Draw();
@@ -111,23 +127,18 @@ public sealed unsafe class RenderingEngine {
         ShaderRegister.Get("ScreenShader").Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        // todo: should always be set to last active frame buffer color attachment
-        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.TextureColorBuffer);
+        Gl.BindTexture(TextureTarget.Texture2D, ActiveFrameBuffer.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
     private void DoPostProcessing() {
-        // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer2.ID);
-        
-        //DrawBackground();
-        //Gl.Clear(ClearBufferMask.ColorBufferBit);
+        SwapActiveFrameBuffer();
         // use screen shader
         ShaderRegister.Get(ScreenShader).Use();
         ShaderRegister.Get(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.TextureColorBuffer);
+        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
 

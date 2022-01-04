@@ -6,6 +6,9 @@ namespace GameEngine.Editor.EditorWindows;
 
 public class HierarchyWindow : EditorWindow {
 
+    private Entity _selected;
+    
+
     public HierarchyWindow() {
         Title = "Hierarchy";
     }
@@ -17,9 +20,22 @@ public class HierarchyWindow : EditorWindow {
         }
 
         foreach(Entity entity in Hierarchy.Instance) {
-            ImGui.Text(entity.GetType().ToString());
+            DrawEntityNode(entity);
         }
         
+    }
+
+    private void DrawEntityNode(Entity entity) {
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (_selected == entity ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
+        bool opened = ImGui.TreeNodeEx(entity.GetType().ToString(), treeNodeFlags);
+        if(ImGui.IsItemClicked()) {
+            _selected = entity;
+        }
+
+        if(opened) {
+            ImGui.Text("Test");
+            ImGui.TreePop();
+        }
     }
     
 }

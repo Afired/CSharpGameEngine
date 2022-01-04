@@ -1,5 +1,6 @@
 ﻿using ExampleGame.Entities;
 using GameEngine.Core;
+using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
 

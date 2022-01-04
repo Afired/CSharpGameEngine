@@ -1,5 +1,6 @@
 using GameEngine.Core;
 using GameEngine.Input;
+using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
@@ -30,11 +31,14 @@ public sealed unsafe class RenderingEngine {
     
     public static string ScreenShader = "ScreenShader";
     
+    public static LayerStack LayerStack { get; private set; }
+    
 
     internal void Initialize() {
         Setup();
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
+        LayerStack = new LayerStack();
         
         RenderLoop(GlfwWindow.Handle, inputHandler);
     }
@@ -73,10 +77,21 @@ public sealed unsafe class RenderingEngine {
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         // render and draw frame
         if(CurrentCamera != null) {
-            RenderFirstPass();
-            RenderSecondPass();
+            
+            // bind default framebuffer to render to
+            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            
+            Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+            Gl.Enable(EnableCap.DepthTest); // reenable depth test
+            Gl.ClearColor(System.Drawing.Color.Aqua);
+            
+            foreach(Layer layer in LayerStack) {
+                layer.Draw();
+            }
+//            RenderFirstPass();
+//            RenderSecondPass();
         }
-        RenderOverlay();
+//        RenderOverlay();
         Glfw.SwapBuffers(window);
     }
 

@@ -2,11 +2,22 @@ using GameEngine.Entities;
 using GameEngine.SceneManagement;
 using ImGuiNET;
 
-namespace GameEngine.Editor.EditorWindows; 
+namespace GameEngine.Editor.EditorWindows;
+
+public delegate void OnSelect(Entity entity);
 
 public class HierarchyWindow : EditorWindow {
+    
+    public static event OnSelect OnSelect;
 
-    private Entity _selected;
+    private Entity v_selected;
+    private Entity _selected {
+        get => v_selected;
+        set {
+            v_selected = value;
+            OnSelect?.Invoke(v_selected);
+        }
+    }
     
 
     public HierarchyWindow() {

@@ -8,8 +8,8 @@ namespace GameEngine.SceneManagement;
 
 public class Hierarchy : IEnumerable {
 
-    private static Hierarchy _instance;
-    public static Hierarchy Instance => _instance ??= new Hierarchy();
+    private static Hierarchy v_instance;
+    public static Hierarchy Instance => v_instance ??= new Hierarchy();
 
     private List<Entity> _entities;
     

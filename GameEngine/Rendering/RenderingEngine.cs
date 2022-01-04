@@ -4,7 +4,6 @@ using GameEngine.Layers;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
-using GameEngine.SceneManagement;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 

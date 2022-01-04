@@ -34,8 +34,11 @@ public class InspectorWindow : EditorWindow {
     }
 
     private void DrawTransform(Transform transform) {
-        ImGui.Text("Transform");
-        ImGui.Indent();
+        bool opened = ImGui.TreeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen);
+        
+        if(!opened)
+            return;
+        
         {
             System.Numerics.Vector3 transformPosition = new System.Numerics.Vector3(transform.Position.X, transform.Position.Y, transform.Position.Z);
             ImGui.InputFloat3("Position", ref transformPosition);
@@ -49,7 +52,8 @@ public class InspectorWindow : EditorWindow {
             ImGui.InputFloat3("Scale", ref transformScale);
             transform.Scale = new Vector3(transformScale.X, transformScale.Y, transformScale.Z);
         }
-        ImGui.Unindent();
+        
+        ImGui.TreePop();
     }
     
 }

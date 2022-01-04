@@ -14,7 +14,7 @@ public class Renderer : Component {
     
     
     public Renderer(Entity entity, string texture, string shader) : base(entity) {
-        DefaultLayer.OnDraw += OnDraw;
+        DefaultNormalLayer.OnDraw += OnDraw;
         _texture = texture;
         _shader = shader;
     }

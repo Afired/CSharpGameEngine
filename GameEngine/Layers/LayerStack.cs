@@ -15,7 +15,8 @@ public class LayerStack : IEnumerable<Layer> {
         _normalLayers = new List<Layer>();
         _overlayedLayers = new List<Layer>();
         
-        Push(new DefaultLayer(), LayerType.Normal);
+        Push(new DefaultNormalLayer(), LayerType.Normal);
+        Push(new DefaultOverlayLayer(), LayerType.Overlay);
     }
     
     /// <summary>

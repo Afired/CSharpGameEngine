@@ -1,3 +1,4 @@
+using ExampleGame.Components;
 using GameEngine.Components;
 using GameEngine.Entities;
 using GameEngine.Numerics;
@@ -31,6 +32,8 @@ public class InspectorWindow : EditorWindow {
         }
         if(Selected is ITransform transform)
             DrawTransform(transform.Transform);
+        if(Selected is IRenderer renderer)
+            DrawRenderer(renderer.Renderer);
     }
 
     private void DrawTransform(Transform transform) {
@@ -51,6 +54,25 @@ public class InspectorWindow : EditorWindow {
             System.Numerics.Vector3 transformScale = new System.Numerics.Vector3(transform.Scale.X, transform.Scale.Y, transform.Scale.Z);
             ImGui.InputFloat3("Scale", ref transformScale);
             transform.Scale = new Vector3(transformScale.X, transformScale.Y, transformScale.Z);
+        }
+        
+        ImGui.TreePop();
+    }
+
+    private void DrawRenderer(Renderer renderer) {
+        bool opened = ImGui.TreeNodeEx("Renderer", ImGuiTreeNodeFlags.DefaultOpen);
+        
+        if(!opened)
+            return;
+
+        {
+            string rendererShader = renderer.Shader;
+            ImGui.InputText("Shader", ref rendererShader, 30);
+            renderer.Shader = rendererShader;
+            
+            string rendererTexture = renderer.Texture;
+            ImGui.InputText("Texture (dont edit)", ref rendererTexture, 30);
+            renderer.Texture = rendererTexture;
         }
         
         ImGui.TreePop();

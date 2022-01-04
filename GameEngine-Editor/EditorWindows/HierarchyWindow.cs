@@ -11,7 +11,7 @@ public class HierarchyWindow : EditorWindow {
     public static event OnSelect OnSelect;
 
     private Entity v_selected;
-    private Entity _selected {
+    public Entity Selected {
         get => v_selected;
         set {
             v_selected = value;
@@ -37,10 +37,10 @@ public class HierarchyWindow : EditorWindow {
     }
 
     private void DrawEntityNode(Entity entity) {
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (_selected == entity ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (Selected == entity ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
         bool opened = ImGui.TreeNodeEx(entity.GetType().ToString(), treeNodeFlags);
         if(ImGui.IsItemClicked()) {
-            _selected = entity;
+            Selected = entity;
         }
 
         if(opened) {

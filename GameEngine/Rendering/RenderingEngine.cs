@@ -16,7 +16,6 @@ public delegate void OnImGui();
 public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
-    //public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
     public static GlfwWindow GlfwWindow;
@@ -28,19 +27,19 @@ public sealed unsafe class RenderingEngine {
     // this frame buffer is used for post processing (ping pong frame buffer 2)
     public static FrameBuffer MainFrameBuffer2 { get; private set; }
 
-    public FrameBuffer ActiveFrameBuffer { get; private set; }
+    private FrameBuffer _activeFrameBuffer;
 
-    public void SetActiveFrameBuffer(FrameBuffer frameBufferToBeActive) {
-        ActiveFrameBuffer = frameBufferToBeActive;
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
+    private void SetActiveFrameBuffer(FrameBuffer frameBufferToBeActive) {
+        _activeFrameBuffer = frameBufferToBeActive;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
     }
 
-    public void SwapActiveFrameBuffer() {
-        if(ActiveFrameBuffer == MainFrameBuffer1)
-            ActiveFrameBuffer = MainFrameBuffer2;
-        else if(ActiveFrameBuffer == MainFrameBuffer2)
-            ActiveFrameBuffer = MainFrameBuffer1;
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
+    private void SwapActiveFrameBuffer() {
+        if(_activeFrameBuffer == MainFrameBuffer1)
+            _activeFrameBuffer = MainFrameBuffer2;
+        else if(_activeFrameBuffer == MainFrameBuffer2)
+            _activeFrameBuffer = MainFrameBuffer1;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
     
@@ -106,7 +105,7 @@ public sealed unsafe class RenderingEngine {
             //todo: post processing stack
             DoPostProcessing();
         }
-        
+        //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
         GlfwWindow.ImGuiController.Update(0.1f);
         SwapActiveFrameBuffer();
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -127,7 +126,7 @@ public sealed unsafe class RenderingEngine {
         ShaderRegister.Get("ScreenShader").Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, ActiveFrameBuffer.ColorAttachment);
+        Gl.BindTexture(TextureTarget.Texture2D, _activeFrameBuffer.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
@@ -141,17 +140,7 @@ public sealed unsafe class RenderingEngine {
         Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
-
-    private void RenderOverlay() {
-        GlfwWindow.ImGuiController.Update(0.1f);
-        // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-        
-        //OnImGui?.Invoke();
-        
-        GlfwWindow.ImGuiController.Render();
-    }
-
+    
     private void DrawBackground() {
         Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }

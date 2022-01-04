@@ -16,7 +16,7 @@ public delegate void OnImGui();
 public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
-    public static event OnImGui OnImGui;
+    //public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
     public static GlfwWindow GlfwWindow;
@@ -90,11 +90,14 @@ public sealed unsafe class RenderingEngine {
             //todo: post processing stack
             DoPostProcessing();
         }
-        // bind default framebuffer to render to
+        
+        GlfwWindow.ImGuiController.Update(0.1f);
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
+        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Draw();
         }
+        GlfwWindow.ImGuiController.Render();
         
         DrawToBackBuffer();
         Glfw.SwapBuffers(window);
@@ -109,7 +112,7 @@ public sealed unsafe class RenderingEngine {
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
         // todo: should always be set to last active frame buffer color attachment
-        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer2.ColorAttachment);
+        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.TextureColorBuffer);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
@@ -133,7 +136,7 @@ public sealed unsafe class RenderingEngine {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         
-        OnImGui?.Invoke();
+        //OnImGui?.Invoke();
         
         GlfwWindow.ImGuiController.Render();
     }

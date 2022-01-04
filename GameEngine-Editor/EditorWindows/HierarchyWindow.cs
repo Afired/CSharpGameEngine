@@ -33,6 +33,10 @@ public class HierarchyWindow : EditorWindow {
         foreach(Entity entity in Hierarchy.Instance) {
             DrawEntityNode(entity);
         }
+
+        if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
+            Selected = null;
+        }
         
     }
 

@@ -36,8 +36,10 @@ public class InspectorWindow : EditorWindow {
             DrawRenderer(renderer.Renderer);
         if(Selected is ICamera2D camera2D)
             DrawCamera2D(camera2D.Camera2D);
+        if(Selected is ICamera3D camera3D)
+            DrawCamera3D(camera3D.Camera3D);
     }
-
+    
     private void DrawTransform(Transform transform) {
         bool opened = ImGui.TreeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen);
         
@@ -88,12 +90,44 @@ public class InspectorWindow : EditorWindow {
 
         {
             float camera2DZoom = camera2D.Zoom;
-            ImGui.InputFloat("Zoom", ref camera2DZoom);
+            ImGui.DragFloat("Zoom", ref camera2DZoom);
             camera2D.Zoom = camera2DZoom;
             
             System.Numerics.Vector4 camera2DBackgroundColor = new System.Numerics.Vector4(camera2D.BackgroundColor.R, camera2D.BackgroundColor.G, camera2D.BackgroundColor.B, camera2D.BackgroundColor.A);
             ImGui.ColorPicker4("Background Color", ref camera2DBackgroundColor);
             camera2D.BackgroundColor = new Color(camera2DBackgroundColor.X, camera2DBackgroundColor.Y, camera2DBackgroundColor.Z, camera2DBackgroundColor.W);
+            
+            if(ImGui.Button("Set active")) {
+                RenderingEngine.SetActiveCamera(camera2D);
+            }
+        }
+        
+        ImGui.TreePop();
+    }
+    
+    private void DrawCamera3D(Camera3D camera3D) {
+        bool opened = ImGui.TreeNodeEx("Camera 3D", ImGuiTreeNodeFlags.DefaultOpen);
+        
+        if(!opened)
+            return;
+
+        {
+            float camera3DFieldOfView = camera3D.FieldOfView;
+            ImGui.DragFloat("Field of View", ref camera3DFieldOfView);
+            camera3D.FieldOfView = camera3DFieldOfView;
+            
+            System.Numerics.Vector2 clippingDistance = new System.Numerics.Vector2(camera3D.NearPlaneDistance, camera3D.FarPlaneDistance);
+            ImGui.InputFloat2("Clipping Distance", ref clippingDistance);
+            camera3D.NearPlaneDistance = clippingDistance.X;
+            camera3D.FarPlaneDistance = clippingDistance.Y;
+            
+            System.Numerics.Vector4 camera2DBackgroundColor = new System.Numerics.Vector4(camera3D.BackgroundColor.R, camera3D.BackgroundColor.G, camera3D.BackgroundColor.B, camera3D.BackgroundColor.A);
+            ImGui.ColorPicker4("Background Color", ref camera2DBackgroundColor);
+            camera3D.BackgroundColor = new Color(camera2DBackgroundColor.X, camera2DBackgroundColor.Y, camera2DBackgroundColor.Z, camera2DBackgroundColor.W);
+
+            if(ImGui.Button("Set active")) {
+                RenderingEngine.SetActiveCamera(camera3D);
+            }
         }
         
         ImGui.TreePop();

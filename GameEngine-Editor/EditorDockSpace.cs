@@ -1,4 +1,4 @@
-using GameEngine.Layers;
+using GameEngine.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor; 
@@ -6,7 +6,7 @@ namespace GameEngine.Editor;
 public class EditorDockSpace {
 
     public EditorDockSpace() {
-        DefaultOverlayLayer.OnDraw += Draw;
+        RenderingEngine.LayerStack.DefaultOverlayLayer.OnDraw += Draw;
     }
 
     private void Draw() {

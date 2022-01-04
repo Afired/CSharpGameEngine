@@ -2,7 +2,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using Editor;
 using GameEngine.Core;
-using GameEngine.Layers;
+using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Textures;
 using ImGuiNET;
@@ -27,7 +27,7 @@ public class EditorMenubar {
     private bool _dragging;
     
     public EditorMenubar() {
-        DefaultOverlayLayer.OnDraw += Draw;
+        LayerStack.DefaultOverlayLayer.OnDraw += Draw;
     }
     
     private void Draw() {

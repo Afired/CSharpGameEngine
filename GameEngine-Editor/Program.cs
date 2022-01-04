@@ -1,5 +1,6 @@
 ﻿using ExampleGame.Entities;
 using GameEngine.Core;
+using GameEngine.Rendering;
 
 namespace GameEngine.Editor;
 
@@ -18,11 +19,15 @@ public static class Program {
         
         application.Start();
         
-        EditorGui editorGui = new EditorGui();
+        RenderingEngine.OnLoad += InitializeEditor;
         
         return 0;
     }
-    
+
+    private static void InitializeEditor() {
+        EditorGui editorGui = new EditorGui();
+    }
+
     private static void SetConfig() {
         Configuration.TargetFrameRate = -1;
         Configuration.WindowTitle = "GameEngine-Editor";

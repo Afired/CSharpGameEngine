@@ -1,5 +1,4 @@
 using GameEngine.Entities;
-using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
@@ -14,9 +13,13 @@ public class Renderer : Component {
     
     
     public Renderer(Entity entity, string texture, string shader) : base(entity) {
-        DefaultNormalLayer.OnDraw += OnDraw;
+        RenderingEngine.OnLoad += OnLoad;
         _texture = texture;
         _shader = shader;
+    }
+
+    private void OnLoad() {
+        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
     }
     
     public void OnDraw() {

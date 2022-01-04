@@ -1,7 +1,6 @@
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Layers;
-using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
@@ -11,7 +10,6 @@ using Silk.NET.OpenGL;
 namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
-public delegate void OnImGui();
 
 public sealed unsafe class RenderingEngine {
     
@@ -54,7 +52,6 @@ public sealed unsafe class RenderingEngine {
         Setup();
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
-        LayerStack = new LayerStack();
         
         RenderLoop(GlfwWindow.Handle, inputHandler);
     }
@@ -80,6 +77,7 @@ public sealed unsafe class RenderingEngine {
         MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
         MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
         _fullscreenVao = GetFullScreenRenderQuadVao();
+        LayerStack = new LayerStack();
         LoadResources();
     }
     

@@ -1,5 +1,5 @@
 using GameEngine.Editor.EditorWindows;
-using GameEngine.Layers;
+using GameEngine.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor; 
@@ -19,7 +19,7 @@ public class EditorGui {
         new ConsoleWindow();
         new AssetBrowserWindow();
         new ProjectSettingsWindow();
-        DefaultOverlayLayer.OnDraw += RenderDemoWindow;
+        RenderingEngine.LayerStack.DefaultOverlayLayer.OnDraw += RenderDemoWindow;
     }
 
     private void RenderDemoWindow() {

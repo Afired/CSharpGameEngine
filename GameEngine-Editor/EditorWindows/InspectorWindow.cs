@@ -1,9 +1,9 @@
-using ExampleGame.Components;
 using GameEngine.Components;
 using GameEngine.Entities;
 using GameEngine.Numerics;
+using GameEngine.Rendering;
+using GameEngine.Rendering.Cameras;
 using ImGuiNET;
-using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Editor.EditorWindows;
 
@@ -34,6 +34,8 @@ public class InspectorWindow : EditorWindow {
             DrawTransform(transform.Transform);
         if(Selected is IRenderer renderer)
             DrawRenderer(renderer.Renderer);
+        if(Selected is ICamera2D camera2D)
+            DrawCamera2D(camera2D.Camera2D);
     }
 
     private void DrawTransform(Transform transform) {
@@ -73,6 +75,25 @@ public class InspectorWindow : EditorWindow {
             string rendererTexture = renderer.Texture;
             ImGui.InputText("Texture (dont edit)", ref rendererTexture, 30);
             renderer.Texture = rendererTexture;
+        }
+        
+        ImGui.TreePop();
+    }
+
+    private void DrawCamera2D(Camera2D camera2D) {
+        bool opened = ImGui.TreeNodeEx("Camera 2D", ImGuiTreeNodeFlags.DefaultOpen);
+        
+        if(!opened)
+            return;
+
+        {
+            float camera2DZoom = camera2D.Zoom;
+            ImGui.InputFloat("Zoom", ref camera2DZoom);
+            camera2D.Zoom = camera2DZoom;
+            
+            System.Numerics.Vector4 camera2DBackgroundColor = new System.Numerics.Vector4(camera2D.BackgroundColor.R, camera2D.BackgroundColor.G, camera2D.BackgroundColor.B, camera2D.BackgroundColor.A);
+            ImGui.ColorPicker4("Background Color", ref camera2DBackgroundColor);
+            camera2D.BackgroundColor = new Color(camera2DBackgroundColor.X, camera2DBackgroundColor.Y, camera2DBackgroundColor.Z, camera2DBackgroundColor.W);
         }
         
         ImGui.TreePop();

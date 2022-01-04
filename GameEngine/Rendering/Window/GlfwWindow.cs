@@ -37,7 +37,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
         VideoMode = VideoMode.Default,
         VSync = true, // vertical synchronisation
-        WindowBorder = WindowBorder.Resizable, // window border type
+        WindowBorder = WindowBorder.Hidden, // window border type
         WindowClass = "idk", // ?
         WindowState = WindowState.Normal, // window state
         API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api

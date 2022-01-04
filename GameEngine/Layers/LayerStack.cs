@@ -52,6 +52,16 @@ public class LayerStack : IEnumerable<Layer> {
         _ => throw new InvalidEnumArgumentException("The provided layer type is not implemented")
     };
 
+    public IEnumerable<Layer> GetNormalLayers() {
+        foreach(Layer normalLayer in _normalLayers)
+            yield return normalLayer;
+    }
+
+    public IEnumerable<Layer> GetOverlayLayers() {
+        foreach(Layer overlayedLayer in _overlayedLayers)
+            yield return overlayedLayer;
+    }
+
     public IEnumerator<Layer> GetEnumerator() {
         foreach(Layer normalLayer in _normalLayers)
             yield return normalLayer;

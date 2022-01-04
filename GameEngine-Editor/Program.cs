@@ -1,6 +1,7 @@
 ﻿using ExampleGame.Entities;
 using GameEngine.Core;
 using GameEngine.Rendering;
+using GameEngine.SceneManagement;
 
 namespace GameEngine.Editor;
 
@@ -14,14 +15,21 @@ public static class Program {
         
         application.Initialize();
 
-        new PhysicsCheckerboard();
-        SetActiveCamera(new Player().Camera2D);
+        InitializeWorld();
         
         application.Start();
         
         RenderingEngine.OnLoad += InitializeEditor;
         
         return 0;
+    }
+
+    private static void InitializeWorld() {
+        Hierarchy.Instance.Add(new PhysicsCheckerboard());
+        
+        Player player = new Player();
+        SetActiveCamera(player.Camera2D);
+        Hierarchy.Instance.Add(player);
     }
 
     private static void InitializeEditor() {

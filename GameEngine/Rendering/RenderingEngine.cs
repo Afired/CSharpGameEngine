@@ -4,6 +4,7 @@ using GameEngine.Layers;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
+using GameEngine.SceneManagement;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
@@ -47,7 +48,7 @@ public sealed unsafe class RenderingEngine {
     
     public static LayerStack LayerStack { get; private set; }
     
-
+    
     internal void Initialize() {
         Setup();
         InputHandler inputHandler = new InputHandler();

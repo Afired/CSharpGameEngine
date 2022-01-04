@@ -2,6 +2,7 @@
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Input;
+using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
 using ImGuiNET;
@@ -16,7 +17,7 @@ public class PlayerController : Component {
     
     public PlayerController(Entity entity) : base(entity) {
         Application.OnUpdate += OnUpdate;
-        RenderingEngine.OnImGui += OnImGui;
+        DefaultOverlayLayer.OnDraw += OnImGui;
     }
 
     private void OnImGui() {

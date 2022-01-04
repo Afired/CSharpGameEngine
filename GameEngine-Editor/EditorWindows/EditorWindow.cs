@@ -1,4 +1,5 @@
 using System.Numerics;
+using GameEngine.Layers;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -8,7 +9,7 @@ public class EditorWindow {
     protected string Title = "Title";
     
     public EditorWindow() {
-        OnImGui += DrawWindow;
+        DefaultOverlayLayer.OnDraw += DrawWindow;
     }
 
     private void DrawWindow() {

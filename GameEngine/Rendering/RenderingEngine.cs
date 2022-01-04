@@ -1,5 +1,6 @@
 using GameEngine.Core;
 using GameEngine.Input;
+using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
@@ -10,31 +11,50 @@ using Silk.NET.OpenGL;
 namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
-public delegate void OnDraw();
 public delegate void OnImGui();
 
 public sealed unsafe class RenderingEngine {
     
     public static event OnLoad OnLoad;
-    public static event OnDraw OnDraw;
-    public static event OnImGui OnImGui;
     public static BaseCamera CurrentCamera { get; private set; }
     
     public static GlfwWindow GlfwWindow;
     public static GL Gl => GlfwWindow.Gl;
     public static Glfw Glfw => GlfwWindow.Glfw;
     
-    public static SomeFrameBuffer SomeFrameBuffer { get; private set; }
-    public static FrameBuffer FinalFrameBuffer { get; private set; }
+    // this frame buffer is the main frame buffer to render to, it is also used for any drawing of post processing when ping ponging (ping pong frame buffer 1)
+    public static FrameBuffer MainFrameBuffer1 { get; private set; }
+    // this frame buffer is used for post processing (ping pong frame buffer 2)
+    public static FrameBuffer MainFrameBuffer2 { get; private set; }
+
+    private FrameBuffer _activeFrameBuffer;
+
+    private void SetActiveFrameBuffer(FrameBuffer frameBufferToBeActive) {
+        _activeFrameBuffer = frameBufferToBeActive;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
+    }
+
+    private void SwapActiveFrameBuffer() {
+        if(_activeFrameBuffer == MainFrameBuffer1)
+            _activeFrameBuffer = MainFrameBuffer2;
+        else if(_activeFrameBuffer == MainFrameBuffer2)
+            _activeFrameBuffer = MainFrameBuffer1;
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
+        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+    }
+    
     private uint _fullscreenVao;
     
     public static string ScreenShader = "ScreenShader";
+    
+    public static LayerStack LayerStack { get; private set; }
     
 
     internal void Initialize() {
         Setup();
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
+        LayerStack = new LayerStack();
         
         RenderLoop(GlfwWindow.Handle, inputHandler);
     }
@@ -57,8 +77,8 @@ public sealed unsafe class RenderingEngine {
 
     private void Setup() {
         GlfwWindow = new GlfwWindow();
-        SomeFrameBuffer = new SomeFrameBuffer();
-        FinalFrameBuffer = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight });
+        MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
+        MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LoadResources();
     }
@@ -70,52 +90,58 @@ public sealed unsafe class RenderingEngine {
     }
 
     private void Render(WindowHandle* window) {
+        
+        // bind default framebuffer to render to
+        SetActiveFrameBuffer(MainFrameBuffer1);
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        Gl.Enable(EnableCap.DepthTest); // reenable depth
+        
         // render and draw frame
         if(CurrentCamera != null) {
-            RenderFirstPass();
-            RenderSecondPass();
+            DrawBackground();
+            foreach(Layer layer in LayerStack.GetNormalLayers()) {
+                layer.Draw();
+            }
+            //todo: post processing stack
+            DoPostProcessing();
         }
-        RenderOverlay();
+        //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
+        GlfwWindow.ImGuiController.Update(0.1f);
+        SwapActiveFrameBuffer();
+        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        foreach(Layer layer in LayerStack.GetOverlayLayers()) {
+            layer.Draw();
+        }
+        GlfwWindow.ImGuiController.Render();
+        
+        DrawToBackBuffer();
         Glfw.SwapBuffers(window);
     }
 
-    private void RenderFirstPass() {
-        // bind custom framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, SomeFrameBuffer.ID);
-        
-        Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-        Gl.Enable(EnableCap.DepthTest); // reenable depth test
-        Gl.ClearColor(System.Drawing.Color.Aqua);
-        OnDraw?.Invoke();
+    private void DrawToBackBuffer() {
+        // bind default framebuffer to render to
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        // use default screen shader
+        ShaderRegister.Get("ScreenShader").Use();
+        Gl.BindVertexArray(_fullscreenVao);
+        Gl.Disable(EnableCap.DepthTest);
+        Gl.BindTexture(TextureTarget.Texture2D, _activeFrameBuffer.ColorAttachment);
+        Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private void RenderSecondPass() {
-        // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, FinalFrameBuffer.ID);
-        
-        RenderBackground();
-        Gl.Clear(ClearBufferMask.ColorBufferBit);
+    private void DoPostProcessing() {
+        SwapActiveFrameBuffer();
         // use screen shader
         ShaderRegister.Get(ScreenShader).Use();
         ShaderRegister.Get(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, SomeFrameBuffer.TextureColorBuffer);
+        Gl.BindTexture(TextureTarget.Texture2D, MainFrameBuffer1.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
-
-    private void RenderOverlay() {
-        GlfwWindow.ImGuiController.Update(0.1f);
-        // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-        
-        OnImGui?.Invoke();
-        
-        GlfwWindow.ImGuiController.Render();
-    }
-
-    private void RenderBackground() {
+    
+    private void DrawBackground() {
         Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }
 

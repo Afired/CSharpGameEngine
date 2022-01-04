@@ -12,9 +12,13 @@ using Silk.NET.Windowing;
 using Silk.NET.Windowing.Glfw;
 using VideoMode = Silk.NET.Windowing.VideoMode;
 
-namespace GameEngine.Rendering.Window; 
+namespace GameEngine.Rendering.Window;
+
+public delegate void OnResize(uint width, uint height);
 
 public sealed unsafe class GlfwWindow : IDisposable {
+
+    public event OnResize OnResize;
     
     public WindowHandle* Handle => GlfwWindowing.GetHandle(_window);
     private readonly IWindow _window;
@@ -78,6 +82,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         _window.FramebufferResize += s => {
             // Adjust the viewport to the new window size
             Gl.Viewport(s);
+            OnResize?.Invoke((uint) s.X, (uint) s.Y);
         };
 
         // dispose components when window is closing

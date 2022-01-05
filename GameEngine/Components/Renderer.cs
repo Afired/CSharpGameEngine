@@ -1,3 +1,4 @@
+using GameEngine.AutoGenerator;
 using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
@@ -6,6 +7,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
+[GenerateComponentInterface]
 public class Renderer : Component {
 
     public string Texture { get; set; }
@@ -43,8 +45,4 @@ public class Renderer : Component {
         Gl.BindVertexArray(0);
     }
     
-}
-
-public interface IRenderer : ITransform, IGeometry {
-    Renderer Renderer { get; set; }
 }

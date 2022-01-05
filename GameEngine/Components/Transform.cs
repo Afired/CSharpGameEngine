@@ -1,8 +1,10 @@
-﻿using GameEngine.Entities;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Entities;
 using GameEngine.Numerics;
 
 namespace GameEngine.Components;
 
+[GenerateComponentInterface]
 public class Transform : Component {
     
     public Vector3 Position { get; set; }
@@ -16,8 +18,4 @@ public class Transform : Component {
         Rotation = new float();
     }
     
-}
-
-public interface ITransform {
-    public Transform Transform { get; set; }
 }

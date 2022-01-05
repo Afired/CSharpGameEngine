@@ -1,6 +1,7 @@
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
+using GameEngine.AutoGenerator;
 using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Physics;
@@ -8,6 +9,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Components; 
 
+[GenerateComponentInterface]
 public class RigidBody : Component {
     
     private Body _body;
@@ -43,8 +45,4 @@ public class RigidBody : Component {
         (Entity as ITransform).Transform.Rotation = _body.GetAngle();
     }
     
-}
-
-public interface IRigidBody : ITransform {
-    RigidBody RigidBody { get; set; }
 }

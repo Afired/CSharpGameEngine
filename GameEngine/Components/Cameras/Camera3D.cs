@@ -1,4 +1,5 @@
 ﻿using System;
+using GameEngine.AutoGenerator;
 using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
@@ -6,6 +7,7 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras;
 
+[GenerateComponentInterface]
 public class Camera3D : BaseCamera {
     
     public float NearPlaneDistance;
@@ -31,8 +33,4 @@ public class Camera3D : BaseCamera {
         return transMatrix * rotMatrix * perMatrix;
     }
     
-}
-
-public interface ICamera3D {
-    Camera3D Camera3D { get; set; }
 }

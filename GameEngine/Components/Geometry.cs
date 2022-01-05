@@ -1,9 +1,11 @@
-﻿using GameEngine.Entities;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Entities;
 using GameEngine.Rendering;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
+[GenerateComponentInterface]
 public class Geometry : Component {
     
     public uint Vao { get; private set; }
@@ -46,8 +48,4 @@ public class Geometry : Component {
         
     }
     
-}
-
-public interface IGeometry {
-    public Geometry Geometry { get; set; }
 }

@@ -47,7 +47,7 @@ public sealed unsafe class RenderingEngine {
     
     public static LayerStack LayerStack { get; private set; }
     
-
+    
     internal void Initialize() {
         Setup();
         InputHandler inputHandler = new InputHandler();

@@ -1,5 +1,4 @@
 using GameEngine.Entities;
-using GameEngine.Components; // for now, because we dont include the namespace: GameEngine.Components
 
 namespace GameEngine.Components; 
 

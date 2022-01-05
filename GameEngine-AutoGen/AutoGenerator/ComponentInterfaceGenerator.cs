@@ -38,9 +38,8 @@ public class ComponentInterfaceGenerator : ISourceGenerator {
                         .OfType<ClassDeclarationSyntax>()
                         .Where(cd => cd.DescendantNodes().OfType<AttributeSyntax>().Any())) {
 
-                var hasAttribute =
-                    declaredClass.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.ToString() == ATTRIBUTE_NAME));
-
+                var hasAttribute = declaredClass.AttributeLists.Any(x => x.Attributes.Any(y => y.Name.ToString().Contains(ATTRIBUTE_NAME)));
+                
                 if(hasAttribute) {
                     var usingDirectives = tree.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                     var usingDirectivesAsText = string.Join("\r\n", usingDirectives);

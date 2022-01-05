@@ -52,13 +52,14 @@ public class ComponentInterfaceGenerator : ISourceGenerator {
                         var filescopedNamespaceDeclaration = tree.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
                         namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
                     }
-                    var namespaceUsing = string.IsNullOrEmpty(namespaceAsText) ? "" : $"using {namespaceAsText};";
+                    var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
                         $@"
 {usingDirectivesAsText}
-{namespaceUsing}
+
+{namespaceScope}
 
 public interface {interfaceName} {{
     {className} {className} {{ get; set; }}

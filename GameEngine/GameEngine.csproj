@@ -19,5 +19,9 @@
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
       <PackageReference Include="StbImageSharp" Version="2.22.6" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\GameEngine-AutoGen\GameEngine-AutoGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
 
 </Project>

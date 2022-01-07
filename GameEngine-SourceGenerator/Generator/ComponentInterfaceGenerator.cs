@@ -77,7 +77,7 @@ namespace GameEngine.Generator {
 //                                    sb.Append(constructorArgument.Value);
 //                                }
 //                                requiredComponents = sb.ToString();
-                                requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Select(arg => arg.Value));
+                                requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value));
                                 break;
                             }
                             string requiredComponentsAsText = string.IsNullOrEmpty(requiredComponents) ? "" : $" : {requiredComponents}";

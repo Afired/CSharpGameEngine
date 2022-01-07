@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace GameEngine.Generator {
         
         private const string COMPONENT_BASECLASS_NAME = "Component";
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
+        private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
         public void Initialize(GeneratorInitializationContext context) {
             #if DEBUG
@@ -63,9 +65,23 @@ namespace GameEngine.Generator {
                                 namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
                             }
 
-                            var namespaceScope =
-                                string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
-
+                            var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+                            
+                            string requiredComponents = null;
+                            foreach(AttributeData attributeData in classSymbol.GetAttributes()) {
+                                if(attributeData.AttributeClass.Name != REQUIRE_COMPONENT_ATTRIBUTE_NAME)
+                                    continue;
+//                                StringBuilder sb = new StringBuilder();
+//                                foreach(TypedConstant constructorArgument in attributeData.ConstructorArguments) {
+//                                    //todo: exclude non interfaces
+//                                    sb.Append(constructorArgument.Value);
+//                                }
+//                                requiredComponents = sb.ToString();
+                                requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Select(arg => arg.Value));
+                                break;
+                            }
+                            string requiredComponentsAsText = string.IsNullOrEmpty(requiredComponents) ? "" : $" : {requiredComponents}";
+                            
                             var sourceBuilder = new StringBuilder();
                             sourceBuilder.Append(
                                 $@"
@@ -73,7 +89,7 @@ namespace GameEngine.Generator {
 
 {namespaceScope}
 
-public interface {interfaceName} {{
+public interface {interfaceName}{requiredComponentsAsText} {{
     {className} {className} {{ get; set; }}
 }}
 "

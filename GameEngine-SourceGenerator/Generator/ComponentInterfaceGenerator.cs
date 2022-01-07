@@ -84,8 +84,7 @@ namespace GameEngine.Generator {
                             
                             var sourceBuilder = new StringBuilder();
                             sourceBuilder.Append(
-                                $@"
-{usingDirectivesAsText}
+$@"{usingDirectivesAsText}
 
 {namespaceScope}
 

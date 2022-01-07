@@ -68,15 +68,13 @@ namespace GameEngine.Generator {
                             var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                             
                             string requiredComponents = null;
-                            foreach(AttributeData attributeData in classSymbol.GetAttributes()) {
-                                if(attributeData.AttributeClass.Name != REQUIRE_COMPONENT_ATTRIBUTE_NAME)
-                                    continue;
-//                                StringBuilder sb = new StringBuilder();
-//                                foreach(TypedConstant constructorArgument in attributeData.ConstructorArguments) {
-//                                    //todo: exclude non interfaces
-//                                    sb.Append(constructorArgument.Value);
-//                                }
-//                                requiredComponents = sb.ToString();
+                            foreach(AttributeData attributeData in classSymbol.GetAttributes().
+                                        Where(attribute =>
+                                            // filter attributes for attribute name
+                                            attribute.AttributeClass.ToString() == REQUIRE_COMPONENT_ATTRIBUTE_NAME
+                                            // exclude attributes with 0 arguments
+                                            && attribute.ConstructorArguments.Length != 0)) {
+                                
                                 requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value));
                                 break;
                             }

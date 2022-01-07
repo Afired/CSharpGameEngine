@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
-        <ProjectReference Include="..\GameEngine-AutoGen\GameEngine-AutoGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     
     <ItemGroup>

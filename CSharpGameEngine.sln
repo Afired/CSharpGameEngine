@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine-Editor", "GameEngine-Editor\GameEngine-Editor.csproj", "{E4AE33B5-5632-4817-8081-2D9469E3471E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine-AutoGen", "GameEngine-AutoGen\GameEngine-AutoGen.csproj", "{5D851A34-DCE4-468C-8C4F-1CD026322D4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine-SourceGenerator", "GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj", "{5D851A34-DCE4-468C-8C4F-1CD026322D4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

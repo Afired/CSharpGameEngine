@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using GameEngine.Generator.Extensions;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace GameEngine.AutoGenerator {
+namespace GameEngine.Generator {
 
 // todo: update to incremental generator
 // https://andrewlock.net/exploring-dotnet-6-part-9-source-generator-updates-incremental-generators/
@@ -78,25 +78,5 @@ public interface {interfaceName} {{
             }
         }
     }
-
-    public static class ClassDeclarationSyntaxExtensions {
-
-        public static string GetNamespace(this ClassDeclarationSyntax source) {
-            if(source == null) return null;
-
-            var parent = source.Parent;
-            while(parent.IsKind(SyntaxKind.ClassDeclaration)) {
-                var parentClass = parent as ClassDeclarationSyntax;
-
-                if(parentClass == null) return null;
-
-                parent = parent.Parent;
-            }
-
-            var nameSpace = parent as NamespaceDeclarationSyntax;
-
-            return nameSpace?.Name.ToString();
-        }
-    }
-
+    
 }

@@ -9,7 +9,6 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Components; 
 
-[GenerateComponentInterface]
 public class RigidBody : Component {
     
     private Body _body;

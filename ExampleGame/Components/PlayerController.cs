@@ -7,7 +7,6 @@ using GameEngine.Numerics;
 
 namespace ExampleGame.Components; 
 
-[GenerateComponentInterface]
 public class PlayerController : Component {
     
     private Vector2 _inputAxis;

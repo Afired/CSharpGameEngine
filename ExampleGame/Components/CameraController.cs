@@ -6,7 +6,6 @@ using GameEngine.Input;
 
 namespace ExampleGame.Components; 
 
-[GenerateComponentInterface]
 public class CameraController : Component {
     
     private float _speed = 0.005f;

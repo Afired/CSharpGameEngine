@@ -8,7 +8,6 @@ namespace GameEngine.Components;
 //todo: even this would work because we check for the actual string containing the name: [Something.Blablabla.GenerateComponentInterface.Blabla]
 
 //todo: limit attribute should be possible to set for abstract classes
-[GenerateComponentInterface]
 public class TestComponent : Component {
     public TestComponent(Entity entity) : base(entity) { }
 }

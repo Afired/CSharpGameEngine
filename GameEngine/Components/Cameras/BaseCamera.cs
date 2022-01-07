@@ -6,7 +6,6 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras; 
 
-[GenerateComponentInterface]
 public abstract class BaseCamera : Component {
     
     public Color BackgroundColor { get; set; }

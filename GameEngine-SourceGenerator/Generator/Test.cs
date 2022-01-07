@@ -15,7 +15,7 @@ namespace GameEngine.Generator {
     public class ComponentInterfaceGenerator : ISourceGenerator {
         
         private const string COMPONENT_BASECLASS_NAME = "Component";
-        //private const string ATTRIBUTE_NAME = "GenerateComponentInterface";
+        private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
         
         public void Initialize(GeneratorInitializationContext context) {
             #if DEBUG
@@ -46,7 +46,9 @@ namespace GameEngine.Generator {
                         if(currentBaseSymbol.Name == COMPONENT_BASECLASS_NAME) {
                             // is inherited from component:
                             
-                            //todo: exclude if class has attribute [DontGeneratorComponentInterface]
+                            //exclude class that have [DontGeneratorComponentInterface] attribute
+                            if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
+                                break;
                             
                             var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                             var usingDirectivesAsText = string.Join("\r\n", usingDirectives);

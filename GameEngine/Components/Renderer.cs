@@ -7,7 +7,6 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
-[GenerateComponentInterface]
 public class Renderer : Component {
 
     public string Texture { get; set; }

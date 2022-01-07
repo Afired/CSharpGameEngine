@@ -1,9 +1,6 @@
 using System;
 
-namespace GameEngine.AutoGenerator; 
-
-[AttributeUsage(AttributeTargets.Class)]
-public class GenerateComponentInterfaceAttribute : Attribute { }
+namespace GameEngine.AutoGenerator;
 
 //todo: generate Component interfaces as default if the class derives from component and is not abstract
 
@@ -23,4 +20,4 @@ public class RequireComponent : Attribute {
 
 //todo: if you want to manually want to create the component interface, you can use this attribute
 [AttributeUsage(AttributeTargets.Class)]
-public class DoNotGenerateComponent : Attribute { }
+public class DoNotGenerateComponentInterface : Attribute { }

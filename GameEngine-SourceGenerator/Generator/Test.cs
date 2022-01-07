@@ -37,7 +37,9 @@ namespace GameEngine.Generator {
                     
                     INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(declaredClass);
                     
-                    //todo: exclude abstract classes
+                    //exclude abstract classes
+                    if(classSymbol.IsAbstract)
+                        continue;
 
                     INamedTypeSymbol currentBaseSymbol = classSymbol;
                     while((currentBaseSymbol = currentBaseSymbol.BaseType) != null) {

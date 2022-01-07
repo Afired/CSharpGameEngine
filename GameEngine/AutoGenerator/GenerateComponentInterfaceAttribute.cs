@@ -7,7 +7,7 @@ public class GenerateComponentInterfaceAttribute : Attribute { }
 
 //todo: generate Component interfaces as default if the class derives from component and is not abstract
 
-//todo: waiting for c#11 for generic attributes
+//todo: convert to use generic attributes in c#11
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RequireComponent : Attribute {
     

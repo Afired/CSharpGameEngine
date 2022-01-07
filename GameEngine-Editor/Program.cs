@@ -1,11 +1,14 @@
 ﻿using ExampleGame.Entities;
 using GameEngine.Core;
+using GameEngine.Layers;
 using GameEngine.Rendering;
 using GameEngine.SceneManagement;
 
 namespace GameEngine.Editor;
 
 public static class Program {
+    
+    internal static EditorLayer EditorLayer;
 
     public static int Main(string[] args) {
 
@@ -33,6 +36,8 @@ public static class Program {
     }
 
     private static void InitializeEditor() {
+        EditorLayer = new EditorLayer();
+        RenderingEngine.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new EditorGui();
     }
 

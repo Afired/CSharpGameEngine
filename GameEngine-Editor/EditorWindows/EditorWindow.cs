@@ -8,7 +8,7 @@ public class EditorWindow {
     protected string Title = "Title";
     
     public EditorWindow() {
-        RenderingEngine.LayerStack.DefaultOverlayLayer.OnDraw += DrawWindow;
+        Program.EditorLayer.OnDraw += DrawWindow;
     }
 
     private void DrawWindow() {

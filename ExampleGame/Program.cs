@@ -3,6 +3,7 @@ using GameEngine.Core;
 using GameEngine.Layers;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
+using GameEngine.SceneManagement;
 
 namespace ExampleGame;
 
@@ -29,35 +30,10 @@ internal class Program {
     }
     
     public static void InitializeWorld() {
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsCheckerboard().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0, 10, 0);
-        new PhysicsBox().Transform.Position = new Vector3(0.5f, 15, 0);
-        
+        Hierarchy.Instance.Add(new PhysicsCheckerboard());
         Player player = new Player();
-        player.Transform.Position = new Vector3(0, 0, -10);
         RenderingEngine.SetActiveCamera(player.Camera2D);
-        player.Camera2D.BackgroundColor = new Color(0.05f, 0.05f, 0.05f, 1.0f);
+        Hierarchy.Instance.Add(player);
     }
     
 }

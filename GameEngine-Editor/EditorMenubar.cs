@@ -27,7 +27,7 @@ public class EditorMenubar {
     private bool _dragging;
     
     public EditorMenubar() {
-        LayerStack.DefaultOverlayLayer.OnDraw += Draw;
+        Program.EditorLayer.OnDraw += Draw;
     }
     
     private void Draw() {

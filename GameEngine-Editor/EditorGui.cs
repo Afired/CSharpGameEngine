@@ -19,7 +19,7 @@ public class EditorGui {
         new ConsoleWindow();
         new AssetBrowserWindow();
         new ProjectSettingsWindow();
-        RenderingEngine.LayerStack.DefaultOverlayLayer.OnDraw += RenderDemoWindow;
+        Program.EditorLayer.OnDraw += RenderDemoWindow;
     }
 
     private void RenderDemoWindow() {

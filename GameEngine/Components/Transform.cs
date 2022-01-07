@@ -4,7 +4,6 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Components;
 
-[GenerateComponentInterface]
 public class Transform : Component {
     
     public Vector3 Position { get; set; }

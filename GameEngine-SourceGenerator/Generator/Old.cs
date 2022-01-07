@@ -1,4 +1,4 @@
-using System.Diagnostics;
+/*using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GameEngine.Generator.Extensions;
@@ -29,26 +29,26 @@ namespace GameEngine.Generator {
             );
 
             foreach(SyntaxTree tree in classWithAttributes) {
-
+                
                 var semanticModel = context.Compilation.GetSemanticModel(tree);
-
+                
                 foreach(var declaredClass in tree
                             .GetRoot()
                             .DescendantNodes()
                             .OfType<ClassDeclarationSyntax>()
                             .Where(cd => cd.DescendantNodes().OfType<AttributeSyntax>().Any())) {
-
+                    
                     var hasAttribute = declaredClass.AttributeLists.Any(x =>
                         x.Attributes.Any(y => y.Name.ToString().Contains(ATTRIBUTE_NAME))
                     );
-
+                    
                     if(hasAttribute) {
                         var usingDirectives = tree.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                         var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
-
+                        
                         var className = declaredClass.Identifier.ToString();
                         var interfaceName = $"I{className}";
-
+                        
                         string namespaceAsText = declaredClass.GetNamespace();
                         if(string.IsNullOrEmpty(namespaceAsText)) {
                             // if its not a normal scoped namespace, it may be a file scoped namespace
@@ -56,10 +56,9 @@ namespace GameEngine.Generator {
                                 .OfType<FileScopedNamespaceDeclarationSyntax>();
                             namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
                         }
-
-                        var namespaceScope =
-                            string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
-
+                        
+                        var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+                        
                         var sourceBuilder = new StringBuilder();
                         sourceBuilder.Append(
 $@"
@@ -80,3 +79,4 @@ public interface {interfaceName} {{
     }
     
 }
+*/

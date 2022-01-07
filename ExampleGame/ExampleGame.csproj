@@ -8,9 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
+        <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
+        <ProjectReference Include="..\GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
-
+    
     <ItemGroup>
         <None Update="Assets\**\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

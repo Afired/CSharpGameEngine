@@ -1,4 +1,5 @@
-﻿using GameEngine.Entities;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Entities;
 using GameEngine.Rendering;
 using Silk.NET.OpenGL;
 
@@ -46,8 +47,4 @@ public class Geometry : Component {
         
     }
     
-}
-
-public interface IGeometry {
-    public Geometry Geometry { get; set; }
 }

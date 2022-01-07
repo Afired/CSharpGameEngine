@@ -1,4 +1,5 @@
-﻿using GameEngine.Components;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Input;
@@ -6,6 +7,7 @@ using GameEngine.Numerics;
 
 namespace ExampleGame.Components; 
 
+[RequireComponent(typeof(ITransform))]
 public class PlayerController : Component {
     
     private Vector2 _inputAxis;
@@ -33,8 +35,4 @@ public class PlayerController : Component {
         (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
-}
-
-public interface IPlayerController : ITransform {
-    public PlayerController PlayerController { get; set; }
 }

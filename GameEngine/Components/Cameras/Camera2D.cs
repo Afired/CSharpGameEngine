@@ -1,4 +1,5 @@
-﻿using GameEngine.Components;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Numerics;
@@ -8,6 +9,7 @@ namespace GameEngine.Rendering.Cameras;
 /// <summary>
 /// Orthographic Camera looking into -Z direction
 /// </summary>
+[RequireComponent(typeof(ITransform))]
 public class Camera2D : BaseCamera {
     
     public float Zoom { get; set; }
@@ -25,8 +27,4 @@ public class Camera2D : BaseCamera {
         return transMatrix * orthoMatrix * zoomMatrix;
     }
     
-}
-
-public interface ICamera2D {
-    Camera2D Camera2D { get; set; }
 }

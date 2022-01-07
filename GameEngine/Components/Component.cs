@@ -2,7 +2,7 @@ using GameEngine.Entities;
 
 namespace GameEngine.Components;
 
-public class Component {
+public abstract class Component {
     
     public Entity Entity { get; }
     

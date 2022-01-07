@@ -1,10 +1,12 @@
-﻿using GameEngine.Components;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Input;
 
 namespace ExampleGame.Components; 
 
+[RequireComponent(typeof(ITransform))]
 public class CameraController : Component {
     
     private float _speed = 0.005f;
@@ -23,8 +25,4 @@ public class CameraController : Component {
             (Entity as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
     }
     
-}
-
-public interface ICameraController : ITransform {
-    CameraController CameraController { get; set; }
 }

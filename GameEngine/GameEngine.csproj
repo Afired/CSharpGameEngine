@@ -19,5 +19,9 @@
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
       <PackageReference Include="StbImageSharp" Version="2.22.6" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
 
 </Project>

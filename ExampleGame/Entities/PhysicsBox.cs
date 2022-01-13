@@ -1,6 +1,6 @@
 namespace ExampleGame.Entities; 
 
-public class PhysicsBox : PhysicsQuad {
+public partial class PhysicsBox : PhysicsQuad {
     
     public PhysicsBox() : base("Box", "default") { }
     

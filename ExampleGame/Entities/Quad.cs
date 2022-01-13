@@ -3,7 +3,7 @@ using GameEngine.Entities;
 
 namespace ExampleGame.Entities; 
 
-public class Quad : Entity, ITransform, IGeometry, IRenderer {
+public partial class Quad : Entity, ITransform, IGeometry, IRenderer {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }

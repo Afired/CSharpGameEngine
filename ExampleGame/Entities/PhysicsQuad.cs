@@ -2,7 +2,7 @@ using GameEngine.Components;
 
 namespace ExampleGame.Entities; 
 
-public class PhysicsQuad : Quad, IRigidBody {
+public partial class PhysicsQuad : Quad, IRigidBody {
     
     public RigidBody RigidBody { get; set; }
 

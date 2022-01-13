@@ -3,7 +3,7 @@ using GameEngine.Entities;
 
 namespace ExampleGame.Entities; 
 
-public class Pyramid : Entity, ITransform, IGeometry, IRenderer, IRigidBody {
+public partial class Pyramid : Entity, ITransform, IGeometry, IRenderer, IRigidBody {
     
     public Transform Transform { get; set; }
     public Geometry Geometry { get; set; }

@@ -5,7 +5,7 @@ using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
 
-public class Player : Entity, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
+public partial class Player : Entity, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
     
     public Transform Transform { get; set; }
     public PlayerController PlayerController { get; set; }

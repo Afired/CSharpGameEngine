@@ -70,7 +70,7 @@ namespace GameEngine.Generator {
                             var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                             
                             string requiredInterfaces = null;
-                            var interfaces = declaredClass.BaseList.Types.Where(baseType => baseType.ToString().StartsWith("I")).Select(baseType => baseType.ToString());
+                            var interfaces = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
                             requiredInterfaces = string.Join(", ", interfaces);
                             string requiredInterfacesAsText = string.IsNullOrEmpty(requiredInterfaces) ? "" : $" : {requiredInterfaces}";
                             

@@ -11,8 +11,9 @@ public class EditorGui {
     }
     
     private void Initialize() {
-        new EditorMenubar();
+        // todo: make windows stay docked https://github.com/mellinoe/ImGui.NET/issues/202
         new EditorDockSpace();
+        new EditorMenubar();
         new HierarchyWindow();
         new ViewportWindow();
         new InspectorWindow();

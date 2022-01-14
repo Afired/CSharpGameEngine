@@ -75,7 +75,7 @@ namespace GameEngine.Generator {
                             var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
                             StringBuilder autogenPropertiesSB = new StringBuilder();
                             foreach(string interfaceName in interfaceNames) {
-                                autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; set; }}\n");
+                                autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; }}\n");
                             }
                             string autogenProperties = autogenPropertiesSB.ToString();
                             
@@ -99,7 +99,10 @@ $@"{usingDirectivesAsText}
 {autogenProperties}
     public {className}() {{
 {initAutogenProperties}
+        Init();
     }}
+
+    //private partial void Init();
 
 }}
 "

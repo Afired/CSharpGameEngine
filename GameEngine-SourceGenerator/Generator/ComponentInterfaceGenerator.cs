@@ -88,7 +88,7 @@ $@"{usingDirectivesAsText}
 {namespaceScope}
 
 public interface {interfaceName}{requiredComponentsAsText} {{
-    {className} {className} {{ get; set; }}
+    {className} {className} {{ get; }}
 }}
 "
                             );

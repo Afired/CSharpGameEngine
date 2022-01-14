@@ -94,7 +94,7 @@ $@"{usingDirectivesAsText}
 
 {namespaceScope}
 
-{classVisibility} partial class {className}{requiredBaseTypesAsText} {{
+{classVisibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
 
 {autogenProperties}
     public {className}() {{

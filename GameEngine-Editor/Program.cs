@@ -1,6 +1,7 @@
 ﻿using ExampleGame.Entities;
 using GameEngine.Core;
 using GameEngine.Layers;
+using GameEngine.Numerics;
 using GameEngine.Rendering;
 using GameEngine.SceneManagement;
 
@@ -28,10 +29,24 @@ public static class Program {
     }
 
     private static void InitializeWorld() {
-        Hierarchy.Instance.Add(new PhysicsCheckerboard());
-        
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(0, 10, 0)},
+            Renderer = { Texture = "Box", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(0.5f, 11, 0)},
+            Renderer = { Texture = "Checkerboard", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(-0.25f, 12, 0)},
+            Renderer = { Texture = "Checkerboard", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new Quad() {
+            Transform = { Position = new Vector3(0, 2, 0)} ,
+            Renderer = { Texture = "Checkerboard", Shader = "default" }
+        });
         Player player = new Player();
-        SetActiveCamera(player.Camera2D);
+        RenderingEngine.SetActiveCamera(player.Camera2D);
         Hierarchy.Instance.Add(player);
     }
 

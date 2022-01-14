@@ -13,9 +13,9 @@ namespace GameEngine.Generator {
 // todo: update to incremental generator
 // https://andrewlock.net/exploring-dotnet-6-part-9-source-generator-updates-incremental-generators/
     [Generator]
-    public class ComponentInterfaceGenerator : ISourceGenerator {
+    public class EntityGenerator : ISourceGenerator {
         
-        private const string COMPONENT_BASECLASS_NAME = "Component";
+        private const string ENTITY_BASECLASS_NAME = "Entity";
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
         private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
@@ -46,18 +46,19 @@ namespace GameEngine.Generator {
 
                     INamedTypeSymbol currentBaseSymbol = classSymbol;
                     while((currentBaseSymbol = currentBaseSymbol.BaseType) != null) {
-                        if(currentBaseSymbol.Name == COMPONENT_BASECLASS_NAME) {
-                            // is inherited from component:
+                        if(currentBaseSymbol.Name == ENTITY_BASECLASS_NAME) {
+                            // is inherited from entity:
                             
-                            //exclude class that have [DontGeneratorComponentInterface] attribute
-                            if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
-                                break;
+                            //todo: exclude class that are not partial
+                            //if()
+                            //    break;
                             
                             var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                             var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
 
+                            var classVisibility = "public";
+                            
                             var className = declaredClass.Identifier.ToString();
-                            var interfaceName = $"I{className}";
 
                             string namespaceAsText = declaredClass.GetNamespace();
                             if(string.IsNullOrEmpty(namespaceAsText)) {
@@ -68,18 +69,24 @@ namespace GameEngine.Generator {
 
                             var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                             
-                            string requiredComponents = null;
-                            foreach(AttributeData attributeData in classSymbol.GetAttributes().
-                                        Where(attribute =>
-                                            // filter attributes for attribute name
-                                            attribute.AttributeClass.ToString() == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                                            // exclude attributes with 0 arguments
-                                            && attribute.ConstructorArguments.Length != 0)) {
-                                
-                                requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value));
-                                break;
+                            var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
+                            
+                            // really quick and dirty implementation
+                            var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
+                            StringBuilder autogenPropertiesSB = new StringBuilder();
+                            foreach(string interfaceName in interfaceNames) {
+                                autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; }}\n");
                             }
-                            string requiredComponentsAsText = string.IsNullOrEmpty(requiredComponents) ? "" : $" : {requiredComponents}";
+                            string autogenProperties = autogenPropertiesSB.ToString();
+                            
+                            StringBuilder initAutogenPropertiesSB = new StringBuilder();
+                            foreach(string interfaceName in interfaceNames) {
+                                initAutogenPropertiesSB.Append($"        {interfaceName.Substring(1)} = new {interfaceName.Substring(1)}(this);\n");
+                            }
+                            string initAutogenProperties = initAutogenPropertiesSB.ToString();
+                            
+                            string baseTypes = string.Join(", ", baseTypeNames);
+                            string requiredBaseTypesAsText = string.IsNullOrEmpty(baseTypes) ? "" : $" : {baseTypes}";
                             
                             var sourceBuilder = new StringBuilder();
                             sourceBuilder.Append(
@@ -87,12 +94,20 @@ $@"{usingDirectivesAsText}
 
 {namespaceScope}
 
-public interface {interfaceName}{requiredComponentsAsText} {{
-    {className} {className} {{ get; }}
+{classVisibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
+
+{autogenProperties}
+    public {className}() {{
+{initAutogenProperties}
+        Init();
+    }}
+
+    //private partial void Init();
+
 }}
 "
                             );
-                            context.AddSource($"{interfaceName}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+                            context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
                         }
                     }
                 }

@@ -24,6 +24,10 @@ public static class ShaderRegister {
     }
 
     public static Shader Get(string name) {
+        if(name is null) {
+            Console.LogWarning($"Shader not found 'null'");
+            return _invalidShaderShader;
+        }
         name = name.ToLower();
         if(_shaderRegister.TryGetValue(name, out Shader shader))
             return shader;

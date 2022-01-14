@@ -14,10 +14,8 @@ public class Renderer : Component {
     public string Shader { get; set; }
     
     
-    public Renderer(Entity entity, string texture, string shader) : base(entity) {
+    public Renderer(Entity entity) : base(entity) {
         RenderingEngine.OnLoad += OnLoad;
-        Texture = texture;
-        Shader = shader;
     }
 
     private void OnLoad() {

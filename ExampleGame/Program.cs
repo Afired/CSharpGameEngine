@@ -30,7 +30,22 @@ internal class Program {
     }
     
     public static void InitializeWorld() {
-        Hierarchy.Instance.Add(new PhysicsCheckerboard());
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(0, 10, 0)},
+            Renderer = { Texture = "Box", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(0.5f, 11, 0)},
+            Renderer = { Texture = "Checkerboard", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new PhysicsQuad() {
+            Transform = { Position = new Vector3(-0.25f, 12, 0)},
+            Renderer = { Texture = "Checkerboard", Shader = "default"}
+        });
+        Hierarchy.Instance.Add(new Quad() {
+            Transform = { Position = new Vector3(0, 2, 0)} ,
+            Renderer = { Texture = "Checkerboard", Shader = "default" }
+        });
         Player player = new Player();
         RenderingEngine.SetActiveCamera(player.Camera2D);
         Hierarchy.Instance.Add(player);

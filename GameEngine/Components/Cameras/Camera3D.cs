@@ -10,20 +10,16 @@ namespace GameEngine.Rendering.Cameras;
 [RequireComponent(typeof(ITransform))]
 public class Camera3D : BaseCamera {
     
-    public float NearPlaneDistance;
-    public float FarPlaneDistance;
+    public float NearPlaneDistance = 0.01f;
+    public float FarPlaneDistance = 100f;
     public float FieldOfView {
-        get => 180 / (float) Math.PI * _fieldOfView;
-        set => _fieldOfView = (float) Math.PI / 180 * value;
+        get => 180 / (float)Math.PI * _fieldOfView;
+        set => _fieldOfView = (float)Math.PI / 180 * value;
     }
-    private float _fieldOfView;
+    private float _fieldOfView = (float)Math.PI / 180 * 75;
     
     
-    public Camera3D(Entity entity, float fieldOfView, float nearPlaneDistance, float farPlaneDistance) : base(entity) {
-        FieldOfView = fieldOfView;
-        NearPlaneDistance = nearPlaneDistance;
-        FarPlaneDistance = farPlaneDistance;
-    }
+    public Camera3D(Entity entity) : base(entity) { }
 
     public override Matrix4x4 GetProjectionMatrix() {
         Matrix4x4 transMatrix = Matrix4x4.CreateTranslation((Entity as ITransform).Transform.Position);

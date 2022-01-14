@@ -11,13 +11,11 @@ namespace GameEngine.Rendering.Cameras;
 /// </summary>
 [RequireComponent(typeof(ITransform))]
 public class Camera2D : BaseCamera {
-    
-    public float Zoom { get; set; }
+
+    public float Zoom { get; set; } = 50;
 
 
-    public Camera2D(Entity entity, float zoom) : base(entity) {
-        Zoom = zoom;
-    }
+    public Camera2D(Entity entity) : base(entity) { }
     
     public override Matrix4x4 GetProjectionMatrix() {
         Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(-(Entity as ITransform).Transform.Position.X, -(Entity as ITransform).Transform.Position.Y, 0);

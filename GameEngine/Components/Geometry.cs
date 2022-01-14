@@ -9,13 +9,19 @@ public class Geometry : Component {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
-    public int VertexCount { get; }
-    private float[] VertexData { get; set; }
+    public int VertexCount { get; private set; }
+
+    private float[] _vertexData;
+    public float[] VertexData {
+        get => _vertexData;
+        set {
+            _vertexData = value;
+            VertexCount = value.Length / 5;
+        }
+    }
 
 
-    public Geometry(Entity entity, float[] vertexData) : base(entity) {
-        VertexData = vertexData;
-        VertexCount = vertexData.Length / 5;
+    public Geometry(Entity entity) : base(entity) {
         RenderingEngine.OnLoad += InitializeGeometry;
     }
 

@@ -69,10 +69,24 @@ namespace GameEngine.Generator {
 
                             var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                             
-                            string requiredInterfaces = null;
-                            var interfaces = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
-                            requiredInterfaces = string.Join(", ", interfaces);
-                            string requiredInterfacesAsText = string.IsNullOrEmpty(requiredInterfaces) ? "" : $" : {requiredInterfaces}";
+                            var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
+                            
+                            // really quick and dirty implementation
+                            var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
+                            StringBuilder autogenPropertiesSB = new StringBuilder();
+                            foreach(string interfaceName in interfaceNames) {
+                                autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; set; }}\n");
+                            }
+                            string autogenProperties = autogenPropertiesSB.ToString();
+                            
+                            StringBuilder initAutogenPropertiesSB = new StringBuilder();
+                            foreach(string interfaceName in interfaceNames) {
+                                initAutogenPropertiesSB.Append($"        {interfaceName.Substring(1)} = new {interfaceName.Substring(1)}(this);\n");
+                            }
+                            string initAutogenProperties = initAutogenPropertiesSB.ToString();
+                            
+                            string baseTypes = string.Join(", ", baseTypeNames);
+                            string requiredBaseTypesAsText = string.IsNullOrEmpty(baseTypes) ? "" : $" : {baseTypes}";
                             
                             var sourceBuilder = new StringBuilder();
                             sourceBuilder.Append(
@@ -80,8 +94,13 @@ $@"{usingDirectivesAsText}
 
 {namespaceScope}
 
-{classVisibility} partial class {className}{requiredInterfacesAsText} {{
-    public int Hey {{ get; set; }}
+{classVisibility} partial class {className}{requiredBaseTypesAsText} {{
+
+{autogenProperties}
+    public {className}() {{
+{initAutogenProperties}
+    }}
+
 }}
 "
                             );

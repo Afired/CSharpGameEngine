@@ -5,10 +5,10 @@ namespace ExampleGame.Entities;
 
 public partial class Pyramid : Entity, ITransform, IGeometry, IRenderer, IRigidBody {
     
-    public Transform Transform { get; set; }
-    public Geometry Geometry { get; set; }
-    public Renderer Renderer { get; set; }
-    public RigidBody RigidBody { get; set; }
+//    public Transform Transform { get; set; }
+//    public Geometry Geometry { get; set; }
+//    public Renderer Renderer { get; set; }
+//    public RigidBody RigidBody { get; set; }
     
     
     public Pyramid(string texture, string shader) {

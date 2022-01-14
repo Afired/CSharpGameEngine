@@ -5,9 +5,9 @@ namespace ExampleGame.Entities;
 
 public partial class Quad : Entity, ITransform, IGeometry, IRenderer {
     
-    public Transform Transform { get; set; }
-    public Geometry Geometry { get; set; }
-    public Renderer Renderer { get; set; }
+//    public Transform Transform { get; set; }
+//    public Geometry Geometry { get; set; }
+//    public Renderer Renderer { get; set; }
     
     
     public Quad(string texture, string shader) {

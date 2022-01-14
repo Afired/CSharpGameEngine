@@ -53,6 +53,10 @@ namespace GameEngine.Generator {
                             //if()
                             //    break;
                             
+                            // these currently dont work on runtime, but when building solution
+                            Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Warning, true), declaredClass.GetLocation());
+                            context.ReportDiagnostic(diagnostic);
+                            
                             var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                             var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
 

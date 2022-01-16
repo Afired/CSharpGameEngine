@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GameEngine.Generator.Extensions;
@@ -9,24 +7,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.Generator {
-
-// todo: update to incremental generator
-// https://andrewlock.net/exploring-dotnet-6-part-9-source-generator-updates-incremental-generators/
-    [Generator]
-    public class ComponentInterfaceGenerator : ISourceGenerator {
+    
+    public static class ComponentInterfaceGenerator {
         
         private const string COMPONENT_BASECLASS_NAME = "Component";
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
         private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
-        public void Initialize(GeneratorInitializationContext context) {
-            // uncomment for debugging of the source generator process
-//            #if DEBUG
-//            if(!Debugger.IsAttached) Debugger.Launch();
-//            #endif
-        }
-        
-        public void Execute(GeneratorExecutionContext context) {
+        public static void Execute(GeneratorExecutionContext context) {
             
             var filesWithClasses = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes()
                 .OfType<ClassDeclarationSyntax>().Any()

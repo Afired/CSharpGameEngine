@@ -32,7 +32,7 @@ public partial class PlayerController : Component {
     }
     
     private void UpdatePosition(float deltaTime) {
-        (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+        Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
 }

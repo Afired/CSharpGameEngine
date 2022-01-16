@@ -22,7 +22,7 @@ public partial class CameraController : Component {
     
     private void UpdatePosition() {
         if(Input.IsKeyDown(KeyCode.LeftAlt))
-            (Entity as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
+            Transform.Position += -Input.MouseDelta.XY_ * _speed;
     }
     
 }

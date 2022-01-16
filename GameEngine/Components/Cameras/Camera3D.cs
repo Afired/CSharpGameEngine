@@ -22,8 +22,8 @@ public partial class Camera3D : BaseCamera {
     public Camera3D(Entity entity) : base(entity) { }
 
     public override Matrix4x4 GetProjectionMatrix() {
-        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation((Entity as ITransform).Transform.Position);
-        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ((Entity as ITransform).Transform.Rotation);
+        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Transform.Position);
+        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(Transform.Rotation);
         Matrix4x4 perMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfView, (float) Configuration.WindowWidth / (float) Configuration.WindowHeight, NearPlaneDistance, FarPlaneDistance);
         
         return transMatrix * rotMatrix * perMatrix;

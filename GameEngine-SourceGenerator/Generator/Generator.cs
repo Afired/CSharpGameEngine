@@ -16,8 +16,8 @@ namespace GameEngine.Generator {
 
         public void Execute(GeneratorExecutionContext context) {
             ComponentInterfaceGenerator.Execute(context);
-            PartialEntityGenerator.Execute(context);
             PartialComponentGenerator.Execute(context);
+            PartialEntityGenerator.Execute(context);
         }
         
     }

@@ -79,7 +79,7 @@ namespace GameEngine.Generator {
                                             && attribute.ConstructorArguments.Length != 0)) {
 
                                 foreach(string requiredComponentInterface in attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value.ToString())) {
-                                    string requiredComponent = requiredComponentInterface.Substring(1);
+                                    string requiredComponent = ConvertFromInterfaceToComponent(requiredComponentInterface);
                                     autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
                                 }
                                 break;
@@ -105,5 +105,13 @@ namespace GameEngine.Generator {
                 }
             }
         }
+
+        private string ConvertFromInterfaceToComponent(string interfaceName) {
+            if(!interfaceName.Contains('.'))
+                return interfaceName.Substring(1);
+            int index = interfaceName.LastIndexOf('.');
+            return interfaceName.Substring(index + 2);
+        }
+        
     }
 }

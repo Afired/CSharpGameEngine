@@ -12,12 +12,12 @@ public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;
-    
-    
-    public PlayerController(Entity entity) : base(entity) {
+
+
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
     }
-    
+
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);

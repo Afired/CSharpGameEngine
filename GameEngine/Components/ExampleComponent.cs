@@ -10,7 +10,11 @@ namespace GameEngine.Components;
 [RequireComponent(typeof(ITransform))]
 public partial class ExampleComponent : Component {
     
-    public ExampleComponent(Entity entity) : base(entity) { }
+    // init callback should be used for self initialization only
+    protected override void Init() {
+        base.Init();
+    }
+    
 
     private void GetReferenceToRequiredComponent() {
         {

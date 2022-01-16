@@ -14,10 +14,10 @@ public partial class Renderer : Component {
     public string Shader { get; set; }
     
     
-    public Renderer(Entity entity) : base(entity) {
+    protected override void Init() {
         RenderingEngine.OnLoad += OnLoad;
     }
-
+    
     private void OnLoad() {
         LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
     }

@@ -13,9 +13,7 @@ namespace GameEngine.Rendering.Cameras;
 public partial class Camera2D : BaseCamera {
 
     public float Zoom { get; set; } = 50;
-
-
-    public Camera2D(Entity entity) : base(entity) { }
+    
     
     public override Matrix4x4 GetProjectionMatrix() {
         Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(-Transform.Position.X, -Transform.Position.Y, 0);

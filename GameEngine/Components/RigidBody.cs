@@ -15,11 +15,11 @@ public partial class RigidBody : Component {
     private Body _body;
     
     
-    public RigidBody(Entity entity) : base(entity) {
+    protected override void Init() {
         PhysicsEngine.OnRegisterRigidBody += CreateBody;
         PhysicsEngine.OnFixedUpdate += OnFixedUpdate;
     }
-    
+
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef();

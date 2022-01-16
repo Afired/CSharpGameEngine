@@ -11,7 +11,7 @@ public partial class Transform : Component {
     public float Rotation { get; set; }
     
     
-    public Transform(Entity entity) : base(entity) {
+    protected override void Init() {
         Position = new Vector3(0f, 0f, 0f);
         Scale = new Vector3(1f, 1f, 1f);
         Rotation = new float();

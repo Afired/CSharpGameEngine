@@ -12,7 +12,7 @@ public partial class CameraController : Component {
     private float _speed = 0.005f;
     
     
-    public CameraController(Entity entity) : base(entity) {
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
     }
     

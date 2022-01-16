@@ -19,8 +19,6 @@ public partial class Camera3D : BaseCamera {
     private float _fieldOfView = (float)Math.PI / 180 * 75;
     
     
-    public Camera3D(Entity entity) : base(entity) { }
-
     public override Matrix4x4 GetProjectionMatrix() {
         Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Transform.Position);
         Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(Transform.Rotation);

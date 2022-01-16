@@ -96,6 +96,8 @@ namespace GameEngine.Generator {
 
 {autogenProperties}
 
+    public {className}(Entity entity) : base(entity) {{ }}
+
 }}
 "
                             );

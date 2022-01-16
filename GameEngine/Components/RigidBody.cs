@@ -10,7 +10,7 @@ using Vector2 = System.Numerics.Vector2;
 namespace GameEngine.Components; 
 
 [RequireComponent(typeof(ITransform))]
-public class RigidBody : Component {
+public partial class RigidBody : Component {
     
     private Body _body;
     

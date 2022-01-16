@@ -4,7 +4,7 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Components;
 
-public class Transform : Component {
+public partial class Transform : Component {
     
     public Vector3 Position { get; set; }
     public Vector3 Scale { get; set; }

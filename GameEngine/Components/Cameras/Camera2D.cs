@@ -10,7 +10,7 @@ namespace GameEngine.Rendering.Cameras;
 /// Orthographic Camera looking into -Z direction
 /// </summary>
 [RequireComponent(typeof(ITransform))]
-public class Camera2D : BaseCamera {
+public partial class Camera2D : BaseCamera {
 
     public float Zoom { get; set; } = 50;
 

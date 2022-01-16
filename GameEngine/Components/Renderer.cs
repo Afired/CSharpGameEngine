@@ -8,7 +8,7 @@ using Silk.NET.OpenGL;
 namespace GameEngine.Components; 
 
 [RequireComponent(typeof(ITransform), typeof(IGeometry))]
-public class Renderer : Component {
+public partial class Renderer : Component {
 
     public string Texture { get; set; }
     public string Shader { get; set; }

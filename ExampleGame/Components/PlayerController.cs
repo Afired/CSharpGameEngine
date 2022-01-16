@@ -8,7 +8,7 @@ using GameEngine.Numerics;
 namespace ExampleGame.Components; 
 
 [RequireComponent(typeof(ITransform))]
-public class PlayerController : Component {
+public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;

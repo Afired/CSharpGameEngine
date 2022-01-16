@@ -5,7 +5,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
-public class Geometry : Component {
+public partial class Geometry : Component {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }

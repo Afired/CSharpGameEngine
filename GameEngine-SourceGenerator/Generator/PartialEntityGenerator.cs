@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameEngine.Generator.Extensions;
@@ -48,26 +49,18 @@ namespace GameEngine.Generator {
                     
                     string className = classSymbol.Name;
                     
-                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString());
-                    
                     //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
-                    
-                    // really quick and dirty implementation
-                    var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
-                    StringBuilder autogenPropertiesSB = new StringBuilder();
-                    foreach(string interfaceName in interfaceNames) {
-                        autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; }}\n");
+                    IEnumerable<INamedTypeSymbol> interfaces = classSymbol.GetAllInterfaces();
+                    StringBuilder propertiesSb = new StringBuilder();
+                    StringBuilder initializationSb = new StringBuilder();
+                    foreach(INamedTypeSymbol @interface in interfaces) {
+                        string interfaceName = @interface.Name;
+                        string componentName = ConvertFromInterfaceToComponent(interfaceName);
+                        propertiesSb.Append($"    public {componentName} {componentName} {{ get; }}\n");
+                        initializationSb.Append($"        {componentName} = new {componentName}(this);\n");
                     }
-                    string autogenProperties = autogenPropertiesSB.ToString();
-                    
-                    StringBuilder initAutogenPropertiesSB = new StringBuilder();
-                    foreach(string interfaceName in interfaceNames) {
-                        initAutogenPropertiesSB.Append($"        {interfaceName.Substring(1)} = new {interfaceName.Substring(1)}(this);\n");
-                    }
-                    string initAutogenProperties = initAutogenPropertiesSB.ToString();
-                    
-                    string baseTypes = string.Join(", ", baseTypeNames);
-                    string requiredBaseTypesAsText = string.IsNullOrEmpty(baseTypes) ? "" : $" : {baseTypes}";
+                    string properties = propertiesSb.ToString();
+                    string initialization = initializationSb.ToString();
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
@@ -77,9 +70,9 @@ $@"{usingDirectives}
 
 {classAccessibility} partial class {className} {{
 
-{autogenProperties}
+{properties}
     public {className}() {{
-{initAutogenProperties}
+{initialization}
         Init();
     }}
 
@@ -90,5 +83,13 @@ $@"{usingDirectives}
                 }
             }
         }
+        
+        private static string ConvertFromInterfaceToComponent(string interfaceName) {
+            if(!interfaceName.Contains('.'))
+                return interfaceName.Substring(1);
+            int index = interfaceName.LastIndexOf('.');
+            return interfaceName.Substring(index + 2);
+        }
+        
     }
 }

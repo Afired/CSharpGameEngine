@@ -50,7 +50,7 @@ namespace GameEngine.Generator {
                     
                     var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                     
-                    var className = classSyntax.Identifier.ToString();
+                    string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
                     
                     string requiredComponents = null;

@@ -48,7 +48,7 @@ namespace GameEngine.Generator {
 
                     var usingDirectives = file.GetUsingDirectives();
                     
-                    var className = classSyntax.Identifier.ToString();
+                    string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
                     
                     string namespaceAsText = classSyntax.GetNamespace();

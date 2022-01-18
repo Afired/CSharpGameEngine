@@ -44,7 +44,7 @@ namespace GameEngine.Generator {
                     
                     var classVisibility = "public";
                     
-                    var className = classSyntax.Identifier.ToString();
+                    string className = classSymbol.Name;
                     
                     string namespaceAsText = classSyntax.GetNamespace();
                     if(string.IsNullOrEmpty(namespaceAsText)) {

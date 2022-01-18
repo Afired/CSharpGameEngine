@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace GameEngine.Generator.Extensions {
     
     public static class ClassSymbolExtensions {
         
+        // can return INamedTypeSymbol of TypeKind.Error when the interface is auto generated in a different assembly
         public static IEnumerable<INamedTypeSymbol> GetAllInterfaces(this INamedTypeSymbol classSymbol) {
             return classSymbol.Interfaces;
         }

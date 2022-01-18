@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,7 +43,7 @@ namespace GameEngine.Generator {
                     }
                     
                     string usingDirectives = file.GetUsingDirectives().Format();
-
+                    
                     string fileScopedNamespace = file.GetNamespace(classSyntax).AsFileScopedNamespaceText();
                     
                     string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
@@ -54,6 +55,7 @@ namespace GameEngine.Generator {
                     StringBuilder propertiesSb = new StringBuilder();
                     StringBuilder initializationSb = new StringBuilder();
                     foreach(INamedTypeSymbol @interface in interfaces) {
+                        if(@interface.TypeKind == TypeKind.Error) throw new Exception();    // will throw error when interface is auto generated in a different assembly
                         string interfaceName = @interface.Name;
                         string componentName = ConvertFromInterfaceToComponent(interfaceName);
                         propertiesSb.Append($"    public {componentName} {componentName} {{ get; }}\n");

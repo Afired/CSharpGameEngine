@@ -46,7 +46,7 @@ namespace GameEngine.Generator {
                         context.ReportDiagnostic(diagnostic);
                     }
 
-                    var usingDirectives = file.GetUsingDirectives();
+                    string usingDirectives = file.GetUsingDirectives().Format();
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
@@ -80,7 +80,7 @@ namespace GameEngine.Generator {
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-$@"{usingDirectives.Format()}
+$@"{usingDirectives}
 
 {namespaceScope}
 

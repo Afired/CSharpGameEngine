@@ -39,7 +39,7 @@ namespace GameEngine.Generator {
                     if(classSyntax.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
                         break;
                     
-                    var usingDirectives = file.GetUsingDirectives();
+                    string usingDirectives = file.GetUsingDirectives().Format();
                     
                     string namespaceAsText = classSyntax.GetNamespace();
                     if(string.IsNullOrEmpty(namespaceAsText)) {
@@ -68,7 +68,7 @@ namespace GameEngine.Generator {
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-$@"{usingDirectives.Format()}
+$@"{usingDirectives}
 
 {namespaceScope}
 

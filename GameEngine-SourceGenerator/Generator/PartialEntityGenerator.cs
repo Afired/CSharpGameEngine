@@ -61,6 +61,8 @@ namespace GameEngine.Generator {
                             
                             var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
                             
+                            //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
+                            
                             // really quick and dirty implementation
                             var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
                             StringBuilder autogenPropertiesSB = new StringBuilder();

@@ -5,7 +5,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
-public class Geometry : Component {
+public partial class Geometry : Component {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
@@ -19,9 +19,9 @@ public class Geometry : Component {
             VertexCount = value.Length / 5;
         }
     }
-
-
-    public Geometry(Entity entity) : base(entity) {
+    
+    
+    protected override void Init() {
         RenderingEngine.OnLoad += InitializeGeometry;
     }
 

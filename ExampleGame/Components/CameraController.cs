@@ -7,12 +7,12 @@ using GameEngine.Input;
 namespace ExampleGame.Components; 
 
 [RequireComponent(typeof(ITransform))]
-public class CameraController : Component {
+public partial class CameraController : Component {
     
     private float _speed = 0.005f;
     
     
-    public CameraController(Entity entity) : base(entity) {
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
     }
     
@@ -22,7 +22,7 @@ public class CameraController : Component {
     
     private void UpdatePosition() {
         if(Input.IsKeyDown(KeyCode.LeftAlt))
-            (Entity as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
+            Transform.Position += -Input.MouseDelta.XY_ * _speed;
     }
     
 }

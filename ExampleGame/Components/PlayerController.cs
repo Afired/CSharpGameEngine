@@ -8,16 +8,16 @@ using GameEngine.Numerics;
 namespace ExampleGame.Components; 
 
 [RequireComponent(typeof(ITransform))]
-public class PlayerController : Component {
+public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;
-    
-    
-    public PlayerController(Entity entity) : base(entity) {
+
+
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
     }
-    
+
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
@@ -32,7 +32,7 @@ public class PlayerController : Component {
     }
     
     private void UpdatePosition(float deltaTime) {
-        (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+        Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
 }

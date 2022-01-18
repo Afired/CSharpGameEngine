@@ -8,7 +8,7 @@ using GameEngine.Numerics;
 namespace GameEngine.Rendering.Cameras;
 
 [RequireComponent(typeof(ITransform))]
-public class Camera3D : BaseCamera {
+public partial class Camera3D : BaseCamera {
     
     public float NearPlaneDistance = 0.01f;
     public float FarPlaneDistance = 100f;
@@ -19,11 +19,9 @@ public class Camera3D : BaseCamera {
     private float _fieldOfView = (float)Math.PI / 180 * 75;
     
     
-    public Camera3D(Entity entity) : base(entity) { }
-
     public override Matrix4x4 GetProjectionMatrix() {
-        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation((Entity as ITransform).Transform.Position);
-        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ((Entity as ITransform).Transform.Rotation);
+        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Transform.Position);
+        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(Transform.Rotation);
         Matrix4x4 perMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfView, (float) Configuration.WindowWidth / (float) Configuration.WindowHeight, NearPlaneDistance, FarPlaneDistance);
         
         return transMatrix * rotMatrix * perMatrix;

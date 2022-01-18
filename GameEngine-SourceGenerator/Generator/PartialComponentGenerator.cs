@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.Generator {
     
-    public static class ComponentInterfaceGenerator {
+    public static class PartialComponentGenerator {
         
         private const string COMPONENT_BASECLASS_NAME = "Component";
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
@@ -55,38 +55,53 @@ namespace GameEngine.Generator {
                             }
 
                             var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+
+                            string classVisibility = "public";
                             
-                            string requiredComponents = null;
+                            StringBuilder autogenPropertiesSB = new StringBuilder();
                             foreach(AttributeData attributeData in classSymbol.GetAttributes().
                                         Where(attribute =>
                                             // filter attributes for attribute name
                                             attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
                                             // exclude attributes with 0 arguments
                                             && attribute.ConstructorArguments.Length != 0)) {
-                                
-                                requiredComponents = string.Join(", ", attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value));
+
+                                foreach(string requiredComponentInterface in attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value.ToString())) {
+                                    string requiredComponent = ConvertFromInterfaceToComponent(requiredComponentInterface);
+                                    autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
+                                }
                                 break;
                             }
-                            string requiredComponentsAsText = string.IsNullOrEmpty(requiredComponents) ? "" : $" : {requiredComponents}";
-
+                            string autogenProperties = autogenPropertiesSB.ToString();
+                            
                             var sourceBuilder = new StringBuilder();
                             sourceBuilder.Append(
-$@"{usingDirectivesAsText}
+                                $@"{usingDirectivesAsText}
 
 {namespaceScope}
 
-public interface {interfaceName}{requiredComponentsAsText} {{
-    {className} {className} {{ get; }}
+{classVisibility} partial class {className} {{
+
+{autogenProperties}
+
+    public {className}(Entity entity) : base(entity) {{ }}
+
 }}
 "
                             );
-                            context.AddSource($"{interfaceName}",
-                                SourceText.From(sourceBuilder.ToString(), Encoding.UTF8)
-                            );
+                            context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
                         }
                     }
                 }
             }
         }
+
+        private static string ConvertFromInterfaceToComponent(string interfaceName) {
+            if(!interfaceName.Contains('.'))
+                return interfaceName.Substring(1);
+            int index = interfaceName.LastIndexOf('.');
+            return interfaceName.Substring(index + 2);
+        }
+        
     }
 }

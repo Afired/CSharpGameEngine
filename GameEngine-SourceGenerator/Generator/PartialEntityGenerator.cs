@@ -75,15 +75,13 @@ $@"{usingDirectives}
 
 {fileScopedNamespace}
 
-{classAccessibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
+{classAccessibility} partial class {className} {{
 
 {autogenProperties}
     public {className}() {{
 {initAutogenProperties}
         Init();
     }}
-
-    //private partial void Init();
 
 }}
 "

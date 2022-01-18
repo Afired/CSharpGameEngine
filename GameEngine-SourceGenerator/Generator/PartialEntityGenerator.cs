@@ -40,8 +40,7 @@ namespace GameEngine.Generator {
                         context.ReportDiagnostic(diagnostic);
                     }
                     
-                    var usingDirectives = file.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
-                    var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
+                    var usingDirectives = file.GetUsingDirectives();
                     
                     var classVisibility = "public";
                     
@@ -79,7 +78,7 @@ namespace GameEngine.Generator {
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-$@"{usingDirectivesAsText}
+$@"{usingDirectives.Format()}
 
 {namespaceScope}
 

@@ -39,11 +39,7 @@ namespace GameEngine.Generator {
                     if(classSyntax.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
                         break;
                     
-                    var usingDirectives = file.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
-                    var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
-                    
-                    var className = classSyntax.Identifier.ToString();
-                    var interfaceName = $"I{className}";
+                    var usingDirectives = file.GetUsingDirectives();
                     
                     string namespaceAsText = classSyntax.GetNamespace();
                     if(string.IsNullOrEmpty(namespaceAsText)) {
@@ -53,6 +49,9 @@ namespace GameEngine.Generator {
                     }
                     
                     var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+                    
+                    var className = classSyntax.Identifier.ToString();
+                    var interfaceName = $"I{className}";
                     
                     string requiredComponents = null;
                     foreach(AttributeData attributeData in classSymbol.GetAttributes().
@@ -69,7 +68,7 @@ namespace GameEngine.Generator {
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-$@"{usingDirectivesAsText}
+$@"{usingDirectives.Format()}
 
 {namespaceScope}
 

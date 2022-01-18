@@ -45,9 +45,8 @@ namespace GameEngine.Generator {
                         Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classSyntax.GetLocation());
                         context.ReportDiagnostic(diagnostic);
                     }
-                    
-                    var usingDirectives = file.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
-                    var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
+
+                    var usingDirectives = file.GetUsingDirectives();
                     
                     var className = classSyntax.Identifier.ToString();
                     var interfaceName = $"I{className}";
@@ -81,7 +80,7 @@ namespace GameEngine.Generator {
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-                        $@"{usingDirectivesAsText}
+$@"{usingDirectives.Format()}
 
 {namespaceScope}
 

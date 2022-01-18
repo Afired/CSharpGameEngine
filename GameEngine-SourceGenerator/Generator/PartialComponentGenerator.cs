@@ -60,7 +60,7 @@ namespace GameEngine.Generator {
                     
                     var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                     
-                    string classVisibility = "public";
+                    string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
                     
                     StringBuilder autogenPropertiesSB = new StringBuilder();
                     foreach(AttributeData attributeData in classSymbol.GetAttributes().
@@ -84,7 +84,7 @@ $@"{usingDirectives}
 
 {namespaceScope}
 
-{classVisibility} partial class {className} {{
+{classAccessibility} partial class {className} {{
 
 {autogenProperties}
 

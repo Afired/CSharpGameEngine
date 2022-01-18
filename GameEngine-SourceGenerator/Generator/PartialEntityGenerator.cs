@@ -41,8 +41,8 @@ namespace GameEngine.Generator {
                     }
                     
                     string usingDirectives = file.GetUsingDirectives().Format();
-                    
-                    var classVisibility = "public";
+
+                    string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
                     
                     string className = classSymbol.Name;
                     
@@ -82,7 +82,7 @@ $@"{usingDirectives}
 
 {namespaceScope}
 
-{classVisibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
+{classAccessibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
 
 {autogenProperties}
     public {className}() {{

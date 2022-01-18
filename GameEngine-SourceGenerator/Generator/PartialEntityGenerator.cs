@@ -26,62 +26,61 @@ namespace GameEngine.Generator {
                     
                     INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(declaredClass);
                     
-                    //exclude abstract classes
+                    // exclude abstract classes
                     if(classSymbol.IsAbstract)
                         continue;
                     
-                    INamedTypeSymbol currentBaseSymbol = classSymbol;
-                    while((currentBaseSymbol = currentBaseSymbol.BaseType) != null) {
-                        if(currentBaseSymbol.Name == ENTITY_BASECLASS_NAME) {
-                            // is inherited from entity:
+                    // exclude classes not derived from entity
+                    if(!classSymbol.IsDerivedFromType(ENTITY_BASECLASS_NAME))
+                        continue;
                             
-                            //todo: exclude class that are not partial
-                            //if()
-                            //    break;
-                            
-                            // these currently dont work on runtime, but when building solution
-                            Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Warning, true), declaredClass.GetLocation());
-                            context.ReportDiagnostic(diagnostic);
-                            
-                            var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
-                            var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
-
-                            var classVisibility = "public";
-                            
-                            var className = declaredClass.Identifier.ToString();
-
-                            string namespaceAsText = declaredClass.GetNamespace();
-                            if(string.IsNullOrEmpty(namespaceAsText)) {
-                                // if its not a normal scoped namespace, it may be a file scoped namespace
-                                var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
-                                namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
-                            }
-
-                            var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
-                            
-                            var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
-                            
-                            //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
-                            
-                            // really quick and dirty implementation
-                            var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
-                            StringBuilder autogenPropertiesSB = new StringBuilder();
-                            foreach(string interfaceName in interfaceNames) {
-                                autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; }}\n");
-                            }
-                            string autogenProperties = autogenPropertiesSB.ToString();
-                            
-                            StringBuilder initAutogenPropertiesSB = new StringBuilder();
-                            foreach(string interfaceName in interfaceNames) {
-                                initAutogenPropertiesSB.Append($"        {interfaceName.Substring(1)} = new {interfaceName.Substring(1)}(this);\n");
-                            }
-                            string initAutogenProperties = initAutogenPropertiesSB.ToString();
-                            
-                            string baseTypes = string.Join(", ", baseTypeNames);
-                            string requiredBaseTypesAsText = string.IsNullOrEmpty(baseTypes) ? "" : $" : {baseTypes}";
-                            
-                            var sourceBuilder = new StringBuilder();
-                            sourceBuilder.Append(
+                    //todo: exclude class that are not partial
+                    //if()
+                    //    break;
+                    
+                    // these currently dont work on runtime, but when building solution
+                    Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Warning, true), declaredClass.GetLocation());
+                    context.ReportDiagnostic(diagnostic);
+                    
+                    var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
+                    var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
+                    
+                    var classVisibility = "public";
+                    
+                    var className = declaredClass.Identifier.ToString();
+                    
+                    string namespaceAsText = declaredClass.GetNamespace();
+                    if(string.IsNullOrEmpty(namespaceAsText)) {
+                        // if its not a normal scoped namespace, it may be a file scoped namespace
+                        var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
+                        namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
+                    }
+                    
+                    var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+                    
+                    var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
+                    
+                    //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
+                    
+                    // really quick and dirty implementation
+                    var interfaceNames = baseTypeNames.Where(name => name.StartsWith("I"));
+                    StringBuilder autogenPropertiesSB = new StringBuilder();
+                    foreach(string interfaceName in interfaceNames) {
+                        autogenPropertiesSB.Append($"    public {interfaceName.Substring(1)} {interfaceName.Substring(1)} {{ get; }}\n");
+                    }
+                    string autogenProperties = autogenPropertiesSB.ToString();
+                    
+                    StringBuilder initAutogenPropertiesSB = new StringBuilder();
+                    foreach(string interfaceName in interfaceNames) {
+                        initAutogenPropertiesSB.Append($"        {interfaceName.Substring(1)} = new {interfaceName.Substring(1)}(this);\n");
+                    }
+                    string initAutogenProperties = initAutogenPropertiesSB.ToString();
+                    
+                    string baseTypes = string.Join(", ", baseTypeNames);
+                    string requiredBaseTypesAsText = string.IsNullOrEmpty(baseTypes) ? "" : $" : {baseTypes}";
+                    
+                    var sourceBuilder = new StringBuilder();
+                    sourceBuilder.Append(
 $@"{usingDirectivesAsText}
 
 {namespaceScope}
@@ -98,10 +97,8 @@ $@"{usingDirectivesAsText}
 
 }}
 "
-                            );
-                            context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
-                        }
-                    }
+                    );
+                    context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
                 }
             }
         }

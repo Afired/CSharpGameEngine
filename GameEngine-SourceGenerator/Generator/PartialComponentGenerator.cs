@@ -32,51 +32,50 @@ namespace GameEngine.Generator {
                     if(classSymbol.IsAbstract)
                         continue;
 
-                    INamedTypeSymbol currentBaseSymbol = classSymbol;
-                    while((currentBaseSymbol = currentBaseSymbol.BaseType) != null) {
-                        if(currentBaseSymbol.Name == COMPONENT_BASECLASS_NAME) {
-                            // is inherited from component:
-                            
-                            //exclude class that have [DontGeneratorComponentInterface] attribute
-                            if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
-                                break;
-                            
-                            var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
-                            var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
-
-                            var className = declaredClass.Identifier.ToString();
-                            var interfaceName = $"I{className}";
-
-                            string namespaceAsText = declaredClass.GetNamespace();
-                            if(string.IsNullOrEmpty(namespaceAsText)) {
-                                // if its not a normal scoped namespace, it may be a file scoped namespace
-                                var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
-                                namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
-                            }
-
-                            var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
-
-                            string classVisibility = "public";
-                            
-                            StringBuilder autogenPropertiesSB = new StringBuilder();
-                            foreach(AttributeData attributeData in classSymbol.GetAttributes().
-                                        Where(attribute =>
-                                            // filter attributes for attribute name
-                                            attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                                            // exclude attributes with 0 arguments
-                                            && attribute.ConstructorArguments.Length != 0)) {
-
-                                foreach(string requiredComponentInterface in attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value.ToString())) {
-                                    string requiredComponent = ConvertFromInterfaceToComponent(requiredComponentInterface);
-                                    autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
-                                }
-                                break;
-                            }
-                            string autogenProperties = autogenPropertiesSB.ToString();
-                            
-                            var sourceBuilder = new StringBuilder();
-                            sourceBuilder.Append(
-                                $@"{usingDirectivesAsText}
+                    // exclude classes not derived from component
+                    if(!classSymbol.IsDerivedFromType(COMPONENT_BASECLASS_NAME))
+                        continue;
+                    
+                    //exclude class that have [DontGeneratorComponentInterface] attribute
+                    if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
+                        break;
+                    
+                    var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
+                    var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
+                    
+                    var className = declaredClass.Identifier.ToString();
+                    var interfaceName = $"I{className}";
+                    
+                    string namespaceAsText = declaredClass.GetNamespace();
+                    if(string.IsNullOrEmpty(namespaceAsText)) {
+                        // if its not a normal scoped namespace, it may be a file scoped namespace
+                        var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
+                        namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
+                    }
+                    
+                    var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+                    
+                    string classVisibility = "public";
+                    
+                    StringBuilder autogenPropertiesSB = new StringBuilder();
+                    foreach(AttributeData attributeData in classSymbol.GetAttributes().
+                                Where(attribute =>
+                                    // filter attributes for attribute name
+                                    attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
+                                    // exclude attributes with 0 arguments
+                                    && attribute.ConstructorArguments.Length != 0)) {
+                        
+                        foreach(string requiredComponentInterface in attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value.ToString())) {
+                            string requiredComponent = ConvertFromInterfaceToComponent(requiredComponentInterface);
+                            autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
+                        }
+                        break;
+                    }
+                    string autogenProperties = autogenPropertiesSB.ToString();
+                    
+                    var sourceBuilder = new StringBuilder();
+                    sourceBuilder.Append(
+                        $@"{usingDirectivesAsText}
 
 {namespaceScope}
 
@@ -88,10 +87,8 @@ namespace GameEngine.Generator {
 
 }}
 "
-                            );
-                            context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
-                        }
-                    }
+                    );
+                    context.AddSource($"{className}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
                 }
             }
         }

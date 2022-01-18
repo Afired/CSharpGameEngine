@@ -28,17 +28,24 @@ namespace GameEngine.Generator {
                     
                     INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(declaredClass);
                     
-                    //exclude abstract classes
+                    // exclude abstract classes
                     if(classSymbol.IsAbstract)
                         continue;
-
+                    
                     // exclude classes not derived from component
                     if(!classSymbol.IsDerivedFromType(COMPONENT_BASECLASS_NAME))
                         continue;
                     
-                    //exclude class that have [DontGeneratorComponentInterface] attribute
+                    // exclude class that have [DontGeneratorComponentInterface] attribute
                     if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
                         break;
+                    
+                    // warn to use partial keyword
+                    if(!declaredClass.IsPartial()) {
+                        // these currently dont work on runtime, but when building solution
+                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), declaredClass.GetLocation());
+                        context.ReportDiagnostic(diagnostic);
+                    }
                     
                     var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                     var usingDirectivesAsText = string.Join("\r\n", usingDirectives);

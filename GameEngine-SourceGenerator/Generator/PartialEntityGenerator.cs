@@ -33,14 +33,13 @@ namespace GameEngine.Generator {
                     // exclude classes not derived from entity
                     if(!classSymbol.IsDerivedFromType(ENTITY_BASECLASS_NAME))
                         continue;
-                            
-                    //todo: exclude class that are not partial
-                    //if()
-                    //    break;
                     
-                    // these currently dont work on runtime, but when building solution
-                    Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Warning, true), declaredClass.GetLocation());
-                    context.ReportDiagnostic(diagnostic);
+                    // warn to use partial keyword
+                    if(!declaredClass.IsPartial()) {
+                        // these currently dont work on runtime, but when building solution
+                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), declaredClass.GetLocation());
+                        context.ReportDiagnostic(diagnostic);
+                    }
                     
                     var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                     var usingDirectivesAsText = string.Join("\r\n", usingDirectives);

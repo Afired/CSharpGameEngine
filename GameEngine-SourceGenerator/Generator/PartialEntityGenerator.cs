@@ -14,17 +14,16 @@ namespace GameEngine.Generator {
         
         public static void Execute(GeneratorExecutionContext context) {
             
-            var filesWithClasses = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes()
-                .OfType<ClassDeclarationSyntax>().Any()
-            );
+            // get all files with class declarations
+            var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
             
-            foreach(SyntaxTree fileWithClasses in filesWithClasses) {
+            foreach(SyntaxTree file in files) {
                 
-                var semanticModel = context.Compilation.GetSemanticModel(fileWithClasses);
+                var semanticModel = context.Compilation.GetSemanticModel(file);
                 
-                foreach(ClassDeclarationSyntax declaredClass in fileWithClasses.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
+                foreach(ClassDeclarationSyntax classSyntax in file.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
                     
-                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(declaredClass);
+                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
                     
                     // exclude abstract classes
                     if(classSymbol.IsAbstract)
@@ -35,29 +34,29 @@ namespace GameEngine.Generator {
                         continue;
                     
                     // warn to use partial keyword
-                    if(!declaredClass.IsPartial()) {
+                    if(!classSyntax.IsPartial()) {
                         // these currently dont work on runtime, but when building solution
-                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), declaredClass.GetLocation());
+                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classSyntax.GetLocation());
                         context.ReportDiagnostic(diagnostic);
                     }
                     
-                    var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
+                    var usingDirectives = file.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                     var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
                     
                     var classVisibility = "public";
                     
-                    var className = declaredClass.Identifier.ToString();
+                    var className = classSyntax.Identifier.ToString();
                     
-                    string namespaceAsText = declaredClass.GetNamespace();
+                    string namespaceAsText = classSyntax.GetNamespace();
                     if(string.IsNullOrEmpty(namespaceAsText)) {
                         // if its not a normal scoped namespace, it may be a file scoped namespace
-                        var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
+                        var filescopedNamespaceDeclaration = file.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
                         namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
                     }
                     
                     var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                     
-                    var baseTypeNames = declaredClass.BaseList.Types.Select(baseType => baseType.ToString());
+                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString());
                     
                     //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
                     

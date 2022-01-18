@@ -16,17 +16,16 @@ namespace GameEngine.Generator {
         
         public static void Execute(GeneratorExecutionContext context) {
             
-            var filesWithClasses = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes()
-                .OfType<ClassDeclarationSyntax>().Any()
-            );
-
-            foreach(SyntaxTree fileWithClasses in filesWithClasses) {
-
-                var semanticModel = context.Compilation.GetSemanticModel(fileWithClasses);
+            // get all files with class declarations
+            var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
+            
+            foreach(SyntaxTree file in files) {
                 
-                foreach(ClassDeclarationSyntax declaredClass in fileWithClasses.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
+                var semanticModel = context.Compilation.GetSemanticModel(file);
+                
+                foreach(ClassDeclarationSyntax classSyntax in file.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
                     
-                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(declaredClass);
+                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
                     
                     // exclude abstract classes
                     if(classSymbol.IsAbstract)
@@ -37,26 +36,26 @@ namespace GameEngine.Generator {
                         continue;
                     
                     // exclude class that have [DontGeneratorComponentInterface] attribute
-                    if(declaredClass.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
+                    if(classSyntax.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
                         break;
                     
                     // warn to use partial keyword
-                    if(!declaredClass.IsPartial()) {
+                    if(!classSyntax.IsPartial()) {
                         // these currently dont work on runtime, but when building solution
-                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), declaredClass.GetLocation());
+                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classSyntax.GetLocation());
                         context.ReportDiagnostic(diagnostic);
                     }
                     
-                    var usingDirectives = fileWithClasses.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
+                    var usingDirectives = file.GetRoot().DescendantNodes().OfType<UsingDirectiveSyntax>();
                     var usingDirectivesAsText = string.Join("\r\n", usingDirectives);
                     
-                    var className = declaredClass.Identifier.ToString();
+                    var className = classSyntax.Identifier.ToString();
                     var interfaceName = $"I{className}";
                     
-                    string namespaceAsText = declaredClass.GetNamespace();
+                    string namespaceAsText = classSyntax.GetNamespace();
                     if(string.IsNullOrEmpty(namespaceAsText)) {
                         // if its not a normal scoped namespace, it may be a file scoped namespace
-                        var filescopedNamespaceDeclaration = fileWithClasses.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
+                        var filescopedNamespaceDeclaration = file.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
                         namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
                     }
                     

@@ -40,15 +40,8 @@ namespace GameEngine.Generator {
                         break;
                     
                     string usingDirectives = file.GetUsingDirectives().Format();
-                    
-                    string namespaceAsText = classSyntax.GetNamespace();
-                    if(string.IsNullOrEmpty(namespaceAsText)) {
-                        // if its not a normal scoped namespace, it may be a file scoped namespace
-                        var filescopedNamespaceDeclaration = file.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
-                        namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
-                    }
-                    
-                    var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
+
+                    string fileScopedNamespace = file.GetNamespace(classSyntax).AsFileScopedNamespaceText();
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
@@ -70,7 +63,7 @@ namespace GameEngine.Generator {
                     sourceBuilder.Append(
 $@"{usingDirectives}
 
-{namespaceScope}
+{fileScopedNamespace}
 
 public interface {interfaceName}{requiredComponentsAsText} {{
     {className} {className} {{ get; }}

@@ -42,18 +42,11 @@ namespace GameEngine.Generator {
                     
                     string usingDirectives = file.GetUsingDirectives().Format();
 
+                    string fileScopedNamespace = file.GetNamespace(classSyntax).AsFileScopedNamespaceText();
+                    
                     string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
                     
                     string className = classSymbol.Name;
-                    
-                    string namespaceAsText = classSyntax.GetNamespace();
-                    if(string.IsNullOrEmpty(namespaceAsText)) {
-                        // if its not a normal scoped namespace, it may be a file scoped namespace
-                        var filescopedNamespaceDeclaration = file.GetRoot().DescendantNodes().OfType<FileScopedNamespaceDeclarationSyntax>();
-                        namespaceAsText = filescopedNamespaceDeclaration.FirstOrDefault()?.Name.ToString();
-                    }
-                    
-                    var namespaceScope = string.IsNullOrEmpty(namespaceAsText) ? "" : $"namespace {namespaceAsText};";
                     
                     var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString());
                     
@@ -80,7 +73,7 @@ namespace GameEngine.Generator {
                     sourceBuilder.Append(
 $@"{usingDirectives}
 
-{namespaceScope}
+{fileScopedNamespace}
 
 {classAccessibility} partial class {className} /*not necessary and also gives warning of double specified base types {requiredBaseTypesAsText}*/ {{
 

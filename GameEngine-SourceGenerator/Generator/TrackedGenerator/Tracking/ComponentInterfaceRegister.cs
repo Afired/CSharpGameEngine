@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameEngine.Generator.Tracked.Tracking {
     
@@ -21,6 +22,10 @@ namespace GameEngine.Generator.Tracked.Tracking {
         
         internal string InterfaceToComponent(string @interface) {
             return _componentInterfaceDefinitions.Find(componentInterfaceDefinition => componentInterfaceDefinition.InterfaceName == @interface).ComponentName;
+        }
+
+        internal bool ContainsInterface(string @interface) {
+            return _componentInterfaceDefinitions.Any(componentInterfaceDefinition => componentInterfaceDefinition.InterfaceName == @interface);
         }
         
     }

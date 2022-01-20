@@ -52,13 +52,16 @@ namespace GameEngine.Generator.Tracked {
                     string className = classSymbol.Name;
                     
                     //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
-                    IEnumerable<INamedTypeSymbol> interfaces = classSymbol.GetAllInterfaces();
+                    // IEnumerable<INamedTypeSymbol> interfaces = classSymbol.GetAllInterfaces();
+                    
+                    // get names of interfaces without relying on symbols
+                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString());
+                    var interfaceNames = baseTypeNames.Where(componentInterfaceRegister.ContainsInterface);
+                    
                     StringBuilder propertiesSb = new StringBuilder();
                     StringBuilder initializationSb = new StringBuilder();
-                    foreach(INamedTypeSymbol @interface in interfaces) {
-                        if(@interface.TypeKind == TypeKind.Error) throw new Exception();    // will throw error when interface is auto generated in a different assembly
-                        string interfaceName = @interface.Name;
-                        string componentName = ConvertFromInterfaceToComponent(interfaceName);
+                    foreach(string @interfaceName in interfaceNames) {
+                        string componentName = componentInterfaceRegister.InterfaceToComponent(interfaceName);
                         propertiesSb.Append($"    public {componentName} {componentName} {{ get; }}\n");
                         initializationSb.Append($"        {componentName} = new {componentName}(this);\n");
                     }
@@ -86,13 +89,5 @@ $@"{usingDirectives}
                 }
             }
         }
-        
-        private static string ConvertFromInterfaceToComponent(string interfaceName) {
-            if(!interfaceName.Contains('.'))
-                return interfaceName.Substring(1);
-            int index = interfaceName.LastIndexOf('.');
-            return interfaceName.Substring(index + 2);
-        }
-        
     }
 }

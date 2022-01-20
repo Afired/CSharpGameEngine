@@ -1,0 +1,1 @@
+we have to track the added classes and information about them ourself to use it in other generators

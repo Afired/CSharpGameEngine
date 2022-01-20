@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Text;
 using GameEngine.Generator.Extensions;
+using GameEngine.Generator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,13 +9,13 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.Generator.Tracked {
     
-    public static class PartialComponentGenerator {
+    internal static class PartialComponentGenerator {
         
         private const string COMPONENT_BASECLASS_NAME = "Component";
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
         private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
-        public static void Execute(GeneratorExecutionContext context) {
+        internal static void Execute(GeneratorExecutionContext context, ComponentInterfaceRegister componentInterfaceRegister) {
             
             // get all files with class declarations
             var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());

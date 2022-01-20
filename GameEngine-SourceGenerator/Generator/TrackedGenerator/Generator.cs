@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using GameEngine.Generator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
 
 namespace GameEngine.Generator.Tracked {
@@ -14,11 +15,11 @@ namespace GameEngine.Generator.Tracked {
             if(!Debugger.IsAttached) Debugger.Launch();
             #endif
         }
-
+        
         public void Execute(GeneratorExecutionContext context) {
-            ComponentInterfaceGenerator.Execute(context);
-            PartialComponentGenerator.Execute(context);
-            PartialEntityGenerator.Execute(context);
+            ComponentInterfaceGenerator.Execute(context, out ComponentInterfaceRegister componentInterfaceRegister);
+            PartialComponentGenerator.Execute(context, componentInterfaceRegister);
+            PartialEntityGenerator.Execute(context, componentInterfaceRegister);
         }
         
     }

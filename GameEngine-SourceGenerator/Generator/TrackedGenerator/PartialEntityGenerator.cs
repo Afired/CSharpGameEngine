@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameEngine.Generator.Extensions;
+using GameEngine.Generator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,11 +11,11 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.Generator.Tracked {
     
-    public static class PartialEntityGenerator {
+    internal static class PartialEntityGenerator {
         
         private const string ENTITY_BASECLASS_NAME = "Entity";
         
-        public static void Execute(GeneratorExecutionContext context) {
+        internal static void Execute(GeneratorExecutionContext context, ComponentInterfaceRegister componentInterfaceRegister) {
             
             // get all files with class declarations
             var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());

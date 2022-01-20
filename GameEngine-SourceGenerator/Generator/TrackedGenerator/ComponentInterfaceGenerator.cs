@@ -44,7 +44,8 @@ namespace GameEngine.Generator.Tracked {
                     
                     string usingDirectives = file.GetUsingDirectives().Format();
 
-                    string fileScopedNamespace = file.GetNamespace(classSyntax).AsFileScopedNamespaceText();
+                    var @namespace = file.GetNamespace(classSyntax);
+                    string fileScopedNamespace = @namespace.AsFileScopedNamespaceText();
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
@@ -76,6 +77,7 @@ public interface {interfaceName}{requiredComponentsAsText} {{
                     context.AddSource($"{interfaceName}",
                         SourceText.From(sourceBuilder.ToString(), Encoding.UTF8)
                     );
+                    componentInterfaceRegister.Add(new ComponentInterfaceDefinition(@namespace.Name.ToString(), interfaceName, className, null));
                 }
             }
         }

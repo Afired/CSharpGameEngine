@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace GameEngine.Generator {
+namespace GameEngine.Generator.Staged {
     
     public static class PartialEntityGenerator {
         

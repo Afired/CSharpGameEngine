@@ -19,7 +19,7 @@ namespace GameEngine.Generator.Tracked {
         public void Execute(GeneratorExecutionContext context) {
             ComponentInterfaceGenerator.Execute(context, out ComponentInterfaceRegister componentInterfaceRegister);
             PartialComponentGenerator.Execute(context, componentInterfaceRegister);
-            PartialEntityGenerator.Execute(context, componentInterfaceRegister);
+            //PartialEntityGenerator.Execute(context, componentInterfaceRegister);
         }
         
     }

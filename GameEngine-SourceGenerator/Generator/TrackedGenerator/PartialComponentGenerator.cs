@@ -52,7 +52,7 @@ namespace GameEngine.Generator.Tracked {
                     string fileScopedNamespace = file.GetNamespace(classSyntax).AsFileScopedNamespaceText();
                     
                     string className = classSymbol.Name;
-                    var interfaceName = $"I{className}";
+                    string interfaceName = componentInterfaceRegister.ComponentToInterface(className);
                     
                     string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
                     
@@ -65,7 +65,7 @@ namespace GameEngine.Generator.Tracked {
                                     && attribute.ConstructorArguments.Length != 0)) {
                         
                         foreach(string requiredComponentInterface in attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != interfaceName).Select(arg => arg.Value.ToString())) {
-                            string requiredComponent = ConvertFromInterfaceToComponent(requiredComponentInterface);
+                            string requiredComponent = componentInterfaceRegister.InterfaceToComponent(requiredComponentInterface);
                             autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
                         }
                         break;
@@ -91,13 +91,5 @@ $@"{usingDirectives}
                 }
             }
         }
-
-        private static string ConvertFromInterfaceToComponent(string interfaceName) {
-            if(!interfaceName.Contains('.'))
-                return interfaceName.Substring(1);
-            int index = interfaceName.LastIndexOf('.');
-            return interfaceName.Substring(index + 2);
-        }
-        
     }
 }

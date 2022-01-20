@@ -14,8 +14,6 @@ namespace GameEngine.Generator.Tracked {
         private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
         internal static void RetrieveAdditionalComponentInterfacesFromOtherAssemblies(GeneratorExecutionContext context, ComponentInterfaceRegister componentInterfaceRegister) {
-
-            string testStop = "testStop";
             
             // if it doesnt reference the assembly just return
             if(!context.Compilation.SourceModule.ReferencedAssemblySymbols.Any(q => q.Identity.Name == "GameEngine"))

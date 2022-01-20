@@ -15,9 +15,7 @@ namespace GameEngine.Generator.Tracked {
         private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
         private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
         
-        internal static void Execute(GeneratorExecutionContext context, out ComponentInterfaceRegister componentInterfaceRegister) {
-            
-            componentInterfaceRegister = new ComponentInterfaceRegister();
+        internal static void Execute(GeneratorExecutionContext context, ComponentInterfaceRegister componentInterfaceRegister) {
             
             // get all files with class declarations
             var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());

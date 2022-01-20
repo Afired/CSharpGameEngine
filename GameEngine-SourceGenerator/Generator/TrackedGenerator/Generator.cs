@@ -17,8 +17,9 @@ namespace GameEngine.Generator.Tracked {
         }
         
         public void Execute(GeneratorExecutionContext context) {
-            ComponentInterfaceGenerator.Execute(context, out ComponentInterfaceRegister componentInterfaceRegister);
+            ComponentInterfaceRegister componentInterfaceRegister = new ComponentInterfaceRegister();
             AssemblyScanner.RetrieveAdditionalComponentInterfacesFromOtherAssemblies(context, componentInterfaceRegister);
+            ComponentInterfaceGenerator.Execute(context, componentInterfaceRegister);
             PartialComponentGenerator.Execute(context, componentInterfaceRegister);
             PartialEntityGenerator.Execute(context, componentInterfaceRegister);
         }

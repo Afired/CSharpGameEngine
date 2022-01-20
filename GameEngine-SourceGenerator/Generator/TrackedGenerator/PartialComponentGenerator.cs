@@ -57,6 +57,22 @@ namespace GameEngine.Generator.Tracked {
                     string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
                     
                     StringBuilder autogenPropertiesSB = new StringBuilder();
+                    foreach(AttributeListSyntax attributeListSyntax in classSyntax.AttributeLists) {
+
+                        foreach(AttributeSyntax attributeSyntax in attributeListSyntax.Attributes) {
+                            if(attributeSyntax.Name.ToString() != REQUIRE_COMPONENT_ATTRIBUTE_NAME)
+                                return;
+                            foreach(AttributeArgumentSyntax attributeArgumentSyntax in attributeSyntax.ArgumentList.Arguments) {
+                                
+                                //TODO: retrieve text out of TextSpan
+                                string requiredComponentInterface = attributeArgumentSyntax.Span.ToString(); //doesnt work, we have to do it with an unmanaged iteration
+                                string requiredComponent = componentInterfaceRegister.InterfaceToComponent(requiredComponentInterface);
+                                autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
+                            }
+                        }
+                        
+                    }
+                    /*
                     foreach(AttributeData attributeData in classSymbol.GetAttributes().
                                 Where(attribute =>
                                     // filter attributes for attribute name
@@ -69,7 +85,7 @@ namespace GameEngine.Generator.Tracked {
                             autogenPropertiesSB.Append($"    public {requiredComponent} {requiredComponent} => (Entity as {requiredComponentInterface})!.{requiredComponent};\n");
                         }
                         break;
-                    }
+                    }*/
                     string autogenProperties = autogenPropertiesSB.ToString();
                     
                     var sourceBuilder = new StringBuilder();

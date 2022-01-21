@@ -1,11 +1,6 @@
-using System;
-using System.Linq;
 using System.Text;
-using GameEngine.Generator.Extensions;
 using GameEngine.Generator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.Generator.Tracked {

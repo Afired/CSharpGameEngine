@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GameEngine.Generator.Tracked.Tracking {
     
@@ -11,7 +10,6 @@ namespace GameEngine.Generator.Tracked.Tracking {
 
         public static ComponentInterfaceDefinition[] AllDefinitions;
         private static int _definitionsFromThisCount;
-        private static int _definitionsFromOthersCount;
         
         internal static IEnumerable<ComponentInterfaceDefinition> EnumerateDefinitionsFromThisAssembly() {
             for(int i = 0; i < _definitionsFromThisCount; i++) {
@@ -42,11 +40,12 @@ namespace GameEngine.Generator.Tracked.Tracking {
         private static void FillArray() {
             AllDefinitions = new ComponentInterfaceDefinition[_definitionsFromOthers.Count + _definitionsFromThis.Count];
             int i = 0;
-            foreach(ComponentInterfaceDefinition definition in _definitionsFromOthers) {
+            foreach(ComponentInterfaceDefinition definition in _definitionsFromThis) {
                 AllDefinitions[i] = definition;
                 i++;
             }
-            foreach(ComponentInterfaceDefinition definition in _definitionsFromThis) {
+            _definitionsFromThisCount = i + 1;
+            foreach(ComponentInterfaceDefinition definition in _definitionsFromOthers) {
                 AllDefinitions[i] = definition;
                 i++;
             }

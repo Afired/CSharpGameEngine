@@ -7,7 +7,7 @@ namespace GameEngine.Components;
 // now we directly look if the attribute string contains the name
 //todo: even this would work because we check for the actual string containing the name: [Something.Blablabla.GenerateComponentInterface.Blabla]
 
-[RequireComponent(typeof(ITransform))]
+[RequireComponent(typeof(Transform))]
 public partial class ExampleComponent : Component {
     
     // init callback should be used for self initialization only

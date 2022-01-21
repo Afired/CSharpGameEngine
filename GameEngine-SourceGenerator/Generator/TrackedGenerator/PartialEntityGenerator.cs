@@ -15,7 +15,7 @@ namespace GameEngine.Generator.Tracked {
         
         private const string ENTITY_BASECLASS_NAME = "Entity";
         
-        internal static void Execute(GeneratorExecutionContext context, ComponentInterfaceRegister componentInterfaceRegister) {
+        internal static void Execute(GeneratorExecutionContext context) {
             
             // get all files with class declarations
             var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
@@ -55,22 +55,41 @@ namespace GameEngine.Generator.Tracked {
                     // IEnumerable<INamedTypeSymbol> interfaces = classSymbol.GetAllInterfaces();
                     
                     // get names of interfaces without relying on symbols
-                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString());
-                    var interfaceNames = baseTypeNames.Where(componentInterfaceRegister.ContainsInterface);
+                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString()); //TODO: may want to remove duplicates
+                    var interfaceNames = baseTypeNames.Where(interfaceName => ComponentInterfaceRegister.AllDefinitions.Any(definition => definition.InterfaceName == interfaceName));
                     
                     StringBuilder propertiesSb = new StringBuilder();
                     StringBuilder initializationSb = new StringBuilder();
-                    foreach(string @interfaceName in interfaceNames) {
-                        string componentName = componentInterfaceRegister.InterfaceToComponent(interfaceName);
-                        propertiesSb.Append($"    public {componentName} {componentName} {{ get; }}\n");
-                        initializationSb.Append($"        {componentName} = new {componentName}(this);\n");
+                    foreach(string baseTypeName in baseTypeNames) {
+                        if(ComponentInterfaceRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out ComponentInterfaceDefinition interfaceDefinition)) {
+
+                            foreach(ComponentInterfaceDefinition required in interfaceDefinition.GetAllRequiredComponents()) {
+                                
+                                propertiesSb.Append("    public ");
+                                propertiesSb.Append(required.Namespace);
+                                propertiesSb.Append('.');
+                                propertiesSb.Append(required.ComponentName);
+                                propertiesSb.Append(' ');
+                                propertiesSb.Append(required.ComponentName);
+                                propertiesSb.Append(" {{ get; }}\n");
+                                
+                                initializationSb.Append("        ");
+                                initializationSb.Append(required.ComponentName);
+                                initializationSb.Append(" = new ");
+                                initializationSb.Append(required.Namespace);
+                                initializationSb.Append('.');
+                                initializationSb.Append(required.ComponentName);
+                                initializationSb.Append("(this);\n");
+                            }
+                            
+                        }
                     }
                     string properties = propertiesSb.ToString();
                     string initialization = initializationSb.ToString();
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
-$@"{usingDirectives}
+$@"//usingDirectives
 
 {fileScopedNamespace}
 

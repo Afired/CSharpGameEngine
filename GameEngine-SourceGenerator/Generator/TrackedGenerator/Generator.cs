@@ -17,11 +17,12 @@ namespace GameEngine.Generator.Tracked {
         }
         
         public void Execute(GeneratorExecutionContext context) {
-            ComponentInterfaceRegister componentInterfaceRegister = new ComponentInterfaceRegister();
-            AssemblyScanner.RetrieveAdditionalComponentInterfacesFromOtherAssemblies(context, componentInterfaceRegister);
-            ComponentInterfaceGenerator.Execute(context, componentInterfaceRegister);
-            PartialComponentGenerator.Execute(context, componentInterfaceRegister);
-            PartialEntityGenerator.Execute(context, componentInterfaceRegister);
+            AssemblyScanner.ScanOtherAssemblies(context);
+            AssemblyScanner.ScanThisAssembly(context);
+            ComponentInterfaceRegister.Resolve();
+            ComponentInterfaceGenerator.Execute(context);
+            PartialComponentGenerator.Execute(context);
+            PartialEntityGenerator.Execute(context);
         }
         
     }

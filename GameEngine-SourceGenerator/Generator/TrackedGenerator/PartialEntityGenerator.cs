@@ -63,6 +63,7 @@ namespace GameEngine.Generator.Tracked {
                     
                     StringBuilder propertiesSb = new StringBuilder();
                     StringBuilder initializationSb = new StringBuilder();
+                    StringBuilder addToComponentsListSb = new StringBuilder();
                     foreach(ComponentInterfaceDefinition required in GetComponentInterfaceDefinitionsFromBaseListSyntax(classSyntax.BaseList).Distinct()) {
                         propertiesSb.Append("    public ");
                         propertiesSb.Append(required.Namespace);
@@ -79,9 +80,14 @@ namespace GameEngine.Generator.Tracked {
                         initializationSb.Append('.');
                         initializationSb.Append(required.ComponentName);
                         initializationSb.Append("(this);\n");
+                        
+                        addToComponentsListSb.Append("        (Components as System.Collections.Generic.List<GameEngine.Components.Component>)!.Add(");
+                        addToComponentsListSb.Append(required.ComponentName);
+                        addToComponentsListSb.Append(");\n");
                     }
                     string properties = propertiesSb.ToString();
                     string initialization = initializationSb.ToString();
+                    string addToComponentsList = addToComponentsListSb.ToString();
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(
@@ -92,9 +98,9 @@ $@"//usingDirectives
 {classAccessibility} partial class {className} {{
 
 {properties}
-    public {className}() {{
+    public {className}() : base() {{
 {initialization}
-        Init();
+{addToComponentsList}
     }}
 
 }}

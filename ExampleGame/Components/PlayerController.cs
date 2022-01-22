@@ -14,7 +14,7 @@ public partial class PlayerController : Component {
     private float _speed = 10f;
 
 
-    protected override void Init() {
+    protected override void OnAwake() {
         Application.OnUpdate += OnUpdate;
     }
 

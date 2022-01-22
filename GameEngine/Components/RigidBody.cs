@@ -15,7 +15,7 @@ public partial class RigidBody : Component {
     private Body _body;
     
     
-    protected override void Init() {
+    protected override void OnAwake() {
         PhysicsEngine.OnRegisterRigidBody += CreateBody;
         PhysicsEngine.OnFixedUpdate += OnFixedUpdate;
     }

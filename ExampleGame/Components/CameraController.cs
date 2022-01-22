@@ -12,7 +12,7 @@ public partial class CameraController : Component {
     private float _speed = 0.005f;
     
     
-    protected override void Init() {
+    protected override void OnAwake() {
         Application.OnUpdate += OnUpdate;
     }
     

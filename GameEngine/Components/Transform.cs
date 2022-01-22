@@ -11,7 +11,7 @@ public partial class Transform : Component {
     public float Rotation { get; set; }
     
     
-    protected override void Init() {
+    protected override void OnAwake() {
         Position = new Vector3(0f, 0f, 0f);
         Scale = new Vector3(1f, 1f, 1f);
         Rotation = new float();

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using GameEngine.Entities;
 using GameEngine.Input;
+using GameEngine.SceneManagement;
 
 namespace GameEngine.Core;
 
@@ -27,7 +29,14 @@ public sealed partial class Application {
             Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
             OnUpdate?.Invoke(elapsedTime);
+            InvokeHierarchyUpdates();
             InputHandler.ResetMouseDelta();
+        }
+    }
+
+    private void InvokeHierarchyUpdates() {
+        foreach(Entity entity in Hierarchy.Instance) {
+            entity.Update();
         }
     }
     

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameEngine.Entities;
-using GameEngine.Layers;
 
 namespace GameEngine.SceneManagement; 
 
@@ -20,6 +19,7 @@ public class Hierarchy : IEnumerable {
 
     public void Add(Entity entity) {
         _entities.Add(entity);
+        entity.Awake();
     }
     
     public IEnumerator<Entity> GetEnumerator() {

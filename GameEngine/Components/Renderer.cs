@@ -14,7 +14,7 @@ public partial class Renderer : Component {
     public string Shader { get; set; }
     
     
-    protected override void Init() {
+    protected override void OnAwake() {
         RenderingEngine.OnLoad += OnLoad;
     }
     

@@ -7,11 +7,11 @@ using GameEngine.SceneManagement;
 
 namespace GameEngine.Core;
 
-public delegate void OnUpdate(float deltaTime);
+//public delegate void OnUpdate(float deltaTime);
 
 public sealed partial class Application {
     
-    public static event OnUpdate OnUpdate;
+    //public static event OnUpdate OnUpdate;
     
     
     private void UpdateLoop() {
@@ -28,7 +28,7 @@ public sealed partial class Application {
             }
             Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
-            OnUpdate?.Invoke(elapsedTime);
+            //OnUpdate?.Invoke(elapsedTime);
             InvokeHierarchyUpdates();
             InputHandler.ResetMouseDelta();
         }

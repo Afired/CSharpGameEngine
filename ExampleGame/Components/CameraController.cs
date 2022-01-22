@@ -1,7 +1,5 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Entities;
 using GameEngine.Input;
 
 namespace ExampleGame.Components; 
@@ -10,13 +8,13 @@ namespace ExampleGame.Components;
 public partial class CameraController : Component {
     
     private float _speed = 0.005f;
-    
-    
-    protected override void OnAwake() {
-        Application.OnUpdate += OnUpdate;
+
+
+    protected override void OnUpdate() {
+        Update(0.0001f);
     }
-    
-    private void OnUpdate(float deltaTime) {
+
+    private void Update(float deltaTime) {
         UpdatePosition();
     }
     

@@ -1,7 +1,5 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Entities;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -12,13 +10,13 @@ public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;
-
-
-    protected override void OnAwake() {
-        Application.OnUpdate += OnUpdate;
+    
+    
+    protected override void OnUpdate() {
+        Update(0.0001f);
     }
-
-    private void OnUpdate(float deltaTime) {
+    
+    private void Update(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
     }

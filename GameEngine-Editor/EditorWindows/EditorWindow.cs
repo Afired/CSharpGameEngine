@@ -1,3 +1,4 @@
+using GameEngine.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -5,9 +6,9 @@ namespace GameEngine.Editor.EditorWindows;
 public class EditorWindow {
 
     protected string Title = "Title";
-
+    
     public EditorWindow() {
-        OnImGui += DrawWindow;
+        Program.EditorLayer.OnDraw += DrawWindow;
     }
 
     private void DrawWindow() {

@@ -1,30 +1,23 @@
-﻿using GameEngine.Components;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Input;
 using GameEngine.Numerics;
-using GameEngine.Rendering;
-using ImGuiNET;
 
 namespace ExampleGame.Components; 
 
-public class PlayerController : Component {
+[RequireComponent(typeof(Transform))]
+public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;
-    
-    
-    public PlayerController(Entity entity) : base(entity) {
+
+
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
-        RenderingEngine.OnImGui += OnImGui;
     }
 
-    private void OnImGui() {
-        ImGui.Begin("PlayerController Component");
-        ImGui.SliderFloat("Speed", ref _speed, 0f, 50f);
-        ImGui.End();
-    }
-    
     private void OnUpdate(float deltaTime) {
         UpdateInputAxis();
         UpdatePosition(deltaTime);
@@ -39,11 +32,7 @@ public class PlayerController : Component {
     }
     
     private void UpdatePosition(float deltaTime) {
-        (Entity as ITransform).Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+        Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
     }
     
-}
-
-public interface IPlayerController : ITransform {
-    public PlayerController PlayerController { get; set; }
 }

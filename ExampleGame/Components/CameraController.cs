@@ -1,16 +1,18 @@
-﻿using GameEngine.Components;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Components;
 using GameEngine.Core;
 using GameEngine.Entities;
 using GameEngine.Input;
 
 namespace ExampleGame.Components; 
 
-public class CameraController : Component {
+[RequireComponent(typeof(Transform))]
+public partial class CameraController : Component {
     
     private float _speed = 0.005f;
     
     
-    public CameraController(Entity entity) : base(entity) {
+    protected override void Init() {
         Application.OnUpdate += OnUpdate;
     }
     
@@ -20,11 +22,7 @@ public class CameraController : Component {
     
     private void UpdatePosition() {
         if(Input.IsKeyDown(KeyCode.LeftAlt))
-            (Entity as ITransform).Transform.Position += -Input.MouseDelta.XY_ * _speed;
+            Transform.Position += -Input.MouseDelta.XY_ * _speed;
     }
     
-}
-
-public interface ICameraController : ITransform {
-    CameraController CameraController { get; set; }
 }

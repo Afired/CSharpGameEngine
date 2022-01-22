@@ -1,20 +1,27 @@
-﻿using GameEngine.Entities;
+﻿using GameEngine.AutoGenerator;
+using GameEngine.Entities;
 using GameEngine.Rendering;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
-public class Geometry : Component {
+public partial class Geometry : Component {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
-    public int VertexCount { get; }
-    private float[] VertexData { get; set; }
+    public int VertexCount { get; private set; }
 
-
-    public Geometry(Entity entity, float[] vertexData) : base(entity) {
-        VertexData = vertexData;
-        VertexCount = vertexData.Length / 5;
+    private float[] _vertexData;
+    public float[] VertexData {
+        get => _vertexData;
+        set {
+            _vertexData = value;
+            VertexCount = value.Length / 5;
+        }
+    }
+    
+    
+    protected override void Init() {
         RenderingEngine.OnLoad += InitializeGeometry;
     }
 
@@ -46,8 +53,4 @@ public class Geometry : Component {
         
     }
     
-}
-
-public interface IGeometry {
-    public Geometry Geometry { get; set; }
 }

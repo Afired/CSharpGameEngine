@@ -1,6 +1,7 @@
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
+using GameEngine.AutoGenerator;
 using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Physics;
@@ -8,22 +9,23 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Components; 
 
-public class RigidBody : Component {
+[RequireComponent(typeof(Transform))]
+public partial class RigidBody : Component {
     
     private Body _body;
     
     
-    public RigidBody(Entity entity) : base(entity) {
+    protected override void Init() {
         PhysicsEngine.OnRegisterRigidBody += CreateBody;
         PhysicsEngine.OnFixedUpdate += OnFixedUpdate;
     }
-    
+
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef();
         dynamicBodyDef.type = BodyType.Dynamic;
-        dynamicBodyDef.position = new Vector2((Entity as ITransform).Transform.Position.X, (Entity as ITransform).Transform.Position.Y);
-        dynamicBodyDef.angle = (Entity as ITransform).Transform.Rotation;
+        dynamicBodyDef.position = new Vector2(Transform.Position.X, Transform.Position.Y);
+        dynamicBodyDef.angle = Transform.Rotation;
 
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(0.5f, 0.5f);
@@ -39,12 +41,8 @@ public class RigidBody : Component {
     }
     
     private void OnFixedUpdate(float fixedDeltaTime) {
-        (Entity as ITransform).Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, (Entity as ITransform).Transform.Position.Z);
-        (Entity as ITransform).Transform.Rotation = _body.GetAngle();
+        Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, Transform.Position.Z);
+        Transform.Rotation = _body.GetAngle();
     }
     
-}
-
-public interface IRigidBody : ITransform {
-    RigidBody RigidBody { get; set; }
 }

@@ -14,13 +14,14 @@ namespace GameEngine.Generator.Tracked {
                 string requiredInterfaces = null;
                 if(definition.HasRequiredComponents) {
                     StringBuilder sb = new StringBuilder();
-                    sb.Append(" :");
+                    sb.Append(" : ");
                     foreach(ComponentInterfaceDefinition required in definition.GetAllRequiredComponents()) {
-                        sb.Append(" ");
                         sb.Append(required.Namespace);
                         sb.Append('.');
                         sb.Append(required.InterfaceName);
+                        sb.Append(", ");
                     }
+                    sb.Remove(sb.Length - (", ").Length, (", ").Length);
                     requiredInterfaces = sb.ToString();
                 }
                 

@@ -32,8 +32,12 @@ namespace GameEngine.Generator.Tracked.Tracking {
         public static void Resolve() {
             FillArray();
             ClearLists();
-            foreach(ComponentInterfaceDefinition definition in AllDefinitions) {
-                definition.ResolveRequiredComponents();
+            // we cant use foreach because we have to operate directly on the struct in the array and not a copy
+//            foreach(ComponentInterfaceDefinition definition in AllDefinitions) {
+//                definition.ResolveRequiredComponents();
+//            }
+            for(int i = 0; i < AllDefinitions.Length; i++) {
+                AllDefinitions[i].ResolveRequiredComponents();
             }
         }
         
@@ -44,7 +48,7 @@ namespace GameEngine.Generator.Tracked.Tracking {
                 AllDefinitions[i] = definition;
                 i++;
             }
-            _definitionsFromThisCount = i + 1;
+            _definitionsFromThisCount = i;
             foreach(ComponentInterfaceDefinition definition in _definitionsFromOthers) {
                 AllDefinitions[i] = definition;
                 i++;
@@ -52,8 +56,8 @@ namespace GameEngine.Generator.Tracked.Tracking {
         }
         
         private static void ClearLists() {
-            _definitionsFromOthers = null;
-            _definitionsFromThis = null;
+            _definitionsFromOthers.Clear();
+            _definitionsFromThis.Clear();
         }
 
         #region TryToGetDefinitionMethods

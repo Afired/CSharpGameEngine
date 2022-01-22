@@ -7,7 +7,7 @@ namespace GameEngine.Generator.Tracked {
     
     internal static class PartialComponentGenerator {
         
-        private const string GAME_ENGINE_ENTITY_NAMESPACE = "GameEngine.Entites";
+        private const string GAME_ENGINE_ENTITY_NAMESPACE = "GameEngine.Entities";
 
         internal static void Execute(GeneratorExecutionContext context) {
 
@@ -20,13 +20,17 @@ namespace GameEngine.Generator.Tracked {
                     StringBuilder sb = new StringBuilder();
                     foreach(ComponentInterfaceDefinition required in definition.GetAllRequiredComponents()) {
                         sb.Append("    public ");
+                        sb.Append(required.Namespace);
+                        sb.Append('.');
                         sb.Append(required.ComponentName);
                         sb.Append(' ');
                         sb.Append(required.ComponentName);
                         sb.Append(" => (Entity as ");
+                        sb.Append(required.Namespace);
+                        sb.Append('.');
                         sb.Append(required.InterfaceName);
                         sb.Append(")!.");
-                        sb.Append(required.InterfaceName);
+                        sb.Append(required.ComponentName);
                         sb.Append(";\n");
                     }
                     autogenProperties = sb.ToString();
@@ -34,7 +38,7 @@ namespace GameEngine.Generator.Tracked {
                 
                 var sourceBuilder = new StringBuilder();
                 sourceBuilder.Append(
-$@"using {GAME_ENGINE_ENTITY_NAMESPACE};
+$@"//using {GAME_ENGINE_ENTITY_NAMESPACE};
 
 {definition.NamespaceAsFileScopedText()}
 
@@ -42,7 +46,7 @@ $@"using {GAME_ENGINE_ENTITY_NAMESPACE};
 
 {autogenProperties}
 
-    public {definition.ComponentName}(Entity entity) : base(entity) {{ }}
+    public {definition.ComponentName}({GAME_ENGINE_ENTITY_NAMESPACE}.Entity entity) : base(entity) {{ }}
 
 }}
 "

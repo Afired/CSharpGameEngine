@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace GameEngine.Generator.Tracked.Tracking {
@@ -29,8 +30,8 @@ namespace GameEngine.Generator.Tracked.Tracking {
             Namespace = @namespace;
             InterfaceName = interfaceName;
             ComponentName = componentName;
-            _requiredComponentsNamespacesAndNames = requiredComponentsNamespacesAndNames;
-            _requiredComponentsIndices = null;
+            _requiredComponentsNamespacesAndNames = requiredComponentsNamespacesAndNames ?? Array.Empty<string>();
+            _requiredComponentsIndices = Array.Empty<int>();
         }
 
         internal void ResolveRequiredComponents() {

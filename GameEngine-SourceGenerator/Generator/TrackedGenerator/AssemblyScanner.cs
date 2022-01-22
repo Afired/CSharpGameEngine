@@ -44,7 +44,7 @@ namespace GameEngine.Generator.Tracked {
                     switch(firstArgument.Kind) {
                         case TypedConstantKind.Array:
                             requiredComponentsNames = firstArgument.Values
-                                .Where(arg => arg.Value.ToString() != typeSymbol.Name)
+                                .Where(arg => arg.Value.ToString() != typeSymbol.ToString())  //GameEngine.Components.Transform != GameEngine.Components.ExampleComponent
                                 .Select(arg => arg.Value.ToString()).ToArray();
                             break;
                         default:
@@ -78,7 +78,7 @@ namespace GameEngine.Generator.Tracked {
                     //requiredComponentsNames = attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != typeSymbol.Name).Select(arg => arg.Value.ToString().Substring(1)).ToArray();
                     break;
                 }*/
-                ComponentInterfaceRegister.RegisterForOtherAssembly(new ComponentInterfaceDefinition(typeSymbol.ContainingNamespace.Name, $"I{typeSymbol.Name}", typeSymbol.Name, requiredComponentsNames));
+                ComponentInterfaceRegister.RegisterForOtherAssembly(new ComponentInterfaceDefinition(typeSymbol.ContainingNamespace.ToString(), $"I{typeSymbol.Name}", typeSymbol.Name, requiredComponentsNames));
             }
             
         }

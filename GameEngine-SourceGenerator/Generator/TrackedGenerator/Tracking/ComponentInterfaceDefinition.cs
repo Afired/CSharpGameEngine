@@ -69,14 +69,6 @@ namespace GameEngine.Generator.Tracked.Tracking {
             return string.IsNullOrEmpty(definition.Namespace) ? string.Empty : $"namespace {definition.Namespace};";
         }
         
-        internal static string ComponentWithNamespace(this ComponentInterfaceDefinition definition) {
-            return string.IsNullOrEmpty(definition.Namespace) ? definition.ComponentName : $"{definition.Namespace}.{definition.ComponentName}";
-        }
-        
-        internal static string InterfaceWithNamespace(this ComponentInterfaceDefinition definition) {
-            return string.IsNullOrEmpty(definition.Namespace) ? definition.InterfaceName : $"{definition.Namespace}.{definition.InterfaceName}";
-        }
-        
     }
     
 }

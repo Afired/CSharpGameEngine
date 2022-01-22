@@ -50,9 +50,6 @@ namespace GameEngine.Generator.Tracked {
                     
                     string className = classSymbol.Name;
                     
-                    //TODO: also gather interface BaseTypes  from interface BaseType recursively to ensure even "nested" required components get implemented
-                    // IEnumerable<INamedTypeSymbol> interfaces = classSymbol.GetAllInterfaces();
-
                     IEnumerable<ComponentInterfaceDefinition> GetComponentInterfaceDefinitionsFromBaseListSyntax(BaseListSyntax baseList) {
                         foreach(string baseTypeName in baseList.Types.Select(baseType => baseType.ToString())) {
                             if(ComponentInterfaceRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out ComponentInterfaceDefinition interfaceDefinition)) {
@@ -85,39 +82,6 @@ namespace GameEngine.Generator.Tracked {
                     }
                     string properties = propertiesSb.ToString();
                     string initialization = initializationSb.ToString();
-                    
-//                    // get names of interfaces without relying on symbols
-//                    var baseTypeNames = classSyntax.BaseList.Types.Select(baseType => baseType.ToString()); //TODO: may want to remove duplicates
-//                    var interfaceNames = baseTypeNames.Where(interfaceName => ComponentInterfaceRegister.AllDefinitions.Any(definition => definition.InterfaceName == interfaceName));
-//                    
-//                    StringBuilder propertiesSb = new StringBuilder();
-//                    StringBuilder initializationSb = new StringBuilder();
-//                    foreach(string baseTypeName in baseTypeNames) {
-//                        if(ComponentInterfaceRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out ComponentInterfaceDefinition interfaceDefinition)) { // also include class base types and look in that for potential interfaces
-//
-//                            foreach(ComponentInterfaceDefinition required in interfaceDefinition.GetAllRequiredComponents().Append(interfaceDefinition)) {
-//                                
-//                                propertiesSb.Append("    public ");
-//                                propertiesSb.Append(required.Namespace);
-//                                propertiesSb.Append('.');
-//                                propertiesSb.Append(required.ComponentName);
-//                                propertiesSb.Append(' ');
-//                                propertiesSb.Append(required.ComponentName);
-//                                propertiesSb.Append(" { get; }\n");
-//                                
-//                                initializationSb.Append("        ");
-//                                initializationSb.Append(required.ComponentName);
-//                                initializationSb.Append(" = new ");
-//                                initializationSb.Append(required.Namespace);
-//                                initializationSb.Append('.');
-//                                initializationSb.Append(required.ComponentName);
-//                                initializationSb.Append("(this);\n");
-//                            }
-//                            
-//                        }
-//                    }
-//                    string properties = propertiesSb.ToString();
-//                    string initialization = initializationSb.ToString();
                     
                     var sourceBuilder = new StringBuilder();
                     sourceBuilder.Append(

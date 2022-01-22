@@ -54,30 +54,6 @@ namespace GameEngine.Generator.Tracked {
                     }
                     
                 }
-                /*
-                foreach(AttributeData attributeData in typeSymbol.GetAttributes().
-                            Where(attribute =>
-                                // filter attributes for attribute name
-                                attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                                // exclude attributes with 0 arguments
-                                && attribute.ConstructorArguments.Length != 0)) {
-
-                    foreach(TypedConstant argument in attributeData.ConstructorArguments) {
-                        switch(argument.Kind) {
-                            case TypedConstantKind.Array:
-                                requiredComponentsNames = argument.Values.Where(arg => arg.Value.ToString() != typeSymbol.Name).Select(arg => arg.Value.ToString()).ToArray();
-                                break;
-                            default:
-                                requiredComponentsNames = argument.Where(arg => arg.Value.ToString() != className).Select(arg => arg.Value.ToString().Substring(1)).ToArray();
-                                break;
-                        }
-                        //! WE CURRENTLY ONLY PROCESSES FIRST ENTRY OF VALUES
-                        break;
-                    }
-                    
-                    //requiredComponentsNames = attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != typeSymbol.Name).Select(arg => arg.Value.ToString().Substring(1)).ToArray();
-                    break;
-                }*/
                 ComponentInterfaceRegister.RegisterForOtherAssembly(new ComponentInterfaceDefinition(typeSymbol.ContainingNamespace.ToString(), $"I{typeSymbol.Name}", typeSymbol.Name, requiredComponentsNames));
             }
             
@@ -135,18 +111,6 @@ namespace GameEngine.Generator.Tracked {
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
-                    /*
-                    string[] requiredComponentsNames = null;
-                    foreach(AttributeData attributeData in classSymbol.GetAttributes().
-                                Where(attribute =>
-                                    // filter attributes for attribute name
-                                    attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                                    // exclude attributes with 0 arguments
-                                    && attribute.ConstructorArguments.Length != 0)) {
-                        
-                        requiredComponentsNames = attributeData.ConstructorArguments.Where(arg => arg.Value.ToString() != className).Select(arg => arg.Value.ToString()).ToArray();
-                        break;
-                    }*/
                     
                     string[] requiredComponentsNames = null;
                     var attributeData1 = classSymbol.GetAttributes().FirstOrDefault(attribute =>
@@ -168,14 +132,10 @@ namespace GameEngine.Generator.Tracked {
                                     requiredComponentsNames = new string[] { firstArgument.Value.ToString() };
                                 break;
                         }
-                    
                     }
-                    
                     ComponentInterfaceRegister.RegisterForThisAssembly(new ComponentInterfaceDefinition(@namespace.Name.ToString(), interfaceName, className, requiredComponentsNames));
                 }
             }
         }
-        
     }
-    
 }

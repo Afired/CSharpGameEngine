@@ -7,7 +7,7 @@ using GameEngine.Numerics;
 
 namespace GameEngine.Rendering.Cameras;
 
-[RequireComponent(typeof(ITransform))]
+[RequireComponent(typeof(Transform))]
 public partial class Camera3D : BaseCamera {
     
     public float NearPlaneDistance = 0.01f;

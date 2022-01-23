@@ -82,7 +82,7 @@ public sealed class PhysicsEngine {
     
     private void InvokePhysicsUpdate(float physicsTimeStep) {
         Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Entity entity in Hierarchy.Instance) {
+        foreach(Entity entity in Hierarchy.Entities) {
             entity.PhysicsUpdate();
         }
     }

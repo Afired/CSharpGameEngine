@@ -36,7 +36,7 @@ public sealed partial class Application {
 
     private void InvokeUpdate(float elapsedTime) {
         Time.DeltaTime = elapsedTime;
-        foreach(Entity entity in Hierarchy.Instance) {
+        foreach(Entity entity in Hierarchy.Entities) {
             entity.Update();
         }
     }

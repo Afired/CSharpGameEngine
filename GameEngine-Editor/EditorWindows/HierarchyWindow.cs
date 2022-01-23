@@ -25,12 +25,12 @@ public class HierarchyWindow : EditorWindow {
     }
     
     protected override void Draw() {
-        if(Hierarchy.Instance.Count == 0) {
+        if(Hierarchy.Count == 0) {
             ImGui.Text("no objects");
             return;
         }
 
-        foreach(Entity entity in Hierarchy.Instance) {
+        foreach(Entity entity in Hierarchy.Entities) {
             DrawEntityNode(entity);
         }
 

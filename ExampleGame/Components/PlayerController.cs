@@ -19,7 +19,7 @@ public partial class PlayerController : Component {
     }
     
     private void UpdateInputAxis() {
-        _inputAxis = new Vector2();
+        _inputAxis = Vector2.Zero;
         _inputAxis.X += Input.IsKeyDown(KeyCode.A) ? -1 : 0;
         _inputAxis.X += Input.IsKeyDown(KeyCode.D) ? 1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;

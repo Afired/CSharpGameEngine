@@ -25,8 +25,16 @@ public class Entity {
             component.Update();
         }
     }
+
+    internal void PhysicsUpdate() {
+        OnPhysicsUpdate();
+        foreach(Component component in Components) {
+            component.PhysicsUpdate();
+        }
+    }
     
     protected virtual void OnAwake() { }
     protected virtual void OnUpdate() { }
+    protected virtual void OnPhysicsUpdate() { }
     
 }

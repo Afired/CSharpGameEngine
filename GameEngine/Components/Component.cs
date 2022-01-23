@@ -13,8 +13,10 @@ public abstract class Component {
 
     internal void Awake() => OnAwake();
     internal void Update() => OnUpdate();
+    internal void PhysicsUpdate() => OnPhysicsUpdate();
     
     protected virtual void OnAwake() { }
     protected virtual void OnUpdate() { }
+    protected virtual void OnPhysicsUpdate() { }
     
 }

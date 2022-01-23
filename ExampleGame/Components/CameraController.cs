@@ -11,10 +11,6 @@ public partial class CameraController : Component {
 
 
     protected override void OnUpdate() {
-        Update(0.0001f);
-    }
-
-    private void Update(float deltaTime) {
         UpdatePosition();
     }
     

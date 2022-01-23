@@ -29,12 +29,13 @@ public sealed partial class Application {
             Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
             stopwatch.Restart();
             //OnUpdate?.Invoke(elapsedTime);
-            InvokeHierarchyUpdates();
+            InvokeUpdate(elapsedTime);
             InputHandler.ResetMouseDelta();
         }
     }
 
-    private void InvokeHierarchyUpdates() {
+    private void InvokeUpdate(float elapsedTime) {
+        Time.DeltaTime = elapsedTime;
         foreach(Entity entity in Hierarchy.Instance) {
             entity.Update();
         }

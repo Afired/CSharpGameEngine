@@ -1,5 +1,6 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
+using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -13,12 +14,8 @@ public partial class PlayerController : Component {
     
     
     protected override void OnUpdate() {
-        Update(0.0001f);
-    }
-    
-    private void Update(float deltaTime) {
         UpdateInputAxis();
-        UpdatePosition(deltaTime);
+        UpdatePosition();
     }
     
     private void UpdateInputAxis() {
@@ -29,8 +26,8 @@ public partial class PlayerController : Component {
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
     
-    private void UpdatePosition(float deltaTime) {
-        Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+    private void UpdatePosition() {
+        Transform.Position += _inputAxis.XY_.Normalized * Time.DeltaTime * _speed;
     }
     
 }

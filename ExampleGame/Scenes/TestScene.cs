@@ -28,7 +28,6 @@ public static class TestScene {
             Renderer = { Texture = "Checkerboard", Shader = "default" }
         });
         Player player = new Player();
-        RenderingEngine.SetActiveCamera(player.Camera2D);
         scene.AddEntity(player);
         
         return scene;

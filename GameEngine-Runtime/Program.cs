@@ -1,5 +1,6 @@
 ﻿using ExampleGame.Scenes;
 using GameEngine.Core;
+using GameEngine.Rendering;
 using GameEngine.SceneManagement;
 
 namespace Runtime;
@@ -7,16 +8,15 @@ namespace Runtime;
 internal class Program {
     
     public static int Main(string[] args) {
-        Application application = new Application();
 
+        Application application = new Application();
         SetConfig();
         
         application.Initialize();
-        
         application.Start();
         
-        Thread.Sleep(5000);
-        Hierarchy.LoadScene(TestScene.Get());
+        // currently only waits for renderingEngine init, but if other threads didnt yet fully init it'll crash
+        RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
         
         return 0;
     }

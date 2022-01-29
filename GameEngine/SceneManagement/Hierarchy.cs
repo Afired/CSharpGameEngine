@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameEngine.Core;
 using GameEngine.Entities;
+using GameEngine.Physics;
 
 namespace GameEngine.SceneManagement; 
 
@@ -19,6 +20,7 @@ public static class Hierarchy {
 //    }
 
     public static void LoadScene(Scene scene) {
+        PhysicsEngine.InitializeWorld();
         Scene = scene;
         foreach(Entity entity in scene.Entities) {
             entity.Awake();

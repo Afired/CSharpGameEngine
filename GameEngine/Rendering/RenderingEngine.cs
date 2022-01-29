@@ -98,9 +98,11 @@ public sealed unsafe class RenderingEngine {
 //                layer.Draw();
 //            }
             Hierarchy.Draw();
-            //todo: post processing stack
-            DoPostProcessing();
         }
+        
+        //todo: post processing stack
+        DoPostProcessing();
+        
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Attach();

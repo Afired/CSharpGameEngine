@@ -14,10 +14,10 @@ public static class Hierarchy {
     
     static Hierarchy() { }
     
-//    public static void AddEntity(Entity entity) {
-//        _scene.Entities.Add(entity);
-//        entity.Awake();
-//    }
+    public static void AddEntity(Entity entity) {
+        Scene.AddEntity(entity);
+        entity.Awake();
+    }
 
     public static void LoadScene(Scene scene) {
         PhysicsEngine.InitializeWorld();

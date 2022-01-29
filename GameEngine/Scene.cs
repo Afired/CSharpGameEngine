@@ -13,7 +13,12 @@ public class Scene {
         _entities = new List<Entity>();
     }
     
-    public void AddEntity(Entity entity) {
+    public Scene(string name, List<Entity> entities) {
+        _entities = entities ?? new List<Entity>();
+        Name = name;
+    }
+    
+    internal void AddEntity(Entity entity) {
         _entities.Add(entity);
         entity.Awake();
     }

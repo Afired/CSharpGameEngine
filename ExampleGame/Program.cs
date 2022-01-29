@@ -30,25 +30,25 @@ internal class Program {
     }
     
     public static void InitializeWorld() {
-        Hierarchy.Add(new PhysicsQuad() {
-            Transform = { Position = new Vector3(0, 10, 0)},
-            Renderer = { Texture = "Box", Shader = "default"}
-        });
-        Hierarchy.Add(new PhysicsQuad() {
-            Transform = { Position = new Vector3(0.5f, 11, 0)},
-            Renderer = { Texture = "Checkerboard", Shader = "default"}
-        });
-        Hierarchy.Add(new PhysicsQuad() {
-            Transform = { Position = new Vector3(-0.25f, 12, 0)},
-            Renderer = { Texture = "Checkerboard", Shader = "default"}
-        });
-        Hierarchy.Add(new Quad() {
-            Transform = { Position = new Vector3(0, 2, 0)} ,
-            Renderer = { Texture = "Checkerboard", Shader = "default" }
-        });
-        Player player = new Player();
-        RenderingEngine.SetActiveCamera(player.Camera2D);
-        Hierarchy.Add(player);
+//        Hierarchy.AddEntity(new PhysicsQuad() {
+//            Transform = { Position = new Vector3(0, 10, 0)},
+//            Renderer = { Texture = "Box", Shader = "default"}
+//        });
+//        Hierarchy.AddEntity(new PhysicsQuad() {
+//            Transform = { Position = new Vector3(0.5f, 11, 0)},
+//            Renderer = { Texture = "Checkerboard", Shader = "default"}
+//        });
+//        Hierarchy.AddEntity(new PhysicsQuad() {
+//            Transform = { Position = new Vector3(-0.25f, 12, 0)},
+//            Renderer = { Texture = "Checkerboard", Shader = "default"}
+//        });
+//        Hierarchy.AddEntity(new Quad() {
+//            Transform = { Position = new Vector3(0, 2, 0)} ,
+//            Renderer = { Texture = "Checkerboard", Shader = "default" }
+//        });
+//        Player player = new Player();
+//        RenderingEngine.SetActiveCamera(player.Camera2D);
+//        Hierarchy.AddEntity(player);
     }
     
 }

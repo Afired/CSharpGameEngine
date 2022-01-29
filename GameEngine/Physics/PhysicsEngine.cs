@@ -76,14 +76,7 @@ public sealed class PhysicsEngine {
             stopwatch.Restart();
             
             World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-            InvokePhysicsUpdate(Configuration.FixedTimeStep);
-        }
-    }
-    
-    private void InvokePhysicsUpdate(float physicsTimeStep) {
-        Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Entity entity in Hierarchy.Entities) {
-            entity.PhysicsUpdate();
+            Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
         }
     }
     

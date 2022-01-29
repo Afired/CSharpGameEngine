@@ -4,6 +4,7 @@ using GameEngine.Layers;
 using GameEngine.Rendering.Cameras;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
+using GameEngine.SceneManagement;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 
@@ -93,12 +94,15 @@ public sealed unsafe class RenderingEngine {
         // render and draw frame
         if(CurrentCamera != null) {
             DrawBackground();
-            foreach(Layer layer in LayerStack.GetNormalLayers()) {
-                layer.Draw();
-            }
-            //todo: post processing stack
-            DoPostProcessing();
+//            foreach(Layer layer in LayerStack.GetNormalLayers()) {
+//                layer.Draw();
+//            }
+            Hierarchy.Draw();
         }
+        
+        //todo: post processing stack
+        DoPostProcessing();
+        
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Attach();

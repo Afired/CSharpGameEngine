@@ -1,6 +1,7 @@
 using ExampleGame.Components;
 using GameEngine.Components;
 using GameEngine.Entities;
+using GameEngine.Rendering;
 using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
@@ -13,6 +14,7 @@ public partial class Player : Entity, ITransform, IPlayerController, ICamera3D, 
         Camera3D.FieldOfView = 75;
         Camera3D.NearPlaneDistance = 0.01f;
         Camera3D.FarPlaneDistance = 100f;
+        RenderingEngine.SetActiveCamera(Camera2D);
     }
     
 }

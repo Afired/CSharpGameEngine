@@ -1,18 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>disable</ImplicitUsings>
+        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Runtime</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\ExampleGame\ExampleGame.csproj" />
         <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
-        <ProjectReference Include="..\GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <None Update="Assets\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\Textures\Box.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

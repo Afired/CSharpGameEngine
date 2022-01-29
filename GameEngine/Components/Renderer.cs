@@ -10,19 +10,20 @@ namespace GameEngine.Components;
 [RequireComponent(typeof(Transform), typeof(Geometry))]
 public partial class Renderer : Component {
 
-    public string Texture { get; set; }
-    public string Shader { get; set; }
+    public string Texture { get; set; } = "checkerboard";
+    public string Shader { get; set; } = "default";
     
     
     protected override void OnAwake() {
-        RenderingEngine.OnLoad += OnLoad;
+        //RenderingEngine.OnLoad += OnLoad;
+//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
     }
     
-    private void OnLoad() {
-        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
-    }
-    
-    public void OnDraw() {
+//    private void OnLoad() {
+//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
+//    }
+
+    protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
 
         Transform transform = Transform;

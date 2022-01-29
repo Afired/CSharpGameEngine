@@ -20,6 +20,7 @@ public class EditorGui {
         new ConsoleWindow();
         new AssetBrowserWindow();
         new ProjectSettingsWindow();
+        new SceneSelectWindow();
         Program.EditorLayer.OnDraw += RenderDemoWindow;
     }
 

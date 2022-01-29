@@ -1,12 +1,16 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Editor;
+using ExampleGame.Entities;
 using GameEngine.Core;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Textures;
+using GameEngine.SceneManagement;
+using GameEngine.Serialization;
 using ImGuiNET;
 using Silk.NET.GLFW;
+using Vector3 = GameEngine.Numerics.Vector3;
 
 namespace GameEngine.Editor.EditorWindows; 
 

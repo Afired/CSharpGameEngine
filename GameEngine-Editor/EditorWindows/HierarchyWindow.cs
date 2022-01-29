@@ -25,17 +25,26 @@ public class HierarchyWindow : EditorWindow {
     }
     
     protected override void Draw() {
-        if(Hierarchy.Count == 0) {
-            ImGui.Text("no objects");
-            return;
-        }
-
-        foreach(Entity entity in Hierarchy.Entities) {
-            DrawEntityNode(entity);
-        }
-
+        if(Hierarchy.Scene is not null)
+            DrawSceneNode(Hierarchy.Scene);
+        else
+            ImGui.Text("no scene loaded");
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selected = null;
+        }
+    }
+
+    private void DrawSceneNode(Scene scene) {
+        
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None;
+        bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
+        if(opened) {
+            
+            foreach(Entity entity in scene.Entities) {
+                DrawEntityNode(entity);
+            }
+            
+            ImGui.TreePop();
         }
         
     }

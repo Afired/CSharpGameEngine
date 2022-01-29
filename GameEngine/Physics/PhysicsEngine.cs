@@ -17,15 +17,14 @@ public delegate void OnRegisterRigidBody();
 public sealed class PhysicsEngine {
     
     public static World World;
-    public static event OnRegisterRigidBody OnRegisterRigidBody;
     
     
     internal void Initialize() {
+        InitializeWorld();
         FixedUpdateLoop();
     }
-    
-    private void FixedUpdateLoop() {
-        
+
+    internal static void InitializeWorld() {
         //world
         Vector2 gravity = new Vector2(0, -9.81f);
         World = new World(gravity);
@@ -60,8 +59,9 @@ public sealed class PhysicsEngine {
         Body dynamicBody = World.CreateBody(dynamicBodyDef);
 
         dynamicBody.CreateFixture(dynamicFixtureDef);
-        
-        OnRegisterRigidBody?.Invoke();
+    }
+    
+    private void FixedUpdateLoop() {
         
         int velocityIterations = 6;
         int positionIterations = 2;
@@ -76,14 +76,7 @@ public sealed class PhysicsEngine {
             stopwatch.Restart();
             
             World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-            InvokePhysicsUpdate(Configuration.FixedTimeStep);
-        }
-    }
-    
-    private void InvokePhysicsUpdate(float physicsTimeStep) {
-        Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Entity entity in Hierarchy.Entities) {
-            entity.PhysicsUpdate();
+            Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
         }
     }
     

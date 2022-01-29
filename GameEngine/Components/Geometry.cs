@@ -22,7 +22,8 @@ public partial class Geometry : Component {
     
     
     protected override void OnAwake() {
-        RenderingEngine.OnLoad += InitializeGeometry;
+        //RenderingEngine.OnLoad += InitializeGeometry;
+        InitializeGeometry();
     }
 
     private void InitializeGeometry() {

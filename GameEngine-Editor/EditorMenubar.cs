@@ -1,12 +1,15 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Editor;
+using ExampleGame.Entities;
 using GameEngine.Core;
 using GameEngine.Rendering;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Textures;
+using GameEngine.SceneManagement;
 using ImGuiNET;
 using Silk.NET.GLFW;
+using Vector3 = GameEngine.Numerics.Vector3;
 
 namespace GameEngine.Editor.EditorWindows; 
 
@@ -134,6 +137,37 @@ public class EditorMenubar {
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
             if(ImGui.MenuItem("Quit")) Application.Terminate();
+            ImGui.EndMenu();
+        }
+        
+        if(ImGui.BeginMenu("File")) {
+            if(ImGui.MenuItem("Open Scene")) {
+                Scene scene = new Scene();
+                scene.Name = "Test Scene";
+                
+                scene.AddEntity(new PhysicsQuad() {
+                    Transform = { Position = new Vector3(0, 10, 0)},
+                    Renderer = { Texture = "Box", Shader = "default"}
+                });
+                scene.AddEntity(new PhysicsQuad() {
+                    Transform = { Position = new Vector3(0.5f, 11, 0)},
+                    Renderer = { Texture = "Checkerboard", Shader = "default"}
+                });
+                scene.AddEntity(new PhysicsQuad() {
+                    Transform = { Position = new Vector3(-0.25f, 12, 0)},
+                    Renderer = { Texture = "Checkerboard", Shader = "default"}
+                });
+                scene.AddEntity(new Quad() {
+                    Transform = { Position = new Vector3(0, 2, 0)} ,
+                    Renderer = { Texture = "Checkerboard", Shader = "default" }
+                });
+                Player player = new Player();
+                RenderingEngine.SetActiveCamera(player.Camera2D);
+                scene.AddEntity(player);
+                
+                Hierarchy.LoadScene(scene);
+            }
+            if(ImGui.MenuItem("Save Scene")) { }
             ImGui.EndMenu();
         }
         

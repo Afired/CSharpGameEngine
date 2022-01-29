@@ -37,7 +37,7 @@ public class HierarchyWindow : EditorWindow {
     private void DrawSceneNode(Scene scene) {
         
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None;
-        bool opened = ImGui.TreeNodeEx("scene " + scene.Name, treeNodeFlags);
+        bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
         if(opened) {
             
             foreach(Entity entity in scene.Entities) {

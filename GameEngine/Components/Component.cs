@@ -9,12 +9,14 @@ public abstract class Component {
     
     public Component(Entity entity) {
         Entity = entity;
-        Init();
     }
+
+    internal void Awake() => OnAwake();
+    internal void Update() => OnUpdate();
+    internal void PhysicsUpdate() => OnPhysicsUpdate();
     
-    /// <summary>
-    /// init callback should be used for self initialization only
-    /// </summary>
-    protected virtual void Init() { }
+    protected virtual void OnAwake() { }
+    protected virtual void OnUpdate() { }
+    protected virtual void OnPhysicsUpdate() { }
     
 }

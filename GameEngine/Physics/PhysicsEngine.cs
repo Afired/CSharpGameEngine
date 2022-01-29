@@ -7,23 +7,22 @@ using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
 using GameEngine.Core;
+using GameEngine.Entities;
+using GameEngine.SceneManagement;
 
 namespace GameEngine.Physics;
-
-public delegate void OnFixedUpdate(float fixedDeltaTime);
 
 public delegate void OnRegisterRigidBody();
 
 public sealed class PhysicsEngine {
     
     public static World World;
-    public static event OnFixedUpdate OnFixedUpdate;
     public static event OnRegisterRigidBody OnRegisterRigidBody;
-
+    
+    
     internal void Initialize() {
         FixedUpdateLoop();
     }
-    
     
     private void FixedUpdateLoop() {
         
@@ -72,13 +71,19 @@ public sealed class PhysicsEngine {
         while(Application.IsRunning) {
             float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
             TimeSpan timeOut = TimeSpan.FromSeconds(Configuration.FixedTimeStep - elapsedTime);
-            //Console.LogWarning(timeOut.TotalSeconds.ToString());
             if(timeOut.TotalSeconds > 0)
                 Thread.Sleep(timeOut);
             stopwatch.Restart();
             
             World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-            OnFixedUpdate?.Invoke(Configuration.FixedTimeStep);
+            InvokePhysicsUpdate(Configuration.FixedTimeStep);
+        }
+    }
+    
+    private void InvokePhysicsUpdate(float physicsTimeStep) {
+        Time.PhysicsTimeStep = physicsTimeStep;
+        foreach(Entity entity in Hierarchy.Entities) {
+            entity.PhysicsUpdate();
         }
     }
     

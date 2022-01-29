@@ -1,7 +1,6 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
 using GameEngine.Core;
-using GameEngine.Entities;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -12,27 +11,23 @@ public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
     private float _speed = 10f;
-
-
-    protected override void Init() {
-        Application.OnUpdate += OnUpdate;
-    }
-
-    private void OnUpdate(float deltaTime) {
+    
+    
+    protected override void OnUpdate() {
         UpdateInputAxis();
-        UpdatePosition(deltaTime);
+        UpdatePosition();
     }
     
     private void UpdateInputAxis() {
-        _inputAxis = new Vector2();
+        _inputAxis = Vector2.Zero;
         _inputAxis.X += Input.IsKeyDown(KeyCode.A) ? -1 : 0;
         _inputAxis.X += Input.IsKeyDown(KeyCode.D) ? 1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.S) ? -1 : 0;
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
     
-    private void UpdatePosition(float deltaTime) {
-        Transform.Position += _inputAxis.XY_.Normalized * deltaTime * _speed;
+    private void UpdatePosition() {
+        Transform.Position += _inputAxis.XY_.Normalized * Time.DeltaTime * _speed;
     }
     
 }

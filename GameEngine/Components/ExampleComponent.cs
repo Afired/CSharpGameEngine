@@ -10,12 +10,16 @@ namespace GameEngine.Components;
 [RequireComponent(typeof(Transform))]
 public partial class ExampleComponent : Component {
     
-    // init callback should be used for self initialization only
-    protected override void Init() {
-        base.Init();
+    // Awake Callback
+    protected override void OnAwake() {
+        base.OnAwake();
     }
     
-
+    // Update Callback
+    protected override void OnUpdate() {
+        base.OnUpdate();
+    }
+    
     private void GetReferenceToRequiredComponent() {
         {
             // normally you would use this long expression to convert the generic entity this component is attached to to a different required component

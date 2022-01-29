@@ -7,8 +7,8 @@ namespace ExampleGame.Entities;
 [Obsolete("Has to be edited to fit the new vertex data format")]
 public partial class Pyramid : Entity, ITransform, IGeometry, IRenderer, IRigidBody {
     
-    protected override void Init() {
-        base.Init();
+    protected override void OnAwake() {
+        base.OnAwake();
         
         float[] vertexData = {
             //walls

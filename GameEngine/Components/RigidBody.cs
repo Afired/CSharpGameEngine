@@ -2,7 +2,6 @@ using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using GameEngine.AutoGenerator;
-using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Physics;
 using Vector2 = System.Numerics.Vector2;
@@ -15,11 +14,15 @@ public partial class RigidBody : Component {
     private Body _body;
     
     
-    protected override void Init() {
+    protected override void OnAwake() {
         PhysicsEngine.OnRegisterRigidBody += CreateBody;
-        PhysicsEngine.OnFixedUpdate += OnFixedUpdate;
     }
-
+    
+    protected override void OnPhysicsUpdate() {
+        Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, Transform.Position.Z);
+        Transform.Rotation = _body.GetAngle();
+    }
+    
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef();
@@ -38,11 +41,6 @@ public partial class RigidBody : Component {
         _body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
         
         _body.CreateFixture(dynamicFixtureDef);
-    }
-    
-    private void OnFixedUpdate(float fixedDeltaTime) {
-        Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, Transform.Position.Z);
-        Transform.Rotation = _body.GetAngle();
     }
     
 }

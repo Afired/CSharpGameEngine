@@ -32,9 +32,17 @@ public class Entity {
             component.PhysicsUpdate();
         }
     }
+
+    internal void Draw() {
+        OnDraw();
+        foreach(Component component in Components) {
+            component.Draw();
+        }
+    }
     
     protected virtual void OnAwake() { }
     protected virtual void OnUpdate() { }
     protected virtual void OnPhysicsUpdate() { }
+    protected virtual void OnDraw() { }
     
 }

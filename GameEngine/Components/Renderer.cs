@@ -16,14 +16,14 @@ public partial class Renderer : Component {
     
     protected override void OnAwake() {
         //RenderingEngine.OnLoad += OnLoad;
-        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
+//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
     }
     
-    private void OnLoad() {
-        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
-    }
-    
-    public void OnDraw() {
+//    private void OnLoad() {
+//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
+//    }
+
+    protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
 
         Transform transform = Transform;

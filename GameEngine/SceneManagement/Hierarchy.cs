@@ -42,5 +42,13 @@ public static class Hierarchy {
             entity.PhysicsUpdate();
         }
     }
+
+    internal static void Draw() {
+        if(Scene is null)
+            return;
+        foreach(Entity entity in Scene.Entities) {
+            entity.Draw();
+        }
+    }
     
 }

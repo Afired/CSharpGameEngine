@@ -31,6 +31,7 @@ public sealed class PhysicsEngine {
         //world
         Vector2 gravity = new Vector2(0, -9.81f);
         World = new World(gravity);
+        World.SetContactListener(new ContactListener());
         
         //ground
         PolygonShape groundBox = new PolygonShape();

@@ -1,5 +1,7 @@
+using Box2D.NetStandard.Collision;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
+using Box2D.NetStandard.Dynamics.Contacts;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using GameEngine.AutoGenerator;
 using GameEngine.Numerics;
@@ -32,18 +34,27 @@ public partial class RigidBody : Component {
         dynamicBodyDef.type = BodyType.Dynamic;
         dynamicBodyDef.position = new Vector2(Transform.Position.X, Transform.Position.Y);
         dynamicBodyDef.angle = Transform.Rotation;
-
+        
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(0.5f, 0.5f);
-
+        
         FixtureDef dynamicFixtureDef = new FixtureDef();
         dynamicFixtureDef.shape = dynamicBox;
         dynamicFixtureDef.density = 1.0f;
         dynamicFixtureDef.friction = 0.3f;
-
+//        dynamicFixtureDef.isSensor = true; TRIGGER?
+        
         _body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
         
+        _body.SetUserData(this);
+        
         _body.CreateFixture(dynamicFixtureDef);
+    }
+
+    internal void BeginCollision(RigidBody other) => OnBeginCollision(other);
+    
+    protected void OnBeginCollision(RigidBody other) {
+        Console.LogSuccess($"{Entity.GetType().Name} collided with {other.Entity.GetType().Name}");
     }
     
 }

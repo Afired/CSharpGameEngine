@@ -13,10 +13,8 @@ internal class Program {
         SetConfig();
         
         application.Initialize();
-        application.Start();
-        
-        // currently only waits for renderingEngine init, but if other threads didnt yet fully init it'll crash
         RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
+        application.Start();
         
         return 0;
     }

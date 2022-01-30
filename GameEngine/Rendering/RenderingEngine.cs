@@ -13,8 +13,9 @@ namespace GameEngine.Rendering;
 public delegate void OnLoad();
 
 public sealed unsafe class RenderingEngine {
-    
+
     public static event OnLoad OnLoad;
+    public static bool IsInit { get; private set; }
     public static BaseCamera CurrentCamera { get; private set; }
     
     public static GlfwWindow GlfwWindow;
@@ -47,7 +48,9 @@ public sealed unsafe class RenderingEngine {
         Setup();
         InputHandler inputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
-        
+        IsInit = true;
+        while(!Application.DoStart) { }
+        OnLoad?.Invoke();
         RenderLoop(GlfwWindow.Handle, inputHandler);
     }
     
@@ -81,7 +84,6 @@ public sealed unsafe class RenderingEngine {
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
-        OnLoad?.Invoke();
     }
 
     private void Render(WindowHandle* window) {

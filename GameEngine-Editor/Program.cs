@@ -14,9 +14,8 @@ public static class Program {
         SetConfig();
         
         application.Initialize();
+        InitializeEditor();
         application.Start();
-        
-        RenderingEngine.OnLoad += InitializeEditor;
         
         return 0;
     }

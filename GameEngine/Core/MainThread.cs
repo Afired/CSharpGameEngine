@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 using GameEngine.Debugging;
 using GameEngine.Guard;
 using GameEngine.Physics;
@@ -14,36 +15,30 @@ public sealed partial class Application {
     private Thread _renderThread;
     
     
-    public void Initialize() {
+    public async Task Initialize() {
+        IsRunning = true;
         Console.Log("Initializing...");
         Console.Log("Initializing engine...");
-        _updateLoopThread = new Thread(UpdateLoop);
+        (_updateLoopThread = new Thread(UpdateLoop)).Start();
         Console.LogSuccess("Initialized engine (1/3)");
         Console.Log("Initializing physics engine...");
-        _physicsThread = new Thread(new PhysicsEngine().Initialize);
+        (_physicsThread = new Thread(new PhysicsEngine().Initialize)).Start();
         Console.LogSuccess("Initialized physics engine (2/3)");
         Console.Log("Initializing render engine...");
-        _renderThread = new Thread(new RenderingEngine().Initialize);
+        (_renderThread = new Thread(new RenderingEngine().Initialize)).Start();
         Console.LogSuccess("Initialized render engine (3/3)");
+        
+        // await all threads to be initialized
+        while(!RenderingEngine.IsInit || !PhysicsEngine.IsInit) { }
         Console.LogSuccess("Initialization complete");
     }
-    
+
+    public static bool DoStart;
     public void Start() {
-        IsRunning = true;
-        Console.Log("Starting...");
-        Console.Log("Starting engine...");
-        Throw.IfNull(_updateLoopThread);
-        _updateLoopThread.Start();
-        Console.LogSuccess("Started engine (1/3)");
-        Console.Log("Starting physics engine...");
-        Throw.IfNull(_physicsThread);
-        _physicsThread.Start();
-        Console.LogSuccess("Started physics engine (2/3)");
-        Console.Log("Started render engine...");
-        Throw.IfNull(_renderThread);
-        _renderThread.Start();
-        Console.LogSuccess("Started render engine (3/3)");
-        Console.LogSuccess("Started");
+        // starts loops on all threads
+        Throw.If(!RenderingEngine.IsInit, "rendering engine has not yet been initialized or initialization has not been awaited");
+        Throw.If(!PhysicsEngine.IsInit, "physics engine has not yet been initialized or initialization has not been awaited");
+        DoStart = true;
     }
     
     public static void Terminate() {

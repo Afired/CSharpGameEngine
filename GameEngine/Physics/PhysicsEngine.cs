@@ -16,11 +16,14 @@ public delegate void OnRegisterRigidBody();
 
 public sealed class PhysicsEngine {
     
+    public static bool IsInit { get; private set; }
     public static World World;
     
     
     internal void Initialize() {
         InitializeWorld();
+        IsInit = true;
+        while(!Application.DoStart) { }
         FixedUpdateLoop();
     }
 

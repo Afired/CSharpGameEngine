@@ -15,6 +15,7 @@ public sealed partial class Application {
     
     
     private void UpdateLoop() {
+        while(!Application.DoStart) { }
         Stopwatch stopwatch = new();
         stopwatch.Start();
         while(IsRunning) {

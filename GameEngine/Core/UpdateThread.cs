@@ -14,6 +14,25 @@ public sealed partial class Application {
     //public static event OnUpdate OnUpdate;
     
     
-    
+    private void UpdateLoop() {
+        while(!Application.DoStart) { }
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+        while(IsRunning) {
+            float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+            if(Configuration.TargetFrameRate > 0) {
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - elapsedTime);
+                if(timeOut.TotalSeconds > 0) {
+                    Thread.Sleep(timeOut);
+                    elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+                }
+            }
+            Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
+            stopwatch.Restart();
+            //OnUpdate?.Invoke(elapsedTime);
+            Hierarchy.Update(elapsedTime);
+            InputHandler.ResetMouseDelta();
+        }
+    }
     
 }

@@ -17,6 +17,9 @@ public sealed partial class Application {
     
     public async Task Initialize() {
         IsRunning = true;
+        Console.Log("Initializing...");
+        Console.Log("Initializing engine...");
+        (_updateLoopThread = new Thread(UpdateLoop)).Start();
         Console.LogSuccess("Initialized engine (1/3)");
         Console.Log("Initializing physics engine...");
         (_physicsThread = new Thread(new PhysicsEngine().Initialize)).Start();

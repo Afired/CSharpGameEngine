@@ -1,6 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Threading;
 using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Layers;
@@ -54,42 +51,23 @@ public sealed unsafe class RenderingEngine {
         IsInit = true;
         while(!Application.DoStart) { }
         OnLoad?.Invoke();
-        Loop(inputHandler);
+        RenderLoop(GlfwWindow.Handle, inputHandler);
     }
-
-    private void Loop(InputHandler inputHandler) {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
+    
+    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
+        
         while(Application.IsRunning) {
-            Render(GlfwWindow.Handle, inputHandler);
-            Update(stopwatch);
+            
+            Render(window);
+            
+            // handle input
+            Glfw.PollEvents();
+            inputHandler.HandleMouseInput(window);
+
+            if(Glfw.WindowShouldClose(window))
+                Application.Terminate();
         }
-    }
-    
-    private void Update(Stopwatch stopwatch) {
-        float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
-        if(Configuration.TargetFrameRate > 0) {
-            TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - elapsedTime);
-            if(timeOut.TotalSeconds > 0) {
-                Thread.Sleep(timeOut);
-                elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
-            }
-        }
-        Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
-        stopwatch.Restart();
-        Hierarchy.Update(elapsedTime);
-        InputHandler.ResetMouseDelta();
-    }
-    
-    private void Render(WindowHandle* window, InputHandler inputHandler) {
-        Render(window);
         
-        // handle input
-        Glfw.PollEvents();
-        inputHandler.HandleMouseInput(window);
-        
-        if(Glfw.WindowShouldClose(window))
-            Application.Terminate();
     }
 
     private void Setup() {

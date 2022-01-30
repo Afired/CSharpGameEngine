@@ -6,9 +6,14 @@ namespace GameEngine.Editor.EditorWindows;
 
 public class ConsoleWindow : EditorWindow {
     
-    private static List<LogMessage> _logMessages;
+    private List<LogMessage> _logMessages;
     private int _maxLogs = 50;
-    
+    private bool _showNormalLogMessages = true;
+    private bool _showSuccessLogMessages = true;
+    private bool _showWarningLogMessages = true;
+    private bool _showErrorLogMessages = true;
+
+
     public ConsoleWindow() {
         Title = "Console";
         _logMessages = new List<LogMessage>();
@@ -23,23 +28,36 @@ public class ConsoleWindow : EditorWindow {
     }
     
     protected override void Draw() {
+        DrawToolBar();
+        DrawLogs();
+    }
+
+    private void DrawLogs() {
         for(int i = 0; i < _logMessages.Count; i++) {
+//            if(_logMessages[i].LogSeverity == LogSeverity.Error && !_showErrorLogMessages)
+//                continue;
             _logMessages[i].Draw();
         }
     }
-    
-    private class LogMessage {
+
+    private void DrawToolBar() {
+        if(ImGui.Button("Clear"))
+            _logMessages.Clear();
+//        ImGui.Checkbox("Errors", ref _showErrorLogMessages);
+    }
+
+    private readonly struct LogMessage {
         
-        private string _message;
-        private LogSeverity _logSeverity;
+        public string Message { get; }
+        public LogSeverity LogSeverity { get; }
         
         public LogMessage(string message, LogSeverity logSeverity) {
-            _message = message;
-            _logSeverity = logSeverity;
+            Message = message;
+            LogSeverity = logSeverity;
         }
-
+        
         public void Draw() {
-            ImGui.TextColored(ToColor(_logSeverity), _message);
+            ImGui.TextColored(ToColor(LogSeverity), Message);
         }
 
         private static Vector4 ToColor(LogSeverity logSeverity) => logSeverity switch {

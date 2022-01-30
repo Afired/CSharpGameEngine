@@ -37,8 +37,6 @@ public partial class Trigger : Component {
             gravityScale = 0
         };
         
-        Console.LogWarning(GetType().Name + " " + Transform.Position.X + ", " + Transform.Position.Y);
-        
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(0.5f, 0.5f);
 

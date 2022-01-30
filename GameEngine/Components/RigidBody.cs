@@ -20,6 +20,8 @@ public partial class RigidBody : Component {
     }
     
     protected override void OnPhysicsUpdate() {
+        if(_body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
+            return;
         Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, Transform.Position.Z);
         Transform.Rotation = _body.GetAngle();
     }

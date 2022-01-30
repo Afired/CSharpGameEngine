@@ -10,13 +10,14 @@ public static class Hierarchy {
     //todo: multiple scenes
     
     public static Scene Scene { get; private set; }
+    private static Stack<Entity> _entitiesToBeAdded;
     
-    
-    static Hierarchy() { }
+    static Hierarchy() {
+        _entitiesToBeAdded = new Stack<Entity>();
+    }
     
     public static void AddEntity(Entity entity) {
-        Scene.AddEntity(entity);
-        entity.Awake();
+        _entitiesToBeAdded.Push(entity);
     }
 
     public static void LoadScene(Scene scene) {
@@ -33,6 +34,11 @@ public static class Hierarchy {
         Time.DeltaTime = elapsedTime;
         foreach(Entity entity in Scene.Entities) {
             entity.Update();
+        }
+
+        while(_entitiesToBeAdded.TryPop(out Entity entity)) {
+            Scene.AddEntity(entity);
+            entity.Awake();
         }
     }
     

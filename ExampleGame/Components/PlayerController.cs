@@ -10,7 +10,7 @@ namespace ExampleGame.Components;
 public partial class PlayerController : Component {
     
     private Vector2 _inputAxis;
-    private float _speed = 10f;
+    public float Speed { get; set; } = 10f;
     
     
     protected override void OnUpdate() {
@@ -27,7 +27,7 @@ public partial class PlayerController : Component {
     }
     
     private void UpdatePosition() {
-        Transform.Position += _inputAxis.XY_.Normalized * Time.DeltaTime * _speed;
+        Transform.Position += _inputAxis.XY_.Normalized * Time.DeltaTime * Speed;
     }
     
 }

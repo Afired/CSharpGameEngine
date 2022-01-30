@@ -1,60 +1,41 @@
-using Box2D.NetStandard.Collision;
-using Box2D.NetStandard.Collision.Shapes;
+using System.Numerics;
 using Box2D.NetStandard.Dynamics.Bodies;
-using Box2D.NetStandard.Dynamics.Contacts;
-using Box2D.NetStandard.Dynamics.Fixtures;
 using GameEngine.AutoGenerator;
-using GameEngine.Numerics;
-using GameEngine.Physics;
-using Vector2 = System.Numerics.Vector2;
+using GameEngine.Core;
+using Vector3 = GameEngine.Numerics.Vector3;
 
 namespace GameEngine.Components; 
 
 [RequireComponent(typeof(Transform))]
-public partial class RigidBody : Component {
-    
-    private Body _body;
-    
+public partial class RigidBody : Collider {
     
     protected override void OnAwake() {
-        //PhysicsEngine.OnRegisterRigidBody += CreateBody;
-        CreateBody();
-    }
-    
-    protected override void OnPhysicsUpdate() {
-        if(_body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
-            return;
-        Transform.Position = new Vector3(_body.GetPosition().X, _body.GetPosition().Y, Transform.Position.Z);
-        Transform.Rotation = _body.GetAngle();
-    }
-    
-    private void CreateBody() {
-        //dynamic object
-        BodyDef dynamicBodyDef = new BodyDef();
-        dynamicBodyDef.type = BodyType.Dynamic;
-        dynamicBodyDef.position = new Vector2(Transform.Position.X, Transform.Position.Y);
-        dynamicBodyDef.angle = Transform.Rotation;
-        
-        PolygonShape dynamicBox = new PolygonShape();
-        dynamicBox.SetAsBox(0.5f, 0.5f);
-        
-        FixtureDef dynamicFixtureDef = new FixtureDef();
-        dynamicFixtureDef.shape = dynamicBox;
-        dynamicFixtureDef.density = 1.0f;
-        dynamicFixtureDef.friction = 0.3f;
-//        dynamicFixtureDef.isSensor = true; TRIGGER?
-        
-        _body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
-        
-        _body.SetUserData(this);
-        
-        _body.CreateFixture(dynamicFixtureDef);
+        BodyType = BodyType.Dynamic;
+        base.OnAwake();
     }
 
-    internal void BeginCollision(RigidBody other) => OnBeginCollision(other);
-    
-    protected void OnBeginCollision(RigidBody other) {
-        Console.LogSuccess($"{Entity.GetType().Name} collided with {other.Entity.GetType().Name}");
+    protected override void OnPhysicsUpdate() {
+        if(Body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
+            return;
+        Transform.Position = new Vector3(Body.GetPosition().X, Body.GetPosition().Y, Transform.Position.Z);
+        Transform.Rotation = Body.GetAngle();
     }
     
+//    protected override void OnAwake() {
+//        BodyType = BodyType.Dynamic;
+//        base.OnAwake();
+//    }
+//
+//    protected override void OnPhysicsUpdate() {
+//        if(Body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
+//            return;
+//        Body.SetGravityScale(0);
+//        
+//        Transform.Position = new Vector3(Body.GetPosition().X, Body.GetPosition().Y, Transform.Position.Z);
+//        Transform.Rotation = Body.GetAngle();
+//
+//        Vector2 vel = new Vector2(0, -1);
+//        Body.SetLinearVelocity(vel);
+//    }
+
 }

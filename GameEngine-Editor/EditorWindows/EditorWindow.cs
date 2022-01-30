@@ -6,20 +6,19 @@ namespace GameEngine.Editor.EditorWindows;
 public class EditorWindow {
 
     protected string Title = "Title";
-//    private readonly int _id;
+    private readonly int _id;
     
     public EditorWindow() {
         Program.EditorLayer.OnDraw += DrawWindow;
-//        _id = GetHashCode();
+        _id = GetHashCode();
     }
 
     private void DrawWindow() {
         bool opened = true;
-//        ImGui.PushID(_id);
-        ImGui.Begin(Title, ref opened, ImGuiWindowFlags.NoCollapse);
+        // push id doesnt work with windows since it cant be handled with the id stack, c++ uses ## or ### to set an identifier
+        ImGui.Begin(Title + " - id:" + _id, ref opened, ImGuiWindowFlags.NoCollapse);
         Draw();
         ImGui.End();
-//        ImGui.PopID();
         if(!opened)
             Program.EditorLayer.OnDraw -= DrawWindow;
     }

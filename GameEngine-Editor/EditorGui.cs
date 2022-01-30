@@ -28,7 +28,7 @@ public class EditorGui {
         new AssetBrowserWindow();
         new ProjectSettingsWindow();
         new SceneSelectWindow();
-        Program.EditorLayer.OnDraw += RenderDemoWindow;
+        //Program.EditorLayer.OnDraw += RenderDemoWindow;
     }
 
     private void RenderDemoWindow() {

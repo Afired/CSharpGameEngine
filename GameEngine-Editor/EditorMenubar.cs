@@ -148,11 +148,11 @@ public class EditorMenubar {
         }
         
         if(ImGui.BeginMenu("Windows")) {
-            if(ImGui.MenuItem("AssetBrowser")) { }
-            if(ImGui.MenuItem("Console")) { }
-            if(ImGui.MenuItem("Hierarchy")) { }
-            if(ImGui.MenuItem("Inspector")) { }
-            if(ImGui.MenuItem("Viewport")) { }
+            if(ImGui.MenuItem("AssetBrowser")) { new AssetBrowserWindow(); }
+            if(ImGui.MenuItem("Console")) { new ConsoleWindow(); }
+            if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
+            if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
+            if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
             ImGui.EndMenu();
         }
 

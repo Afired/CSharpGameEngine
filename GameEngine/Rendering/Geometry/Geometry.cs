@@ -1,31 +1,21 @@
-﻿using GameEngine.AutoGenerator;
-using GameEngine.Entities;
-using GameEngine.Rendering;
 using Silk.NET.OpenGL;
 
-namespace GameEngine.Components; 
+namespace GameEngine.Rendering.Geometry; 
 
-public partial class Geometry : Component {
+public class Geometry {
     
     public uint Vao { get; private set; }
     public uint Vbo { get; private set; }
     public int VertexCount { get; private set; }
 
     private float[] _vertexData;
-    public float[] VertexData {
-        get => _vertexData;
-        set {
-            _vertexData = value;
-            VertexCount = value.Length / 5;
-        }
-    }
-    
-    
-    protected override void OnAwake() {
-        //RenderingEngine.OnLoad += InitializeGeometry;
+
+    public Geometry(float[] vertexData) {
+        _vertexData = vertexData;
+        VertexCount = vertexData.Length / 5;
         InitializeGeometry();
     }
-
+    
     private void InitializeGeometry() {
         
         Vao = Gl.GenVertexArray();
@@ -36,8 +26,8 @@ public partial class Geometry : Component {
         
 
         unsafe {
-            fixed(float* v = &VertexData[0]) {
-                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * VertexData.Length), v, BufferUsageARB.StaticDraw);
+            fixed(float* v = &_vertexData[0]) {
+                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * _vertexData.Length), v, BufferUsageARB.StaticDraw);
             }
             
             // xyz

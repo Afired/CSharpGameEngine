@@ -4,6 +4,6 @@ using GameEngine.Entities;
 
 namespace ExampleGame.Entities; 
 
-public partial class PhysicsQuad : Entity, IQuad, IRenderer, IRigidBody {
+public partial class PhysicsQuad : Entity, IRenderer, IRigidBody {
     
 }

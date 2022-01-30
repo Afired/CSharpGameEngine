@@ -18,12 +18,5 @@ public partial class DynamicCamera : Entity, ITransform, ICamera3D, ICameraContr
         Camera3D.FarPlaneDistance = 100f;
         RenderingEngine.SetActiveCamera(Camera2D);
     }
-
-    protected override void OnUpdate() {
-        base.OnUpdate();
-        if(Input.IsKeyDown(KeyCode.E)) {
-            Console.LogError($"Players position is x:{Transform.Position.X} y:{Transform.Position.Y} z:{Transform.Position.Z}");
-        }
-    }
     
 }

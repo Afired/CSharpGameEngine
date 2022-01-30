@@ -142,7 +142,7 @@ public class EditorMenubar {
         }
         
         if(ImGui.BeginMenu("Project")) {
-            if(ImGui.MenuItem("Project Settings")) { }
+            if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
             if(ImGui.MenuItem("Open Project")) { }
             ImGui.EndMenu();
         }
@@ -153,6 +153,7 @@ public class EditorMenubar {
             if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
             if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
             if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
+            if(ImGui.MenuItem("SceneSelect")) { new SceneSelectWindow(); }
             ImGui.EndMenu();
         }
 

@@ -61,6 +61,7 @@ public class InspectorWindow : EditorWindow {
         }
         
         ImGui.TreePop();
+        ImGui.Separator();
     }
 
     private void DrawRenderer(Renderer renderer) {
@@ -80,6 +81,7 @@ public class InspectorWindow : EditorWindow {
         }
         
         ImGui.TreePop();
+        ImGui.Separator();
     }
 
     private void DrawCamera2D(Camera2D camera2D) {
@@ -103,6 +105,7 @@ public class InspectorWindow : EditorWindow {
         }
         
         ImGui.TreePop();
+        ImGui.Separator();
     }
     
     private void DrawCamera3D(Camera3D camera3D) {
@@ -131,6 +134,7 @@ public class InspectorWindow : EditorWindow {
         }
         
         ImGui.TreePop();
+        ImGui.Separator();
     }
     
 }

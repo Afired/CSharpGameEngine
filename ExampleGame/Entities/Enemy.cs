@@ -4,6 +4,6 @@ using GameEngine.Entities;
 
 namespace ExampleGame.Entities; 
 
-public partial class Bullet : Entity, IQuad, IRenderer, IBulletTrigger {
+public partial class Enemy : Entity, IQuad, IRenderer, IEnemyTrigger {
     
 }

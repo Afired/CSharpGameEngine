@@ -8,7 +8,7 @@ using GameEngine.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
 
-public partial class DynamicCamera : Entity, ITransform, IPlayerController, ICamera3D, ICameraController, ICamera2D {
+public partial class DynamicCamera : Entity, ITransform, ICamera3D, ICameraController, ICamera2D {
     
     protected override void OnAwake() {
         base.OnAwake();

@@ -37,6 +37,8 @@ public partial class Trigger : Component {
             gravityScale = 0
         };
         
+        Console.LogWarning(GetType().Name + " " + Transform.Position.X + ", " + Transform.Position.Y);
+        
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(0.5f, 0.5f);
 
@@ -56,8 +58,6 @@ public partial class Trigger : Component {
 
     internal void BeginTrigger(Trigger other) => OnBeginTrigger(other);
     
-    protected void OnBeginTrigger(Trigger other) {
-        Console.LogSuccess($"{Entity.GetType().Name} triggered with {other.Entity.GetType().Name}");
-    }
+    protected virtual void OnBeginTrigger(Trigger other) { }
     
 }

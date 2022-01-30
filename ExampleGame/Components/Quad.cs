@@ -1,9 +1,10 @@
+using GameEngine.AutoGenerator;
 using GameEngine.Components;
-using GameEngine.Entities;
 
-namespace ExampleGame.Entities; 
+namespace ExampleGame.Components; 
 
-public partial class Quad : Entity, ITransform, IGeometry, IRenderer {
+[RequireComponent(typeof(Geometry))]
+public partial class Quad : Renderer {
     
     protected override void OnAwake() {
         base.OnAwake();

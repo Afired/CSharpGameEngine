@@ -47,8 +47,6 @@ public partial class Collider : Component {
 
     internal void BeginCollision(Collider other) => OnBeginCollision(other);
     
-    protected void OnBeginCollision(Collider other) {
-        Console.LogSuccess($"{Entity.GetType().Name} collided with {other.Entity.GetType().Name}");
-    }
+    protected virtual void OnBeginCollision(Collider other) { }
     
 }

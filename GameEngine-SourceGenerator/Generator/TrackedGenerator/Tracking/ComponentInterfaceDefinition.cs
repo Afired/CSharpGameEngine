@@ -37,7 +37,12 @@ namespace GameEngine.Generator.Tracked.Tracking {
         internal void ResolveRequiredComponents() {
             List<int> requiredComponentsIndices = new List<int>(_requiredComponentsNamespacesAndNames.Length);
             foreach(string current in _requiredComponentsNamespacesAndNames) {
+                
+                if(!IsValid(current))
+                    continue;
+                
                 ExtractNamespaceAndName(current, out string @namespace, out string componentName);
+                
                 if(TryGetIndexFromMatchingNamespaceAndComponentName(@namespace, componentName, out int index))
                     requiredComponentsIndices.Add(index);
             }
@@ -45,8 +50,22 @@ namespace GameEngine.Generator.Tracked.Tracking {
             _requiredComponentsNamespacesAndNames = null;
         }
         
+        private static bool IsValid(string namespaceAndName) {
+            if(string.IsNullOrEmpty(namespaceAndName)) return false;
+            if(namespaceAndName == "?") return false;
+            return true;
+        }
+        
         private static void ExtractNamespaceAndName(string namespaceAndName, out string @namespace, out string name) {
+            
             int lastIndexOfDot = namespaceAndName.LastIndexOf('.');
+            
+            if(lastIndexOfDot == -1) {
+                @namespace = "";
+                name = namespaceAndName;
+                return;
+            }
+            
             @namespace = namespaceAndName.Substring(0, lastIndexOfDot);
             name = namespaceAndName.Substring(lastIndexOfDot + 1);
         }

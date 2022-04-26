@@ -26,7 +26,7 @@ namespace GameEngine.Generator.Tracked {
                 PartialEntityGenerator.Execute(context);
             } catch(Exception exception) {
                 // todo: report diagnostics
-                // these currently dont work on runtime, but when building solution which is not vary helpful in this case
+                // these currently dont work on runtime, but when building solution which is not very helpful in this case
             }
         }
         

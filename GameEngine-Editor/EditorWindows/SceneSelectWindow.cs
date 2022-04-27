@@ -14,6 +14,9 @@ public class SceneSelectWindow : EditorWindow {
         if(ImGui.Button("TestScene")) {
             Hierarchy.LoadScene(TestScene.Get());
         }
+        if(ImGui.Button("RigidBodyScene")) {
+            Hierarchy.LoadScene(RigidBodyScene.Get());
+        }
     }
     
 }

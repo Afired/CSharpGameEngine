@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameEngine.Generator.Extensions;
@@ -31,25 +32,30 @@ namespace GameEngine.Generator.Tracked {
                     continue;
                 //if(HasAttribute(typeSymbol, DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
                 //    continue;
-
+                
                 string[] requiredComponentsNames = null;
                 var attributeData1 = typeSymbol.GetAttributes().FirstOrDefault(attribute =>
                     attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
                     // exclude attributes with 0 arguments
                     && attribute.ConstructorArguments.Length != 0);
                 if(attributeData1 != null) {
-
+                    
                     TypedConstant firstArgument = attributeData1.ConstructorArguments[0];
-
+                    
                     switch(firstArgument.Kind) {
                         case TypedConstantKind.Array:
                             requiredComponentsNames = firstArgument.Values
                                 .Where(arg => arg.Value.ToString() != typeSymbol.ToString())  //GameEngine.Components.Transform != GameEngine.Components.ExampleComponent
                                 .Select(arg => arg.Value.ToString()).ToArray();
                             break;
-                        default:
-                            if(firstArgument.Value.ToString() != typeSymbol.Name)
+                        case TypedConstantKind.Type:
+                            if(firstArgument.Value.ToString() == "?")
+                                requiredComponentsNames = Array.Empty<string>();
+                            else if(firstArgument.Value.ToString() != typeSymbol.Name)
                                 requiredComponentsNames = new string[] { firstArgument.Value.ToString() };
+                            break;
+                        default:
+                            requiredComponentsNames = Array.Empty<string>();
                             break;
                     }
                     
@@ -62,10 +68,10 @@ namespace GameEngine.Generator.Tracked {
         private static IEnumerable<INamedTypeSymbol> GetNamedTypeSymbols(INamespaceSymbol globalNamespace) {
             var stack = new Stack<INamespaceSymbol>();
             stack.Push(globalNamespace);
-
+            
             while (stack.Count > 0) {
                 var @namespace = stack.Pop();
-
+                
                 foreach (INamespaceOrTypeSymbol member in @namespace.GetMembers()) {
                     switch(member) {
                         case INamespaceSymbol memberAsNamespace:
@@ -111,6 +117,10 @@ namespace GameEngine.Generator.Tracked {
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
+
+                    if(className.Contains("MyTestComponent")) {
+                        Console.WriteLine("debug here");
+                    }
                     
                     string[] requiredComponentsNames = null;
                     var attributeData1 = classSymbol.GetAttributes().FirstOrDefault(attribute =>
@@ -118,18 +128,23 @@ namespace GameEngine.Generator.Tracked {
                         // exclude attributes with 0 arguments
                         && attribute.ConstructorArguments.Length != 0);
                     if(attributeData1 != null) {
-
+                        
                         TypedConstant firstArgument = attributeData1.ConstructorArguments[0];
-
+                        
                         switch(firstArgument.Kind) {
                             case TypedConstantKind.Array:
                                 requiredComponentsNames = firstArgument.Values
                                     .Where(arg => arg.Value.ToString() != classSymbol.Name)
                                     .Select(arg => arg.Value.ToString()).ToArray();
                                 break;
-                            default:
-                                if(firstArgument.Value.ToString() != classSymbol.Name)
+                            case TypedConstantKind.Type:
+                                if(firstArgument.Value.ToString() == "?")
+                                    requiredComponentsNames = Array.Empty<string>();
+                                else if(firstArgument.Value.ToString() != classSymbol.Name)
                                     requiredComponentsNames = new string[] { firstArgument.Value.ToString() };
+                                break;
+                            default:
+                                requiredComponentsNames = Array.Empty<string>();
                                 break;
                         }
                     }

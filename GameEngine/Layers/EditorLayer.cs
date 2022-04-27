@@ -7,7 +7,7 @@ public class EditorLayer : Layer {
     }
 
     protected override void OnAttach() {
-        GlfwWindow.ImGuiController.Update(0.1f);
+        GlfwWindow.ImGuiController.Update(0.001f);
     }
 
     protected override void OnDetach() {

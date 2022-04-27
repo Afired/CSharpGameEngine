@@ -17,6 +17,7 @@ public static class TextureRegister {
     }
     
     private static void Register(string name, Texture texture) {
+        name = name.ToLower();
         Throw.If(_textureRegister.ContainsKey(name), "duplicate texture");
         _textureRegister.Add(name, texture);
     }

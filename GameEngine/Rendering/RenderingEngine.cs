@@ -2,6 +2,7 @@ using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Layers;
 using GameEngine.Rendering.Cameras;
+using GameEngine.Rendering.Geometry;
 using GameEngine.Rendering.Shaders;
 using GameEngine.Rendering.Window;
 using GameEngine.SceneManagement;
@@ -84,6 +85,7 @@ public sealed unsafe class RenderingEngine {
     private void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
+        GeometryRegister.Load();
     }
 
     private void Render(WindowHandle* window) {

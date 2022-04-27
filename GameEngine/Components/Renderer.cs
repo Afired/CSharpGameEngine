@@ -1,31 +1,23 @@
 using GameEngine.AutoGenerator;
-using GameEngine.Entities;
 using GameEngine.Numerics;
 using GameEngine.Rendering;
+using GameEngine.Rendering.Geometry;
 using GameEngine.Rendering.Shaders;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Components; 
 
-[RequireComponent(typeof(Transform), typeof(Geometry))]
+[RequireComponent(typeof(Transform))]
 public partial class Renderer : Component {
 
     public string Texture { get; set; } = "checkerboard";
     public string Shader { get; set; } = "default";
+    public string Geometry { get; set; } = "quad";
     
     
-    protected override void OnAwake() {
-        //RenderingEngine.OnLoad += OnLoad;
-//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
-    }
-    
-//    private void OnLoad() {
-//        LayerStack.DefaultNormalLayer.OnDraw += OnDraw;
-//    }
-
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
-
+        
         Transform transform = Transform;
         
         Matrix4x4 trans = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, transform.Position.Z);
@@ -34,13 +26,15 @@ public partial class Renderer : Component {
         
         ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
         ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
+
+        Geometry geometry = GeometryRegister.Get(Geometry);
         
-        Gl.BindVertexArray(Geometry.Vao);
+        Gl.BindVertexArray(geometry.Vao);
         
         TextureRegister.Get(Texture).Bind();
         ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
-
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) Geometry.VertexCount);
+        
+        Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
         Gl.BindVertexArray(0);
     }
     

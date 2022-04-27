@@ -19,6 +19,7 @@ public static class ShaderRegister {
     }
 
     public static void Register(string name, Shader shader) {
+        name = name.ToLower();
         Throw.If(_shaderRegister.ContainsKey(name), "duplicate shader");
         _shaderRegister.Add(name, shader);
     }

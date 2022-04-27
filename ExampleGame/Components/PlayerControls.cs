@@ -6,16 +6,20 @@ using GameEngine.Numerics;
 
 namespace ExampleGame.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class PlayerController : Component {
+[RequireComponent(typeof(Movable), typeof(Blaster))]
+public partial class PlayerControls : Component {
     
     private Vector2 _inputAxis;
-    private float _speed = 10f;
     
     
     protected override void OnUpdate() {
         UpdateInputAxis();
-        UpdatePosition();
+        UpdateMovable();
+        UpdateBlaster();
+    }
+    
+    private void UpdateBlaster() {
+        Blaster.IsShooting = Input.IsKeyDown(KeyCode.E);
     }
     
     private void UpdateInputAxis() {
@@ -26,8 +30,8 @@ public partial class PlayerController : Component {
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
     
-    private void UpdatePosition() {
-        Transform.Position += _inputAxis.XY_.Normalized * Time.DeltaTime * _speed;
+    private void UpdateMovable() {
+        Movable.Direction = _inputAxis.XY_.Normalized;
     }
     
 }

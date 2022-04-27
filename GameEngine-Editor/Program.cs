@@ -15,7 +15,7 @@ public static class Program {
         
         application.Initialize();
         InitializeEditor();
-        application.Start();
+        application.Run();
         
         return 0;
     }

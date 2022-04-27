@@ -14,7 +14,7 @@ internal class Program {
         
         application.Initialize();
         RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
-        application.Start();
+        application.Run();
         
         return 0;
     }

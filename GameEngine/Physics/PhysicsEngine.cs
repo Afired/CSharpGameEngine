@@ -23,8 +23,6 @@ public sealed class PhysicsEngine {
     internal void Initialize() {
         InitializeWorld();
         IsInit = true;
-        while(!Application.DoStart) { }
-        FixedUpdateLoop();
     }
 
     internal static void InitializeWorld() {
@@ -65,7 +63,7 @@ public sealed class PhysicsEngine {
         dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    private void FixedUpdateLoop() {
+    public void FixedUpdateLoop() {
         
         int velocityIterations = 6;
         int positionIterations = 2;

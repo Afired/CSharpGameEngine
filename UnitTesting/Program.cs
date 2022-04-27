@@ -19,7 +19,7 @@ internal static class Program {
             updateLoopCalled++;
         };
         
-        application.Start();
+        application.Run();
         
         Thread.Sleep(TimeSpan.FromSeconds(testForSeconds));
         Console.WriteLine($"UpdateLoop called {updateLoopCalled} in {testForSeconds} seconds");
@@ -41,7 +41,7 @@ internal static class Program {
             fixedUpdateLoopCalled++;
         };
         
-        application.Start();
+        application.Run();
         
         Thread.Sleep(TimeSpan.FromSeconds(testForSeconds));
         Console.WriteLine($"FixedUpdateLoop called {fixedUpdateLoopCalled} in {testForSeconds} seconds");

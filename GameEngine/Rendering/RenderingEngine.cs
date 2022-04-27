@@ -15,6 +15,9 @@ public delegate void OnLoad();
 
 public sealed unsafe class RenderingEngine {
 
+    internal WindowHandle* WindowHandle;
+    internal InputHandler InputHandler;
+    
     public static event OnLoad OnLoad;
     public static bool IsInit { get; private set; }
     public static BaseCamera CurrentCamera { get; private set; }
@@ -47,30 +50,29 @@ public sealed unsafe class RenderingEngine {
     
     internal void Initialize() {
         Setup();
-        InputHandler inputHandler = new InputHandler();
-        Glfw.SetKeyCallback(GlfwWindow.Handle, inputHandler.OnKeyAction);
+        InputHandler = new InputHandler();
+        Glfw.SetKeyCallback(GlfwWindow.Handle, InputHandler.OnKeyAction);
         IsInit = true;
-        while(!Application.DoStart) { }
         OnLoad?.Invoke();
-        RenderLoop(GlfwWindow.Handle, inputHandler);
+        WindowHandle = GlfwWindow.Handle;
     }
     
-    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
-        
-        while(Application.IsRunning) {
-            
-            Render(window);
-            
-            // handle input
-            Glfw.PollEvents();
-            inputHandler.HandleMouseInput(window);
-
-            if(Glfw.WindowShouldClose(window))
-                Application.Terminate();
-        }
-        
-    }
-
+//    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
+//        
+//        while(Application.IsRunning) {
+//            
+//            Render(window);
+//            
+//            // handle input
+//            Glfw.PollEvents();
+//            inputHandler.HandleMouseInput(window);
+//
+//            if(Glfw.WindowShouldClose(window))
+//                Application.Terminate();
+//        }
+//        
+//    }
+    
     private void Setup() {
         GlfwWindow = new GlfwWindow();
         MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
@@ -88,7 +90,9 @@ public sealed unsafe class RenderingEngine {
         GeometryRegister.Load();
     }
 
-    private void Render(WindowHandle* window) {
+    internal void Render(WindowHandle* window) {
+        if(window is null)
+            window = WindowHandle;
         
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);

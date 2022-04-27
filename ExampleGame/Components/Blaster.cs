@@ -2,6 +2,7 @@ using ExampleGame.Entities;
 using GameEngine.AutoGenerator;
 using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Debugging;
 using GameEngine.SceneManagement;
 
 namespace ExampleGame.Components; 
@@ -30,6 +31,7 @@ public partial class Blaster : Component {
         Bullet bullet = new Bullet();
         bullet.Transform.Position = Transform.Position;
         Hierarchy.AddEntity(bullet);
+        Console.LogSuccess("Spawned Bullet!");
     }
     
 }

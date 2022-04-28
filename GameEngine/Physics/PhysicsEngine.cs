@@ -1,30 +1,22 @@
-using System;
-using System.Diagnostics;
 using System.Numerics;
-using System.Threading;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
 using GameEngine.Core;
-using GameEngine.Entities;
 using GameEngine.SceneManagement;
 
 namespace GameEngine.Physics;
 
-public delegate void OnRegisterRigidBody();
-
-public sealed class PhysicsEngine {
+public static class PhysicsEngine {
     
     public static bool IsInit { get; private set; }
     public static World World;
     
     
-    internal void Initialize() {
+    internal static void Initialize() {
         InitializeWorld();
         IsInit = true;
-        while(!Application.DoStart) { }
-        FixedUpdateLoop();
     }
 
     internal static void InitializeWorld() {
@@ -65,23 +57,12 @@ public sealed class PhysicsEngine {
         dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    private void FixedUpdateLoop() {
-        
+    internal static void DoStep() {
         int velocityIterations = 6;
         int positionIterations = 2;
         
-        
-        Stopwatch stopwatch = new();
-        while(Application.IsRunning) {
-            float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
-            TimeSpan timeOut = TimeSpan.FromSeconds(Configuration.FixedTimeStep - elapsedTime);
-            if(timeOut.TotalSeconds > 0)
-                Thread.Sleep(timeOut);
-            stopwatch.Restart();
-            
-            World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-            Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
-        }
+        World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
+        Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
     }
     
 }

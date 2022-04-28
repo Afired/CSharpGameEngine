@@ -19,9 +19,6 @@ public partial class Trigger : Component {
     }
     
     protected override void OnPhysicsUpdate() {
-        if(Body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
-            return;
-        
         Vector2 position = new Vector2(Transform.Position.X, Transform.Position.Y);
         Body.SetTransform(position, Transform.Rotation);
     }

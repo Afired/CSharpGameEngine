@@ -1,6 +1,7 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
 using GameEngine.Input;
+using GameEngine.Numerics;
 
 namespace ExampleGame.Components; 
 
@@ -16,7 +17,7 @@ public partial class CameraController : Component {
     
     private void UpdatePosition() {
         if(Input.IsKeyDown(KeyCode.LeftAlt))
-            Transform.Position += -Input.MouseDelta.XY_ * _speed;
+            Transform.Position -= new Vector3(Input.MouseDelta.X, Input.MouseDelta.Y, 0) * _speed;
     }
     
 }

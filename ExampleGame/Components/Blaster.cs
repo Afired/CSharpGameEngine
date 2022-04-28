@@ -2,6 +2,7 @@ using ExampleGame.Entities;
 using GameEngine.AutoGenerator;
 using GameEngine.Components;
 using GameEngine.Core;
+using GameEngine.Debugging;
 using GameEngine.SceneManagement;
 
 namespace ExampleGame.Components; 
@@ -10,7 +11,7 @@ namespace ExampleGame.Components;
 public partial class Blaster : Component {
 
     public bool IsShooting;
-    public float Cooldown = 1f;
+    public float Cooldown = 0.1f;
     public float CurrentCooldown = 0;
     
     protected override void OnUpdate() {
@@ -27,9 +28,11 @@ public partial class Blaster : Component {
     }
 
     private void Shoot() {
-        Bullet bullet = new Bullet();
-        bullet.Transform.Position = Transform.Position;
+        Bullet bullet = new Bullet() {
+            Transform = { Position = Transform.Position }
+        };
         Hierarchy.AddEntity(bullet);
+        Console.LogSuccess("Spawned Bullet!");
     }
     
 }

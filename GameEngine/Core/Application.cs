@@ -34,8 +34,8 @@ public static unsafe class Application {
             throw new Exception("Application is already running!");
         IsRunning = true;
         // starts loops on all threads
-        Throw.If(!RenderingEngine.IsInit, "rendering engine has not yet been initialized or initialization has not been awaited");
-        Throw.If(!PhysicsEngine.IsInit, "physics engine has not yet been initialized or initialization has not been awaited");
+        Throw.If(!RenderingEngine.IsInit, "rendering engine has not yet been initialized or initialization has not been fully completed");
+        Throw.If(!PhysicsEngine.IsInit, "physics engine has not yet been initialized or initialization has not been fully completed");
         
         Loop();
     }

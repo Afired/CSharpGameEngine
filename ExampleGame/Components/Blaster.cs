@@ -11,7 +11,7 @@ namespace ExampleGame.Components;
 public partial class Blaster : Component {
 
     public bool IsShooting;
-    public float Cooldown = 1f;
+    public float Cooldown = 0.1f;
     public float CurrentCooldown = 0;
     
     protected override void OnUpdate() {

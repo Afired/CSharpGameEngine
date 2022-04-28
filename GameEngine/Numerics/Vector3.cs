@@ -28,10 +28,6 @@ public struct Vector3 : IEquatable<Vector3>, IFormattable {
     public static Vector3 Left => new Vector3(-1f, 0f, 0f);
     public static Vector3 Right => new Vector3(1f, 0f, 0f);
     
-    public Vector2 XY => new Vector2(X, Y);
-    public Vector2 YZ => new Vector2(Y, Z);
-    public Quaternion XYZ_ => new Quaternion(X, Y, Z, 0f);
-
     /// <summary>
     /// Returns the hash code for this instance.
     /// </summary>

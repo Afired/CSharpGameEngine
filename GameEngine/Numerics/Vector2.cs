@@ -24,10 +24,6 @@ public struct Vector2 : IEquatable<Vector2>, IFormattable {
     public static Vector2 Left => new Vector2(-1f, 0f);
     public static Vector2 Right => new Vector2(1f, 0f);
     
-    public Vector3 XY_ => new Vector3(X, Y, 0f);
-    public Vector3 X_Y => new Vector3(X, 0f, Y);
-    public Vector3 _XY => new Vector3(0f, X, Y);
-    
     /// <summary>
     /// Returns the hash code for this instance.
     /// </summary>

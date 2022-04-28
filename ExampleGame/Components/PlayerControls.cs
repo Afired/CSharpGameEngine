@@ -1,6 +1,5 @@
 ﻿using GameEngine.AutoGenerator;
 using GameEngine.Components;
-using GameEngine.Core;
 using GameEngine.Input;
 using GameEngine.Numerics;
 
@@ -31,7 +30,7 @@ public partial class PlayerControls : Component {
     }
     
     private void UpdateMovable() {
-        Movable.Direction = _inputAxis.XY_.Normalized;
+        Movable.Direction = new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized;
     }
     
 }

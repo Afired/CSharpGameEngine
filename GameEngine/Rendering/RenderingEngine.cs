@@ -13,10 +13,10 @@ namespace GameEngine.Rendering;
 
 public delegate void OnLoad();
 
-public sealed unsafe class RenderingEngine {
+public static unsafe class RenderingEngine {
 
-    internal WindowHandle* WindowHandle;
-    internal InputHandler InputHandler;
+    internal static WindowHandle* WindowHandle;
+    internal static InputHandler InputHandler;
     
     public static event OnLoad OnLoad;
     public static bool IsInit { get; private set; }
@@ -41,14 +41,14 @@ public sealed unsafe class RenderingEngine {
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
     
-    private uint _fullscreenVao;
+    private static uint _fullscreenVao;
     
     public static string ScreenShader = "ScreenShader";
     
     public static LayerStack LayerStack { get; private set; }
     
     
-    internal void Initialize() {
+    internal static void Initialize() {
         Setup();
         InputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, InputHandler.OnKeyAction);
@@ -57,23 +57,7 @@ public sealed unsafe class RenderingEngine {
         WindowHandle = GlfwWindow.Handle;
     }
     
-//    private void RenderLoop(WindowHandle* window, InputHandler inputHandler) {
-//        
-//        while(Application.IsRunning) {
-//            
-//            Render(window);
-//            
-//            // handle input
-//            Glfw.PollEvents();
-//            inputHandler.HandleMouseInput(window);
-//
-//            if(Glfw.WindowShouldClose(window))
-//                Application.Terminate();
-//        }
-//        
-//    }
-    
-    private void Setup() {
+    private static void Setup() {
         GlfwWindow = new GlfwWindow();
         MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
         MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
@@ -84,16 +68,13 @@ public sealed unsafe class RenderingEngine {
         LoadResources();
     }
     
-    private void LoadResources() {
+    private static void LoadResources() {
         ShaderRegister.Load();
         TextureRegister.Load();
         GeometryRegister.Load();
     }
 
-    internal void Render(WindowHandle* window) {
-        if(window is null)
-            window = WindowHandle;
-        
+    internal static void Render() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
@@ -119,10 +100,10 @@ public sealed unsafe class RenderingEngine {
         }
         
         DrawToBackBuffer();
-        Glfw.SwapBuffers(window);
+        Glfw.SwapBuffers(WindowHandle);
     }
 
-    private void DrawToBackBuffer() {
+    private static void DrawToBackBuffer() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -134,7 +115,7 @@ public sealed unsafe class RenderingEngine {
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private void DoPostProcessing() {
+    private static void DoPostProcessing() {
         SwapActiveFrameBuffer();
         // use screen shader
         ShaderRegister.Get(ScreenShader).Use();
@@ -145,11 +126,11 @@ public sealed unsafe class RenderingEngine {
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private void DrawBackground() {
+    private static void DrawBackground() {
         Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
     }
 
-    private uint GetFullScreenRenderQuadVao() {
+    private static uint GetFullScreenRenderQuadVao() {
         
         float[] vertexData = {
             -1, 1f, 0f, 0f, 1f,   // top left

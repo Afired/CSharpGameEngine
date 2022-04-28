@@ -28,8 +28,9 @@ public partial class Blaster : Component {
     }
 
     private void Shoot() {
-        Bullet bullet = new Bullet();
-        bullet.Transform.Position = Transform.Position;
+        Bullet bullet = new Bullet() {
+            Transform = { Position = Transform.Position }
+        };
         Hierarchy.AddEntity(bullet);
         Console.LogSuccess("Spawned Bullet!");
     }

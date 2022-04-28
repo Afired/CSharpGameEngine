@@ -13,7 +13,7 @@ public partial class RigidBody : Collider {
         BodyType = BodyType.Dynamic;
         base.OnAwake();
     }
-
+    
     protected override void OnPhysicsUpdate() {
         if(Body is null) //todo: shouldn't receive physics updates if it has not been awaken yet
             return;

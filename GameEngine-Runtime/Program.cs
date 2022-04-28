@@ -8,13 +8,13 @@ namespace Runtime;
 internal class Program {
     
     public static int Main(string[] args) {
-
-        Application application = new Application();
+        
         SetConfig();
         
-        application.Initialize();
-        RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
-        application.Run();
+        Application.Initialize();
+        //RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
+        Hierarchy.LoadScene(RigidBodyScene.Get());
+        Application.Run();
         
         return 0;
     }

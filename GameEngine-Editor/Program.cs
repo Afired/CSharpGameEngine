@@ -9,13 +9,12 @@ public static class Program {
     internal static EditorLayer EditorLayer;
 
     public static int Main(string[] args) {
-
-        Application application = new Application();
+        
         SetConfig();
         
-        application.Initialize();
+        Application.Initialize();
         InitializeEditor();
-        application.Run();
+        Application.Run();
         
         return 0;
     }

@@ -1,78 +1,83 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using GameEngine.Guard;
-using GameEngine.Input;
 using GameEngine.Physics;
 using GameEngine.Rendering;
 using GameEngine.SceneManagement;
 
 namespace GameEngine.Core;
 
-public sealed unsafe class Application {
+public static unsafe class Application {
     
     public static bool IsRunning { get; private set; }
-    private PhysicsEngine _physicsEngine;
-    private RenderingEngine _renderingEngine;
     
     
-    public void Initialize() {
+    public static void Initialize() {
         Console.Log("Initializing...");
         Console.Log("Initializing engine...");
-        
         Console.LogSuccess("Initialized engine (1/3)");
+        
         Console.Log("Initializing physics engine...");
-        
-        _physicsEngine = new PhysicsEngine();
-        _physicsEngine.Initialize();
-        
+        PhysicsEngine.Initialize();
         Console.LogSuccess("Initialized physics engine (2/3)");
+        
         Console.Log("Initializing render engine...");
-        
-        _renderingEngine = new RenderingEngine();
-        _renderingEngine.Initialize();
-        
+        RenderingEngine.Initialize();
         Console.LogSuccess("Initialized render engine (3/3)");
+        
         Console.LogSuccess("Initialization complete");
     }
     
-    public void Run() {
+    public static void Run() {
+        if(IsRunning)
+            throw new Exception("Application is already running!");
         IsRunning = true;
         // starts loops on all threads
         Throw.If(!RenderingEngine.IsInit, "rendering engine has not yet been initialized or initialization has not been awaited");
         Throw.If(!PhysicsEngine.IsInit, "physics engine has not yet been initialized or initialization has not been awaited");
         
-        UpdateLoop();
+        Loop();
     }
     
-    private void UpdateLoop() {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
+    private static void Loop() {
+        Stopwatch updateTimer = new();
+        Stopwatch physicsTimer = new();
+        updateTimer.Start();
+        physicsTimer.Start();
+        
         while(IsRunning) {
-            float elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+            
+            float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {
-                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - elapsedTime);
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - updateTime);
                 if(timeOut.TotalSeconds > 0) {
                     Thread.Sleep(timeOut);
-                    elapsedTime = (float) stopwatch.Elapsed.TotalSeconds;
+                    updateTime = (float) updateTimer.Elapsed.TotalSeconds;
                 }
             }
-            Time.TotalTimeElapsed += (float) stopwatch.Elapsed.TotalSeconds;
-            stopwatch.Restart();
+            Time.TotalTimeElapsed += (float) updateTimer.Elapsed.TotalSeconds;
+            updateTimer.Restart();
             
-            Hierarchy.Update(elapsedTime);
-            InputHandler.ResetMouseDelta();
+            Hierarchy.Update(updateTime);
+            RenderingEngine.InputHandler.ResetMouseDelta();
             
-            _renderingEngine.Render(_renderingEngine.WindowHandle);
+            RenderingEngine.Render();
             
             // handle input
             Glfw.PollEvents();
-            _renderingEngine.InputHandler.HandleMouseInput(_renderingEngine.WindowHandle);
-
-            if(Glfw.WindowShouldClose(_renderingEngine.WindowHandle))
-                Application.Terminate();
+            RenderingEngine.InputHandler.HandleMouseInput(RenderingEngine.WindowHandle);
+            
+            float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
+            if(physicsTime > Configuration.FixedTimeStep) {
+                PhysicsEngine.DoStep();
+                physicsTimer.Restart();
+            }
+            
+            if(Glfw.WindowShouldClose(RenderingEngine.WindowHandle))
+                Terminate();
         }
+        
     }
     
     public static void Terminate() {

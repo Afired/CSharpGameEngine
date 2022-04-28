@@ -11,7 +11,7 @@ internal partial class InputHandler {
     private static bool _catchCursor = false;
     
     
-    internal static void ResetMouseDelta() {
+    internal void ResetMouseDelta() {
         if(!_catchCursor)
             return;
         Input.MouseDelta = Vector2.Zero;

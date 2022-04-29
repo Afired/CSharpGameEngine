@@ -7,13 +7,12 @@ using GameEngine.Rendering;
 
 namespace ExampleGame.Scenes; 
 
-public static class TestScene {
+public class TestScene : Scene {
     
-    public static Scene Get() {
+    public TestScene() {
+        Name = "Test Scene";
         
-        string name = "Test Scene";
-
-        List<Entity> _entities = new List<Entity>() {
+        _entities = new List<Entity>() {
             
             new Bullet() {
                 Transform = { Position = new Vector3(-5, 0, 0) },
@@ -38,8 +37,6 @@ public static class TestScene {
             }
             
         };
-        
-        return new Scene(name, _entities);
     }
     
 }

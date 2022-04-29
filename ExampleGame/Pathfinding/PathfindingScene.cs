@@ -6,13 +6,13 @@ using GameEngine.Numerics;
 
 namespace ExampleGame.Pathfinding; 
 
-public static class PathfindingScene {
+public class PathfindingScene : Scene {
     
-    public static Scene Get() {
+    public PathfindingScene() {
+        Name = "Pathfinding Scene";
         
-        string name = "Pathfinding Scene";
-        
-        List<Entity> entities = new() {
+        _entities = new List<Entity>() {
+            
             new DynamicCamera() {
                 Transform = { Position = new Vector3(10, 10, 0) },
                 Camera2D = { Zoom = 40 }
@@ -22,9 +22,8 @@ public static class PathfindingScene {
                 GridSize = new Size(20, 20),
                 NodeRadius = 1f
             }
+            
         };
-        
-        return new Scene(name, entities);
     }
     
 }

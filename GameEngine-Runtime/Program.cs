@@ -11,12 +11,12 @@ internal class Program {
         SetConfig();
         
         Application.Initialize();
-        Hierarchy.LoadScene(PathfindingScene.Get());
+        Hierarchy.LoadScene(new PathfindingScene());
         Application.Run();
         
         return 0;
     }
-
+    
     private static void SetConfig() {
         Configuration.TargetFrameRate = -1;
         Configuration.WindowTitle = "Example Game";

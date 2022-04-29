@@ -26,7 +26,7 @@ public partial class Renderer : Component {
         
         ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
         ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
-
+        
         Geometry geometry = GeometryRegister.Get(Geometry);
         
         Gl.BindVertexArray(geometry.Vao);

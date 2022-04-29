@@ -20,7 +20,21 @@ public partial class Grid : Entity, ITransform {
     }
 
     private void LinkNodes() {
-        //TODO
+        for(int x = 0; x < GridSize.X; x++) {
+            for(int y = 0; y < GridSize.Y; y++) {
+                
+                if(x > 0)
+                    _grid[x, y].Neighbors.Add(_grid[x - 1, y]);
+                if(x < GridSize.X - 1)
+                    _grid[x, y].Neighbors.Add(_grid[x + 1, y]);
+                
+                if(y > 0)
+                    _grid[x, y].Neighbors.Add(_grid[x, y - 1]);
+                if(y < GridSize.Y - 1)
+                    _grid[x, y].Neighbors.Add(_grid[x, y + 1]);
+                
+            }
+        }
     }
     
     private void CreateRandom() {

@@ -7,18 +7,49 @@ using GameEngine.SceneManagement;
 namespace ExampleGame.Pathfinding;
 
 public partial class Grid : Entity, ITransform {
+
+    public static Grid Instance;
     
     public Size GridSize { get; init; }
     public float NodeRadius { get; init; }
     private Node[,] _grid;
     private static Random _random;
+    private bool _hasSafeBorder = false;
     
     protected override void OnAwake() {
-        _random = new Random();
-        CreateRandom();
+        _random = new Random(Guid.NewGuid().GetHashCode());
+        CreateRandom(_hasSafeBorder);
         LinkNodes();
+        Instance = this;
     }
-
+    
+    public Node GetRandomBorderNode() {
+        if(_grid is null)
+            throw new NullReferenceException("Grid has not yet been build!");
+        bool isX = _random.Next(0, 2) == 0;
+        if(isX) {
+            
+            bool isOtherSide = _random.Next(0, 2) == 0;
+            int y = isOtherSide ? GridSize.Y - 1 : 0;
+            
+            int xIndex = _random.Next(0, GridSize.X);
+            
+            _grid[xIndex, y].IsValid = true;
+            
+            return _grid[xIndex, y];
+        } else {
+            
+            bool isOtherSide = _random.Next(0, 2) == 0;
+            int x = isOtherSide ? GridSize.X - 1 : 0;
+            
+            int yIndex = _random.Next(0, GridSize.Y);
+            
+            _grid[x, yIndex].IsValid = true;
+            
+            return _grid[x, yIndex];
+        }
+    }
+    
     private void LinkNodes() {
         for(int x = 0; x < GridSize.X; x++) {
             for(int y = 0; y < GridSize.Y; y++) {
@@ -37,8 +68,7 @@ public partial class Grid : Entity, ITransform {
         }
     }
     
-    private void CreateRandom() {
-
+    private void CreateRandom(bool hasSafeBorder) {
         if(GridSize.X < 2 || GridSize.Y < 2)
             throw new Exception("GridSize should at least be 2 units!");
         
@@ -54,7 +84,10 @@ public partial class Grid : Entity, ITransform {
             }
         }
         
-        //make sure there is a possible solution
+        if(!hasSafeBorder)
+            return;
+        
+        //make sure there is a possible solution by creating a safe border
         for(int x = 0; x < GridSize.X; x++) {
             _grid[0, x].IsValid = true;
             _grid[GridSize.Y - 1, x].IsValid = true;

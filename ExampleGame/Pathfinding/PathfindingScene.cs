@@ -14,10 +14,12 @@ public static class PathfindingScene {
         
         List<Entity> entities = new() {
             new DynamicCamera() {
-                Transform = { Position = new Vector3(5, 5, 0) }
+                Transform = { Position = new Vector3(10, 10, 0) },
+                Camera2D = { Zoom = 40 }
             },
+            new PathfindingAISpawner(),
             new Grid() {
-                GridSize = new Size(10, 10),
+                GridSize = new Size(20, 20),
                 NodeRadius = 1f
             }
         };

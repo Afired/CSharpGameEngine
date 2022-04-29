@@ -12,7 +12,6 @@ public partial class DynamicCamera : Entity, ITransform, ICamera3D, ICameraContr
     
     protected override void OnAwake() {
         base.OnAwake();
-        Camera2D.Zoom = 50;
         Camera3D.FieldOfView = 75;
         Camera3D.NearPlaneDistance = 0.01f;
         Camera3D.FarPlaneDistance = 100f;

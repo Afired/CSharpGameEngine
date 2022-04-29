@@ -33,5 +33,9 @@ public partial class Node : Entity, IRenderer, ITransform {
     private void RefreshTexture() {
         Renderer!.Texture = IsValid ? "Box" : "Checkerboard";
     }
+
+    public void UpdateHCost(Node other) {
+        HCost = (int) (Transform.Position - other.Transform.Position).Magnitude;
+    }
     
 }

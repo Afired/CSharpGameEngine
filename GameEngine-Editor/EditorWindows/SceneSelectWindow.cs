@@ -1,3 +1,4 @@
+using ExampleGame.Pathfinding;
 using ExampleGame.Scenes;
 using GameEngine.SceneManagement;
 using ImGuiNET;
@@ -11,11 +12,14 @@ public class SceneSelectWindow : EditorWindow {
     }
     
     protected override void Draw() {
-        if(ImGui.Button("TestScene")) {
+        if(ImGui.Button("Test Scene")) {
             Hierarchy.LoadScene(TestScene.Get());
         }
-        if(ImGui.Button("RigidBodyScene")) {
+        if(ImGui.Button("RigidBody Scene")) {
             Hierarchy.LoadScene(RigidBodyScene.Get());
+        }
+        if(ImGui.Button("A* Pathfinding Scene")) {
+            Hierarchy.LoadScene(PathfindingScene.Get());
         }
     }
     

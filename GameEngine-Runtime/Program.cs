@@ -13,7 +13,7 @@ internal class Program {
         
         Application.Initialize();
         //RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
-        Hierarchy.LoadScene(TestScene.Get());
+        Hierarchy.LoadScene(PathfindingScene.Get());
         Application.Run();
         
         return 0;

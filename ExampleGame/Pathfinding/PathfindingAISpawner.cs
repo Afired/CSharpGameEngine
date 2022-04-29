@@ -1,0 +1,42 @@
+using System;
+using GameEngine.Core;
+using GameEngine.Entities;
+using GameEngine.Input;
+using GameEngine.SceneManagement;
+
+namespace ExampleGame.Pathfinding; 
+
+public partial class PathfindingAISpawner : Entity {
+    
+    private float _cooldown = 1f;
+    private float _currentTime;
+    
+    protected override void OnUpdate() {
+        _currentTime -= Time.DeltaTime;
+        if(_currentTime > 0)
+            return;
+        if(Input.IsKeyDown(KeyCode.E)) {
+            SpawnPathfindingAI();
+            _currentTime = _cooldown;
+        }
+    }
+
+    private void SpawnPathfindingAI() {
+
+        Grid grid = Grid.Instance;
+
+        Random random = new();
+
+        Node startNode = grid.GetRandomBorderNode();
+        Node endNode = grid.GetRandomBorderNode();
+        
+        PathfindingAI pathfindingAi = new() {
+            StartNode = startNode,
+            EndNode = endNode,
+        };
+        Hierarchy.AddEntity(pathfindingAi);
+        startNode.Renderer.Shader = "";
+        endNode.Renderer.Shader = "";
+    }
+    
+}

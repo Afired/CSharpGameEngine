@@ -1,6 +1,5 @@
-﻿using ExampleGame.Scenes;
+﻿using ExampleGame.Pathfinding;
 using GameEngine.Core;
-using GameEngine.Rendering;
 using GameEngine.SceneManagement;
 
 namespace Runtime;
@@ -12,8 +11,7 @@ internal class Program {
         SetConfig();
         
         Application.Initialize();
-        //RenderingEngine.OnLoad += () => Hierarchy.LoadScene(TestScene.Get());
-        Hierarchy.LoadScene(TestScene.Get());
+        Hierarchy.LoadScene(PathfindingScene.Get());
         Application.Run();
         
         return 0;

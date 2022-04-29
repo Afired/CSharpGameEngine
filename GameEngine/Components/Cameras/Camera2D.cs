@@ -11,7 +11,7 @@ namespace GameEngine.Rendering.Cameras;
 /// </summary>
 [RequireComponent(typeof(Transform))]
 public partial class Camera2D : BaseCamera {
-
+    
     public float Zoom { get; set; } = 50;
     
     

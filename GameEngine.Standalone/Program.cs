@@ -2,7 +2,7 @@
 using GameEngine.Core.Core;
 using GameEngine.Core.SceneManagement;
 
-namespace Runtime;
+namespace GameEngine.Standalone;
 
 internal class Program {
     

@@ -10,15 +10,20 @@ public partial class Grid : Entity, ITransform {
 
     public static Grid Instance;
     
-    public Size GridSize { get; init; }
-    public float NodeRadius { get; init; }
+    public Size GridSize { get; init; } = new Size(20, 20);
+    public uint ValidNodeProbability { get; init; } = 0;
+    public bool HasSafeBorder { get; init; } = true;
+    public bool ConnectNodesDiagonal { get; init; } = true;
+    public bool ConnectNodesStraight { get; init; } = true;
+    public int StraightConnectionCost { get; init; } = 10;
+    public int DiagonalConnectionCost { get; init; } = 14; // 14: prefers diagonal | 30: prefers straight over diagonal if its not too complicated
+    public float NodeSpacing { get; init; } = 1f;
     private Node[,] _grid;
     private static Random _random;
-    private bool _hasSafeBorder = false;
     
     protected override void OnAwake() {
         _random = new Random(Guid.NewGuid().GetHashCode());
-        CreateRandom(_hasSafeBorder);
+        CreateRandom(HasSafeBorder);
         LinkNodes();
         Instance = this;
     }
@@ -53,16 +58,33 @@ public partial class Grid : Entity, ITransform {
     private void LinkNodes() {
         for(int x = 0; x < GridSize.X; x++) {
             for(int y = 0; y < GridSize.Y; y++) {
+
+                if(ConnectNodesStraight) {
+                    
+                    if(x > 0)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y], StraightConnectionCost));
+                    if(x < GridSize.X - 1)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y], StraightConnectionCost));
                 
-                if(x > 0)
-                    _grid[x, y].Neighbors.Add(_grid[x - 1, y]);
-                if(x < GridSize.X - 1)
-                    _grid[x, y].Neighbors.Add(_grid[x + 1, y]);
-                
-                if(y > 0)
-                    _grid[x, y].Neighbors.Add(_grid[x, y - 1]);
-                if(y < GridSize.Y - 1)
-                    _grid[x, y].Neighbors.Add(_grid[x, y + 1]);
+                    if(y > 0)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x, y - 1], StraightConnectionCost));
+                    if(y < GridSize.Y - 1)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x, y + 1], StraightConnectionCost));
+                    
+                }
+
+                if(ConnectNodesDiagonal) {
+                    
+                    if(x > 0 && y > 0)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y - 1], DiagonalConnectionCost));
+                    if(x > 0 && y < GridSize.Y - 1)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y + 1], DiagonalConnectionCost));
+                    if(x < GridSize.X - 1 && y > 0)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y - 1], DiagonalConnectionCost));
+                    if(x < GridSize.X - 1 && y < GridSize.Y - 1)
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y + 1], DiagonalConnectionCost));
+                    
+                }
                 
             }
         }
@@ -75,9 +97,10 @@ public partial class Grid : Entity, ITransform {
         _grid = new Node[GridSize.X, GridSize.Y];
         for(int x = 0; x < GridSize.X; x++) {
             for(int y = 0; y < GridSize.Y; y++) {
+                
                 Node newNode = new() {
-                    Transform = { Position = Transform.Position + new Vector3(x * NodeRadius, y * NodeRadius, 0) },
-                    IsValid = _random.Next(0, 4) != 0,
+                    Transform = { Position = Transform.Position + new Vector3(x * NodeSpacing, y * NodeSpacing, 0) },
+                    IsValid = _random.Next(0, (int) ValidNodeProbability + 1) != 0,
                 };
                 Hierarchy.AddEntity(newNode);
                 _grid[x, y] = newNode;

@@ -15,14 +15,14 @@ public partial class Node : Entity, IRenderer, ITransform {
         }
     }
     
-    // distance to starting node
+    // cost from starting node
     public int GCost { get; set; }
     // distance to end node
     public int HCost { get; set; }
     // combined cost
     public int FCost => GCost + HCost;
     
-    public List<Node> Neighbors { get; set; } = new();
+    public List<Edge> Edges { get; set; } = new();
     public Node Parent { get; set; }
 
     protected override void OnAwake() {

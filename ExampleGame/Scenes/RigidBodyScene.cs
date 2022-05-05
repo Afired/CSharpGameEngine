@@ -6,14 +6,13 @@ using GameEngine.Numerics;
 
 namespace ExampleGame.Scenes; 
 
-public static class RigidBodyScene {
+public class RigidBodyScene : Scene {
 
-    public static Scene Get() {
+    public RigidBodyScene() {
+        Name = "RigidBody Scene";
         
-        string name = "RigidBody Scene";
-
-        List<Entity> _entities = new List<Entity>() {
-
+        _entities = new List<Entity>() {
+            
             new PhysicsQuad() {
                 Transform = { Position = new Vector3(0, 10, 0) },
                 Renderer = { Texture = "Checkerboard", Shader = "default" }
@@ -32,8 +31,6 @@ public static class RigidBodyScene {
             }
             
         };
-        
-        return new Scene(name, _entities);
     }
     
 }

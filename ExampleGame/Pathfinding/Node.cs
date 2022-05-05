@@ -15,7 +15,7 @@ public partial class Node : Entity, IRenderer, ITransform {
         }
     }
     
-    // distance to starting node
+    // cost from starting node
     public int GCost { get; set; }
     // distance to end node
     public int HCost { get; set; }

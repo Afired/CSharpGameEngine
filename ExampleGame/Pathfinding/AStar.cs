@@ -27,24 +27,30 @@ public class AStar {
             if(current == endNode)
                 break;
             
-            foreach(Node neighborNode in current.Neighbors) {
-                if(!neighborNode.IsValid)
+            foreach((Node node, int cost) neighbor in current.Neighbors) {
+                if(!neighbor.node.IsValid)
                     continue;
-                if(closed.Contains(neighborNode))
+                if(closed.Contains(neighbor.node))
                     continue;
 
-                if(!open.Contains(neighborNode)) { // new node
+                if(!open.Contains(neighbor.node)) { // new node
                     // set FCost of neighborNode
-                    neighborNode.GCost = current.GCost + 10;
-                    neighborNode.UpdateHCost(endNode);
-                    neighborNode.Parent = current;
+                    neighbor.node.GCost = current.GCost + neighbor.cost;
+                    neighbor.node.UpdateHCost(endNode);
+                    neighbor.node.Parent = current;
                     
-                    open.Add(neighborNode);
-                }/* else if() { // path to neighbor is shorter than previous calculated
-                    // update node
-                    neighborNode.GCost = current.GCost + 10;
-                    neighborNode.Parent = current;
-                }*/
+                    open.Add(neighbor.node);
+                }
+                
+                else { // previous calculated
+                    int newGCost = current.GCost + neighbor.cost;
+                    if(neighbor.node.GCost > newGCost) { // path to neighbor is shorter than previous calculated
+                        // update node
+                        neighbor.node.GCost = newGCost;
+                        neighbor.node.Parent = current;
+                    }
+                }
+                
             }
         }
         

@@ -1,6 +1,6 @@
 ﻿using ExampleGame.Pathfinding;
-using GameEngine.Core;
-using GameEngine.SceneManagement;
+using GameEngine.Core.Core;
+using GameEngine.Core.SceneManagement;
 
 namespace Runtime;
 

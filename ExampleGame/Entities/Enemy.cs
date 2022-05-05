@@ -1,6 +1,6 @@
 using ExampleGame.Components;
-using GameEngine.Components;
-using GameEngine.Entities;
+using GameEngine.Core.Components;
+using GameEngine.Core.Entities;
 
 namespace ExampleGame.Entities; 
 

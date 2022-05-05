@@ -1,5 +1,5 @@
-﻿using GameEngine.Core;
-using GameEngine.Physics;
+﻿using GameEngine.Core.Core;
+using GameEngine.Core.Physics;
 using NUnit.Framework;
 
 namespace UnitTesting;

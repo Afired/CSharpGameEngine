@@ -1,5 +1,4 @@
 using GameEngine.Editor.EditorWindows;
-using GameEngine.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor; 

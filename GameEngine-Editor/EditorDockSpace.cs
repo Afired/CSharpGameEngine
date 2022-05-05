@@ -1,4 +1,4 @@
-using GameEngine.Rendering;
+using GameEngine.Core.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor; 

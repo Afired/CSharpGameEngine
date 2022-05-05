@@ -1,10 +1,10 @@
 using ExampleGame.Components;
-using GameEngine.Components;
-using GameEngine.Debugging;
-using GameEngine.Entities;
-using GameEngine.Input;
-using GameEngine.Rendering;
-using GameEngine.Rendering.Cameras;
+using GameEngine.Core.Components;
+using GameEngine.Core.Debugging;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Input;
+using GameEngine.Core.Rendering;
+using GameEngine.Core.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
 

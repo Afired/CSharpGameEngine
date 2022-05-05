@@ -1,9 +1,9 @@
 using ExampleGame.Entities;
-using GameEngine.AutoGenerator;
-using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Debugging;
-using GameEngine.SceneManagement;
+using GameEngine.Core.AutoGenerator;
+using GameEngine.Core.Components;
+using GameEngine.Core.Core;
+using GameEngine.Core.Debugging;
+using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Components; 
 

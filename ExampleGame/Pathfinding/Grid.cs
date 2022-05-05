@@ -1,13 +1,13 @@
 using System;
-using GameEngine.Components;
-using GameEngine.Entities;
-using GameEngine.Numerics;
-using GameEngine.SceneManagement;
+using GameEngine.Core.Components;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Numerics;
+using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Pathfinding;
 
 public partial class Grid : Entity, ITransform {
-
+    
     public static Grid Instance;
     
     public Size GridSize { get; init; } = new Size(20, 20);

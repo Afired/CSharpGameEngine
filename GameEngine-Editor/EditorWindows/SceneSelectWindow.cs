@@ -1,6 +1,6 @@
 using System.Reflection;
-using ExampleGame.Scenes;
-using GameEngine.SceneManagement;
+using GameEngine.Core;
+using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 

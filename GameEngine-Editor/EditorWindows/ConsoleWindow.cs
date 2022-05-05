@@ -1,5 +1,5 @@
 using System.Numerics;
-using GameEngine.Debugging;
+using GameEngine.Core.Debugging;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 

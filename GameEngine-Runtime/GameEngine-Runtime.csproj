@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ExampleGame\ExampleGame.csproj" />
-        <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
+        <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,8 +1,8 @@
-using GameEngine.Components;
-using GameEngine.Entities;
-using GameEngine.Numerics;
-using GameEngine.Rendering;
-using GameEngine.Rendering.Cameras;
+using GameEngine.Core.Components;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Numerics;
+using GameEngine.Core.Rendering;
+using GameEngine.Core.Rendering.Cameras;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows;

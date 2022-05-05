@@ -1,5 +1,6 @@
-using GameEngine.Entities;
-using GameEngine.SceneManagement;
+using GameEngine.Core;
+using GameEngine.Core.Entities;
+using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows;

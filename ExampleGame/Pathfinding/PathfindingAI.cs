@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Entities;
-using GameEngine.Numerics;
+using GameEngine.Core.Components;
+using GameEngine.Core.Core;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Pathfinding; 
 

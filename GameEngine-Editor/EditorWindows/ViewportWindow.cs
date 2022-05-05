@@ -1,7 +1,7 @@
 using System.Numerics;
-using GameEngine.Core;
-using GameEngine.Rendering;
-using GameEngine.SceneManagement;
+using GameEngine.Core.Core;
+using GameEngine.Core.Rendering;
+using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 

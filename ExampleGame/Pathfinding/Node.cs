@@ -22,7 +22,7 @@ public partial class Node : Entity, IRenderer, ITransform {
     // combined cost
     public int FCost => GCost + HCost;
     
-    public List<(Node node, int cost)> Neighbors { get; set; } = new();
+    public List<Edge> Edges { get; set; } = new();
     public Node Parent { get; set; }
 
     protected override void OnAwake() {

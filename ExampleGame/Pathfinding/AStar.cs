@@ -27,27 +27,27 @@ public class AStar {
             if(current == endNode)
                 break;
             
-            foreach((Node node, int cost) neighbor in current.Neighbors) {
-                if(!neighbor.node.IsValid)
+            foreach(Edge edge in current.Edges) {
+                if(!edge.ConnectedNode.IsValid)
                     continue;
-                if(closed.Contains(neighbor.node))
+                if(closed.Contains(edge.ConnectedNode))
                     continue;
 
-                if(!open.Contains(neighbor.node)) { // new node
+                if(!open.Contains(edge.ConnectedNode)) { // new node
                     // set FCost of neighborNode
-                    neighbor.node.GCost = current.GCost + neighbor.cost;
-                    neighbor.node.UpdateHCost(endNode);
-                    neighbor.node.Parent = current;
+                    edge.ConnectedNode.GCost = current.GCost + edge.Cost;
+                    edge.ConnectedNode.UpdateHCost(endNode);
+                    edge.ConnectedNode.Parent = current;
                     
-                    open.Add(neighbor.node);
+                    open.Add(edge.ConnectedNode);
                 }
                 
                 else { // previous calculated
-                    int newGCost = current.GCost + neighbor.cost;
-                    if(neighbor.node.GCost > newGCost) { // path to neighbor is shorter than previous calculated
+                    int newGCost = current.GCost + edge.Cost;
+                    if(edge.ConnectedNode.GCost > newGCost) { // path to neighbor is shorter than previous calculated
                         // update node
-                        neighbor.node.GCost = newGCost;
-                        neighbor.node.Parent = current;
+                        edge.ConnectedNode.GCost = newGCost;
+                        edge.ConnectedNode.Parent = current;
                     }
                 }
                 

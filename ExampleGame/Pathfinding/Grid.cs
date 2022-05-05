@@ -62,27 +62,27 @@ public partial class Grid : Entity, ITransform {
                 if(ConnectNodesStraight) {
                     
                     if(x > 0)
-                        _grid[x, y].Neighbors.Add((_grid[x - 1, y], StraightConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y], StraightConnectionCost));
                     if(x < GridSize.X - 1)
-                        _grid[x, y].Neighbors.Add((_grid[x + 1, y], StraightConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y], StraightConnectionCost));
                 
                     if(y > 0)
-                        _grid[x, y].Neighbors.Add((_grid[x, y - 1], StraightConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x, y - 1], StraightConnectionCost));
                     if(y < GridSize.Y - 1)
-                        _grid[x, y].Neighbors.Add((_grid[x, y + 1], StraightConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x, y + 1], StraightConnectionCost));
                     
                 }
 
                 if(ConnectNodesDiagonal) {
                     
                     if(x > 0 && y > 0)
-                        _grid[x, y].Neighbors.Add((_grid[x - 1, y - 1], DiagonalConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y - 1], DiagonalConnectionCost));
                     if(x > 0 && y < GridSize.Y - 1)
-                        _grid[x, y].Neighbors.Add((_grid[x - 1, y + 1], DiagonalConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x - 1, y + 1], DiagonalConnectionCost));
                     if(x < GridSize.X - 1 && y > 0)
-                        _grid[x, y].Neighbors.Add((_grid[x + 1, y - 1], DiagonalConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y - 1], DiagonalConnectionCost));
                     if(x < GridSize.X - 1 && y < GridSize.Y - 1)
-                        _grid[x, y].Neighbors.Add((_grid[x + 1, y + 1], DiagonalConnectionCost));
+                        _grid[x, y].Edges.Add(new Edge(_grid[x + 1, y + 1], DiagonalConnectionCost));
                     
                 }
                 

@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Editor; 
+namespace GameEngine.Editor; 
 
 internal static class CursorPosition {
     [StructLayout(LayoutKind.Sequential)]

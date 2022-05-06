@@ -117,10 +117,6 @@ namespace GameEngine.SourceGenerator.Tracked {
                     
                     string className = classSymbol.Name;
                     var interfaceName = $"I{className}";
-
-                    if(className.Contains("MyTestComponent")) {
-                        Console.WriteLine("debug here");
-                    }
                     
                     string[] requiredComponentsNames = null;
                     var attributeData1 = classSymbol.GetAttributes().FirstOrDefault(attribute =>

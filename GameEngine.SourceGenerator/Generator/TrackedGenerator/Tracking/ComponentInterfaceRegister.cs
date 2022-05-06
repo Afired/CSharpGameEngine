@@ -5,8 +5,8 @@ namespace GameEngine.SourceGenerator.Tracked.Tracking {
     
     internal static class ComponentInterfaceRegister {
         
-        private static List<ComponentInterfaceDefinition> _definitionsFromThis;
-        private static List<ComponentInterfaceDefinition> _definitionsFromOthers;
+        private static readonly List<ComponentInterfaceDefinition> _definitionsFromThis;
+        private static readonly List<ComponentInterfaceDefinition> _definitionsFromOthers;
 
         public static ComponentInterfaceDefinition[] AllDefinitions;
         private static int _definitionsFromThisCount;

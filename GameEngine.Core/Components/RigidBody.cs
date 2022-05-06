@@ -1,6 +1,5 @@
 using Box2D.NetStandard.Dynamics.Bodies;
-using GameEngine.Core.AutoGenerator;
-using Vector3 = GameEngine.Core.Numerics.Vector3;
+using GameEngine.Core.SourceGenerator;
 
 namespace GameEngine.Core.Components; 
 

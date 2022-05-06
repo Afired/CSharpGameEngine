@@ -1,8 +1,7 @@
-﻿using GameEngine.Core.AutoGenerator;
+﻿using GameEngine.Core.SourceGenerator;
 using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
-using GameEngine.Core.Entities;
 
 namespace GameEngine.Core.Rendering.Cameras;
 

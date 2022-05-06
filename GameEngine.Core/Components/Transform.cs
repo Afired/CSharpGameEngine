@@ -1,6 +1,4 @@
-﻿using GameEngine.Core.AutoGenerator;
-using GameEngine.Core.Numerics;
-using GameEngine.Core.Entities;
+﻿using GameEngine.Core.Numerics;
 
 namespace GameEngine.Core.Components;
 

@@ -1,7 +1,7 @@
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
-using GameEngine.Core.AutoGenerator;
+using GameEngine.Core.SourceGenerator;
 using GameEngine.Core.Physics;
 using Vector2 = System.Numerics.Vector2;
 

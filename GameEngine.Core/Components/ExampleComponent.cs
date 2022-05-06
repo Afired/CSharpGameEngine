@@ -1,5 +1,4 @@
-using GameEngine.Core.AutoGenerator;
-using GameEngine.Core.Entities;
+using GameEngine.Core.SourceGenerator;
 
 namespace GameEngine.Core.Components;
 

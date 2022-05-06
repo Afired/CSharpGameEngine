@@ -2,7 +2,7 @@
 using GameEngine.Core.Physics;
 using NUnit.Framework;
 
-namespace UnitTesting;
+namespace GameEngine.UnitTesting;
 
 internal static class Program {
 

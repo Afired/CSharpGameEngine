@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine.Core", "GameEngi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame", "ExampleGame\ExampleGame.csproj", "{DEF3E22C-8735-4687-98C8-6DC2704BA153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{E828E771-EDDF-46CF-A984-5926C1E6C0B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine.UnitTesting", "GameEngine.UnitTesting\GameEngine.UnitTesting.csproj", "{E828E771-EDDF-46CF-A984-5926C1E6C0B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine.Editor", "GameEngine.Editor\GameEngine.Editor.csproj", "{E4AE33B5-5632-4817-8081-2D9469E3471E}"
 EndProject

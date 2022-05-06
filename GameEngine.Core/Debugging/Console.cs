@@ -18,7 +18,7 @@ public static class Console {
     public static void LogWarning(string message) {
         if(!Configuration.DoDebugWarnings) 
             return;
-        Log("A Waring occured: ", message, ConsoleColor.Yellow, LogSeverity.Warning);
+        Log("A Warning occurred: ", message, ConsoleColor.Yellow, LogSeverity.Warning);
     }
     
     public static void LogError(string message) {

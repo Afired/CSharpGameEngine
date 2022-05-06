@@ -1,0 +1,2 @@
+- we have to track the added classes and information about them ourself to use it in other generators
+- because the generators are still executed on a per assembly basis, we can only track component interfaces that are in the current assembly, however in this case we can use the semantic model to retrieve information about the component interfaces since the referenced assembly should be compiled first

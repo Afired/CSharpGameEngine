@@ -1,13 +1,9 @@
-using GameEngine.Components;
+using ExampleGame.Components;
+using GameEngine.Core.Components;
+using GameEngine.Core.Entities;
 
 namespace ExampleGame.Entities; 
 
-public class PhysicsQuad : Quad, IRigidBody {
-    
-    public RigidBody RigidBody { get; set; }
-
-    public PhysicsQuad(string texture, string shader) : base(texture, shader) {
-        RigidBody = new RigidBody(this);
-    }
+public partial class PhysicsQuad : Entity, IRenderer, IRigidBody {
     
 }

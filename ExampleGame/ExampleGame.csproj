@@ -3,14 +3,14 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <OutputType>Exe</OutputType>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
+        <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj" />
+        <ProjectReference Include="..\GameEngine.SourceGenerator\GameEngine.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
-
+    
     <ItemGroup>
         <None Update="Assets\**\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

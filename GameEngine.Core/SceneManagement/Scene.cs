@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GameEngine.Core.Entities;
 
-namespace GameEngine.Core; 
+namespace GameEngine.Core.SceneManagement; 
 
 public class Scene {
     

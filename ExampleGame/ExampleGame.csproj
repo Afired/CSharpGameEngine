@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\GameEngine\GameEngine.csproj" />
-        <ProjectReference Include="..\GameEngine-SourceGenerator\GameEngine-SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj" />
+        <ProjectReference Include="..\GameEngine.SourceGenerator\GameEngine.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     
     <ItemGroup>

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using ExampleGame.Entities;
-using GameEngine;
-using GameEngine.Entities;
-using GameEngine.Numerics;
-using GameEngine.Rendering;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Numerics;
+using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Scenes; 
 

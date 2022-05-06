@@ -1,7 +1,7 @@
-using GameEngine.AutoGenerator;
-using GameEngine.Components;
-using GameEngine.Core;
-using GameEngine.Numerics;
+using GameEngine.Core.SourceGenerator;
+using GameEngine.Core.Components;
+using GameEngine.Core.Core;
+using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Components; 
 

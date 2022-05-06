@@ -1,7 +1,7 @@
-using GameEngine.Components;
-using GameEngine.Entities;
-using GameEngine.Rendering;
-using GameEngine.Rendering.Cameras;
+using GameEngine.Core.Components;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Rendering;
+using GameEngine.Core.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
 

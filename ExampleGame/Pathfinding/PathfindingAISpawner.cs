@@ -1,8 +1,8 @@
 using System;
-using GameEngine.Core;
-using GameEngine.Entities;
-using GameEngine.Input;
-using GameEngine.SceneManagement;
+using GameEngine.Core.Core;
+using GameEngine.Core.Entities;
+using GameEngine.Core.Input;
+using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Pathfinding; 
 

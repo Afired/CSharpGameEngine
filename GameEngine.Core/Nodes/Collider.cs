@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Input;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
@@ -8,7 +7,7 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class Collider : Node, ICloneable {
+public partial class Collider : Transform {
     
     protected Body Body { get; private set; }
     protected BodyType BodyType = BodyType.Dynamic;
@@ -24,8 +23,8 @@ public partial class Collider : Node, ICloneable {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(Transform.Position.X, Transform.Position.Y),
-            angle = Transform.Rotation
+            position = new Vector2(Position.X, Position.Y),
+            angle = Rotation
         };
         
         PolygonShape dynamicBox = new PolygonShape();

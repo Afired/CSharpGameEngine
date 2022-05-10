@@ -6,7 +6,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class Renderer : Node {
+public partial class Renderer : Transform {
 
     public string Texture { get; set; } = "checkerboard";
     public string Shader { get; set; } = "default";
@@ -16,11 +16,9 @@ public partial class Renderer : Node {
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
         
-        Transform transform = Transform;
-        
-        Matrix4x4 trans = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, transform.Position.Z);
-        Matrix4x4 sca = Matrix4x4.CreateScale(transform.Scale.X, transform.Scale.Y, transform.Scale.Z);
-        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(transform.Rotation);
+        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
+        Matrix4x4 sca = Matrix4x4.CreateScale(Scale.X, Scale.Y, Scale.Z);
+        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(Rotation);
         
         ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
         ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());

@@ -6,7 +6,7 @@ using GameEngine.Core.Physics;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class Trigger : Node {
+public partial class Trigger : Transform {
     
     protected Body Body { get; private set; }
     protected BodyType BodyType = BodyType.Dynamic;
@@ -17,16 +17,16 @@ public partial class Trigger : Node {
     }
     
     protected override void OnPhysicsUpdate() {
-        Vector2 position = new Vector2(Transform.Position.X, Transform.Position.Y);
-        Body.SetTransform(position, Transform.Rotation);
+        Vector2 position = new Vector2(Position.X, Position.Y);
+        Body.SetTransform(position, Rotation);
     }
     
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(Transform.Position.X, Transform.Position.Y),
-            angle = Transform.Rotation,
+            position = new Vector2(Position.X, Position.Y),
+            angle = Rotation,
             awake = true,
             allowSleep = false,
             gravityScale = 0

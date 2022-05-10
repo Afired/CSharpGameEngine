@@ -23,7 +23,7 @@ namespace GameEngine.SourceGenerator.Tracked {
                 AssemblyScanner.ScanThisAssembly(context);
                 NodeRegister.Resolve();
                 NodeInterfaceGenerator.Execute(context);
-                //PartialNodeGenerator.Execute(context);
+                PartialNodeGenerator.Execute(context);
 //                PartialComponentGenerator.Execute(context);
 //                PartialEntityGenerator.Execute(context);
             } catch(Exception exception) {

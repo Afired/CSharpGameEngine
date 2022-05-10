@@ -18,25 +18,25 @@ namespace GameEngine.SourceGenerator.Tracked {
                 StringBuilder propertiesSb = new StringBuilder();
                 StringBuilder initializationSb = new StringBuilder();
                 StringBuilder addToComponentsListSb = new StringBuilder();
-                foreach(NodeDefinition required in node.GetAllChildNodes()) {
+                foreach(NodeDefinition childNode in node.GetAllChildNodes()) {
                     propertiesSb.Append("    public ");
-                    propertiesSb.Append(required.Namespace);
+                    propertiesSb.Append(childNode.Namespace);
                     propertiesSb.Append('.');
-                    propertiesSb.Append(required.ClassName);
+                    propertiesSb.Append(childNode.ClassName);
                     propertiesSb.Append(' ');
-                    propertiesSb.Append(required.ClassName);
+                    propertiesSb.Append(childNode.ClassName);
                     propertiesSb.Append(" { get; }\n");
                             
                     initializationSb.Append("        ");
-                    initializationSb.Append(required.ClassName);
+                    initializationSb.Append(childNode.ClassName);
                     initializationSb.Append(" = new ");
-                    initializationSb.Append(required.Namespace);
+                    initializationSb.Append(childNode.Namespace);
                     initializationSb.Append('.');
-                    initializationSb.Append(required.ClassName);
+                    initializationSb.Append(childNode.ClassName);
                     initializationSb.Append("(this);\n");
                     
                     addToComponentsListSb.Append("        ChildNodes.Add(");
-                    addToComponentsListSb.Append(required.ClassName);
+                    addToComponentsListSb.Append(childNode.ClassName);
                     addToComponentsListSb.Append(");\n");
                 }
                 string properties = propertiesSb.ToString();

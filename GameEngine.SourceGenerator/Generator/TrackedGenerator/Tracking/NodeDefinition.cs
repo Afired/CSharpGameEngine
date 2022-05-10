@@ -47,7 +47,7 @@ namespace GameEngine.SourceGenerator.Tracked.Tracking {
                     requiredComponentsIndices.Add(index);
                 */
 
-                if(TryGetIndexFromMatchingNodeName(current, out int index)) {
+                if(TryGetIndexFromMatchingInterfaceName(current, out int index)) {
                     requiredComponentsIndices.Add(index);
                 }
             }
@@ -85,10 +85,10 @@ namespace GameEngine.SourceGenerator.Tracked.Tracking {
             return false;
         }
         
-        private static bool TryGetIndexFromMatchingNodeName(string nodeName, out int index) {
+        private static bool TryGetIndexFromMatchingInterfaceName(string nodeName, out int index) {
             index = 0;
             foreach(NodeDefinition definition in NodeRegister.AllDefinitions) {
-                if(definition.ClassName == nodeName)
+                if(definition.InterfaceName == nodeName)
                     return true;
                 index++;
             }

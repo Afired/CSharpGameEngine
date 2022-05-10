@@ -1,22 +1,24 @@
+using System.Numerics;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
-using GameEngine.Core.Ecs;
 using GameEngine.Core.Physics;
-using Vector2 = System.Numerics.Vector2;
 
-namespace GameEngine.Core.Components; 
+namespace GameEngine.Core.Nodes; 
 
-public partial class Collider : Node {
+public partial class Trigger : Node {
     
     protected Body Body { get; private set; }
     protected BodyType BodyType = BodyType.Dynamic;
-    protected float Density = 1.0f;
-    protected float Friction = 0.3f;
     
     
     protected override void OnAwake() {
         CreateBody();
+    }
+    
+    protected override void OnPhysicsUpdate() {
+        Vector2 position = new Vector2(Transform.Position.X, Transform.Position.Y);
+        Body.SetTransform(position, Transform.Rotation);
     }
     
     private void CreateBody() {
@@ -24,7 +26,10 @@ public partial class Collider : Node {
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
             position = new Vector2(Transform.Position.X, Transform.Position.Y),
-            angle = Transform.Rotation
+            angle = Transform.Rotation,
+            awake = true,
+            allowSleep = false,
+            gravityScale = 0
         };
         
         PolygonShape dynamicBox = new PolygonShape();
@@ -32,9 +37,9 @@ public partial class Collider : Node {
 
         FixtureDef dynamicFixtureDef = new FixtureDef() {
             shape = dynamicBox,
-            density = Density,
-            friction = Friction,
-            isSensor = false,
+            density = 0f,
+            friction = 0f,
+            isSensor = true,
         };
         
         Body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
@@ -44,8 +49,8 @@ public partial class Collider : Node {
         Body.CreateFixture(dynamicFixtureDef);
     }
 
-    internal void BeginCollision(Collider other) => OnBeginCollision(other);
+    internal void BeginTrigger(Trigger other) => OnBeginTrigger(other);
     
-    protected virtual void OnBeginCollision(Collider other) { }
+    protected virtual void OnBeginTrigger(Trigger other) { }
     
 }

@@ -1,12 +1,10 @@
-﻿using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
+﻿using GameEngine.Core.Ecs;
 using GameEngine.Core.Input;
 using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Components; 
 
-[RequireComponent(typeof(Movable), typeof(Blaster))]
-public partial class PlayerControls : Component {
+public partial class PlayerControls : Node {
     
     private Vector2 _inputAxis;
     

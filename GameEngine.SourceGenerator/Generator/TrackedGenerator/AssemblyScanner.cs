@@ -12,57 +12,92 @@ namespace GameEngine.SourceGenerator.Tracked {
     //reference: https://stackoverflow.com/questions/68055210/generate-source-based-on-other-assembly-classes-c-source-generator
     internal static class AssemblyScanner {
         
-        private const string COMPONENT_BASECLASS_NAME = "Component";
-        private const string DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME = "DoNotGenerateComponentInterface";
-        private const string REQUIRE_COMPONENT_ATTRIBUTE_NAME = "RequireComponent";
+        private const string NODE_BASECLASS_NAME = "Node";
+        private const string GAME_ENGINE_CORE_ASSEMBLY_NAME = "GameEngine.Core";
         
-        internal static void ScanOtherAssemblies(GeneratorExecutionContext context) {
+        
+        internal static void ScanThisAssembly(GeneratorExecutionContext context) {
             
-            // if it doesnt reference the assembly just return
-            if(!context.Compilation.SourceModule.ReferencedAssemblySymbols.Any(q => q.Identity.Name == "GameEngine.Core"))
-                return;
+            // get all files with class declarations
+            var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
             
-            // retrieve referenced assembly symbols
-            IAssemblySymbol assemblySymbol = context.Compilation.SourceModule.ReferencedAssemblySymbols.FirstOrDefault(q => q.Identity.Name == "GameEngine.Core");
-            
-            foreach(INamedTypeSymbol typeSymbol in GetNamedTypeSymbols(assemblySymbol.GlobalNamespace)) {
-                if(!typeSymbol.IsDerivedFromType(COMPONENT_BASECLASS_NAME))
-                    continue;
-                if(typeSymbol.IsAbstract)
-                    continue;
-                //if(HasAttribute(typeSymbol, DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
-                //    continue;
+            foreach(SyntaxTree file in files) {
                 
-                string[] requiredComponentsNames = null;
-                var attributeData1 = typeSymbol.GetAttributes().FirstOrDefault(attribute =>
-                    attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                    // exclude attributes with 0 arguments
-                    && attribute.ConstructorArguments.Length != 0);
-                if(attributeData1 != null) {
+                var semanticModel = context.Compilation.GetSemanticModel(file);
+                
+                foreach(ClassDeclarationSyntax classSyntax in file.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
                     
-                    TypedConstant firstArgument = attributeData1.ConstructorArguments[0];
+                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
                     
-                    switch(firstArgument.Kind) {
-                        case TypedConstantKind.Array:
-                            requiredComponentsNames = firstArgument.Values
-                                .Where(arg => arg.Value.ToString() != typeSymbol.ToString())  //GameEngine.Components.Transform != GameEngine.Components.ExampleComponent
-                                .Select(arg => arg.Value.ToString()).ToArray();
-                            break;
-                        case TypedConstantKind.Type:
-                            if(firstArgument.Value.ToString() == "?")
-                                requiredComponentsNames = Array.Empty<string>();
-                            else if(firstArgument.Value.ToString() != typeSymbol.Name)
-                                requiredComponentsNames = new string[] { firstArgument.Value.ToString() };
-                            break;
-                        default:
-                            requiredComponentsNames = Array.Empty<string>();
-                            break;
+                    // exclude abstract classes
+                    if(classSymbol.IsAbstract)
+                        continue;
+                    
+                    // exclude classes not derived from entity
+                    if(!classSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
+                        continue;
+                    
+                    // warn to use partial keyword
+                    if(!classSyntax.IsPartial()) {
+                        // these currently dont work on runtime, but when building solution
+                        Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classSyntax.GetLocation());
+                        context.ReportDiagnostic(diagnostic);
                     }
                     
+//                    string usingDirectives = file.GetUsingDirectives().Format();
+                    string @namespace = file.GetNamespace(classSyntax).Name.ToString();
+                    string className = classSymbol.Name;
+//                    string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
+                    string[] baseTypes = classSyntax.BaseList.Types.Select(type => type.ToString()).ToArray();
+                    
+                    NodeRegister.RegisterForThisAssembly(new NodeDefinition(
+                        @namespace,
+                        className,
+                        $"I{className}",
+                        baseTypes)
+                    );
                 }
-                ComponentInterfaceRegister.RegisterForOtherAssembly(new ComponentInterfaceDefinition(typeSymbol.ContainingNamespace.ToString(), $"I{typeSymbol.Name}", typeSymbol.Name, requiredComponentsNames));
             }
-            
+        }
+        
+//        internal static void ScanOtherAssemblies(GeneratorExecutionContext context) {
+//            
+//            // if it doesnt reference the assembly just return
+//            if(!context.Compilation.SourceModule.ReferencedAssemblySymbols.Any(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME))
+//                return;
+//            
+//            // retrieve referenced assembly symbols
+//            IAssemblySymbol assemblySymbol = context.Compilation.SourceModule.ReferencedAssemblySymbols.FirstOrDefault(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME);
+//            
+//            foreach(INamedTypeSymbol typeSymbol in GetNamedTypeSymbols(assemblySymbol.GlobalNamespace)) {
+//                if(!typeSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
+//                    continue;
+//                
+//                //? not sure
+//                if(typeSymbol.IsAbstract)
+//                    continue;
+//                
+//                if(typeSymbol)
+//                
+//                NodeRegister.RegisterForOtherAssembly(new NodeDefinition(
+//                    typeSymbol.ContainingNamespace.ToString(), 
+//                    $"I{typeSymbol.Name}", 
+//                    typeSymbol.Name, 
+//                    requiredComponentsNames)
+//                );
+//            }
+//            
+//        }
+        
+        internal static IEnumerable<NodeDefinition> GetComponentInterfaceDefinitionsFromBaseListSyntax(BaseListSyntax baseList) {
+            foreach(string baseTypeName in baseList.Types.Select(baseType => baseType.ToString())) {
+                if(NodeRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out NodeDefinition interfaceDefinition)) {
+                    yield return interfaceDefinition;
+                    foreach(NodeDefinition required in interfaceDefinition.GetAllChildNodes()) {
+                        yield return required;
+                    }
+                }
+            }
         }
         
         private static IEnumerable<INamedTypeSymbol> GetNamedTypeSymbols(INamespaceSymbol globalNamespace) {
@@ -85,68 +120,48 @@ namespace GameEngine.SourceGenerator.Tracked {
             }
         }
         
-        internal static void ScanThisAssembly(GeneratorExecutionContext context) {
-            
-            // get all files with class declarations
-            var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
-            
-            foreach(SyntaxTree file in files) {
-                
-                var semanticModel = context.Compilation.GetSemanticModel(file);
-                
-                foreach(ClassDeclarationSyntax classSyntax in file.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
-                    
-                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
-                    
-                    //exclude abstract classes
-                    if(classSymbol.IsAbstract)
-                        continue;
-                    
-                    // exclude classes not derived from component
-                    if(!classSymbol.IsDerivedFromType(COMPONENT_BASECLASS_NAME))
-                        continue;
-                    
-                    //exclude class that have [DontGeneratorComponentInterface] attribute
-                    if(classSyntax.HasAttribute(DO_NOT_GENERATE_COMPONENT_INTERFACE_ATTRIBUTE_NAME))
-                        break;
-                    
-                    string usingDirectives = file.GetUsingDirectives().Format();
-
-                    var @namespace = file.GetNamespace(classSyntax);
-                    string fileScopedNamespace = @namespace.AsFileScopedNamespaceText();
-                    
-                    string className = classSymbol.Name;
-                    var interfaceName = $"I{className}";
-                    
-                    string[] requiredComponentsNames = null;
-                    var attributeData1 = classSymbol.GetAttributes().FirstOrDefault(attribute =>
-                        attribute.AttributeClass.Name == REQUIRE_COMPONENT_ATTRIBUTE_NAME
-                        // exclude attributes with 0 arguments
-                        && attribute.ConstructorArguments.Length != 0);
-                    if(attributeData1 != null) {
-                        
-                        TypedConstant firstArgument = attributeData1.ConstructorArguments[0];
-                        
-                        switch(firstArgument.Kind) {
-                            case TypedConstantKind.Array:
-                                requiredComponentsNames = firstArgument.Values
-                                    .Where(arg => arg.Value.ToString() != classSymbol.Name)
-                                    .Select(arg => arg.Value.ToString()).ToArray();
-                                break;
-                            case TypedConstantKind.Type:
-                                if(firstArgument.Value.ToString() == "?")
-                                    requiredComponentsNames = Array.Empty<string>();
-                                else if(firstArgument.Value.ToString() != classSymbol.Name)
-                                    requiredComponentsNames = new string[] { firstArgument.Value.ToString() };
-                                break;
-                            default:
-                                requiredComponentsNames = Array.Empty<string>();
-                                break;
-                        }
-                    }
-                    ComponentInterfaceRegister.RegisterForThisAssembly(new ComponentInterfaceDefinition(@namespace.Name.ToString(), interfaceName, className, requiredComponentsNames));
-                }
-            }
-        }
+//        internal static void ScanThisAssembly(GeneratorExecutionContext context) {
+//            
+//            // get all files with class declarations
+//            var files = context.Compilation.SyntaxTrees.Where(st => st.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Any());
+//            
+//            foreach(SyntaxTree file in files) {
+//                
+//                var semanticModel = context.Compilation.GetSemanticModel(file);
+//                
+//                foreach(ClassDeclarationSyntax classSyntax in file.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>()) {
+//                    
+//                    INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
+//                    
+//                    if(!classSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
+//                        continue;
+//                    
+//                    //? not sure
+//                    if(classSymbol.IsAbstract)
+//                        continue;
+//                    
+//                    string usingDirectives = file.GetUsingDirectives().Format();
+//                    
+//                    var @namespace = file.GetNamespace(classSyntax);
+//                    string fileScopedNamespace = @namespace.AsFileScopedNamespaceText();
+//                    
+//                    string className = classSymbol.Name;
+//                    var interfaceName = $"I{className}";
+//
+//
+//                    string[] childNodeNames = null;
+//                    
+//                    string[] requiredComponentsNames = null;
+//                    
+//                    
+//                    NodeRegister.RegisterForThisAssembly(new NodeDefinition(
+//                        @namespace.Name.ToString(), 
+//                        interfaceName, 
+//                        className, 
+//                        requiredComponentsNames)
+//                    );
+//                }
+//            }
+//        }
     }
 }

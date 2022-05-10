@@ -1,11 +1,10 @@
-using GameEngine.Core.Ecs;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using Silk.NET.OpenGL;
 
-namespace GameEngine.Core.Components; 
+namespace GameEngine.Core.Nodes; 
 
 public partial class Renderer : Node {
 

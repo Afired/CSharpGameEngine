@@ -1,14 +1,13 @@
 using ExampleGame.Entities;
-using GameEngine.Core.SourceGenerator;
 using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Debugging;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class Blaster : Component {
+public partial class Blaster : Node {
 
     public bool IsShooting;
     public float Cooldown = 0.1f;

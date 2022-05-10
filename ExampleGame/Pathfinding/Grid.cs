@@ -18,7 +18,7 @@ public partial class Grid : GameEngine.Core.Entities.Node, ITransform {
     public int StraightConnectionCost { get; init; } = 10;
     public int DiagonalConnectionCost { get; init; } = 14; // 14: prefers diagonal | 30: prefers straight over diagonal if its not too complicated
     public float NodeSpacing { get; init; } = 1f;
-    private Node[,] _grid;
+    private PNode[,] _grid;
     private static Random _random;
     
     protected override void OnAwake() {
@@ -28,7 +28,7 @@ public partial class Grid : GameEngine.Core.Entities.Node, ITransform {
         Instance = this;
     }
     
-    public Node GetRandomBorderNode() {
+    public PNode GetRandomBorderNode() {
         if(_grid is null)
             throw new NullReferenceException("Grid has not yet been build!");
         bool isX = _random.Next(0, 2) == 0;
@@ -94,11 +94,11 @@ public partial class Grid : GameEngine.Core.Entities.Node, ITransform {
         if(GridSize.X < 2 || GridSize.Y < 2)
             throw new Exception("GridSize should at least be 2 units!");
         
-        _grid = new Node[GridSize.X, GridSize.Y];
+        _grid = new PNode[GridSize.X, GridSize.Y];
         for(int x = 0; x < GridSize.X; x++) {
             for(int y = 0; y < GridSize.Y; y++) {
                 
-                Node newNode = new() {
+                PNode newNode = new() {
                     Transform = { Position = Transform.Position + new Vector3(x * NodeSpacing, y * NodeSpacing, 0) },
                     IsValid = _random.Next(0, (int) ValidNodeProbability + 1) != 0,
                 };

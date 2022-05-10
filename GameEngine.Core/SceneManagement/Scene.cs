@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GameEngine.Core.Entities;
+using GameEngine.Core.Nodes;
 
 namespace GameEngine.Core.SceneManagement; 
 

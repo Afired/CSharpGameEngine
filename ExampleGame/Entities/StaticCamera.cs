@@ -1,5 +1,5 @@
 using GameEngine.Core.Components;
-using GameEngine.Core.Entities;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Cameras;
 

@@ -1,8 +1,7 @@
 using ExampleGame.Components;
 using GameEngine.Core.Components;
 using GameEngine.Core.Debugging;
-using GameEngine.Core.Entities;
-using GameEngine.Core.Input;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Cameras;
 

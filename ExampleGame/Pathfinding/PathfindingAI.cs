@@ -8,10 +8,10 @@ namespace ExampleGame.Pathfinding;
 
 public partial class PathfindingAI : GameEngine.Core.Entities.Node, ITransform, IRenderer {
     
-    public Node StartNode { get; set; }
-    public Node EndNode { get; set; }
+    public PNode StartNode { get; set; }
+    public PNode EndNode { get; set; }
 
-    private List<Node> _nodePath;
+    private List<PNode> _nodePath;
     
     protected override void OnAwake() {
         base.OnAwake();

@@ -1,12 +1,11 @@
-using GameEngine.Core.SourceGenerator;
 using GameEngine.Core.Components;
 using GameEngine.Core.Core;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class Movable : Component {
+public partial class Movable : Node {
 
     public Vector3 Direction { get; set; } = Vector3.Zero;
     public float Speed { get; set; } = 10f;

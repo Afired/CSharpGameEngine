@@ -1,12 +1,11 @@
-﻿using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
+﻿using GameEngine.Core.Components;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Input;
 using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class CameraController : Component {
+public partial class CameraController : Node {
     
     private float _speed = 0.005f;
 

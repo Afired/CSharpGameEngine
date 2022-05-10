@@ -1,8 +1,7 @@
 ﻿using GameEngine.Core.Core;
-using GameEngine.Core.Ecs;
 using GameEngine.Core.Numerics;
 
-namespace GameEngine.Core.Rendering.Cameras; 
+namespace GameEngine.Core.Nodes; 
 
 //TODO: proper support for abstract classes: require component attribute without the generation of the component interface but partial extension class
 public abstract class BaseCamera : Node {

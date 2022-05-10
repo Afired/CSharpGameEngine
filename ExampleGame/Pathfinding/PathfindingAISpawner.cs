@@ -27,8 +27,8 @@ public partial class PathfindingAISpawner : GameEngine.Core.Entities.Node {
 
         Random random = new();
 
-        Node startNode = grid.GetRandomBorderNode();
-        Node endNode = grid.GetRandomBorderNode();
+        PNode startNode = grid.GetRandomBorderNode();
+        PNode endNode = grid.GetRandomBorderNode();
         
         PathfindingAI pathfindingAi = new() {
             StartNode = startNode,

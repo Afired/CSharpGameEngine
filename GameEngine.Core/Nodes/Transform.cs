@@ -1,7 +1,6 @@
-﻿using GameEngine.Core.Ecs;
-using GameEngine.Core.Numerics;
+﻿using GameEngine.Core.Numerics;
 
-namespace GameEngine.Core.Components;
+namespace GameEngine.Core.Nodes;
 
 public partial class Transform : Node {
     

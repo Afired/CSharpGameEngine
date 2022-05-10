@@ -1,7 +1,7 @@
 ﻿using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 
-namespace GameEngine.Core.Rendering.Cameras;
+namespace GameEngine.Core.Nodes;
 
 /// <summary>
 /// Orthographic Camera looking into -Z direction

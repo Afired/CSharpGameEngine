@@ -2,7 +2,7 @@
 using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 
-namespace GameEngine.Core.Rendering.Cameras;
+namespace GameEngine.Core.Nodes;
 
 public partial class Camera3D : BaseCamera {
     

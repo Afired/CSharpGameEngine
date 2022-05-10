@@ -6,12 +6,12 @@ namespace ExampleGame.Pathfinding;
 public class AStar {
     
     
-    public static List<Node> Search(Node startNode, Node endNode) {
+    public static List<PNode> Search(PNode startNode, PNode endNode) {
         
         // nodes to be evaluated
-        List<Node> open = new();
+        List<PNode> open = new();
         // nodes already evaluated
-        List<Node> closed = new();
+        List<PNode> closed = new();
         
         open.Add(startNode);
         
@@ -20,7 +20,7 @@ public class AStar {
             if(open.Count == 0) return null;
             
             // node in open with lowest FCost
-            Node current = open.OrderBy(n => n.FCost).First();
+            PNode current = open.OrderBy(n => n.FCost).First();
             open.Remove(current);
             closed.Add(current);
             
@@ -55,8 +55,8 @@ public class AStar {
         }
         
         
-        List<Node> path = new();
-        Node currentNode = endNode;
+        List<PNode> path = new();
+        PNode currentNode = endNode;
         while(currentNode != startNode) {
             path.Add(currentNode);
             currentNode = currentNode.Parent;

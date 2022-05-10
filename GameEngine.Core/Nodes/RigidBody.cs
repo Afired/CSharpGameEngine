@@ -1,6 +1,6 @@
 using Box2D.NetStandard.Dynamics.Bodies;
 
-namespace GameEngine.Core.Components; 
+namespace GameEngine.Core.Nodes; 
 
 public partial class RigidBody : Collider {
     

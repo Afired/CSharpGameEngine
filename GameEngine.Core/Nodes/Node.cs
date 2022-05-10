@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GameEngine.Core.Ecs; 
+namespace GameEngine.Core.Nodes; 
 
 public class Node {
     
@@ -9,6 +9,7 @@ public class Node {
     public Node? ParentNode { get; }
     
     protected Node(Node? parentNode) {
+        ChildNodes = new List<Node>();
         ParentNode = parentNode;
     }
     

@@ -1,5 +1,4 @@
-using GameEngine.Core;
-using GameEngine.Core.Entities;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 

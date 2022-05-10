@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using ExampleGame.Entities;
-using GameEngine.Core.Entities;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.SceneManagement;
 

@@ -11,7 +11,7 @@ public class TestScene : Scene {
     public TestScene() {
         Name = "Test Scene";
         
-        _entities = new List<Entity>() {
+        _entities = new List<Node>() {
             
             new Bullet() {
                 Transform = { Position = new Vector3(-5, 0, 0) },

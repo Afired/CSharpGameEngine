@@ -1,9 +1,7 @@
 using Box2D.NetStandard.Dynamics.Bodies;
-using GameEngine.Core.SourceGenerator;
 
 namespace GameEngine.Core.Components; 
 
-[RequireComponent(typeof(Transform))]
 public partial class RigidBody : Collider {
     
     protected override void OnAwake() {

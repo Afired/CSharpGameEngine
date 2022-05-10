@@ -1,4 +1,4 @@
-using GameEngine.Core.SourceGenerator;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
@@ -7,8 +7,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class Renderer : Component {
+public partial class Renderer : Node {
 
     public string Texture { get; set; } = "checkerboard";
     public string Shader { get; set; } = "default";

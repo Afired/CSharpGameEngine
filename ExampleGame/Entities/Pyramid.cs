@@ -5,7 +5,7 @@ using GameEngine.Core.Entities;
 namespace ExampleGame.Entities; 
 
 [Obsolete("Has to be edited to fit the new vertex data format")]
-public partial class Pyramid : Entity, ITransform, IRenderer, IRigidBody {
+public partial class Pyramid : Node, ITransform, IRenderer, IRigidBody {
     
     protected override void OnAwake() {
         base.OnAwake();

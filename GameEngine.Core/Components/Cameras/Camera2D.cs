@@ -1,6 +1,4 @@
-﻿using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
-using GameEngine.Core.Core;
+﻿using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 
 namespace GameEngine.Core.Rendering.Cameras;
@@ -8,7 +6,6 @@ namespace GameEngine.Core.Rendering.Cameras;
 /// <summary>
 /// Orthographic Camera looking into -Z direction
 /// </summary>
-[RequireComponent(typeof(Transform))]
 public partial class Camera2D : BaseCamera {
     
     public float Zoom { get; set; } = 50;

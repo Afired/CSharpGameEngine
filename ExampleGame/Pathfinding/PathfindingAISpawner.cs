@@ -6,7 +6,7 @@ using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Pathfinding; 
 
-public partial class PathfindingAISpawner : Entity {
+public partial class PathfindingAISpawner : GameEngine.Core.Entities.Node {
     
     private float _cooldown = 1f;
     private float _currentTime;

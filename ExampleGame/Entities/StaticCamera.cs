@@ -5,7 +5,7 @@ using GameEngine.Core.Rendering.Cameras;
 
 namespace ExampleGame.Entities; 
 
-public partial class StaticCamera : Entity, ITransform, ICamera2D {
+public partial class StaticCamera : Node, ITransform, ICamera2D {
     
     protected override void OnAwake() {
         base.OnAwake();

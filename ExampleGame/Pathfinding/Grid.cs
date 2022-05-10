@@ -6,7 +6,7 @@ using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Pathfinding;
 
-public partial class Grid : Entity, ITransform {
+public partial class Grid : GameEngine.Core.Entities.Node, ITransform {
     
     public static Grid Instance;
     

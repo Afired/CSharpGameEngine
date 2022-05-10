@@ -6,7 +6,7 @@ using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Pathfinding; 
 
-public partial class PathfindingAI : Entity, ITransform, IRenderer {
+public partial class PathfindingAI : GameEngine.Core.Entities.Node, ITransform, IRenderer {
     
     public Node StartNode { get; set; }
     public Node EndNode { get; set; }

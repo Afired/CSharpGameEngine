@@ -1,12 +1,9 @@
 ﻿using System;
-using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 
 namespace GameEngine.Core.Rendering.Cameras;
 
-[RequireComponent(typeof(Transform))]
 public partial class Camera3D : BaseCamera {
     
     public float NearPlaneDistance = 0.01f;

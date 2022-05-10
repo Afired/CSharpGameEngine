@@ -9,8 +9,8 @@ namespace GameEngine.Editor.EditorWindows;
 
 public class InspectorWindow : EditorWindow {
     
-    private Entity v_selected;
-    public Entity Selected {
+    private Node v_selected;
+    public Node Selected {
         get => v_selected;
         private set {
             v_selected = value;

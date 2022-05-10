@@ -4,7 +4,7 @@ using GameEngine.Core.Entities;
 
 namespace ExampleGame.Pathfinding;
 
-public partial class Node : Entity, IRenderer, ITransform {
+public partial class Node : GameEngine.Core.Entities.Node, IRenderer, ITransform {
     
     private bool _isValid = true;
     public bool IsValid {

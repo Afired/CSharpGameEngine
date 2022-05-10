@@ -11,7 +11,7 @@ public class RigidBodyScene : Scene {
     public RigidBodyScene() {
         Name = "RigidBody Scene";
         
-        _entities = new List<Entity>() {
+        _entities = new List<Node>() {
             
             new PhysicsQuad() {
                 Transform = { Position = new Vector3(0, 10, 0) },

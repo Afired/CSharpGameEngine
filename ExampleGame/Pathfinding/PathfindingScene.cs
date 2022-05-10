@@ -12,7 +12,7 @@ public class PathfindingScene : Scene {
         Name = "Pathfinding Scene";
         
         // small grid, straight only
-        _entities = new List<Entity>() {
+        _entities = new List<GameEngine.Core.Entities.Node>() {
             
             new DynamicCamera() {
                 Transform = { Position = new Vector3(10, 10, 0) },

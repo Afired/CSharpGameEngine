@@ -5,14 +5,14 @@ using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows;
 
-public delegate void OnSelect(Entity entity);
+public delegate void OnSelect(Node node);
 
 public class HierarchyWindow : EditorWindow {
     
     public static event OnSelect OnSelect;
 
-    private Entity v_selected;
-    public Entity Selected {
+    private Node v_selected;
+    public Node Selected {
         get => v_selected;
         set {
             v_selected = value;
@@ -43,7 +43,7 @@ public class HierarchyWindow : EditorWindow {
         ImGui.PopID();
         
         if(opened) {
-            foreach(Entity entity in scene.Entities) {
+            foreach(Node entity in scene.Entities) {
                 DrawEntityNode(entity);
             }
             ImGui.TreePop();
@@ -51,13 +51,13 @@ public class HierarchyWindow : EditorWindow {
         
     }
 
-    private void DrawEntityNode(Entity entity) {
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (Selected == entity ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
-        ImGui.PushID(entity.GetHashCode());
-        bool opened = ImGui.TreeNodeEx(entity.GetType().ToString(), treeNodeFlags);
+    private void DrawEntityNode(Node node) {
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
+        ImGui.PushID(node.GetHashCode());
+        bool opened = ImGui.TreeNodeEx(node.GetType().ToString(), treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = entity;
+            Selected = node;
         }
 
         if(opened) {

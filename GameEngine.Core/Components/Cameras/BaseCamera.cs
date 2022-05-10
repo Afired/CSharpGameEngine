@@ -1,18 +1,16 @@
-﻿using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
-using GameEngine.Core.Core;
-using GameEngine.Core.Entities;
+﻿using GameEngine.Core.Core;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Numerics;
 
 namespace GameEngine.Core.Rendering.Cameras; 
 
 //TODO: proper support for abstract classes: require component attribute without the generation of the component interface but partial extension class
-public abstract class BaseCamera : Component {
+public abstract class BaseCamera : Node {
     
     public Color BackgroundColor { get; set; }
     
     
-    public BaseCamera(Entity entity) : base(entity) {
+    public BaseCamera(Node node) : base(node) {
         BackgroundColor = Configuration.DefaultBackgroundColor;
     }
     

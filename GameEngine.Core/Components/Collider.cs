@@ -1,14 +1,13 @@
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
-using GameEngine.Core.SourceGenerator;
+using GameEngine.Core.Ecs;
 using GameEngine.Core.Physics;
 using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Core.Components; 
 
-[RequireComponent(typeof(Transform))]
-public partial class Collider : Component {
+public partial class Collider : Node {
     
     protected Body Body { get; private set; }
     protected BodyType BodyType = BodyType.Dynamic;

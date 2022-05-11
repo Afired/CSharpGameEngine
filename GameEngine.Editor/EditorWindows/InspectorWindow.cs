@@ -45,23 +45,27 @@ public class InspectorWindow : EditorWindow {
             return;
         
         {
+            System.Numerics.Vector3 transformLocalPosition = new System.Numerics.Vector3(transform.LocalPosition.X, transform.LocalPosition.Y, transform.LocalPosition.Z);
+            ImGui.DragFloat3("Local Position", ref transformLocalPosition, 0.1f);
+            transform.LocalPosition = new Vector3(transformLocalPosition.X, transformLocalPosition.Y, transformLocalPosition.Z);
+            
             System.Numerics.Vector3 transformPosition = new System.Numerics.Vector3(transform.Position.X, transform.Position.Y, transform.Position.Z);
-            ImGui.InputFloat3("Position", ref transformPosition);
-            transform.Position = new Vector3(transformPosition.X, transformPosition.Y, transformPosition.Z);
+            ImGui.InputFloat3("World Position", ref transformPosition, "%g", ImGuiInputTextFlags.ReadOnly);
+//            transform.Position = new Vector3(transformPosition.X, transformPosition.Y, transformPosition.Z);
             
             float transformRotation = transform.Rotation;
-            ImGui.InputFloat("Rotation", ref transformRotation);
+            ImGui.DragFloat("Rotation", ref transformRotation, 0.01f);
             transform.Rotation = transformRotation;
             
             System.Numerics.Vector3 transformScale = new System.Numerics.Vector3(transform.Scale.X, transform.Scale.Y, transform.Scale.Z);
-            ImGui.InputFloat3("Scale", ref transformScale);
+            ImGui.DragFloat3("Scale", ref transformScale, 0.01f);
             transform.Scale = new Vector3(transformScale.X, transformScale.Y, transformScale.Z);
         }
         
         ImGui.TreePop();
         ImGui.Separator();
     }
-
+    
     private void DrawRenderer(Renderer renderer) {
         bool opened = ImGui.TreeNodeEx("Renderer", ImGuiTreeNodeFlags.DefaultOpen);
         
@@ -81,7 +85,7 @@ public class InspectorWindow : EditorWindow {
         ImGui.TreePop();
         ImGui.Separator();
     }
-
+    
     private void DrawCamera2D(Camera2D camera2D) {
         bool opened = ImGui.TreeNodeEx("Camera 2D", ImGuiTreeNodeFlags.DefaultOpen);
         

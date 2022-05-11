@@ -29,7 +29,7 @@ public partial class Player : Transform, IRenderer, IBlaster {
     }
     
     private void UpdateMovable() {
-        Position += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * Speed;
+        LocalPosition += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * Speed;
     }
     
 }

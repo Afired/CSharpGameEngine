@@ -29,12 +29,12 @@ namespace GameEngine.SourceGenerator.Tracked {
                     
                     INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classSyntax);
                     
-                    // exclude abstract classes
-                    if(classSymbol.IsAbstract)
+                    // exclude classes not derived from node
+                    if(!classSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
                         continue;
                     
-                    // exclude classes not derived from entity
-                    if(!classSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
+                    // exclude abstract classes
+                    if(classSymbol.IsAbstract)
                         continue;
                     
                     // warn to use partial keyword
@@ -60,34 +60,43 @@ namespace GameEngine.SourceGenerator.Tracked {
             }
         }
         
-//        internal static void ScanOtherAssemblies(GeneratorExecutionContext context) {
-//            
-//            // if it doesnt reference the assembly just return
-//            if(!context.Compilation.SourceModule.ReferencedAssemblySymbols.Any(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME))
-//                return;
-//            
-//            // retrieve referenced assembly symbols
-//            IAssemblySymbol assemblySymbol = context.Compilation.SourceModule.ReferencedAssemblySymbols.FirstOrDefault(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME);
-//            
-//            foreach(INamedTypeSymbol typeSymbol in GetNamedTypeSymbols(assemblySymbol.GlobalNamespace)) {
-//                if(!typeSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
-//                    continue;
-//                
-//                //? not sure
-//                if(typeSymbol.IsAbstract)
-//                    continue;
-//                
-//                if(typeSymbol)
-//                
-//                NodeRegister.RegisterForOtherAssembly(new NodeDefinition(
-//                    typeSymbol.ContainingNamespace.ToString(), 
-//                    $"I{typeSymbol.Name}", 
-//                    typeSymbol.Name, 
-//                    requiredComponentsNames)
-//                );
-//            }
-//            
-//        }
+        internal static void ScanOtherAssemblies(GeneratorExecutionContext context) {
+            
+            // if it doesnt reference the assembly just return
+            if(!context.Compilation.SourceModule.ReferencedAssemblySymbols.Any(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME))
+                return;
+            
+            // retrieve referenced assembly symbols
+            IAssemblySymbol assemblySymbol = context.Compilation.SourceModule.ReferencedAssemblySymbols.FirstOrDefault(q => q.Identity.Name == GAME_ENGINE_CORE_ASSEMBLY_NAME);
+            
+            foreach(INamedTypeSymbol typeSymbol in GetNamedTypeSymbols(assemblySymbol.GlobalNamespace)) {
+                if(!typeSymbol.IsDerivedFromType(NODE_BASECLASS_NAME))
+                    continue;
+                
+                //? not sure
+                if(typeSymbol.IsAbstract)
+                    continue;
+                
+                // warn to use partial keyword
+                
+                
+                
+                
+//              string usingDirectives = file.GetUsingDirectives().Format();
+                string @namespace = typeSymbol.ContainingNamespace.ToString();
+                string className = typeSymbol.Name;
+//                    string classAccessibility = classSymbol.DeclaredAccessibility.AsText();
+                string[] baseTypes = typeSymbol.AllInterfaces.Select(i => i.Name).ToArray();
+                
+                NodeRegister.RegisterForOtherAssembly(new NodeDefinition(
+                    @namespace,
+                    className,
+                    $"I{className}",
+                    baseTypes)
+                );
+            }
+            
+        }
         
         internal static IEnumerable<NodeDefinition> GetComponentInterfaceDefinitionsFromBaseListSyntax(BaseListSyntax baseList) {
             foreach(string baseTypeName in baseList.Types.Select(baseType => baseType.ToString())) {

@@ -13,7 +13,7 @@ namespace GameEngine.SourceGenerator.Tracked {
         
         internal static void Execute(GeneratorExecutionContext context) {
 
-            foreach(NodeDefinition node in NodeRegister.AllDefinitions) {
+            foreach(NodeDefinition node in NodeRegister.EnumerateDefinitionsFromThisAssembly()) {
                 
                 StringBuilder propertiesSb = new StringBuilder();
                 StringBuilder initializationSb = new StringBuilder();

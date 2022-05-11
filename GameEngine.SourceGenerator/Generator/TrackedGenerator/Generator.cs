@@ -19,7 +19,7 @@ namespace GameEngine.SourceGenerator.Tracked {
         
         public void Execute(GeneratorExecutionContext context) {
             try {
-//                AssemblyScanner.ScanOtherAssemblies(context);
+                AssemblyScanner.ScanOtherAssemblies(context);
                 AssemblyScanner.ScanThisAssembly(context);
                 NodeRegister.Resolve();
                 NodeInterfaceGenerator.Execute(context);

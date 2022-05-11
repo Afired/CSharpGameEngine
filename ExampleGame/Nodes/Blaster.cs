@@ -1,14 +1,12 @@
-using ExampleGame.Entities;
-using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Debugging;
-using GameEngine.Core.Ecs;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 
-namespace ExampleGame.Components; 
+namespace ExampleGame.Nodes; 
 
-public partial class Blaster : Node {
-
+public partial class Blaster : Transform {
+    
     public bool IsShooting;
     public float Cooldown = 0.1f;
     public float CurrentCooldown = 0;
@@ -21,14 +19,14 @@ public partial class Blaster : Node {
         
         if(!IsShooting)
             return;
-
+        
         Shoot();
         CurrentCooldown = Cooldown;
     }
-
+    
     private void Shoot() {
-        Bullet bullet = new Bullet() {
-            Transform = { Position = Transform.Position }
+        Bullet bullet = new Bullet {
+            Position = this.Position
         };
         Hierarchy.AddEntity(bullet);
         Console.LogSuccess("Spawned Bullet!");

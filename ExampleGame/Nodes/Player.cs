@@ -1,13 +1,14 @@
-﻿using GameEngine.Core.Ecs;
+using GameEngine.Core.Core;
 using GameEngine.Core.Input;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 
-namespace ExampleGame.Components; 
+namespace ExampleGame.Nodes; 
 
-public partial class PlayerControls : Node {
+public partial class Player : Transform, IRenderer, IBlaster {
     
     private Vector2 _inputAxis;
-    
+    private float _speed = 5f;
     
     protected override void OnUpdate() {
         UpdateInputAxis();
@@ -28,7 +29,7 @@ public partial class PlayerControls : Node {
     }
     
     private void UpdateMovable() {
-        Movable.Direction = new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized;
+        Position += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * _speed;
     }
     
 }

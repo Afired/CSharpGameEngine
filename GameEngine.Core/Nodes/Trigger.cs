@@ -4,10 +4,13 @@ using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using GameEngine.Core.Physics;
 
-namespace GameEngine.Core.Nodes; 
+namespace GameEngine.Core.Nodes;
+
+public delegate void OnBeginTrigger(Trigger other);
 
 public partial class Trigger : Transform {
     
+    public event OnBeginTrigger OnBeginTrigger;
     protected Body Body { get; private set; }
     protected BodyType BodyType = BodyType.Dynamic;
     
@@ -34,7 +37,7 @@ public partial class Trigger : Transform {
         
         PolygonShape dynamicBox = new PolygonShape();
         dynamicBox.SetAsBox(0.5f, 0.5f);
-
+        
         FixtureDef dynamicFixtureDef = new FixtureDef() {
             shape = dynamicBox,
             density = 0f,
@@ -51,6 +54,6 @@ public partial class Trigger : Transform {
 
     internal void BeginTrigger(Trigger other) => OnBeginTrigger(other);
     
-    protected virtual void OnBeginTrigger(Trigger other) { }
+    // protected virtual void OnBeginTrigger(Trigger other) { }
     
 }

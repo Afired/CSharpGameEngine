@@ -12,7 +12,7 @@ namespace GameEngine.SourceGenerator.Tracked {
         private const string ENTITY_BASECLASS_NAME = "Node";
         
         internal static void Execute(GeneratorExecutionContext context) {
-
+            
             foreach(NodeDefinition node in NodeRegister.EnumerateDefinitionsFromThisAssembly()) {
                 
                 StringBuilder propertiesSb = new StringBuilder();

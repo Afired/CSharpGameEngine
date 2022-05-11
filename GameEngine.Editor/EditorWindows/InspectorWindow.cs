@@ -28,14 +28,14 @@ public class InspectorWindow : EditorWindow {
             ImGui.Text("select an entity");
             return;
         }
-        if(Selected is ITransform transform)
-            DrawTransform(transform.Transform);
-        if(Selected is IRenderer renderer)
-            DrawRenderer(renderer.Renderer);
-        if(Selected is ICamera2D camera2D)
-            DrawCamera2D(camera2D.Camera2D);
-        if(Selected is ICamera3D camera3D)
-            DrawCamera3D(camera3D.Camera3D);
+        if(Selected is Transform transform)
+            DrawTransform(transform);
+        if(Selected is Renderer renderer)
+            DrawRenderer(renderer);
+        if(Selected is Camera2D camera2D)
+            DrawCamera2D(camera2D);
+        if(Selected is Camera3D camera3D)
+            DrawCamera3D(camera3D);
     }
     
     private void DrawTransform(Transform transform) {

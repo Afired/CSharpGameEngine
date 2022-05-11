@@ -31,8 +31,13 @@ public class TestScene : Scene {
                 Speed = 20f
             },
             new Camera2D() {
-                Position = new Vector3(0, 10, 0),
+                Position = new Vector3(0, 10, -5),
                 Zoom = 50f
+            },
+            new Renderer() {
+                Position = new Vector3(2, 10, 0),
+                Texture = "Box",
+                Shader = "default",
             }
             
         };

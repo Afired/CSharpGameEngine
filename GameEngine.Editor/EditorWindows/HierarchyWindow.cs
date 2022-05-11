@@ -36,7 +36,7 @@ public class HierarchyWindow : EditorWindow {
 
     private void DrawSceneNode(Scene scene) {
         
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None;
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None | ImGuiTreeNodeFlags.CollapsingHeader;
         ImGui.PushID(scene.GetHashCode());
         bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
         ImGui.PopID();
@@ -51,7 +51,9 @@ public class HierarchyWindow : EditorWindow {
     }
 
     private void DrawEntityNode(Node node) {
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
+        ImGuiTreeNodeFlags treeNodeFlags =
+            (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
+            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None);
         ImGui.PushID(node.GetHashCode());
         bool opened = ImGui.TreeNodeEx(node.GetType().ToString(), treeNodeFlags);
         ImGui.PopID();
@@ -60,7 +62,9 @@ public class HierarchyWindow : EditorWindow {
         }
 
         if(opened) {
-            ImGui.Text("Test");
+            foreach(Node childNode in node.ChildNodes) {
+                DrawEntityNode(childNode);
+            }
             ImGui.TreePop();
         }
     }

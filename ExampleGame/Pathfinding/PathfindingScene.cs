@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using ExampleGame.Entities;
 using GameEngine.Core.Entities;
 using GameEngine.Core.Numerics;
@@ -119,3 +119,4 @@ public class PathfindingScene : Scene {
     }
     
 }
+*/

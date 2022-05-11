@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using GameEngine.Core.Components;
 using GameEngine.Core.Entities;
 
@@ -39,3 +39,4 @@ public partial class PNode : GameEngine.Core.Entities.Node, IRenderer, ITransfor
     }
     
 }
+*/

@@ -8,7 +8,7 @@ namespace ExampleGame.Nodes;
 public partial class Player : Transform, IRenderer, IBlaster {
     
     private Vector2 _inputAxis;
-    private float _speed = 5f;
+    public float Speed { get; init; }= 5f;
     
     protected override void OnUpdate() {
         UpdateInputAxis();
@@ -29,7 +29,7 @@ public partial class Player : Transform, IRenderer, IBlaster {
     }
     
     private void UpdateMovable() {
-        Position += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * _speed;
+        Position += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * Speed;
     }
     
 }

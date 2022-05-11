@@ -34,8 +34,8 @@ namespace GameEngine.SourceGenerator.Tracked {
                         continue;
                     
                     // exclude abstract classes
-                    if(classSymbol.IsAbstract)
-                        continue;
+                    // if(classSymbol.IsAbstract)
+                    //     continue;
                     
                     // warn to use partial keyword
                     if(!classSyntax.IsPartial()) {
@@ -74,8 +74,8 @@ namespace GameEngine.SourceGenerator.Tracked {
                     continue;
                 
                 //? not sure
-                if(typeSymbol.IsAbstract)
-                    continue;
+                // if(typeSymbol.IsAbstract)
+                //     continue;
                 
                 // warn to use partial keyword
                 

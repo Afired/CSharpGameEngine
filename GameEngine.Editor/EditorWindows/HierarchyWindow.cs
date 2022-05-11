@@ -36,7 +36,7 @@ public class HierarchyWindow : EditorWindow {
 
     private void DrawSceneNode(Scene scene) {
         
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None | ImGuiTreeNodeFlags.CollapsingHeader;
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.None | ImGuiTreeNodeFlags.CollapsingHeader | ImGuiTreeNodeFlags.DefaultOpen;
         ImGui.PushID(scene.GetHashCode());
         bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
         ImGui.PopID();

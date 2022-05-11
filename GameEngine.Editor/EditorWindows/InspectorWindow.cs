@@ -71,7 +71,7 @@ public class InspectorWindow : EditorWindow {
         
         if(!opened)
             return;
-
+        
         {
             string rendererShader = renderer.Shader;
             ImGui.InputText("Shader", ref rendererShader, 30);
@@ -91,7 +91,7 @@ public class InspectorWindow : EditorWindow {
         
         if(!opened)
             return;
-
+        
         {
             float camera2DZoom = camera2D.Zoom;
             ImGui.DragFloat("Zoom", ref camera2DZoom);
@@ -115,7 +115,7 @@ public class InspectorWindow : EditorWindow {
         
         if(!opened)
             return;
-
+        
         {
             float camera3DFieldOfView = camera3D.FieldOfView;
             ImGui.DragFloat("Field of View", ref camera3DFieldOfView);

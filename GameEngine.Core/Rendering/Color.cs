@@ -1,12 +1,13 @@
-﻿namespace GameEngine.Core.Rendering; 
+﻿using GameEngine.Core.Serialization;
+
+namespace GameEngine.Core.Rendering; 
 
 public struct Color {
     
-    public float R { get; set; }
-    public float G { get; set; }
-    public float B { get; set; }
-    public float A { get; set; }
-    
+    [Serialized] public float R { get; internal set; }
+    [Serialized] public float G { get; internal set; }
+    [Serialized] public float B { get; internal set; }
+    [Serialized] public float A { get; internal set; }
     
     public Color(float r, float g, float b) {
         R = r;

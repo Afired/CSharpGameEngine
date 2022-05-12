@@ -1,22 +1,22 @@
 using System;
 using System.Globalization;
 using System.Text;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Numerics;
 
 public struct Vector3 : IEquatable<Vector3>, IFormattable {
     
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-
-
+    [Serialized] public float X { get; internal set; }
+    [Serialized] public float Y { get; internal set; }
+    [Serialized] public float Z { get; internal set; }
+    
     public Vector3(float x, float y, float z) {
         X = x;
         Y = y;
         Z = z;
     }
-
+    
     public Vector3(float value) : this(value, value, value) { }
     
     public static Vector3 Zero => new Vector3(0f, 0f, 0f);

@@ -1,14 +1,14 @@
 using System;
 using System.Globalization;
 using System.Text;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Numerics;
 
 public struct Vector2 : IEquatable<Vector2>, IFormattable {
     
-    public float X { get; set; }
-    public float Y { get; set; }
-    
+    [Serialized] public float X { get; internal set; }
+    [Serialized] public float Y { get; internal set; }
     
     public Vector2(float x, float y) {
         X = x;

@@ -7,8 +7,8 @@ namespace GameEngine.Core.Numerics;
 
 public struct Vector2 : IEquatable<Vector2>, IFormattable {
     
-    [Serialized] public float X { get; internal set; }
-    [Serialized] public float Y { get; internal set; }
+    [Serialized] public float X { get; set; }
+    [Serialized] public float Y { get; set; }
     
     public Vector2(float x, float y) {
         X = x;

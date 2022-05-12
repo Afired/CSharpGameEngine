@@ -7,9 +7,9 @@ namespace GameEngine.Core.Numerics;
 
 public struct Vector3 : IEquatable<Vector3>, IFormattable {
     
-    [Serialized] public float X { get; internal set; }
-    [Serialized] public float Y { get; internal set; }
-    [Serialized] public float Z { get; internal set; }
+    [Serialized] public float X { get; set; }
+    [Serialized] public float Y { get; set; }
+    [Serialized] public float Z { get; set; }
     
     public Vector3(float x, float y, float z) {
         X = x;

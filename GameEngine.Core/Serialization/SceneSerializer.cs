@@ -117,7 +117,7 @@ public static class SceneSerializer {
 
 public class SerializedPropertiesResolver : DefaultContractResolver {
     
-    private static Serialized _serializedAttribute = new();
+    private static readonly Serialized _serializedAttribute = new();
     
 //    private readonly HashSet<string> _ignoreProps;
 //    public IgnorePropertiesResolver(IEnumerable<string> propNamesToIgnore) {

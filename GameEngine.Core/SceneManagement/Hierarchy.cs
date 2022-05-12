@@ -9,7 +9,7 @@ public static class Hierarchy {
     
     //todo: multiple scenes
     
-    public static Scene Scene { get; private set; }
+    public static Scene? Scene { get; private set; }
     private static Stack<Node> _entitiesToBeAdded;
     
     static Hierarchy() {

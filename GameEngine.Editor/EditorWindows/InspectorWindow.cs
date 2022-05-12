@@ -1,17 +1,19 @@
+using System.Reflection;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
+using GameEngine.Core.Serialization;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows;
 
 public class InspectorWindow : EditorWindow {
     
-    private Node v_selected;
-    public Node Selected {
-        get => v_selected;
+    private Node? _selected;
+    public Node? Selected {
+        get => _selected;
         private set {
-            v_selected = value;
+            _selected = value;
             // todo: needs a unique identifier, because if not provided it takes the name
             //Title = $"Inspector - {value.GetType().ToString()}";
         }
@@ -24,18 +26,82 @@ public class InspectorWindow : EditorWindow {
     }
     
     protected override void Draw() {
-        if(Selected == null) {
-            ImGui.Text("select an entity");
+        if(Selected is null) {
+            ImGui.Text("select a node to inspect");
             return;
         }
-        if(Selected is Transform transform)
-            DrawTransform(transform);
-        if(Selected is Renderer renderer)
-            DrawRenderer(renderer);
-        if(Selected is Camera2D camera2D)
-            DrawCamera2D(camera2D);
-        if(Selected is Camera3D camera3D)
-            DrawCamera3D(camera3D);
+
+        DrawNode(Selected);
+        
+//        if(Selected is Transform transform)
+//            DrawTransform(transform);
+//        if(Selected is Renderer renderer)
+//            DrawRenderer(renderer);
+//        if(Selected is Camera2D camera2D)
+//            DrawCamera2D(camera2D);
+//        if(Selected is Camera3D camera3D)
+//            DrawCamera3D(camera3D);
+    }
+
+    private void DrawNode(Node node) {
+
+        foreach(PropertyInfo propertyInfo in GetSerializedProperties(node.GetType())) {
+            
+            if(!propertyInfo.CanRead)
+                continue;
+            
+            bool isReadonly = !propertyInfo.CanWrite;
+            MethodInfo? getter = propertyInfo.GetGetMethod(true);
+            MethodInfo? setter = propertyInfo.GetSetMethod(true);
+            
+            if(getter.ReturnType == typeof(float)) {
+                float value = (float) propertyInfo.GetValue(node);
+                ImGui.DragFloat(propertyInfo.Name, ref value, 0.01f, float.MinValue, float.MaxValue, "%g", isReadonly ? ImGuiSliderFlags.NoInput : ImGuiSliderFlags.None);
+                if(!isReadonly)
+                    propertyInfo.SetValue(node, value);
+            }
+            if(getter.ReturnType == typeof(string)) {
+                string value = (string) propertyInfo.GetValue(node);
+                ImGui.InputText(propertyInfo.Name, ref value, 30);
+                if(!isReadonly)
+                    propertyInfo.SetValue(node, value);
+            }
+            if(getter.ReturnType == typeof(Color)) {
+                Color value = (Color) propertyInfo.GetValue(node);
+                System.Numerics.Vector4 v4 = new System.Numerics.Vector4(value.R, value.G, value.B, value.A);
+                ImGui.ColorEdit4(propertyInfo.Name, ref v4);
+
+                if(!isReadonly) {
+                    value = new Color(v4.X, v4.Y, v4.Z, v4.W);
+                    propertyInfo.SetValue(node, value);
+                }
+            }
+            if(getter.ReturnType == typeof(Vector3)) {
+                Vector3 value = (Vector3) propertyInfo.GetValue(node);
+                System.Numerics.Vector3 v3 = new System.Numerics.Vector3(value.X, value.Y, value.Z);
+                ImGui.DragFloat3(propertyInfo.Name, ref v3, 0.01f);
+
+                if(!isReadonly) {
+                    value = new Vector3(v3.X, v3.Y, v3.Z);
+                    propertyInfo.SetValue(node, value);
+                }
+            }
+            
+        }
+        
+    }
+    
+    private static IEnumerable<PropertyInfo> GetSerializedProperties(Type type) {
+        List<PropertyInfo> properties = new List<PropertyInfo>();
+        
+        for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
+            properties.AddRange(
+                currentType
+                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                    .Where(prop => prop.GetCustomAttribute<Serialized>(false) is not null)
+                );
+        }
+        return properties;
     }
     
     private void DrawTransform(Transform transform) {

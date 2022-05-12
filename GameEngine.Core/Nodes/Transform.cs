@@ -1,13 +1,14 @@
 ﻿using GameEngine.Core.Numerics;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
 
 public partial class Transform : Node {
     
-    public Vector3 LocalPosition = Vector3.Zero;
+    [Serialized] public Vector3 LocalPosition { get; set; } = Vector3.Zero;
     
 //    public Vector3 Position = Vector3.Zero;
-    public Vector3 Position {
+    [Serialized] public Vector3 Position {
         get {
             Vector3 value = LocalPosition;
             
@@ -24,7 +25,6 @@ public partial class Transform : Node {
 //        }
     }
     
-    public Vector3 Scale { get; set; } = Vector3.One;
-    public float Rotation { get; set; } = 0f;
-    
+    [Serialized] public Vector3 Scale { get; set; } = Vector3.One;
+    [Serialized] public float Rotation { get; set; } = 0f;
 }

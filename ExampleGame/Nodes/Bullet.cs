@@ -3,7 +3,7 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Bullet : Transform, IRenderer, ITrigger, IRigidBody {
+public partial class Bullet : RigidBody, IRenderer, ITrigger {
     
     protected override void OnAwake() {
         base.OnAwake();

@@ -2,16 +2,16 @@ using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
+using GameEngine.Core.Serialization;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes; 
 
 public partial class Renderer : Transform {
-
-    public string Texture { get; set; } = "checkerboard";
-    public string Shader { get; set; } = "default";
-    public string Geometry { get; set; } = "quad";
     
+    [Serialized] public string Texture { get; set; } = "checkerboard";
+    [Serialized] public string Shader { get; set; } = "default";
+    [Serialized] public string Geometry { get; set; } = "quad";
     
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();

@@ -2,13 +2,14 @@ using GameEngine.Core.Core;
 using GameEngine.Core.Input;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
+using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
 public partial class Player : Transform, IRenderer, IBlaster {
     
     private Vector2 _inputAxis;
-    public float Speed { get; init; }= 5f;
+    [Serialized] public float Speed { get; init; }= 5f;
     
     protected override void OnUpdate() {
         UpdateInputAxis();

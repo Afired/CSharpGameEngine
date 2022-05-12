@@ -2,14 +2,15 @@ using GameEngine.Core.Core;
 using GameEngine.Core.Debugging;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
 public partial class Blaster : Transform {
     
     public bool IsShooting;
-    public float Cooldown = 0.1f;
-    public float CurrentCooldown = 0;
+    [Serialized] public float Cooldown { get; set; }= 0.1f;
+    [Serialized] public float CurrentCooldown { get; set; } = 0;
     
     protected override void OnUpdate() {
         if(CurrentCooldown > 0) {

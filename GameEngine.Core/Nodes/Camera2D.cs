@@ -1,5 +1,6 @@
 ﻿using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
 
@@ -8,7 +9,7 @@ namespace GameEngine.Core.Nodes;
 /// </summary>
 public partial class Camera2D : BaseCamera {
     
-    public float Zoom { get; set; } = 50;
+    [Serialized] public float Zoom { get; set; } = 50;
     
     
     public override Matrix4x4 GetProjectionMatrix() {

@@ -43,12 +43,9 @@ public partial class Collider : Transform {
         
         Body.CreateFixture(dynamicFixtureDef);
     }
-
+    
     internal void BeginCollision(Collider other) => OnBeginCollision(other);
     
     protected virtual void OnBeginCollision(Collider other) { }
-
-    public object Clone() {
-        throw new NotImplementedException();
-    }
+    
 }

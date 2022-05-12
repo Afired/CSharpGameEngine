@@ -18,7 +18,7 @@ public static class PhysicsEngine {
         InitializeWorld();
         IsInit = true;
     }
-
+    
     internal static void InitializeWorld() {
         //world
         Vector2 gravity = new Vector2(0, -9.81f);

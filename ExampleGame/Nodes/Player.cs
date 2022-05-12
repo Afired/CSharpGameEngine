@@ -8,17 +8,13 @@ namespace ExampleGame.Nodes;
 
 public partial class Player : Transform, IRenderer, IBlaster {
     
+    [Serialized] public float Speed { get; init; } = 5f;
     private Vector2 _inputAxis;
-    [Serialized] public float Speed { get; init; }= 5f;
     
     protected override void OnUpdate() {
         UpdateInputAxis();
-        UpdateMovable();
+        UpdatePosition();
         UpdateBlaster();
-    }
-    
-    private void UpdateBlaster() {
-        Blaster.IsShooting = Input.IsKeyDown(KeyCode.E);
     }
     
     private void UpdateInputAxis() {
@@ -29,8 +25,12 @@ public partial class Player : Transform, IRenderer, IBlaster {
         _inputAxis.Y += Input.IsKeyDown(KeyCode.W) ? 1 : 0;
     }
     
-    private void UpdateMovable() {
+    private void UpdatePosition() {
         LocalPosition += new Vector3(_inputAxis.X, _inputAxis.Y, 0).Normalized * Time.DeltaTime * Speed;
+    }
+    
+    private void UpdateBlaster() {
+        Blaster.IsShooting = Input.IsKeyDown(KeyCode.E);
     }
     
 }

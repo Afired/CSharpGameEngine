@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes; 
 
-[Serializable]
 public class Node {
     
     [Serialized] public List<Node> ChildNodes { get; set; }

@@ -1,8 +1,10 @@
-﻿using GameEngine.Core.Numerics;
+﻿using System;
+using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
 
+[Serializable]
 public partial class Transform : Node {
     
     [Serialized] public Vector3 LocalPosition { get; set; } = Vector3.Zero;

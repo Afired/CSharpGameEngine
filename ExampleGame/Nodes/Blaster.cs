@@ -9,7 +9,7 @@ namespace ExampleGame.Nodes;
 public partial class Blaster : Transform {
     
     public bool IsShooting;
-    [Serialized] public float Cooldown { get; set; }= 0.1f;
+    [Serialized] public float Cooldown { get; set; } = 0.1f;
     [Serialized] public float CurrentCooldown { get; set; } = 0;
     
     protected override void OnUpdate() {

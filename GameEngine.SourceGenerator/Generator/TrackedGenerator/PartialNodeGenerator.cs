@@ -19,14 +19,14 @@ namespace GameEngine.SourceGenerator.Tracked {
                 StringBuilder initializationSb = new StringBuilder();
                 StringBuilder addToComponentsListSb = new StringBuilder();
                 foreach(NodeDefinition childNode in node.GetAllChildNodes()) {
-                    propertiesSb.Append("    public ");
+                    propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized] public ");
                     propertiesSb.Append(childNode.Namespace);
                     propertiesSb.Append('.');
                     propertiesSb.Append(childNode.ClassName);
                     propertiesSb.Append(' ');
                     propertiesSb.Append(childNode.ClassName);
-                    propertiesSb.Append(" { get; init; }\n");
-                            
+                    propertiesSb.Append(" { get; set; }\n"); // was init
+                    
                     initializationSb.Append("        ");
                     initializationSb.Append(childNode.ClassName);
                     initializationSb.Append(" = new ");

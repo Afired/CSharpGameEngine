@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes; 
 
+[Serializable]
 public class Node {
     
-    public List<Node> ChildNodes { get; }
-    public Node? ParentNode { get; }
+    [Serialized] public List<Node> ChildNodes { get; set; }
+    [Serialized] public Node? ParentNode { get; /*private*/ set; }
     
     protected Node(Node? parentNode) {
         ChildNodes = new List<Node>();
@@ -22,10 +25,11 @@ public class Node {
         return currentNode;
     }
     
-    internal void Awake() {
+    internal void Awake(Node? parentNode = null) {
+        ParentNode = parentNode;
         OnAwake();
         foreach(Node childNodes in ChildNodes)
-            childNodes.Awake();
+            childNodes.Awake(this);
     }
     
     internal void Update() {

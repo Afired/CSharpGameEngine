@@ -1,3 +1,4 @@
+using System;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
@@ -7,6 +8,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes; 
 
+[Serializable]
 public partial class Renderer : Transform {
     
     [Serialized] public string Texture { get; set; } = "checkerboard";

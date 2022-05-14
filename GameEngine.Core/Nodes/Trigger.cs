@@ -52,7 +52,7 @@ public partial class Trigger : Transform {
         Body.CreateFixture(dynamicFixtureDef);
     }
 
-    internal void BeginTrigger(Trigger other) => OnBeginTrigger(other);
+    internal void BeginTrigger(Trigger other) => OnBeginTrigger?.Invoke(other);
     
     // protected virtual void OnBeginTrigger(Trigger other) { }
     

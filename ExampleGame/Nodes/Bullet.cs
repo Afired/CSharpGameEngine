@@ -12,6 +12,7 @@ public partial class Bullet : RigidBody, IRenderer, ITrigger {
     
     private void OnEnemyHit(Trigger other) {
         Console.Log("Bullet hit something!");
+        var test = ChildNodes;
     }
     
 }

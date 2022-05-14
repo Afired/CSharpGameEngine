@@ -1,35 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace GameEngine.Core.Serialization; 
 
 public static class SceneSerializer {
-    
-    public static Scene Load(string path) {
-
-        DeserializerBuilder deserializerBuilder = new();
-        deserializerBuilder.WithTypeInspector(descriptor => new SerializationTypeInspector(descriptor)).IncludeNonPublicProperties();
-        IDeserializer deserializer = deserializerBuilder.Build();
-        
-//        var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
-//            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//            .Build();
-        
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Scene scene = deserializer.Deserialize<Scene>(File.ReadAllText(desktopPath + "\\" + "Test.scene"));
-        return scene;
-    }
     
     public static Scene LoadJson(string path) {
         
@@ -54,27 +32,6 @@ public static class SceneSerializer {
         return SaveSceneJson("Test", Hierarchy.Scene);
     }
     
-    private static bool SaveScene(string path, Scene scene) {
-
-        SerializerBuilder serializerBuilder = new();
-        serializerBuilder.WithTypeInspector(descriptor => new SerializationTypeInspector(descriptor)).IncludeNonPublicProperties();
-        ISerializer serializer = serializerBuilder.Build();
-        
-//        ISerializer serializer = new SerializerBuilder()
-//            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//            //.IncludeNonPublicProperties()
-//            .IgnoreFields()
-//            .WithTypeResolver()
-//            .Build();
-        
-        string stringResult = serializer.Serialize(scene);
-        
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        File.WriteAllText(desktopPath + "\\" + "Test.scene", stringResult);
-        return true;
-    }
-
-
     private static bool SaveSceneJson(string path, Scene scene) {
         JsonSerializerSettings settings = new JsonSerializerSettings() {
             ContractResolver = new SerializedPropertiesResolver(),
@@ -92,50 +49,33 @@ public static class SceneSerializer {
     
 }
 
-//public class IgnoreParentPropertiesResolver : DefaultContractResolver {
-//    
-//    protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) {
-//        var allProps = base.CreateProperties(type, memberSerialization);
-//        
-//        //Choose the properties you want to serialize/deserialize
-//        var props = type.GetProperties(~BindingFlags.FlattenHierarchy); 
-//        
-//        return 
-//        
-//        return allProps.Where(p => props.Any(a => a.Name == p.PropertyName)).ToList();
-//    }
-//    
-//}
-//
-//public class MyResolver : IContractResolver {
-//    
-//    public JsonContract ResolveContract(Type type) {
-//        new JsonContainerContract()
-//    }
-//    
-//}
-
 public class SerializedPropertiesResolver : DefaultContractResolver {
     
     private static readonly Serialized _serializedAttribute = new();
     
-//    private readonly HashSet<string> _ignoreProps;
-//    public IgnorePropertiesResolver(IEnumerable<string> propNamesToIgnore) {
-//        _ignoreProps = new HashSet<string>(propNamesToIgnore);
-//    }
-
-//    protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) {
-//        JsonProperty property = base.CreateProperty(member, memberSerialization);
-//        if(_ignoreProps.Contains(property.PropertyName))
-//            property.ShouldSerialize = _ => false;
-//        return property;
-//    }
-    
     protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization) {
-        JsonProperty property = base.CreateProperty(member, memberSerialization);
-        property.ShouldSerialize = _ => property.AttributeProvider.GetAttributes(false).Contains(_serializedAttribute);
-        property.ShouldDeserialize = _ => property.AttributeProvider.GetAttributes(false).Contains(_serializedAttribute);
-        return property;
+        JsonProperty jProp = base.CreateProperty(member, memberSerialization);
+        
+//        Console.LogSuccess(jProp.PropertyName ?? "null");
+        
+        // include all properties even if they have a none public setter
+        if(!jProp.Writable) {
+            PropertyInfo? propertyInfo = member as PropertyInfo;
+            bool hasNonePublicSetter = propertyInfo?.GetSetMethod(true) is not null;
+            jProp.Writable = hasNonePublicSetter;
+        }
+        
+        // include all properties if they have a getter method
+        if(!jProp.Readable) {
+            PropertyInfo? propertyInfo = member as PropertyInfo;
+            bool hasGetterMethod = propertyInfo?.GetGetMethod(true) is not null;
+            jProp.Readable = hasGetterMethod;
+        }
+        
+        // only include if property is decorated with [Serialized] attribute
+        jProp.ShouldSerialize = _ => jProp.AttributeProvider.GetAttributes(false).Contains(_serializedAttribute);
+        jProp.ShouldDeserialize = _ => jProp.AttributeProvider.GetAttributes(false).Contains(_serializedAttribute);
+        return jProp;
     }
     
 }

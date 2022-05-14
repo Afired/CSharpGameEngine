@@ -7,44 +7,41 @@ using ImGuiNET;
 
 namespace GameEngine.Editor.NodeDrawers;
 
-internal interface INodeDrawer {
-    public Type NodeType { get; }
-    public void DrawNodeInternal(object node);
-}
-
-public abstract class NodeDrawer<T> : INodeDrawer where T : Node {
+public abstract class NodeDrawer {
     
-    public Type NodeType => typeof(T);
-
-    public void DrawNodeInternal(object node) => DrawNode(node as T);
-    private static Dictionary<Type, INodeDrawer>? _nodeDrawerLookup;
+    private static Dictionary<Type, NodeDrawer>? _nodeDrawerLookup;
+    protected internal abstract Type NodeType { get; }
+    protected internal abstract void DrawNodeInternal(Node node);
     
     internal static void Draw(Node node) {
         _nodeDrawerLookup ??= BuildNodeDrawerLookup();
-
-        if(_nodeDrawerLookup.TryGetValue(node.GetType(), out INodeDrawer? nodeDrawer)) {
+        
+        if(_nodeDrawerLookup.TryGetValue(node.GetType(), out NodeDrawer? nodeDrawer)) {
             nodeDrawer.DrawNodeInternal(node);
         } else {
-            DrawDefault(node);
+            DrawDefaultHeader(node);
+            DrawDefaultDrawers(node);
         }
     }
     
-    private static Dictionary<Type, INodeDrawer> BuildNodeDrawerLookup() {
-        Dictionary<Type, INodeDrawer> nodeDrawerLookup = new();
+    private static Dictionary<Type, NodeDrawer> BuildNodeDrawerLookup() {
+        Dictionary<Type, NodeDrawer> nodeDrawerLookup = new();
         List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(NodeDrawer<>), typeof(NodeDrawer<>).Assembly);
-        foreach(Type type in derivedTypes) { 
-      //  foreach(Type type in typeof(NodeDrawer<>).Assembly.GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(NodeDrawer<>)))) {
-            //object? instance = Activator.CreateInstance(type);
-            INodeDrawer nodeDrawer = Activator.CreateInstance(type) as INodeDrawer ?? throw new NullReferenceException();
+        foreach(Type type in derivedTypes) {
+            NodeDrawer nodeDrawer = Activator.CreateInstance(type) as NodeDrawer ?? throw new NullReferenceException();
             if(!nodeDrawerLookup.TryAdd(nodeDrawer.NodeType, nodeDrawer))
                 Console.LogWarning($"Failed to register Node Drawer of type {nodeDrawer.NodeType}");
         }
         return nodeDrawerLookup;
     }
     
-    public abstract void DrawNode(T node);
+    protected static void DrawDefaultHeader(Node node) {
+//        ImGui.CollapsingHeader(node.GetType().ToString());
+        ImGui.Text(node.GetType().ToString());
+        ImGui.Spacing();
+    }
     
-    protected static void DrawDefault(Node node) {
+    protected static void DrawDefaultDrawers(Node node) {
         foreach(MemberInfo memberInfo in GetSerializedMembers(node.GetType())) {
             if(memberInfo is PropertyInfo propertyInfo) {
                 DrawProperty(node, propertyInfo);
@@ -147,5 +144,13 @@ public abstract class NodeDrawer<T> : INodeDrawer where T : Node {
         }
         return members;
     }
+}
+
+public abstract class NodeDrawer<TNode> : NodeDrawer where TNode : Node {
+    
+    protected internal sealed override Type NodeType => typeof(TNode);
+    protected internal sealed override void DrawNodeInternal(Node node) => DrawNode(node as TNode);
+    
+    protected abstract void DrawNode(TNode node);
     
 }

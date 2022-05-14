@@ -1,4 +1,4 @@
-﻿using ExampleGame.Pathfinding;
+﻿using ExampleGame.Scenes;
 using GameEngine.Core.Core;
 using GameEngine.Core.SceneManagement;
 
@@ -11,7 +11,7 @@ internal class Program {
         SetConfig();
         
         Application.Initialize();
-        Hierarchy.LoadScene(new PathfindingScene());
+        Hierarchy.LoadScene(new TestScene());
         Application.Run();
         
         return 0;

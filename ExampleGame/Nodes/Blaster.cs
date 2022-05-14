@@ -1,18 +1,16 @@
-using ExampleGame.Entities;
-using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Debugging;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 
-namespace ExampleGame.Components; 
+namespace ExampleGame.Nodes; 
 
-[RequireComponent(typeof(Transform))]
-public partial class Blaster : Component {
-
+public partial class Blaster : Transform {
+    
     public bool IsShooting;
-    public float Cooldown = 0.1f;
-    public float CurrentCooldown = 0;
+    [Serialized] public float Cooldown { get; set; } = 0.1f;
+    [Serialized] public float CurrentCooldown { get; set; } = 0;
     
     protected override void OnUpdate() {
         if(CurrentCooldown > 0) {
@@ -22,14 +20,14 @@ public partial class Blaster : Component {
         
         if(!IsShooting)
             return;
-
+        
         Shoot();
         CurrentCooldown = Cooldown;
     }
-
+    
     private void Shoot() {
-        Bullet bullet = new Bullet() {
-            Transform = { Position = Transform.Position }
+        Bullet bullet = new Bullet {
+            LocalPosition = this.Position
         };
         Hierarchy.AddEntity(bullet);
         Console.LogSuccess("Spawned Bullet!");

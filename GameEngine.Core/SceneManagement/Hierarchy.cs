@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using GameEngine.Core.Core;
-using GameEngine.Core.Entities;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Physics;
 
 namespace GameEngine.Core.SceneManagement; 
@@ -9,21 +9,21 @@ public static class Hierarchy {
     
     //todo: multiple scenes
     
-    public static Scene Scene { get; private set; }
-    private static Stack<Entity> _entitiesToBeAdded;
+    public static Scene? Scene { get; private set; }
+    private static Stack<Node> _entitiesToBeAdded;
     
     static Hierarchy() {
-        _entitiesToBeAdded = new Stack<Entity>();
+        _entitiesToBeAdded = new Stack<Node>();
     }
     
-    public static void AddEntity(Entity entity) {
-        _entitiesToBeAdded.Push(entity);
+    public static void AddEntity(Node node) {
+        _entitiesToBeAdded.Push(node);
     }
 
     public static void LoadScene(Scene scene) {
         PhysicsEngine.InitializeWorld();
         Scene = scene;
-        foreach(Entity entity in scene.Entities) {
+        foreach(Node entity in scene.Entities) {
             entity.Awake();
         }
     }
@@ -32,11 +32,11 @@ public static class Hierarchy {
         if(Scene is null)
             return;
         Time.DeltaTime = elapsedTime;
-        foreach(Entity entity in Scene.Entities) {
+        foreach(Node entity in Scene.Entities) {
             entity.Update();
         }
 
-        while(_entitiesToBeAdded.TryPop(out Entity entity)) {
+        while(_entitiesToBeAdded.TryPop(out Node entity)) {
             Scene.AddEntity(entity);
             entity.Awake();
         }
@@ -46,7 +46,7 @@ public static class Hierarchy {
         if(Scene is null)
             return;
         Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Entity entity in Scene.Entities) {
+        foreach(Node entity in Scene.Entities) {
             entity.PhysicsUpdate();
         }
     }
@@ -54,7 +54,7 @@ public static class Hierarchy {
     internal static void Draw() {
         if(Scene is null)
             return;
-        foreach(Entity entity in Scene.Entities) {
+        foreach(Node entity in Scene.Entities) {
             entity.Draw();
         }
     }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using ExampleGame.Entities;
-using GameEngine.Core.Entities;
+using ExampleGame.Nodes;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.SceneManagement;
 
@@ -11,28 +11,33 @@ public class TestScene : Scene {
     public TestScene() {
         Name = "Test Scene";
         
-        _entities = new List<Entity>() {
+        _entities = new List<Node>() {
             
             new Bullet() {
-                Transform = { Position = new Vector3(-5, 0, 0) },
+                LocalPosition = new Vector3(-5, 0, 0),
                 Renderer = { Texture = "Box", Shader = "default" }
             },
             new Bullet() {
-                Transform = { Position = new Vector3(5, 0, 0) },
+                LocalPosition = new Vector3(5, 0, 0),
                 Renderer = { Texture = "Box", Shader = "default" }
             },
             new Enemy() {
-                Transform = { Position = new Vector3(0, 5, 0) },
+                LocalPosition = new Vector3(0, 5, 0),
                 Renderer = { Texture = "Checkerboard", Shader = "default" }
             },
             new Player() {
-                Transform = { Position = new Vector3(0, 2, 0) },
+                LocalPosition = new Vector3(0, 2, 0),
                 Renderer = { Texture = "Box", Shader = "default" },
-                Movable = { Speed = 20f }
+                Speed = 20f
             },
-            new DynamicCamera() {
-                Transform = { Position = new Vector3(0, 10, 0) },
-                Camera2D = { Zoom = 50f }
+            new Camera2D() {
+                LocalPosition = new Vector3(0, 10, -5),
+                Zoom = 50f
+            },
+            new Renderer() {
+                LocalPosition = new Vector3(2, 10, 0),
+                Texture = "Box",
+                Shader = "default",
             }
             
         };

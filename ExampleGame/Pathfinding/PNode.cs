@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using GameEngine.Core.Components;
 using GameEngine.Core.Entities;
 
 namespace ExampleGame.Pathfinding;
 
-public partial class Node : Entity, IRenderer, ITransform {
+public partial class PNode : GameEngine.Core.Entities.Node, IRenderer, ITransform {
     
     private bool _isValid = true;
     public bool IsValid {
@@ -23,7 +23,7 @@ public partial class Node : Entity, IRenderer, ITransform {
     public int FCost => GCost + HCost;
     
     public List<Edge> Edges { get; set; } = new();
-    public Node Parent { get; set; }
+    public PNode Parent { get; set; }
 
     protected override void OnAwake() {
         base.OnAwake();
@@ -34,8 +34,9 @@ public partial class Node : Entity, IRenderer, ITransform {
         Renderer!.Texture = IsValid ? "Box" : "Checkerboard";
     }
 
-    public void UpdateHCost(Node other) {
+    public void UpdateHCost(PNode other) {
         HCost = (int) (Transform.Position - other.Transform.Position).Magnitude;
     }
     
 }
+*/

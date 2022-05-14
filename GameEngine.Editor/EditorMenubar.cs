@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 using GameEngine.Core.Core;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
+using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 using ImGuiNET;
 using Silk.NET.GLFW;
 
@@ -150,7 +152,13 @@ public class EditorMenubar {
             if(ImGui.MenuItem("SceneSelect")) { new SceneSelectWindow(); }
             ImGui.EndMenu();
         }
-
+        
+        if(ImGui.BeginMenu("Scene")) {
+            if(ImGui.MenuItem("Save")) SceneSerializer.SaveOpenedScene();
+            if(ImGui.MenuItem("Load")) Hierarchy.LoadScene(SceneSerializer.LoadJson("Test"));
+            ImGui.EndMenu();
+        }
+        
         ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
     }
 

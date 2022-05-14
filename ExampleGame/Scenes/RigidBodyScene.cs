@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using ExampleGame.Entities;
-using GameEngine.Core.Entities;
+using ExampleGame.Nodes;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.SceneManagement;
 
@@ -11,23 +11,23 @@ public class RigidBodyScene : Scene {
     public RigidBodyScene() {
         Name = "RigidBody Scene";
         
-        _entities = new List<Entity>() {
+        _entities = new List<Node>() {
             
             new PhysicsQuad() {
-                Transform = { Position = new Vector3(0, 10, 0) },
+                LocalPosition = new Vector3(0, 10, 0),
                 Renderer = { Texture = "Checkerboard", Shader = "default" }
             },
             new PhysicsQuad() {
-                Transform = { Position = new Vector3(0.5f, 11, 0) },
-                Renderer = { Texture = "Checkerboard", Shader = "default" }
+                LocalPosition = new Vector3(0.5f, 11, 0),
+                Renderer = { Texture = "Checkerboard", Shader = "default" },
             },
             new PhysicsQuad() {
-                Transform = { Position = new Vector3(-0.25f, 12, 0) },
+                LocalPosition = new Vector3(-0.25f, 12, 0),
                 Renderer = { Texture = "Checkerboard", Shader = "default" }
             },
-            new DynamicCamera() {
-                Transform = { Position = new Vector3(0, 10, 0) },
-                Camera2D = { Zoom = 50f }
+            new Camera2D() {
+                LocalPosition = new Vector3(0, 10, 0),
+                Zoom = 50f
             }
             
         };

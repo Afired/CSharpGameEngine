@@ -50,11 +50,11 @@ namespace GameEngine.SourceGenerator.Tracked {
                     
                     string className = classSymbol.Name;
                     
-                    IEnumerable<ComponentInterfaceDefinition> GetComponentInterfaceDefinitionsFromBaseListSyntax(BaseListSyntax baseList) {
+                    IEnumerable<NodeDefinition> GetComponentInterfaceDefinitionsFromBaseListSyntax(BaseListSyntax baseList) {
                         foreach(string baseTypeName in baseList.Types.Select(baseType => baseType.ToString())) {
-                            if(ComponentInterfaceRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out ComponentInterfaceDefinition interfaceDefinition)) {
+                            if(NodeRegister.TryToGetDefinition(baseTypeName, (s1, d) => s1 == d.InterfaceName, out NodeDefinition interfaceDefinition)) {
                                 yield return interfaceDefinition;
-                                foreach(ComponentInterfaceDefinition required in interfaceDefinition.GetAllRequiredComponents()) {
+                                foreach(NodeDefinition required in interfaceDefinition.GetAllChildNodes()) {
                                     yield return required;
                                 }
                             }
@@ -64,25 +64,25 @@ namespace GameEngine.SourceGenerator.Tracked {
                     StringBuilder propertiesSb = new StringBuilder();
                     StringBuilder initializationSb = new StringBuilder();
                     StringBuilder addToComponentsListSb = new StringBuilder();
-                    foreach(ComponentInterfaceDefinition required in GetComponentInterfaceDefinitionsFromBaseListSyntax(classSyntax.BaseList).Distinct()) {
+                    foreach(NodeDefinition required in GetComponentInterfaceDefinitionsFromBaseListSyntax(classSyntax.BaseList).Distinct()) {
                         propertiesSb.Append("    public ");
                         propertiesSb.Append(required.Namespace);
                         propertiesSb.Append('.');
-                        propertiesSb.Append(required.ComponentName);
+                        propertiesSb.Append(required.ClassName);
                         propertiesSb.Append(' ');
-                        propertiesSb.Append(required.ComponentName);
+                        propertiesSb.Append(required.ClassName);
                         propertiesSb.Append(" { get; }\n");
                                 
                         initializationSb.Append("        ");
-                        initializationSb.Append(required.ComponentName);
+                        initializationSb.Append(required.ClassName);
                         initializationSb.Append(" = new ");
                         initializationSb.Append(required.Namespace);
                         initializationSb.Append('.');
-                        initializationSb.Append(required.ComponentName);
+                        initializationSb.Append(required.ClassName);
                         initializationSb.Append("(this);\n");
                         
                         addToComponentsListSb.Append("        (Components as System.Collections.Generic.List<GameEngine.Core.Components.Component>)!.Add(");
-                        addToComponentsListSb.Append(required.ComponentName);
+                        addToComponentsListSb.Append(required.ClassName);
                         addToComponentsListSb.Append(");\n");
                     }
                     string properties = propertiesSb.ToString();

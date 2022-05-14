@@ -1,7 +1,7 @@
 using GameEngine.Core.Core;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
-using GameEngine.Core.Rendering.Cameras;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Window;
@@ -81,7 +81,7 @@ public static unsafe class RenderingEngine {
         Gl.Enable(EnableCap.DepthTest); // reenable depth
         
         // render and draw frame
-        if(CurrentCamera != null) {
+        if(CurrentCamera is not null) {
             DrawBackground();
 //            foreach(Layer layer in LayerStack.GetNormalLayers()) {
 //                layer.Draw();
@@ -102,7 +102,7 @@ public static unsafe class RenderingEngine {
         DrawToBackBuffer();
         Glfw.SwapBuffers(WindowHandle);
     }
-
+    
     private static void DrawToBackBuffer() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);

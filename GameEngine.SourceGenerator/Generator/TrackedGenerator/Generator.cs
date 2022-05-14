@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using GameEngine.SourceGenerator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
 
@@ -20,10 +21,11 @@ namespace GameEngine.SourceGenerator.Tracked {
             try {
                 AssemblyScanner.ScanOtherAssemblies(context);
                 AssemblyScanner.ScanThisAssembly(context);
-                ComponentInterfaceRegister.Resolve();
-                ComponentInterfaceGenerator.Execute(context);
-                PartialComponentGenerator.Execute(context);
-                PartialEntityGenerator.Execute(context);
+                NodeRegister.Resolve();
+                NodeInterfaceGenerator.Execute(context);
+                PartialNodeGenerator.Execute(context);
+//                PartialComponentGenerator.Execute(context);
+//                PartialEntityGenerator.Execute(context);
             } catch(Exception exception) {
                 // todo: report diagnostics
                 // these currently dont work on runtime, but when building solution which is not very helpful in this case

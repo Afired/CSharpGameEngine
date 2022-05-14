@@ -1,12 +1,9 @@
 ﻿using System;
-using GameEngine.Core.SourceGenerator;
-using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 
-namespace GameEngine.Core.Rendering.Cameras;
+namespace GameEngine.Core.Nodes;
 
-[RequireComponent(typeof(Transform))]
 public partial class Camera3D : BaseCamera {
     
     public float NearPlaneDistance = 0.01f;
@@ -19,8 +16,8 @@ public partial class Camera3D : BaseCamera {
     
     
     public override Matrix4x4 GetProjectionMatrix() {
-        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Transform.Position);
-        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(Transform.Rotation);
+        Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Position);
+        Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(Rotation);
         Matrix4x4 perMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfView, (float) Configuration.WindowWidth / (float) Configuration.WindowHeight, NearPlaneDistance, FarPlaneDistance);
         
         return transMatrix * rotMatrix * perMatrix;

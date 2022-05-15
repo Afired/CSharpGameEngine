@@ -61,7 +61,7 @@ public class EditorLayer : Layer {
         colors[(int)ImGuiCol.DockingEmptyBg] = new Vector4(0.12f, 0.12f, 0.12f, 1.0f);
         
         
-        colors[(int)ImGuiCol.ModalWindowDimBg] = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+//        colors[(int)ImGuiCol.MenuBarBg] = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
         
         colors[(int)ImGuiCol.WindowBg] = new Vector4(0.15f, 0.15f, 0.15f, 1.0f);
     }

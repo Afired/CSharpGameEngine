@@ -1,3 +1,5 @@
+using System.Reflection;
+using ExampleGame;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using ImGuiNET;
@@ -46,6 +48,37 @@ public class HierarchyWindow : EditorWindow {
                 DrawEntityNode(entity);
             }
             ImGui.TreePop();
+
+            if(ImGui.BeginPopupContextWindow("", ImGuiPopupFlags.MouseButtonRight)) {
+                ImGui.Text("Create new Node");
+                ImGui.Spacing();
+                ImGui.Separator();
+                ImGui.Spacing();
+                foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
+                    if(ImGui.MenuItem(type.Name)) {
+                        object[] parameters = type
+                            .GetConstructors()
+                            .Single()
+                            .GetParameters()
+                            .Select(p => (object)null!)
+                            .ToArray();
+                        Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                        Hierarchy.AddEntity(newNode);
+                    }
+                }
+                foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
+                    if(ImGui.MenuItem(type.Name)) {
+                        object[] parameters = type
+                            .GetConstructors()
+                            .Single()
+                            .GetParameters()
+                            .Select(p => (object)null!)
+                            .ToArray();
+                        Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                        Hierarchy.AddEntity(newNode);
+                    }
+                }
+            }
         }
         
     }

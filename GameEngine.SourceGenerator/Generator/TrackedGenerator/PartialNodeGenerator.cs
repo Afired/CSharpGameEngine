@@ -19,7 +19,7 @@ namespace GameEngine.SourceGenerator.Tracked {
                 StringBuilder initializationSb = new StringBuilder();
                 StringBuilder addToComponentsListSb = new StringBuilder();
                 foreach(NodeDefinition childNode in node.GetAllChildNodes()) {
-                    propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized] public ");
+                    propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public ");
                     propertiesSb.Append(childNode.Namespace);
                     propertiesSb.Append('.');
                     propertiesSb.Append(childNode.ClassName);

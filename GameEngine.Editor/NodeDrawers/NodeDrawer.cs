@@ -1,7 +1,5 @@
 using System.Reflection;
 using GameEngine.Core.Nodes;
-using GameEngine.Core.Numerics;
-using GameEngine.Core.Rendering;
 using GameEngine.Core.Serialization;
 using GameEngine.Editor.PropertyDrawers;
 using ImGuiNET;
@@ -52,19 +50,28 @@ public abstract class NodeDrawer {
         }
     }
     
-    //todo: exclude if [Serialized(Hidden)]
     private static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
         List<MemberInfo> members = new List<MemberInfo>();
         for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
             members.AddRange(
                 currentType
                     .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(prop => prop.GetCustomAttribute<Serialized>(false) is not null)
+                    .Where(prop => {
+                        Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
+                        if(serializedAttribute is null) return false;
+                        if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
+                        return true;
+                    })
             );
             members.AddRange(
                 currentType
                     .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(prop => prop.GetCustomAttribute<Serialized>(false) is not null)
+                    .Where(prop => {
+                        Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
+                        if(serializedAttribute is null) return false;
+                        if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
+                        return true;
+                    })
             );
         }
         return members;

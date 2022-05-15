@@ -5,8 +5,8 @@ namespace GameEngine.Core.Nodes;
 
 public class Node {
     
-    [Serialized] public List<Node> ChildNodes { get; private set; }
-    [Serialized] public Node? ParentNode { get; private set; }
+    [Serialized(Editor.Hidden)] public List<Node> ChildNodes { get; private set; }
+    [Serialized(Editor.Hidden)] public Node? ParentNode { get; private set; }
     
     protected Node(Node? parentNode) {
         ChildNodes = new List<Node>();

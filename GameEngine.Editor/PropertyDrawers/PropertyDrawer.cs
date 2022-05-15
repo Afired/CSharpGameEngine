@@ -69,10 +69,19 @@ public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
     
 }
 
-public class PropertyDrawerInt : PropertyDrawer<float> {
+public class PropertyDrawerFloat : PropertyDrawer<float> {
     
     protected override void DrawProperty(ref float value, Property property) {
-        ImGui.DragFloat(property.Name, ref value, 0.01f, float.MinValue, float.MaxValue, "%g");
+        ImGui.Columns(2);
+        ImGui.Text(property.Name);
+        ImGui.NextColumn();
+
+        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+        ImGui.PushID(property.Name);
+        ImGui.DragFloat("", ref value, 0.01f, float.MinValue, float.MaxValue, "%g");
+        ImGui.PopID();
+        ImGui.PopItemWidth();
+        ImGui.Columns(1);
     }
     
 }
@@ -88,9 +97,20 @@ public class PropertyDrawerBool : PropertyDrawer<bool> {
 public class PropertyDrawerColor : PropertyDrawer<Color> {
     
     protected override void DrawProperty(ref Color value, Property property) {
+        ImGui.Columns(2);
+        ImGui.Text(property.Name);
+        ImGui.NextColumn();
+        
+        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+        ImGui.PushID(property.Name);
+        
         System.Numerics.Vector4 v4 = new(value.R, value.G, value.B, value.A);
-        ImGui.ColorEdit4(property.Name, ref v4);
+        ImGui.ColorEdit4("", ref v4);
         value = new Color(v4.X, v4.Y, v4.Z, v4.W);
+        
+        ImGui.PopID();
+        ImGui.PopItemWidth();
+        ImGui.Columns(1);
     }
     
 }
@@ -98,7 +118,16 @@ public class PropertyDrawerColor : PropertyDrawer<Color> {
 public class PropertyDrawerString : PropertyDrawer<string> {
     
     protected override void DrawProperty(ref string value, Property property) {
-        ImGui.InputText(property.Name, ref value, 30);
+        ImGui.Columns(2);
+        ImGui.Text(property.Name);
+        ImGui.NextColumn();
+
+        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
+        ImGui.PushID(property.Name);
+        ImGui.InputText("", ref value, 30);
+        ImGui.PopID();
+        ImGui.PopItemWidth();
+        ImGui.Columns(1);
     }
     
 }
@@ -107,8 +136,29 @@ public class PropertyDrawerVector3 : PropertyDrawer<Vector3> {
     
     protected override void DrawProperty(ref Vector3 value, Property property) {
         System.Numerics.Vector3 v3 = new System.Numerics.Vector3(value.X, value.Y, value.Z);
-        ImGui.DragFloat3(property.Name, ref v3, 0.01f);
+        ImGui.Columns(2);
+        ImGui.Text(property.Name);
+        ImGui.NextColumn();
+        
+        ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X / 3 - 20);
+        ImGui.PushID(property.Name);
+        ImGui.Text("X");
+        ImGui.SameLine();
+        ImGui.DragFloat("##X", ref v3.X);
+        ImGui.SameLine();
+        ImGui.Text("Y");
+        ImGui.SameLine();
+        ImGui.DragFloat("##Y", ref v3.Y);
+        ImGui.SameLine();
+        ImGui.Text("Z");
+        ImGui.SameLine();
+        ImGui.DragFloat("##Z", ref v3.Z);
+//        ImGui.DragFloat3("", ref v3, 0.01f);
         value = new Vector3(v3.X, v3.Y, v3.Z);
+        
+        ImGui.PopID();
+        ImGui.PopItemWidth();
+        ImGui.Columns(1);
     }
     
 }

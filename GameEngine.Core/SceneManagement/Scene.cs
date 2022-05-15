@@ -14,5 +14,9 @@ public class Scene {
         _entities.Add(node);
         node.Awake();
     }
+
+    public void RemoveNode(Node node) {
+        _entities.Remove(node);
+    }
     
 }

@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Reflection;
 using ExampleGame;
 using GameEngine.Core.Nodes;
@@ -48,8 +49,10 @@ public class HierarchyWindow : EditorWindow {
                 DrawEntityNode(entity);
             }
             ImGui.TreePop();
-
-            if(ImGui.BeginPopupContextWindow("", ImGuiPopupFlags.MouseButtonRight)) {
+            
+            ImGui.Spacing();
+            ImGui.Button("Create new Node", new Vector2(ImGui.GetContentRegionAvail().X + 10, 20));
+            if(ImGui.BeginPopupContextItem("", ImGuiPopupFlags.MouseButtonLeft)) {
                 ImGui.Text("Create new Node");
                 ImGui.Spacing();
                 ImGui.Separator();
@@ -78,7 +81,9 @@ public class HierarchyWindow : EditorWindow {
                         Hierarchy.AddEntity(newNode);
                     }
                 }
+                ImGui.EndPopup();
             }
+            
         }
         
     }
@@ -92,6 +97,12 @@ public class HierarchyWindow : EditorWindow {
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
             Selected = node;
+        }
+
+        if(ImGui.BeginPopupContextItem()) {
+            if(ImGui.MenuItem("Delete Node"))
+                Hierarchy.DeleteEntity(node.GetRootNode());
+            ImGui.EndPopup();
         }
 
         if(opened) {

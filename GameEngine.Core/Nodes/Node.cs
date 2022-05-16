@@ -1,21 +1,24 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using GameEngine.Core.Serialization;
+using Newtonsoft.Json;
 
 namespace GameEngine.Core.Nodes; 
 
 public class Node {
     
-    //todo: refactor to array
-    // [Serialized(Editor.Hidden)] public List<Node> ChildNodes { get; private set; }
-    [Serialized(Editor.Hidden)] public Node[] ChildNodes { get; protected set; }
+    public IReadOnlyList<Node> ChildNodes => _childNodes;
+    [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
     public Node? ParentNode { get; private set; }
     
-    protected Node(out List<Node> childNodes, Node? parentNode) {
+    protected Node(Node? parentNode, out List<Node> childNodes) {
         childNodes = new List<Node>();
-        ChildNodes = childNodes.ToArray();
         ParentNode = parentNode;
     }
+    
+    [JsonConstructor]
+    protected Node(bool isJsonConstructed) { }
     
     public Node GetRootNode() {
         Node currentNode = this;

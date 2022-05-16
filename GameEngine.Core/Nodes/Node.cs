@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using GameEngine.Core.Serialization;
 using Newtonsoft.Json;
@@ -9,16 +8,13 @@ namespace GameEngine.Core.Nodes;
 public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
-    [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
     public Node? ParentNode { get; private set; }
+    [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
     
     protected Node(Node? parentNode, out List<Node> childNodes) {
         childNodes = new List<Node>();
         ParentNode = parentNode;
     }
-    
-    [JsonConstructor]
-    protected Node(bool isJsonConstructed) { }
     
     public Node GetRootNode() {
         Node currentNode = this;
@@ -58,6 +54,9 @@ public class Node {
     protected virtual void OnUpdate() { }
     protected virtual void OnPhysicsUpdate() { }
     protected virtual void OnDraw() { }
+    
+    [JsonConstructor]
+    protected Node(bool isJsonConstructed) { }
     
     [OnDeserialized]
     private void OnAfterDeserialization(StreamingContext context) {

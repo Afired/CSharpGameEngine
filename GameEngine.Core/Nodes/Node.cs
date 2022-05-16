@@ -7,11 +7,13 @@ namespace GameEngine.Core.Nodes;
 public class Node {
     
     //todo: refactor to array
-    [Serialized(Editor.Hidden)] public List<Node> ChildNodes { get; private set; }
+    // [Serialized(Editor.Hidden)] public List<Node> ChildNodes { get; private set; }
+    [Serialized(Editor.Hidden)] public Node[] ChildNodes { get; protected set; }
     public Node? ParentNode { get; private set; }
     
-    protected Node(Node? parentNode) {
-        ChildNodes = new List<Node>();
+    protected Node(out List<Node> childNodes, Node? parentNode) {
+        childNodes = new List<Node>();
+        ChildNodes = childNodes.ToArray();
         ParentNode = parentNode;
     }
     

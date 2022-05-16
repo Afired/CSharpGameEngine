@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GameEngine.Core.Nodes;
 
 // before we directly compared the actual strings which means this is not being detected: [GameEngine.AutoGenerator.GenerateComponentInterface]
@@ -5,6 +7,14 @@ namespace GameEngine.Core.Nodes;
 //todo: even this would work because we check for the actual string containing the name: [Something.Blablabla.GenerateComponentInterface.Blabla]
 
 public partial class ExampleComponent : Node, ITransform {
+    
+    public ExampleComponent(Node? parentNode = null) : this(out List<Node> childNodes, parentNode) {
+        ChildNodes = childNodes.ToArray();
+    }
+    
+    private ExampleComponent(out List<Node> childNodes, Node? parentNode) : base(out childNodes, parentNode) {
+        childNodes.Add(new Transform());
+    }
     
     // Awake Callback
     protected override void OnAwake() {

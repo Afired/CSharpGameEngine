@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.Serialization;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes; 
@@ -23,11 +25,10 @@ public class Node {
         return currentNode;
     }
     
-    internal void Awake(Node? parentNode = null) {
-        ParentNode = parentNode;
+    internal void Awake() {
         OnAwake();
         foreach(Node childNodes in ChildNodes)
-            childNodes.Awake(this);
+            childNodes.Awake();
     }
     
     internal void Update() {
@@ -52,5 +53,11 @@ public class Node {
     protected virtual void OnUpdate() { }
     protected virtual void OnPhysicsUpdate() { }
     protected virtual void OnDraw() { }
+    
+    [OnDeserialized]
+    private void OnAfterDeserialization(StreamingContext context) {
+        foreach(Node childNode in ChildNodes)
+            childNode.ParentNode = this;
+    }
     
 }

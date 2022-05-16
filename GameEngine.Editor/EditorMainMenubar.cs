@@ -145,13 +145,13 @@ public class EditorMainMenubar {
             ImGui.EndMenu();
         }
         
-        if(ImGui.BeginMenu("Windows")) {
-            if(ImGui.MenuItem("AssetBrowser")) { new AssetBrowserWindow(); }
+        if(ImGui.BeginMenu("Window")) {
+            if(ImGui.MenuItem("Asset Browser")) { new AssetBrowserWindow(); }
             if(ImGui.MenuItem("Console")) { new ConsoleWindow(); }
             if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
             if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
             if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
-            if(ImGui.MenuItem("SceneSelect")) { new SceneSelectWindow(); }
+            if(ImGui.MenuItem("Scene Select")) { new SceneSelectWindow(); }
             ImGui.EndMenu();
         }
         

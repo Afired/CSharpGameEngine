@@ -13,15 +13,20 @@ public class EditorLayer : Layer {
     protected override void OnAttach() {
         GlfwWindow.ImGuiController.Update(Time.DeltaTime);
         SetTheme();
+        PushStyle();
+    }
+
+    private static void PushStyle() {
+        ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 4);
     }
 
     private static void SetTheme() {
         RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
         
         // Header
-        colors[(int)ImGuiCol.Header] = new Vector4(0.2f, 0.205f, 0.21f, 1.0f);
-        colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.2f, 0.205f, 0.21f, 1.0f);
-        colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.2f, 0.205f, 0.21f, 1.0f);
+        colors[(int)ImGuiCol.Header] = new Vector4(0.21f, 0.21f, 0.21f, 1.0f);
+        colors[(int)ImGuiCol.HeaderHovered] = new Vector4(0.23f, 0.23f, 0.23f, 1.0f);
+        colors[(int)ImGuiCol.HeaderActive] = new Vector4(0.25f, 0.25f, 0.25f, 1.0f);
         
         // Button
         colors[(int)ImGuiCol.Button] = new Vector4(0.29f, 0.29f, 0.29f, 1.0f);
@@ -29,9 +34,9 @@ public class EditorLayer : Layer {
 //        colors[(int)ImGuiCol.ButtonHovered] = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
         
         // Property Field BG
-        colors[(int)ImGuiCol.FrameBg] = new Vector4(0.11f, 0.11f, 0.11f, 1.0f);
+        colors[(int)ImGuiCol.FrameBg] = new Vector4(0.12f, 0.12f, 0.12f, 1.0f);
+        colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.10f, 0.10f, 0.10f, 1.0f);
         colors[(int)ImGuiCol.FrameBgActive] = new Vector4(0.22f, 0.22f, 0.22f, 1.2f);
-        colors[(int)ImGuiCol.FrameBgHovered] = new Vector4(0.17f, 0.17f, 0.17f, 1.0f);
         
         // Tabs
         colors[(int)ImGuiCol.TabUnfocused] = new Vector4(0.18f, 0.18f, 0.18f, 1.0f);            // tabs which are in background
@@ -63,11 +68,12 @@ public class EditorLayer : Layer {
         
 //        colors[(int)ImGuiCol.MenuBarBg] = new Vector4(1.0f, 0.0f, 0.0f, 1.0f);
         
-        colors[(int)ImGuiCol.WindowBg] = new Vector4(0.15f, 0.15f, 0.15f, 1.0f);
+        colors[(int)ImGuiCol.WindowBg] = new Vector4(0.16f, 0.16f, 0.16f, 1.0f);
     }
 
     protected override void OnDetach() {
         GlfwWindow.ImGuiController.Render();
+        ImGui.PopStyleVar();
     }
     
 }

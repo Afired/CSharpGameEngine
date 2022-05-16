@@ -50,7 +50,7 @@ public abstract class NodeDrawer {
         }
     }
     
-    private static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
+    protected static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
         List<MemberInfo> members = new List<MemberInfo>();
         for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
             members.AddRange(

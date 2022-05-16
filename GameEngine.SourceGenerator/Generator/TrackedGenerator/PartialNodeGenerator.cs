@@ -25,7 +25,7 @@ namespace GameEngine.SourceGenerator.Tracked {
                     propertiesSb.Append(childNode.ClassName);
                     propertiesSb.Append(' ');
                     propertiesSb.Append(childNode.ClassName);
-                    propertiesSb.Append(" { get; set; }\n"); // was init
+                    propertiesSb.Append(" { get; init; }\n"); // was init
                     
                     initializationSb.Append("        ");
                     initializationSb.Append(childNode.ClassName);

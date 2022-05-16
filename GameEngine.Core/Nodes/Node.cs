@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using GameEngine.Core.Serialization;
 
@@ -7,8 +6,9 @@ namespace GameEngine.Core.Nodes;
 
 public class Node {
     
+    //todo: refactor to array
     [Serialized(Editor.Hidden)] public List<Node> ChildNodes { get; private set; }
-    [Serialized(Editor.Hidden)] public Node? ParentNode { get; private set; }
+    public Node? ParentNode { get; private set; }
     
     protected Node(Node? parentNode) {
         ChildNodes = new List<Node>();

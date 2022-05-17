@@ -65,7 +65,7 @@ public class HierarchyWindow : EditorWindow {
                     if(ImGui.MenuItem(type.Name)) {
                         object[] parameters = type
                             .GetConstructors()
-                            .Single()
+                            .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
                             .GetParameters()
                             .Select(p => (object)null!)
                             .ToArray();
@@ -77,7 +77,7 @@ public class HierarchyWindow : EditorWindow {
                     if(ImGui.MenuItem(type.Name)) {
                         object[] parameters = type
                             .GetConstructors()
-                            .Single()
+                            .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
                             .GetParameters()
                             .Select(p => (object)null!)
                             .ToArray();

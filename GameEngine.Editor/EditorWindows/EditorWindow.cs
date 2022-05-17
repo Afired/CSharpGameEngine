@@ -15,7 +15,7 @@ public class EditorWindow {
     private void DrawWindow() {
         bool opened = true;
         // push id doesnt work with windows since it cant be handled with the id stack, c++ uses ## or ### to set an identifier
-        ImGui.Begin(Title + "##" + _id, ref opened, ImGuiWindowFlags.NoCollapse);
+        ImGui.Begin(Title + "##" + _id, ref opened, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar);
 
         DrawToolbar();
         

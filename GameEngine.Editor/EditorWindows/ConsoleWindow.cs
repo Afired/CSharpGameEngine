@@ -43,11 +43,17 @@ public class ConsoleWindow : EditorWindow {
     }
     
     private void DrawToolBar() {
-        if(ImGui.Button("Clear")) {
-            _logMessages.Clear();
-            _logCount = 0;
+        if(ImGui.BeginMenuBar()) {
+            
+            if(ImGui.Button("Clear")) {
+                _logMessages.Clear();
+                _logCount = 0;
+            }
+            ImGui.Text($"Log Counter: {_logCount}");
+            
+            ImGui.EndMenuBar();
         }
-        ImGui.Text($"Log Counter: {_logCount}");
+        
 //        ImGui.Checkbox("Errors", ref _showErrorLogMessages);
     }
     

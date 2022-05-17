@@ -13,8 +13,8 @@ public class HierarchyWindow : EditorWindow {
     
     public static event OnSelect OnSelect;
 
-    private Node v_selected;
-    public Node Selected {
+    private Node? v_selected;
+    public Node? Selected {
         get => v_selected;
         set {
             v_selected = value;
@@ -24,14 +24,18 @@ public class HierarchyWindow : EditorWindow {
     
 
     public HierarchyWindow() {
-        Title = "Hierarchy";
+        Title = "Outliner";
     }
     
     protected override void Draw() {
+        if(ImGui.BeginMenuBar()) {
+            ImGui.Text(Hierarchy.Scene is not null ? Hierarchy.Scene.Name : "no scene loaded");
+            ImGui.EndMenuBar();
+        }
+        
         if(Hierarchy.Scene is not null)
             DrawSceneNode(Hierarchy.Scene);
-        else
-            ImGui.Text("no scene loaded");
+        
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selected = null;
         }

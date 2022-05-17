@@ -15,8 +15,12 @@ public class InspectorWindow : EditorWindow {
     }
     
     protected override void Draw() {
+        
+        if(ImGui.BeginMenuBar()) {
+            ImGui.Text(Selected is not null ? Selected.GetType().ToString() : "select a node to inspect");
+            ImGui.EndMenuBar();
+        }
         if(Selected is null) {
-            ImGui.Text("select a node to inspect");
             return;
         }
         

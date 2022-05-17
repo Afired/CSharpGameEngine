@@ -14,13 +14,29 @@ public abstract class NodeDrawer {
     
     internal static void Draw(Node node) {
         _nodeDrawerLookup ??= BuildNodeDrawerLookup();
-        
-        if(_nodeDrawerLookup.TryGetValue(node.GetType(), out NodeDrawer? nodeDrawer)) {
-            nodeDrawer.DrawNodeInternal(node);
-        } else {
-            DrawDefaultHeader(node);
-            DrawDefaultDrawers(node);
+
+        foreach(Type currentType in EnumerateFromBaseTypeUp(node.GetType())) {
+
+            List<MemberInfo> memberInfos = GetSerializedMembersNotBeingHidden(currentType);
+            
+            if(memberInfos.Count == 0)
+                continue;
+            
+            if(ImGui.CollapsingHeader(currentType.Name, ImGuiTreeNodeFlags.DefaultOpen)) {
+                if(_nodeDrawerLookup.TryGetValue(currentType, out NodeDrawer? nodeDrawer))
+                    nodeDrawer.DrawNodeInternal(node);
+                else
+                    DrawDefaultDrawers(node, currentType);
+            }
+            
         }
+        
+//        if(_nodeDrawerLookup.TryGetValue(node.GetType(), out NodeDrawer? nodeDrawer)) {
+//            nodeDrawer.DrawNodeInternal(node);
+//        } else {
+//            DrawDefaultHeader(node);
+//            DrawDefaultDrawers(node);
+//        }
     }
     
     private static Dictionary<Type, NodeDrawer> BuildNodeDrawerLookup() {
@@ -34,14 +50,14 @@ public abstract class NodeDrawer {
         return nodeDrawerLookup;
     }
     
-    protected static void DrawDefaultHeader(Node node) {
+    private static void DrawDefaultHeader(Node node, Type type) {
 //        ImGui.CollapsingHeader(node.GetType().ToString());
-        ImGui.Text(node.GetType().ToString());
+        ImGui.Text(type.ToString());
         ImGui.Spacing();
     }
     
-    protected static void DrawDefaultDrawers(Node node) {
-        foreach(MemberInfo memberInfo in GetSerializedMembersNotBeingHidden(node.GetType())) {
+    protected static void DrawDefaultDrawers(Node node, Type type) {
+        foreach(MemberInfo memberInfo in GetSerializedMembersNotBeingHidden(type)) {
             if(memberInfo is PropertyInfo propertyInfo) {
                 PropertyDrawer.Draw(node, propertyInfo);
             } else if(memberInfo is FieldInfo fieldInfo) {
@@ -50,7 +66,7 @@ public abstract class NodeDrawer {
         }
     }
     
-    protected static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
+    protected static List<MemberInfo> GetSerializedMembersNotBeingHiddenWithBaseTypesIncluded(Type type) {
         List<MemberInfo> members = new List<MemberInfo>();
         for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
             members.AddRange(
@@ -75,6 +91,41 @@ public abstract class NodeDrawer {
             );
         }
         return members;
+    }
+    
+    protected static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
+        List<MemberInfo> members = new List<MemberInfo>();
+        members.AddRange(
+            type
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(prop => {
+                    Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
+                    if(serializedAttribute is null) return false;
+                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
+                    return true;
+                })
+        );
+        members.AddRange(
+            type
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(prop => {
+                    Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
+                    if(serializedAttribute is null) return false;
+                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
+                    return true;
+                })
+        );
+        return members;
+    }
+    
+    protected static IEnumerable<Type> EnumerateFromBaseTypeUp(Type type) {
+        Stack<Type> typeStack = new();
+        for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
+            typeStack.Push(currentType);
+        }
+        while(typeStack.TryPop(out Type? currentType)) {
+            yield return currentType;
+        }
     }
 }
 

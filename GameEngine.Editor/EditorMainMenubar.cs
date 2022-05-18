@@ -10,9 +10,9 @@ using Silk.NET.GLFW;
 
 namespace GameEngine.Editor.EditorWindows; 
 
-public class EditorMenubar {
-
-    struct Position {
+public class EditorMainMenubar {
+    
+    private struct Position {
         public int X;
         public int Y;
         public Position(int x, int y) {
@@ -26,12 +26,13 @@ public class EditorMenubar {
 
     private bool _dragging;
     
-    public EditorMenubar() {
+    public EditorMainMenubar() {
         Program.EditorLayer.OnDraw += Draw;
     }
     
     private void Draw() {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
+        ImGui.PushStyleColor(ImGuiCol.MenuBarBg, new Vector4(0.11f, 0.11f, 0.11f, 1.0f));
         if(ImGui.BeginMainMenuBar()) {
             
             DrawAppIcon("Checkerboard");
@@ -46,6 +47,7 @@ public class EditorMenubar {
         }
         // pop main menu bar size
         ImGui.PopStyleVar();
+        ImGui.PopStyleColor();
     }
     
     public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -143,13 +145,13 @@ public class EditorMenubar {
             ImGui.EndMenu();
         }
         
-        if(ImGui.BeginMenu("Windows")) {
-            if(ImGui.MenuItem("AssetBrowser")) { new AssetBrowserWindow(); }
+        if(ImGui.BeginMenu("Window")) {
+            if(ImGui.MenuItem("Asset Browser")) { new AssetBrowserWindow(); }
             if(ImGui.MenuItem("Console")) { new ConsoleWindow(); }
             if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
             if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
             if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
-            if(ImGui.MenuItem("SceneSelect")) { new SceneSelectWindow(); }
+            if(ImGui.MenuItem("Scene Select")) { new SceneSelectWindow(); }
             ImGui.EndMenu();
         }
         

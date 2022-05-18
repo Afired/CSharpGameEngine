@@ -11,15 +11,21 @@ public static class Hierarchy {
     
     public static Scene? Scene { get; private set; }
     private static Stack<Node> _entitiesToBeAdded;
-    
+    private static Stack<Node> _entitiesToBeDeleted;
+
     static Hierarchy() {
         _entitiesToBeAdded = new Stack<Node>();
+        _entitiesToBeDeleted = new Stack<Node>();
     }
     
     public static void AddEntity(Node node) {
         _entitiesToBeAdded.Push(node);
     }
-
+    
+    public static void DeleteEntity(Node node) {
+        _entitiesToBeDeleted.Push(node);
+    }
+    
     public static void LoadScene(Scene scene) {
         PhysicsEngine.InitializeWorld();
         Scene = scene;
@@ -31,14 +37,16 @@ public static class Hierarchy {
     internal static void Update(float elapsedTime) {
         if(Scene is null)
             return;
-        Time.DeltaTime = elapsedTime;
-        foreach(Node entity in Scene.Entities) {
-            entity.Update();
+        while(_entitiesToBeDeleted.TryPop(out Node node)) {
+            Scene.RemoveNode(node);
         }
-
         while(_entitiesToBeAdded.TryPop(out Node entity)) {
             Scene.AddEntity(entity);
             entity.Awake();
+        }
+        Time.DeltaTime = elapsedTime;
+        foreach(Node entity in Scene.Entities) {
+            entity.Update();
         }
     }
     

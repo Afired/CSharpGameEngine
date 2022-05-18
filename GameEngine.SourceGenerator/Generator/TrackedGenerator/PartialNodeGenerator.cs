@@ -19,25 +19,25 @@ namespace GameEngine.SourceGenerator.Tracked {
                 StringBuilder initializationSb = new StringBuilder();
                 StringBuilder addToComponentsListSb = new StringBuilder();
                 foreach(NodeDefinition childNode in node.GetAllChildNodes()) {
-                    propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized] public ");
+                    propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public ");
                     propertiesSb.Append(childNode.Namespace);
                     propertiesSb.Append('.');
                     propertiesSb.Append(childNode.ClassName);
                     propertiesSb.Append(' ');
                     propertiesSb.Append(childNode.ClassName);
-                    propertiesSb.Append(" { get; set; }\n"); // was init
+                    propertiesSb.Append(" { get; init; } = null!;\n");
                     
-                    initializationSb.Append("        ");
+                    initializationSb.Append("\n        ");
                     initializationSb.Append(childNode.ClassName);
                     initializationSb.Append(" = new ");
                     initializationSb.Append(childNode.Namespace);
                     initializationSb.Append('.');
                     initializationSb.Append(childNode.ClassName);
-                    initializationSb.Append("(this);\n");
+                    initializationSb.Append("(this);");
                     
-                    addToComponentsListSb.Append("        ChildNodes.Add(");
+                    addToComponentsListSb.Append("\n        childNodes.Add(");
                     addToComponentsListSb.Append(childNode.ClassName);
-                    addToComponentsListSb.Append(");\n");
+                    addToComponentsListSb.Append(");");
                 }
                 string properties = propertiesSb.ToString();
                 string initialization = initializationSb.ToString();
@@ -45,18 +45,22 @@ namespace GameEngine.SourceGenerator.Tracked {
                 
                 var sourceBuilder = new StringBuilder();
                 sourceBuilder.Append(
-$@"//usingDirectives
-
-namespace {node.Namespace};
+$@"namespace {node.Namespace};
 
 {CLASS_ACCESSIBILITY} partial class {node.ClassName} {{
-
+    
 {properties}
-    public {node.ClassName}(GameEngine.Core.Nodes.Node? parentNode = null) : base(parentNode) {{
-{initialization}
+    public {node.ClassName}(GameEngine.Core.Nodes.Node? parentNode = null) : this(parentNode, out System.Collections.Generic.List<GameEngine.Core.Nodes.Node> childNodes) {{
+        _childNodes = childNodes;
+    }}
+    
+    public {node.ClassName}(GameEngine.Core.Nodes.Node? parentNode, out System.Collections.Generic.List<GameEngine.Core.Nodes.Node> childNodes) : base(parentNode, out childNodes) {{{initialization}
 {addToComponentsList}
     }}
-
+    
+    [Newtonsoft.Json.JsonConstructor]
+    protected {node.ClassName}(bool isJsonConstructed) : base(isJsonConstructed) {{ }}
+    
 }}
 "
                 );

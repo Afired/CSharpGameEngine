@@ -1,6 +1,7 @@
 ﻿using System;
 using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
+using GlmNet;
 
 namespace GameEngine.Core.Nodes;
 
@@ -21,6 +22,10 @@ public partial class Camera3D : BaseCamera {
         Matrix4x4 perMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfView, (float) Configuration.WindowWidth / (float) Configuration.WindowHeight, NearPlaneDistance, FarPlaneDistance);
         
         return transMatrix * rotMatrix * perMatrix;
+    }
+    
+    public override mat4 GLM_GetProjectionMatrix() {
+        throw new NotImplementedException();
     }
     
 }

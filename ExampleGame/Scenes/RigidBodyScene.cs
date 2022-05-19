@@ -26,8 +26,8 @@ public class RigidBodyScene : Scene {
                 Renderer = { Texture = "Checkerboard", Shader = "default" }
             },
             new Camera2D() {
-                LocalPosition = new Vector3(0, 10, 0),
-                Zoom = 50f
+                LocalPosition = new Vector3(0, 10, -5),
+                Zoom = 10f
             }
             
         };

@@ -32,7 +32,7 @@ public class TestScene : Scene {
             },
             new Camera2D() {
                 LocalPosition = new Vector3(0, 10, -5),
-                Zoom = 50f
+                Zoom = 10f
             },
             new Renderer() {
                 LocalPosition = new Vector3(2, 10, 0),

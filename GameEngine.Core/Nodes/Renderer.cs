@@ -3,6 +3,7 @@ using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Serialization;
+using GlmNet;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes; 
@@ -16,12 +17,18 @@ public partial class Renderer : Transform {
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
         
-        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
-        Matrix4x4 sca = Matrix4x4.CreateScale(Scale.X, Scale.Y, Scale.Z);
-        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(Rotation);
+//        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
+//        Matrix4x4 sca = Matrix4x4.CreateScale(Scale.X, Scale.Y, Scale.Z);
+//        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(Rotation);
+
+        mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
+                            glm.scale(new mat4(1), new vec3(Scale.X, Scale.Y, Scale.Z));
         
-        ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
-        ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
+        
+//        ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
+//        ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
+        ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
+        ShaderRegister.Get(Shader).GLM_SetMat("projection", RenderingEngine.CurrentCamera.GLM_GetProjectionMatrix());
         
         Geometry geometry = GeometryRegister.Get(Geometry);
         

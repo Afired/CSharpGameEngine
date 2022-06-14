@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameEngine.SourceGenerator.Extensions;
-using GameEngine.SourceGenerator.Tracked.Tracking;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -149,7 +147,9 @@ public static class PartialNodeGenerator {
         
         var sourceBuilder = new StringBuilder();
         sourceBuilder.Append(
-$@"namespace {nodeSymbol.ContainingNamespace.ToDisplayString()};
+$@"#nullable enable
+
+namespace {nodeSymbol.ContainingNamespace.ToDisplayString()};
 
 public partial class {nodeSymbol.Name} {{
     

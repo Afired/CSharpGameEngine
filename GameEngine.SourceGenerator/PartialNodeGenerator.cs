@@ -57,6 +57,7 @@ public static class PartialNodeGenerator {
         // warn to use partial keyword
         if(!classDeclarationSyntax.IsPartial()) {
             // these currently dont work on runtime, but when building solution
+            // fix merged on feb 16th into dotnet:main of roslyn repo -> use dotnet 7 preview?
             Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classDeclarationSyntax.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 
 namespace GameEngine.SourceGenerator; 
@@ -9,9 +10,9 @@ public class Generator : ISourceGenerator {
     
     public void Initialize(GeneratorInitializationContext context) {
         // uncomment for debugging of the source generator process
-        // #if DEBUG
-        // if(!Debugger.IsAttached) Debugger.Launch();
-        // #endif
+        #if DEBUG
+        if(!Debugger.IsAttached) Debugger.Launch();
+        #endif
     }
     
     public void Execute(GeneratorExecutionContext context) {

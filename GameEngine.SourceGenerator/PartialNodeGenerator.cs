@@ -42,7 +42,7 @@ public static class PartialNodeGenerator {
     
     private static void VisitClass(GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax, SemanticModel semanticModel) {
         
-        INamedTypeSymbol classSymbol = (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) as INamedTypeSymbol)!;
+        INamedTypeSymbol classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax)!;
         
         // semanticModel.GetSymbolInfo(classDeclarationSyntax).Symbol.
         
@@ -54,16 +54,20 @@ public static class PartialNodeGenerator {
         // if(classSymbol.IsAbstract)
         //     continue;
         
-        // // warn to use partial keyword
-        // if(!classSyntax.IsPartial()) {
-        //     // these currently dont work on runtime, but when building solution
-        //     Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classSyntax.GetLocation());
-        //     context.ReportDiagnostic(diagnostic);
-        // }
+        // warn to use partial keyword
+        if(!classDeclarationSyntax.IsPartial()) {
+            // these currently dont work on runtime, but when building solution
+            Diagnostic diagnostic = Diagnostic.Create(new DiagnosticDescriptor("TEST01", "Title", "Message", "Category", DiagnosticSeverity.Error, true), classDeclarationSyntax.GetLocation());
+            context.ReportDiagnostic(diagnostic);
+        }
         
         List<ISymbol> hasNodesList = new();
         
-        foreach(BaseTypeSyntax baseTypeSyntax in classDeclarationSyntax.BaseList.Types) {
+        if(classDeclarationSyntax.BaseList is null) // symbol gave back a BaseType of Node, but if the class declaration base list is null -> doubled partial class declaration
+            return;
+        //todo: ignore if its not the main partial class
+        
+        foreach(BaseTypeSyntax baseTypeSyntax in classDeclarationSyntax.BaseList.Types) { // use classSymbol.AllInterfaces
             
             if(baseTypeSyntax.Type is not GenericNameSyntax baseNameSyntax)
                 continue;

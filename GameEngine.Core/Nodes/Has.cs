@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;

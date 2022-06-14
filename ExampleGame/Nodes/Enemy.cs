@@ -3,7 +3,7 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Enemy : Transform, IRenderer, ITrigger {
+public partial class Enemy : Transform, Has<Renderer>, Has<Trigger> {
     
     protected override void OnAwake() {
         base.OnAwake();

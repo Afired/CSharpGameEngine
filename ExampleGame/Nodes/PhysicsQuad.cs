@@ -2,6 +2,6 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class PhysicsQuad : RigidBody, IRenderer {
+public partial class PhysicsQuad : RigidBody, Has<Renderer> {
     
 }

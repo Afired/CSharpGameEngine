@@ -62,7 +62,8 @@ public static class PartialNodeGenerator {
             context.ReportDiagnostic(diagnostic);
         }
         
-        List<ISymbol> hasNodesList = new();
+        List<ISymbol> hasNodes = new();
+        List<ISymbol> arrNodes = new();
         
         if(classDeclarationSyntax.BaseList is null) // symbol gave back a BaseType of Node, but if the class declaration base list is null -> doubled partial class declaration
             return;
@@ -94,7 +95,7 @@ public static class PartialNodeGenerator {
                 if(symbol is not null) { // if its null, its invalid type
                     // string symbolName = symbol.Name; // "TestNode2"
                     // INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
-                    hasNodesList.Add(symbol);
+                    hasNodes.Add(symbol);
                 }
                 
             } else if(interfaceSymbol.Name == "Arr") {
@@ -110,47 +111,68 @@ public static class PartialNodeGenerator {
                     // string symbolName = symbol.Name; // "TestNode3"
                     // INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
                     // nullable?
+                    arrNodes.Add(symbol);
                 }
                 
             }
             
         }
         
-        GeneratePartialNode(classSymbol, hasNodesList, context);
+        GeneratePartialNode(classSymbol, hasNodes, arrNodes, context);
         
     }
     
-    private static void GeneratePartialNode(INamedTypeSymbol nodeSymbol, List<ISymbol> hasNodeSymbolList, GeneratorExecutionContext context) {
+    private static void GeneratePartialNode(INamedTypeSymbol nodeSymbol, List<ISymbol> hasNodes, List<ISymbol> arrNodes, GeneratorExecutionContext context) {
         
         StringBuilder propertiesSb = new();
         StringBuilder initializationSb = new();
         StringBuilder addToComponentsListSb = new();
-        foreach(ISymbol hasNodeSymbol in hasNodeSymbolList) {
+        
+        foreach(ISymbol hasNode in hasNodes) {
             propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public ");
-            propertiesSb.Append(hasNodeSymbol.ContainingNamespace.ToDisplayString());
+            propertiesSb.Append(hasNode.ContainingNamespace.ToDisplayString());
             propertiesSb.Append('.');
-            propertiesSb.Append(hasNodeSymbol.Name);
+            propertiesSb.Append(hasNode.Name);
             propertiesSb.Append(' ');
-            propertiesSb.Append(hasNodeSymbol.Name);
+            propertiesSb.Append(hasNode.Name);
             propertiesSb.Append(" { get; init; } = null!;\n");
             
             initializationSb.Append("\n        ");
-            initializationSb.Append(hasNodeSymbol.Name);
+            initializationSb.Append(hasNode.Name);
             initializationSb.Append(" = new ");
-            initializationSb.Append(hasNodeSymbol.ContainingNamespace.ToDisplayString());
+            initializationSb.Append(hasNode.ContainingNamespace.ToDisplayString());
             initializationSb.Append('.');
-            initializationSb.Append(hasNodeSymbol.Name);
+            initializationSb.Append(hasNode.Name);
             initializationSb.Append("(this);");
             
             addToComponentsListSb.Append("\n        childNodes.Add(");
-            addToComponentsListSb.Append(hasNodeSymbol.Name);
+            addToComponentsListSb.Append(hasNode.Name);
             addToComponentsListSb.Append(");");
         }
+        
+        foreach(ISymbol arrNode in arrNodes) {
+            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public System.Collections.Generic.List<");
+            propertiesSb.Append(arrNode.ContainingNamespace.ToDisplayString());
+            propertiesSb.Append('.');
+            propertiesSb.Append(arrNode.Name);
+            propertiesSb.Append("> ");
+            propertiesSb.Append(arrNode.Name);
+            propertiesSb.Append("s { get; init; } = null!;\n");
+            
+            initializationSb.Append("\n        ");
+            initializationSb.Append(arrNode.Name);
+            initializationSb.Append("s = new System.Collections.Generic.List<");
+            initializationSb.Append(arrNode.ContainingNamespace.ToDisplayString());
+            initializationSb.Append('.');
+            initializationSb.Append(arrNode.Name);
+            initializationSb.Append(">();");
+        }
+        
         string properties = propertiesSb.ToString();
         string initialization = initializationSb.ToString();
         string addToComponentsList = addToComponentsListSb.ToString();
         
-        var sourceBuilder = new StringBuilder();
+        StringBuilder sourceBuilder = new();
         sourceBuilder.Append(
 $@"#nullable enable
 

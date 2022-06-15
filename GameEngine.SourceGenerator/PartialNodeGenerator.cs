@@ -107,8 +107,8 @@ public static class PartialNodeGenerator {
                 ISymbol? symbol = semanticModel.GetSymbolInfo(typeArgumentListSyntax[0]).Symbol;
                 
                 if(symbol is not null) { // if its null, its invalid type
-                    string symbolName = symbol.Name; // "TestNode3"
-                    INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
+                    // string symbolName = symbol.Name; // "TestNode3"
+                    // INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
                     // nullable?
                 }
                 

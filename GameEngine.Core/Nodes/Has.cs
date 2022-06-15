@@ -18,9 +18,9 @@ public partial class TestNode4 : Node { }
 
 #region Has<T> Arr<T>
 
-public interface Has<T> where T : Node { }
+public interface Has<in T> where T : Node { }
 
-public interface Arr<T> where T : Node? { }
+public interface Arr<in T> where T : Node? { }
 
 
 public partial class MyTestNode1 : Node, Has<TestNode2>, Arr<TestNode3?>/*, Has<Test>*/ {

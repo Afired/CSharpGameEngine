@@ -13,12 +13,13 @@ public class HierarchyWindow : EditorWindow {
     
     public static event OnSelect OnSelect;
 
-    private Node? v_selected;
-    public Node? Selected {
+    private object? v_selected;
+    public object? Selected {
         get => v_selected;
         set {
             v_selected = value;
-            OnSelect?.Invoke(v_selected);
+            if(v_selected is Node selectedNode)
+                OnSelect?.Invoke(selectedNode);
         }
     }
     
@@ -50,7 +51,7 @@ public class HierarchyWindow : EditorWindow {
         
         if(opened) {
             foreach(Node entity in scene.Entities) {
-                DrawEntityNode(entity);
+                DrawEntityRootNode(entity);
             }
             ImGui.TreePop();
             
@@ -92,7 +93,7 @@ public class HierarchyWindow : EditorWindow {
         
     }
 
-    private void DrawEntityNode(Node node) {
+    private void DrawEntityRootNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags =
             (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
             (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
@@ -112,7 +113,66 @@ public class HierarchyWindow : EditorWindow {
 
         if(opened) {
             foreach(Node childNode in node.ChildNodes) {
-                DrawEntityNode(childNode);
+                DrawEntityChildNode(childNode);
+            }
+            ///
+            if(node is ExampleNode exampleNode) {
+                DrawNodeArr(exampleNode.Transforms);
+            }
+            ///
+            ImGui.TreePop();
+        }
+    }
+    
+    private void DrawEntityChildNode(Node node) {
+        ImGuiTreeNodeFlags treeNodeFlags =
+            (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
+            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+            ImGuiTreeNodeFlags.SpanAvailWidth;
+        ImGui.PushID(node.GetHashCode());
+        bool opened = ImGui.TreeNodeEx(node.GetType().ToString(), treeNodeFlags);
+        ImGui.PopID();
+        if(ImGui.IsItemClicked()) {
+            Selected = node;
+        }
+        
+        if(opened) {
+            foreach(Node childNode in node.ChildNodes) {
+                DrawEntityChildNode(childNode);
+            }
+            ImGui.TreePop();
+        }
+    }
+    
+    private void DrawNodeArr(List<Transform> nodes) {
+        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) | ImGuiTreeNodeFlags.SpanAvailWidth;
+        ImGui.PushID(nodes.GetHashCode());
+        bool opened = ImGui.TreeNodeEx(nodes.GetType().ToString(), treeNodeFlags);
+        ImGui.PopID();
+        if(ImGui.IsItemClicked()) {
+            Selected = nodes;
+        }
+        
+        if(ImGui.BeginPopupContextItem()) {
+            if (ImGui.MenuItem("Add Entry")) {
+                // Type type = typeof(Transform);
+                // object[] parameters = type
+                //     .GetConstructors()
+                //     .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
+                //     .GetParameters()
+                //     .Select(p => (object)null!)
+                //     .ToArray();
+                // Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+
+                Transform newNode = new();
+                nodes.Add(newNode);
+            }
+            ImGui.EndPopup();
+        }
+        
+        if(opened) {
+            foreach(Node node in nodes) {
+                DrawEntityChildNode(node);
             }
             ImGui.TreePop();
         }

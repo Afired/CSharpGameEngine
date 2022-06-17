@@ -28,8 +28,4 @@ public partial class ExampleNode : Node, Has<Transform>, Arr<Transform> {
     // [JsonConstructor]
     // protected ExampleComponent(bool isJsonConstructed) : base(isJsonConstructed) { }
     
-    protected override void OnUpdate() {
-        Console.Log(Transforms.Count.ToString());
-    }
-    
 }

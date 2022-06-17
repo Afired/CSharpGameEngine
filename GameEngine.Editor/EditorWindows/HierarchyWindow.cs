@@ -96,10 +96,9 @@ public class HierarchyWindow : EditorWindow {
     private void DrawEntityRootNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
                                            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
-                                           ImGuiTreeNodeFlags.SpanAvailWidth |
-                                           ImGuiTreeNodeFlags.Framed;
+                                           ImGuiTreeNodeFlags.SpanFullWidth;
         ImGui.PushID(node.GetHashCode());
-        bool opened = MyTreeNode(node.GetType().ToString(), treeNodeFlags);
+        bool opened = ImGui.TreeNodeEx(node.GetType().ToString(), treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
             Selected = node;
@@ -127,10 +126,9 @@ public class HierarchyWindow : EditorWindow {
     private void DrawEntityChildNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
                                            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
-                                           ImGuiTreeNodeFlags.SpanAvailWidth |
-                                           ImGuiTreeNodeFlags.Framed;
+                                           ImGuiTreeNodeFlags.SpanFullWidth;
         ImGui.PushID(node.GetHashCode());
-        bool opened = MyTreeNode(node.GetType().ToString(), treeNodeFlags);
+        bool opened = ImGui.TreeNodeEx(node.GetType().ToString(), treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
             Selected = node;
@@ -147,12 +145,12 @@ public class HierarchyWindow : EditorWindow {
     private void DrawNodeArr(List<Transform> nodes) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
                                            (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
-                                           ImGuiTreeNodeFlags.SpanAvailWidth |
+                                           ImGuiTreeNodeFlags.SpanFullWidth |
                                            ImGuiTreeNodeFlags.AllowItemOverlap |
                                            ImGuiTreeNodeFlags.FramePadding;
         ImGui.PushID(nodes.GetHashCode());
         ImGui.AlignTextToFramePadding();
-        bool opened = MyTreeNode(nodes.GetType().ToString(), treeNodeFlags);
+        bool opened = ImGui.TreeNodeEx(nodes.GetType().ToString(), treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
             Selected = nodes;

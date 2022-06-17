@@ -1,3 +1,5 @@
+using System;
+
 namespace GameEngine.Core.Nodes;
 
 // before we directly compared the actual strings which means this is not being detected: [GameEngine.AutoGenerator.GenerateComponentInterface]

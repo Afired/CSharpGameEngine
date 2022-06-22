@@ -126,7 +126,7 @@ public static class PartialNodeGenerator {
         
         StringBuilder propertiesSb = new();
         StringBuilder initializationSb = new();
-        StringBuilder addToComponentsListSb = new();
+        StringBuilder addToNodeListSb = new();
         
         foreach(ISymbol hasNode in hasNodes) {
             propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public ");
@@ -145,9 +145,9 @@ public static class PartialNodeGenerator {
             initializationSb.Append(hasNode.Name);
             initializationSb.Append("(this);");
             
-            addToComponentsListSb.Append("\n        childNodes.Add(");
-            addToComponentsListSb.Append(hasNode.Name);
-            addToComponentsListSb.Append(");");
+            addToNodeListSb.Append("\n        childNodes.Add(");
+            addToNodeListSb.Append(hasNode.Name);
+            addToNodeListSb.Append(");");
         }
         
         foreach(ISymbol arrNode in arrNodes) {
@@ -170,7 +170,7 @@ public static class PartialNodeGenerator {
         
         string properties = propertiesSb.ToString();
         string initialization = initializationSb.ToString();
-        string addToComponentsList = addToComponentsListSb.ToString();
+        string addToComponentsList = addToNodeListSb.ToString();
         
         StringBuilder sourceBuilder = new();
         sourceBuilder.Append(

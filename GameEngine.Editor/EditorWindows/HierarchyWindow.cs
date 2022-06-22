@@ -116,7 +116,7 @@ public class HierarchyWindow : EditorWindow {
             }
             ///
             if(node is SceneNode sceneNode) {
-                DrawNodeArr(sceneNode.Nodes);
+                DrawNodeArr(sceneNode.Nodes, sceneNode);
             }
             ///
             ImGui.TreePop();
@@ -142,7 +142,7 @@ public class HierarchyWindow : EditorWindow {
         }
     }
     
-    private void DrawNodeArr(List<Node> nodes) {
+    private void DrawNodeArr(List<Node> nodes, Node container) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
                                            (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth |
@@ -160,6 +160,7 @@ public class HierarchyWindow : EditorWindow {
         if (ImGui.Button("+", new Vector2(20, 19))) {
             Transform newNode = new();
             nodes.Add(newNode);
+            (container.ChildNodes as List<Node>)!.Add(newNode);
         }
         
         // if(ImGui.BeginPopupContextItem()) {

@@ -7,14 +7,14 @@ public class Serialized : Attribute {
     
     public readonly Editor Editor;
     
-    public Serialized(Editor editor = Editor.Edit) {
+    public Serialized(Editor editor = Editor.Inspector) {
         Editor = editor;
     }
     
 }
 
 public enum Editor {
-    Edit,
+    Inspector,
     Hidden,
-    Readonly
+    Hierarchy,
 }

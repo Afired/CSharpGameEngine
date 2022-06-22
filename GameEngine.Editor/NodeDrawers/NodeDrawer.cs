@@ -17,7 +17,7 @@ public abstract class NodeDrawer {
 
         foreach(Type currentType in EnumerateFromBaseTypeUp(node.GetType())) {
 
-            List<MemberInfo> memberInfos = GetSerializedMembersNotBeingHidden(currentType);
+            List<MemberInfo> memberInfos = GetSerializedMembersDisplayedInInspector(currentType);
             
             if(memberInfos.Count == 0)
                 continue;
@@ -57,7 +57,7 @@ public abstract class NodeDrawer {
     }
     
     protected static void DrawDefaultDrawers(Node node, Type type) {
-        foreach(MemberInfo memberInfo in GetSerializedMembersNotBeingHidden(type)) {
+        foreach(MemberInfo memberInfo in GetSerializedMembersDisplayedInInspector(type)) {
             if(memberInfo is PropertyInfo propertyInfo) {
                 PropertyDrawer.Draw(node, propertyInfo);
             } else if(memberInfo is FieldInfo fieldInfo) {
@@ -93,16 +93,16 @@ public abstract class NodeDrawer {
         return members;
     }
     
-    protected static List<MemberInfo> GetSerializedMembersNotBeingHidden(Type type) {
-        List<MemberInfo> members = new List<MemberInfo>();
+    protected static List<MemberInfo> GetSerializedMembersDisplayedInInspector(Type type) {
+        List<MemberInfo> members = new();
         members.AddRange(
             type
                 .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(prop => {
                     Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
                     if(serializedAttribute is null) return false;
-                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
-                    return true;
+                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Inspector) return true;
+                    return false;
                 })
         );
         members.AddRange(
@@ -111,8 +111,8 @@ public abstract class NodeDrawer {
                 .Where(prop => {
                     Serialized? serializedAttribute = prop.GetCustomAttribute<Serialized>(false);
                     if(serializedAttribute is null) return false;
-                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Hidden) return false;
-                    return true;
+                    if(serializedAttribute.Editor == GameEngine.Core.Serialization.Editor.Inspector) return true;
+                    return false;
                 })
         );
         return members;

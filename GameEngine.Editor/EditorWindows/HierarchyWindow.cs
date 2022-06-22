@@ -3,6 +3,7 @@ using System.Reflection;
 using ExampleGame;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows;
@@ -12,7 +13,7 @@ public delegate void OnSelect(Node node);
 public class HierarchyWindow : EditorWindow {
     
     public static event OnSelect OnSelect;
-
+    
     private object? v_selected;
     public object? Selected {
         get => v_selected;
@@ -23,7 +24,7 @@ public class HierarchyWindow : EditorWindow {
         }
     }
     
-
+    
     public HierarchyWindow() {
         Title = "Outliner";
     }
@@ -35,14 +36,14 @@ public class HierarchyWindow : EditorWindow {
         }
         
         if(Hierarchy.Scene is not null)
-            DrawSceneNode(Hierarchy.Scene);
+            DrawScene(Hierarchy.Scene);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selected = null;
         }
     }
-
-    private void DrawSceneNode(Scene scene) {
+    
+    private void DrawScene(Scene scene) {
         
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.CollapsingHeader | ImGuiTreeNodeFlags.DefaultOpen;
         ImGui.PushID(scene.GetHashCode());
@@ -51,7 +52,7 @@ public class HierarchyWindow : EditorWindow {
         
         if(opened) {
             foreach(Node entity in scene.Entities) {
-                DrawEntityRootNode(entity);
+                DrawEntityNode(entity);
             }
             ImGui.TreePop();
             
@@ -93,37 +94,7 @@ public class HierarchyWindow : EditorWindow {
         
     }
 
-    private void DrawEntityRootNode(Node node) {
-        ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
-                                           (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
-                                           ImGuiTreeNodeFlags.SpanFullWidth;
-        ImGui.PushID(node.GetHashCode());
-        bool opened = ImGui.TreeNodeEx(node.GetType().Name, treeNodeFlags);
-        ImGui.PopID();
-        if(ImGui.IsItemClicked()) {
-            Selected = node;
-        }
-
-        if(ImGui.BeginPopupContextItem()) {
-            if(ImGui.MenuItem("Delete Node"))
-                Hierarchy.DeleteEntity(node.GetRootNode());
-            ImGui.EndPopup();
-        }
-
-        if(opened) {
-            foreach(Node childNode in node.ChildNodes) {
-                DrawEntityChildNode(childNode);
-            }
-            ///
-            if(node is SceneNode sceneNode) {
-                DrawNodeArr(sceneNode.Nodes, sceneNode);
-            }
-            ///
-            ImGui.TreePop();
-        }
-    }
-    
-    private void DrawEntityChildNode(Node node) {
+    private void DrawEntityNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
                                            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth;
@@ -134,12 +105,41 @@ public class HierarchyWindow : EditorWindow {
             Selected = node;
         }
         
+        if(ImGui.BeginPopupContextItem()) {
+            if(ImGui.MenuItem("Delete Node"))
+                Hierarchy.DeleteEntity(node.GetRootNode());
+            ImGui.EndPopup();
+        }
+        
         if(opened) {
-            foreach(Node childNode in node.ChildNodes) {
-                DrawEntityChildNode(childNode);
+            
+            // gets all property infos with [Serialized(Editor.Hierarchy)] Attribute
+            IEnumerable<PropertyInfo> serializedProperties = GetAllPropertiesWithSerializedAttribute(node);
+            
+            foreach(PropertyInfo serializedPropertyInfo in serializedProperties) {
+                Serialized? serializedAttribute = serializedPropertyInfo.GetCustomAttribute<Serialized>();
+                if(serializedAttribute is null)
+                    continue;
+                
+                if(serializedAttribute.Editor != Core.Serialization.Editor.Hierarchy)
+                    continue;
+
+                object? value = serializedPropertyInfo.GetValue(node);
+
+                if(value is Node valueAsNode) {
+                    DrawEntityNode(valueAsNode);
+                } else if(value is List<Node> valueAsNodeList) {
+                    DrawNodeArr(valueAsNodeList, node);
+                }
+                
             }
+            
             ImGui.TreePop();
         }
+    }
+
+    private static IEnumerable<PropertyInfo> GetAllPropertiesWithSerializedAttribute(Node node) {
+        return node.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(Serialized)));
     }
     
     private void DrawNodeArr(List<Node> nodes, Node container) {
@@ -163,26 +163,9 @@ public class HierarchyWindow : EditorWindow {
             (container.ChildNodes as List<Node>)!.Add(newNode);
         }
         
-        // if(ImGui.BeginPopupContextItem()) {
-        //     if (ImGui.MenuItem("Add Entry")) {
-        //         // Type type = typeof(Transform);
-        //         // object[] parameters = type
-        //         //     .GetConstructors()
-        //         //     .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-        //         //     .GetParameters()
-        //         //     .Select(p => (object)null!)
-        //         //     .ToArray();
-        //         // Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
-        //         
-        //         Transform newNode = new();
-        //         nodes.Add(newNode);
-        //     }
-        //     ImGui.EndPopup();
-        // }
-        
         if(opened) {
             foreach(Node node in nodes) {
-                DrawEntityChildNode(node);
+                DrawEntityNode(node);
             }
             ImGui.TreePop();
         }

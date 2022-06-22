@@ -129,7 +129,7 @@ public static class PartialNodeGenerator {
         StringBuilder addToNodeListSb = new();
         
         foreach(ISymbol hasNode in hasNodes) {
-            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public ");
+            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hierarchy)] public ");
             propertiesSb.Append(hasNode.ContainingNamespace.ToDisplayString());
             propertiesSb.Append('.');
             propertiesSb.Append(hasNode.Name);
@@ -151,7 +151,7 @@ public static class PartialNodeGenerator {
         }
         
         foreach(ISymbol arrNode in arrNodes) {
-            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hidden)] public System.Collections.Generic.List<");
+            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hierarchy)] public System.Collections.Generic.List<");
             propertiesSb.Append(arrNode.ContainingNamespace.ToDisplayString());
             propertiesSb.Append('.');
             propertiesSb.Append(arrNode.Name);

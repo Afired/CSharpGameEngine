@@ -22,7 +22,7 @@
 //
 //
 //
-// [Has<Trigger>("Trigger1")]
+// [Has<Trigger>]
 // [Has<Trigger>("Trigger2")]
 // [Arr<Transform>("SpawnLocations")]
 // public partial class Spawner : Node {

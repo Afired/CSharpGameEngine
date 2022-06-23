@@ -8,13 +8,23 @@ namespace GameEngine.Core.Nodes;
 public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
-    public Node? ParentNode { get; private set; }
+    public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
+    
+    //todo: add other constructors
     
     protected Node(Node? parentNode, out List<Node> childNodes) {
         childNodes = new List<Node>();
         ParentNode = parentNode;
     }
+    
+    public Node(Node? parentNode) {
+        _childNodes = new List<Node>();
+        ParentNode = parentNode;
+    }
+    
+    [JsonConstructor]
+    protected Node(bool isJsonConstructed) { }
     
     public Node GetRootNode() {
         Node currentNode = this;
@@ -54,9 +64,6 @@ public class Node {
     protected virtual void OnUpdate() { }
     protected virtual void OnPhysicsUpdate() { }
     protected virtual void OnDraw() { }
-    
-    [JsonConstructor]
-    protected Node(bool isJsonConstructed) { }
     
     [OnDeserialized]
     private void OnAfterDeserialization(StreamingContext context) {

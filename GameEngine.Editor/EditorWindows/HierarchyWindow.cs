@@ -12,7 +12,7 @@ public delegate void OnSelect(Node node);
 
 public class HierarchyWindow : EditorWindow {
     
-    public static event OnSelect OnSelect;
+    public static event OnSelect? OnSelect;
     
     private object? v_selected;
     public object? Selected {
@@ -123,13 +123,15 @@ public class HierarchyWindow : EditorWindow {
                 
                 if(serializedAttribute.Editor != Core.Serialization.Editor.Hierarchy)
                     continue;
-
+                
                 object? value = serializedPropertyInfo.GetValue(node);
-
+                
                 if(value is Node valueAsNode) {
                     DrawEntityNode(valueAsNode);
-                } else if(value is List<Node> valueAsNodeList) {
+                } else if(value is INodeArr valueAsNodeList) {
                     DrawNodeArr(valueAsNodeList, node);
+                } else {
+                    Console.LogWarning($"There is a property defined with Serialized(Inspector) which cant be displayed | node: {node.GetType()}, property: {value?.GetType()}");
                 }
                 
             }
@@ -142,7 +144,7 @@ public class HierarchyWindow : EditorWindow {
         return node.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(Serialized)));
     }
     
-    private void DrawNodeArr(List<Node> nodes, Node container) {
+    private void DrawNodeArr(INodeArr nodes, Node container) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
                                            (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth |
@@ -158,7 +160,16 @@ public class HierarchyWindow : EditorWindow {
         
         ImGui.SameLine();
         if (ImGui.Button("+", new Vector2(20, 19))) {
-            Transform newNode = new();
+            
+            object[] parameters = nodes.GetNodeType
+                .GetConstructors()
+                .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
+                .GetParameters()
+                .Select(p => (object)null!)
+                .ToArray();
+            Node newNode = (Node) Activator.CreateInstance(nodes.GetNodeType, parameters)!;
+            
+            // Transform newNode = new();
             nodes.Add(newNode);
             (container.ChildNodes as List<Node>)!.Add(newNode);
         }

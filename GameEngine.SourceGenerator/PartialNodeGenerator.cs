@@ -151,7 +151,7 @@ public static class PartialNodeGenerator {
         }
         
         foreach(ISymbol arrNode in arrNodes) {
-            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hierarchy)] public System.Collections.Generic.List<");
+            propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hierarchy)] public GameEngine.Core.Nodes.NodeArr<");
             propertiesSb.Append(arrNode.ContainingNamespace.ToDisplayString());
             propertiesSb.Append('.');
             propertiesSb.Append(arrNode.Name);
@@ -161,11 +161,11 @@ public static class PartialNodeGenerator {
             
             initializationSb.Append("\n        ");
             initializationSb.Append(arrNode.Name);
-            initializationSb.Append("s = new System.Collections.Generic.List<");
+            initializationSb.Append("s = new GameEngine.Core.Nodes.NodeArr<");
             initializationSb.Append(arrNode.ContainingNamespace.ToDisplayString());
             initializationSb.Append('.');
             initializationSb.Append(arrNode.Name);
-            initializationSb.Append(">();");
+            initializationSb.Append(">(this);");
         }
         
         string properties = propertiesSb.ToString();

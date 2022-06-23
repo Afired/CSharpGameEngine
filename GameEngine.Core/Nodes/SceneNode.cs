@@ -9,6 +9,6 @@ public partial class SceneNode : Node, Arr<Node?> {
 }
 
 
-public partial class MySpecialSceneNode : SceneNode, Has<Transform> {
+public partial class MySpecialSceneNode : SceneNode, Has<Transform>, Arr<Transform> {
     
 }

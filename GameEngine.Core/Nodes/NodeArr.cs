@@ -63,6 +63,8 @@ public sealed class NodeArr<T> : INodeArr, IEnumerable<T> where T : Node {
     
     Type INodeArr.GetNodeType => typeof(T);
     
+    public int Count => _list.Count;
+    
 }
 
 public interface INodeArr {
@@ -70,4 +72,5 @@ public interface INodeArr {
     public void Remove(Node node);
     public IEnumerator<Node> GetEnumerator();
     public Type GetNodeType { get; }
+    public int Count { get; }
 }

@@ -11,8 +11,6 @@ public class Node {
     public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
     
-    //todo: add other constructors
-    
     protected Node(Node? parentNode, out List<Node> childNodes) {
         childNodes = new List<Node>();
         ParentNode = parentNode;

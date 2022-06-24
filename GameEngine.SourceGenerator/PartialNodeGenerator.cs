@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace GameEngine.SourceGenerator; 
 
+//todo: disallow any constructors on nodes
 public static class PartialNodeGenerator {
     
     private const string NODE_BASECLASS_NAME = "Node";
@@ -125,8 +126,6 @@ public static class PartialNodeGenerator {
     private static void GeneratePartialNode(INamedTypeSymbol nodeSymbol, List<ISymbol> hasNodes, List<ISymbol> arrNodes, GeneratorExecutionContext context) {
         
         StringBuilder propertiesSb = new();
-        // StringBuilder initializationSb = new();
-        // StringBuilder addToNodeListSb = new();
         
         foreach(ISymbol hasNode in hasNodes) {
             propertiesSb.Append("    [GameEngine.Core.Serialization.Serialized(GameEngine.Core.Serialization.Editor.Hierarchy)] public ");
@@ -136,18 +135,6 @@ public static class PartialNodeGenerator {
             propertiesSb.Append(' ');
             propertiesSb.Append(hasNode.Name);
             propertiesSb.Append(" { get; init; } = null!;\n");
-            
-            // initializationSb.Append("\n        ");
-            // initializationSb.Append(hasNode.Name);
-            // initializationSb.Append(" = new ");
-            // initializationSb.Append(hasNode.ContainingNamespace.ToDisplayString());
-            // initializationSb.Append('.');
-            // initializationSb.Append(hasNode.Name);
-            // initializationSb.Append("(this);");
-            //
-            // addToNodeListSb.Append("\n        childNodes.Add(");
-            // addToNodeListSb.Append(hasNode.Name);
-            // addToNodeListSb.Append(");");
         }
         
         foreach(ISymbol arrNode in arrNodes) {
@@ -158,19 +145,9 @@ public static class PartialNodeGenerator {
             propertiesSb.Append("> ");
             propertiesSb.Append(arrNode.Name);
             propertiesSb.Append("s { get; init; } = null!;\n");
-            
-            // initializationSb.Append("\n        ");
-            // initializationSb.Append(arrNode.Name);
-            // initializationSb.Append("s = new GameEngine.Core.Nodes.NodeArr<");
-            // initializationSb.Append(arrNode.ContainingNamespace.ToDisplayString());
-            // initializationSb.Append('.');
-            // initializationSb.Append(arrNode.Name);
-            // initializationSb.Append(">(this);");
         }
         
         string properties = propertiesSb.ToString();
-        // string initialization = initializationSb.ToString();
-        // string addToComponentsList = addToNodeListSb.ToString();
         
         StringBuilder sourceBuilder = new();
         sourceBuilder.Append(
@@ -185,29 +162,6 @@ public partial class {nodeSymbol.Name} {{
 }}
 "
         );
-        
-//         sourceBuilder.Append(
-// $@"#nullable enable
-//
-// namespace {nodeSymbol.ContainingNamespace.ToDisplayString()};
-//
-// public partial class {nodeSymbol.Name} {{
-//     
-// {properties}
-//     public {nodeSymbol.Name}(GameEngine.Core.Nodes.Node? parentNode = null) : this(parentNode, out System.Collections.Generic.List<GameEngine.Core.Nodes.Node> childNodes) {{
-//         _childNodes = childNodes;
-//     }}
-//     
-//     public {nodeSymbol.Name}(GameEngine.Core.Nodes.Node? parentNode, out System.Collections.Generic.List<GameEngine.Core.Nodes.Node> childNodes) : base(parentNode, out childNodes) {{{initialization}
-// {addToComponentsList}
-//     }}
-//     
-//     [Newtonsoft.Json.JsonConstructor]
-//     protected {nodeSymbol.Name}(bool isJsonConstructed) : base(isJsonConstructed) {{ }}
-//     
-// }}
-// "
-//         );
         context.AddSource($"{nodeSymbol.Name}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
         
     }

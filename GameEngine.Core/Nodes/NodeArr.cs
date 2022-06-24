@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using GameEngine.Core.Serialization;
-using Newtonsoft.Json;
 
 namespace GameEngine.Core.Nodes; 
 
@@ -10,7 +8,6 @@ namespace GameEngine.Core.Nodes;
 public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
     
     [Serialized(Editor.Hidden)] private List<T> _list = new();
-//? https://www.newtonsoft.com/json/help/html/PreserveObjectReferences.htm#:~:text=References%20cannot%20be,work%20with%20PreserveReferencesHandling.
     [Serialized(Editor.Hidden)] Node INodeArr.ContainingNode { get; set; } = null!;
     
     IEnumerator<Node> INodeArr.GetEnumerator() {

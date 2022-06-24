@@ -2,35 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
-using Newtonsoft.Json;
 
 namespace GameEngine.Core.Nodes; 
 
 public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
-    
-//? https://www.newtonsoft.com/json/help/html/PreserveObjectReferences.htm#:~:text=References%20cannot%20be,work%20with%20PreserveReferencesHandling.
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] private readonly List<Node> _childNodes = null!;
     private bool _hasBeenAwaken = false;
-    
-    // protected Node(Node? parentNode, out List<Node> childNodes) {
-    //     childNodes = new List<Node>();
-    //     ParentNode = parentNode;
-    // }
-    //
-    // public Node(Node? parentNode) {
-    //     _childNodes = new List<Node>();
-    //     ParentNode = parentNode;
-    // }
-    //
-    // [JsonConstructor]
-    // protected Node(bool isJsonConstructed) { }
-    // private Node(int int1) { }
     
     public Node GetRootNode() {
         Node currentNode = this;

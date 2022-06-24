@@ -64,36 +64,18 @@ public class HierarchyWindow : EditorWindow {
                 ImGui.Separator();
                 ImGui.Spacing();
                 if(ImGui.MenuItem(nameof(Node))) {
-                    object[] parameters = typeof(Node)
-                        .GetConstructors()
-                        .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                        .GetParameters()
-                        .Select(p => (object)null!)
-                        .ToArray();
-                    Node newNode = (Node) Activator.CreateInstance(typeof(Node), parameters)!;
+                    Node newNode = Node.New<Node>();
                     Hierarchy.AddEntity(newNode);
                 }
                 foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
                     if(ImGui.MenuItem(type.Name)) {
-                        object[] parameters = type
-                            .GetConstructors()
-                            .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                            .GetParameters()
-                            .Select(p => (object)null!)
-                            .ToArray();
-                        Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                        Node newNode = Node.New(type);
                         Hierarchy.AddEntity(newNode);
                     }
                 }
                 foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
                     if(ImGui.MenuItem(type.Name)) {
-                        object[] parameters = type
-                            .GetConstructors()
-                            .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                            .GetParameters()
-                            .Select(p => (object)null!)
-                            .ToArray();
-                        Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                        Node newNode = Node.New(type);
                         Hierarchy.AddEntity(newNode);
                     }
                 }
@@ -170,14 +152,7 @@ public class HierarchyWindow : EditorWindow {
         
         ImGui.SameLine();
         if(ImGui.Button("+", new Vector2(20, 19))) {
-            
-            object[] parameters = nodes.GetNodeType
-                .GetConstructors()
-                .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                .GetParameters()
-                .Select(p => (object)null!)
-                .ToArray();
-            Node newNode = (Node) Activator.CreateInstance(nodes.GetNodeType, parameters)!;
+            Node newNode = Node.New(nodes.GetNodeType);
             nodes.Add(newNode);
         }
         
@@ -187,36 +162,18 @@ public class HierarchyWindow : EditorWindow {
             ImGui.Separator();
             ImGui.Spacing();
             if(ImGui.MenuItem(nodes.GetNodeType.Name)) {
-                object[] parameters = nodes.GetNodeType
-                    .GetConstructors()
-                    .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                    .GetParameters()
-                    .Select(p => (object)null!)
-                    .ToArray();
-                Node newNode = (Node) Activator.CreateInstance(nodes.GetNodeType, parameters)!;
+                Node newNode = Node.New(nodes.GetNodeType);
                 nodes.Add(newNode);
             }
             foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
                 if(ImGui.MenuItem(type.Name)) {
-                    object[] parameters = type
-                        .GetConstructors()
-                        .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                        .GetParameters()
-                        .Select(p => (object)null!)
-                        .ToArray();
-                    Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                    Node newNode = Node.New(type);
                     nodes.Add(newNode);
                 }
             }
             foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
                 if(ImGui.MenuItem(type.Name)) {
-                    object[] parameters = type
-                        .GetConstructors()
-                        .Single(ctor => ctor.IsPublic && ctor.GetParameters().Length == 1)
-                        .GetParameters()
-                        .Select(p => (object)null!)
-                        .ToArray();
-                    Node newNode = (Node) Activator.CreateInstance(type, parameters)!;
+                    Node newNode = Node.New(type);
                     nodes.Add(newNode);
                 }
             }

@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 namespace GameEngine.Core.Serialization; 
 
 public static class SceneSerializer {
-
-    private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings {
+    
+    private static readonly JsonSerializerSettings SerializerSettings = new() {
         ContractResolver = new SerializedContractResolver(),
         TypeNameHandling = TypeNameHandling.Auto,
         // TypeNameHandling = TypeNameHandling.All,
@@ -16,12 +16,12 @@ public static class SceneSerializer {
         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
         PreserveReferencesHandling = PreserveReferencesHandling.All,
         ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-//        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+        ConstructorHandling = ConstructorHandling.Default,
     };
     
     public static Scene LoadJson(string path) {
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Scene scene = JsonConvert.DeserializeObject<Scene>(File.ReadAllText(desktopPath + "\\" + "Test.scene"), _settings)!;
+        Scene scene = JsonConvert.DeserializeObject<Scene>(File.ReadAllText(desktopPath + "\\" + "Test.scene"), SerializerSettings)!;
         return scene;
     }
     
@@ -33,7 +33,7 @@ public static class SceneSerializer {
     }
     
     private static bool SaveSceneJson(string path, Scene scene) {
-        string stringResult = JsonConvert.SerializeObject(scene, Formatting.Indented, _settings);
+        string stringResult = JsonConvert.SerializeObject(scene, Formatting.Indented, SerializerSettings);
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         File.WriteAllText(desktopPath + "\\" + "Test.scene", stringResult);
         return true;

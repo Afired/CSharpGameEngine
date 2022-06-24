@@ -11,15 +11,7 @@ public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
     
     [Serialized(Editor.Hidden)] private List<T> _list = new();
 //? https://www.newtonsoft.com/json/help/html/PreserveObjectReferences.htm#:~:text=References%20cannot%20be,work%20with%20PreserveReferencesHandling.
-    [Serialized(Editor.Hidden)] private Node _containingNode;
-    
-    public NodeArr(Node containingNode) {
-        _containingNode = containingNode;
-    }
-    
-    [JsonConstructor]
-    [Obsolete]
-    public NodeArr() { }
+    [Serialized(Editor.Hidden)] Node INodeArr.ContainingNode { get; set; } = null!;
     
     IEnumerator<Node> INodeArr.GetEnumerator() {
         return GetEnumerator();
@@ -38,8 +30,8 @@ public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
             throw new Exception("Cant add node that already has a parent node");
         
         _list.Add(node);
-        (_containingNode.ChildNodes as List<Node>)!.Add(node);
-        node.ParentNode = _containingNode;
+        (((INodeArr) this).ContainingNode.ChildNodes as List<Node>)!.Add(node);
+        node.ParentNode = ((INodeArr) this).ContainingNode;
     }
     
     public void Remove(T node) {
@@ -47,7 +39,7 @@ public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
             throw new Exception("Cant remove node that is not contained in that node arr");
         
         _list.Remove(node);
-        (_containingNode.ChildNodes as List<Node>)!.Remove(node);
+        (((INodeArr) this).ContainingNode.ChildNodes as List<Node>)!.Remove(node);
     }
     
     void INodeArr.Add(Node node) {
@@ -76,4 +68,5 @@ public interface INodeArr {
     public IEnumerator<Node> GetEnumerator();
     public Type GetNodeType { get; }
     public int Count { get; }
+    internal Node ContainingNode { get; set; }
 }

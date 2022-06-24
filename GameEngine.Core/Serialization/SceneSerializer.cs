@@ -9,7 +9,8 @@ public static class SceneSerializer {
 
     private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings {
         ContractResolver = new SerializedContractResolver(),
-        TypeNameHandling = TypeNameHandling.Auto,
+        // TypeNameHandling = TypeNameHandling.Auto,
+        TypeNameHandling = TypeNameHandling.All,
         MaxDepth = 10,
         ObjectCreationHandling = ObjectCreationHandling.Replace,
         PreserveReferencesHandling = PreserveReferencesHandling.All,

@@ -34,7 +34,7 @@ public static class Hierarchy {
         }
     }
     
-    internal static void Update(float elapsedTime) {
+    internal static void Awake() {
         if(Scene is null)
             return;
         while(_entitiesToBeDeleted.TryPop(out Node node)) {
@@ -44,6 +44,14 @@ public static class Hierarchy {
             Scene.AddEntity(entity);
             entity.Awake();
         }
+        foreach(Node node in Scene.Entities) {
+            node.Awake();
+        }
+    }
+    
+    internal static void Update(float elapsedTime) {
+        if(Scene is null)
+            return;
         Time.DeltaTime = elapsedTime;
         foreach(Node entity in Scene.Entities) {
             entity.Update();

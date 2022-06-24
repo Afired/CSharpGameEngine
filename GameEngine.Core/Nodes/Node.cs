@@ -10,6 +10,7 @@ public class Node {
     public IReadOnlyList<Node> ChildNodes => _childNodes;
     public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
+    private bool _hasBeenAwaken = false;
     
     protected Node(Node? parentNode, out List<Node> childNodes) {
         childNodes = new List<Node>();
@@ -35,7 +36,9 @@ public class Node {
     }
     
     internal void Awake() {
-        OnAwake();
+        if(!_hasBeenAwaken)
+            OnAwake();
+        _hasBeenAwaken = true;
         foreach(Node childNodes in ChildNodes)
             childNodes.Awake();
     }

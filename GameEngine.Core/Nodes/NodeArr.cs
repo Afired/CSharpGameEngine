@@ -2,19 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameEngine.Core.Serialization;
+using Newtonsoft.Json;
 
 namespace GameEngine.Core.Nodes; 
 
-public sealed class NodeArr<T> : INodeArr, IEnumerable<T> where T : Node {
+//? cant implement IEnumerable because deserialization is failing -> cant Convert NodeArr<Node> into ICollection<Node>
+public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
     
-    [Serialized(Editor.Hidden)] private readonly List<T> _list = new();
-    [Serialized(Editor.Hidden)] private readonly Node _containingNode;
+    [Serialized(Editor.Hidden)] private List<T> _list = new();
+    [Serialized(Editor.Hidden)] private Node _containingNode;
     
     public NodeArr(Node containingNode) {
         _containingNode = containingNode;
     }
     
-    [Newtonsoft.Json.JsonConstructor]
+    [JsonConstructor]
     [Obsolete]
     public NodeArr() { }
     
@@ -25,10 +27,10 @@ public sealed class NodeArr<T> : INodeArr, IEnumerable<T> where T : Node {
     public IEnumerator<T> GetEnumerator() {
         return _list.GetEnumerator();
     }
-
-    IEnumerator IEnumerable.GetEnumerator() {
-        return GetEnumerator();
-    }
+    
+    // IEnumerator IEnumerable.GetEnumerator() {
+    //     return GetEnumerator();
+    // }
     
     public void Add(T node) {
         if(node.ParentNode is not null)
@@ -51,14 +53,14 @@ public sealed class NodeArr<T> : INodeArr, IEnumerable<T> where T : Node {
         if(node is T t)
             Add(t);
         else
-            throw new ArgumentException();
+            throw new ArgumentException($"Node has to be assignable to {typeof(T)}");
     }
     
     void INodeArr.Remove(Node node) {
         if(node is T t)
             Remove(t);
         else
-            throw new ArgumentException();
+            throw new ArgumentException($"Node has to be assignable to {typeof(T)}");
     }
     
     Type INodeArr.GetNodeType => typeof(T);

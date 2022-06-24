@@ -59,6 +59,7 @@ public static unsafe class Application {
             Time.TotalTimeElapsed += (float) updateTimer.Elapsed.TotalSeconds;
             updateTimer.Restart();
             
+            Hierarchy.Awake();
             Hierarchy.Update(updateTime);
             RenderingEngine.InputHandler.ResetMouseDelta();
             

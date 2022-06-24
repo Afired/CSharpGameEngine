@@ -8,6 +8,8 @@ namespace GameEngine.Core.Nodes;
 public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
+    
+//? https://www.newtonsoft.com/json/help/html/PreserveObjectReferences.htm#:~:text=References%20cannot%20be,work%20with%20PreserveReferencesHandling.
     public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] protected List<Node> _childNodes { private get; init; } = null!;
     private bool _hasBeenAwaken = false;

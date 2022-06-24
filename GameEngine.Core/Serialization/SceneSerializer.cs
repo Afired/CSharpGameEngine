@@ -9,12 +9,13 @@ public static class SceneSerializer {
 
     private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings {
         ContractResolver = new SerializedContractResolver(),
-        // TypeNameHandling = TypeNameHandling.Auto,
-        TypeNameHandling = TypeNameHandling.All,
-        MaxDepth = 10,
+        TypeNameHandling = TypeNameHandling.Auto,
+        // TypeNameHandling = TypeNameHandling.All,
+        // MaxDepth = 10,
         ObjectCreationHandling = ObjectCreationHandling.Replace,
-        PreserveReferencesHandling = PreserveReferencesHandling.All,
         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+        PreserveReferencesHandling = PreserveReferencesHandling.All,
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
 //        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
     };
     

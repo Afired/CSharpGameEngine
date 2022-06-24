@@ -10,6 +10,7 @@ namespace GameEngine.Core.Nodes;
 public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
     
     [Serialized(Editor.Hidden)] private List<T> _list = new();
+//? https://www.newtonsoft.com/json/help/html/PreserveObjectReferences.htm#:~:text=References%20cannot%20be,work%20with%20PreserveReferencesHandling.
     [Serialized(Editor.Hidden)] private Node _containingNode;
     
     public NodeArr(Node containingNode) {

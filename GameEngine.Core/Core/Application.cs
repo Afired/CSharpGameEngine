@@ -63,17 +63,17 @@ public static unsafe class Application {
             Hierarchy.Update(updateTime);
             RenderingEngine.InputHandler.ResetMouseDelta();
             
-            RenderingEngine.Render();
-            
-            // handle input
-            Glfw.PollEvents();
-            RenderingEngine.InputHandler.HandleMouseInput(RenderingEngine.WindowHandle);
-            
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
                 PhysicsEngine.DoStep();
                 physicsTimer.Restart();
             }
+            
+            RenderingEngine.Render();
+            
+            // handle input
+            Glfw.PollEvents();
+            RenderingEngine.InputHandler.HandleMouseInput(RenderingEngine.WindowHandle);
             
             if(Glfw.WindowShouldClose(RenderingEngine.WindowHandle))
                 Terminate();

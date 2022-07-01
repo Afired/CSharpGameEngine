@@ -24,11 +24,12 @@ public class Node {
     }
     
     internal void Awake() {
-        if(!_hasBeenAwaken)
-            OnAwake();
-        _hasBeenAwaken = true;
         foreach(Node childNodes in ChildNodes)
             childNodes.Awake();
+        if(_hasBeenAwaken)
+            return;
+        OnAwake();
+        _hasBeenAwaken = true;
     }
     
     internal void Update() {

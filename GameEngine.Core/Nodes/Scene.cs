@@ -5,7 +5,7 @@ namespace GameEngine.Core.Nodes;
 
 public partial class Scene : Node, Arr<Node?> {
     
-    [Serialized] public string Name { get; private set; } = string.Empty;
+    [Serialized] public string Name { get; private set; } = "New Scene";
 
     protected override void OnAwake() {
         base.OnAwake();

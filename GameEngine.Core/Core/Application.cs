@@ -83,7 +83,7 @@ public static unsafe class Application {
     
     public static void Terminate() {
         IsRunning = false;
-        Console.Log("Terminating...");
+        Console.Log("Is terminating...");
     }
     
 }

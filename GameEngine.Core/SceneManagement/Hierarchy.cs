@@ -27,15 +27,12 @@ public static class Hierarchy {
     }
     
     public static void LoadScene(Scene scene) {
-        // PhysicsEngine.InitializeWorld();
         Scene = scene;
-        // scene.Awake();
     }
     
     internal static void Awake() {
         if(Scene is null)
             return;
-        PhysicsEngine.InitializeWorld();
         while(_entitiesToBeDeleted.TryPop(out Node node)) {
             Scene.Nodes.Remove(node);
         }

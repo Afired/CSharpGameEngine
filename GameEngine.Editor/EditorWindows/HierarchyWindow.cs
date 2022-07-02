@@ -36,7 +36,7 @@ public class HierarchyWindow : EditorWindow {
         }
         
         if(Hierarchy.Scene is not null)
-            DrawScene(Hierarchy.Scene);
+            DrawNode(Hierarchy.Scene);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selected = null;
@@ -52,7 +52,7 @@ public class HierarchyWindow : EditorWindow {
         
         if(opened) {
             foreach(Node entity in scene.Nodes) {
-                DrawEntityNode(entity);
+                DrawNode(entity);
             }
             ImGui.TreePop();
             
@@ -86,7 +86,7 @@ public class HierarchyWindow : EditorWindow {
         
     }
     
-    private void DrawEntityNode(Node node) {
+    private void DrawNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
                                            (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth;
@@ -119,7 +119,7 @@ public class HierarchyWindow : EditorWindow {
                 object? value = serializedPropertyInfo.GetValue(node);
                 
                 if(value is Node valueAsNode) {
-                    DrawEntityNode(valueAsNode);
+                    DrawNode(valueAsNode);
                 } else if(value is INodeArr valueAsNodeList) {
                     DrawNodeArr(valueAsNodeList);
                 } else {
@@ -182,7 +182,7 @@ public class HierarchyWindow : EditorWindow {
         
         if(opened) {
             foreach(Node node in nodes) {
-                DrawEntityNode(node);
+                DrawNode(node);
             }
             ImGui.TreePop();
         }

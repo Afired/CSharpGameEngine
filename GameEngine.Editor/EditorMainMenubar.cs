@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using GameEngine.Core.Core;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.SceneManagement;
@@ -156,7 +157,7 @@ public class EditorMainMenubar {
         }
         
         if(ImGui.BeginMenu("Scene")) {
-            if(ImGui.MenuItem("New")) Hierarchy.LoadScene(new Scene());
+            if(ImGui.MenuItem("New")) Hierarchy.LoadScene(Node.New<Scene>());
             if(ImGui.MenuItem("Save")) SceneSerializer.SaveOpenedScene();
             if(ImGui.MenuItem("Load")) Hierarchy.LoadScene(SceneSerializer.LoadJson("Test"));
             ImGui.EndMenu();

@@ -27,52 +27,42 @@ public static class Hierarchy {
     }
     
     public static void LoadScene(Scene scene) {
-        PhysicsEngine.InitializeWorld();
+        // PhysicsEngine.InitializeWorld();
         Scene = scene;
-        foreach(Node entity in scene.Entities) {
-            entity.Awake();
-        }
+        // scene.Awake();
     }
     
     internal static void Awake() {
         if(Scene is null)
             return;
+        PhysicsEngine.InitializeWorld();
         while(_entitiesToBeDeleted.TryPop(out Node node)) {
-            Scene.RemoveNode(node);
+            Scene.Nodes.Remove(node);
         }
         while(_entitiesToBeAdded.TryPop(out Node entity)) {
-            Scene.AddEntity(entity);
-            entity.Awake();
+            Scene.Nodes.Add(entity);
         }
-        foreach(Node node in Scene.Entities) {
-            node.Awake();
-        }
+        Scene.Awake();
     }
     
     internal static void Update(float elapsedTime) {
         if(Scene is null)
             return;
         Time.DeltaTime = elapsedTime;
-        foreach(Node entity in Scene.Entities) {
-            entity.Update();
-        }
+        Scene.Update();
     }
     
     internal static void PhysicsUpdate(float physicsTimeStep) {
         if(Scene is null)
             return;
         Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Node entity in Scene.Entities) {
-            entity.PhysicsUpdate();
-        }
+        Scene.PhysicsUpdate();
     }
 
     internal static void Draw() {
         if(Scene is null)
             return;
-        foreach(Node entity in Scene.Entities) {
-            entity.Draw();
-        }
+        Scene.Draw();
     }
     
 }

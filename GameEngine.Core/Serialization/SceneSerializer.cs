@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using Newtonsoft.Json;
 

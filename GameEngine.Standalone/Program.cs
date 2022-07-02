@@ -1,5 +1,5 @@
-﻿using ExampleGame.Scenes;
-using GameEngine.Core.Core;
+﻿using GameEngine.Core.Core;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 
 namespace GameEngine.Standalone;
@@ -11,7 +11,7 @@ internal class Program {
         SetConfig();
         
         Application.Initialize();
-        Hierarchy.LoadScene(new TestScene());
+        Hierarchy.LoadScene(Node.New<Scene>());
         Application.Run();
         
         return 0;

@@ -26,7 +26,7 @@ public class HierarchyWindow : EditorWindow {
     
     
     public HierarchyWindow() {
-        Title = "Outliner";
+        Title = "Hierarchy";
     }
     
     protected override void Draw() {
@@ -51,7 +51,7 @@ public class HierarchyWindow : EditorWindow {
         ImGui.PopID();
         
         if(opened) {
-            foreach(Node entity in scene.Entities) {
+            foreach(Node entity in scene.Nodes) {
                 DrawEntityNode(entity);
             }
             ImGui.TreePop();

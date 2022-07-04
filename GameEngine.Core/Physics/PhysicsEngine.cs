@@ -14,7 +14,7 @@ public static class PhysicsEngine {
     public static World World;
     
     
-    internal static void Initialize() {
+    public static void Initialize() {
         InitializeWorld();
         IsInit = true;
     }
@@ -57,7 +57,7 @@ public static class PhysicsEngine {
         dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    internal static void DoStep() {
+    public static void DoStep() {
         int velocityIterations = 6;
         int positionIterations = 2;
         

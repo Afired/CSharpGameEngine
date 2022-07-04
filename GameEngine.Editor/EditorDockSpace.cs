@@ -5,7 +5,7 @@ namespace GameEngine.Editor;
 public class EditorDockSpace {
 
     public EditorDockSpace() {
-        Program.EditorLayer.OnDraw += Draw;
+        EditorApplication.Instance.EditorLayer.OnDraw += Draw;
     }
 
     private void Draw() {

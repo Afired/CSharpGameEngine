@@ -8,7 +8,7 @@ public class EditorWindow {
     private readonly int _id;
     
     public EditorWindow() {
-        Program.EditorLayer.OnDraw += DrawWindow;
+        EditorApplication.Instance.EditorLayer.OnDraw += DrawWindow;
         _id = GetHashCode();
     }
     
@@ -22,9 +22,9 @@ public class EditorWindow {
         Draw();
         ImGui.End();
         if(!opened)
-            Program.EditorLayer.OnDraw -= DrawWindow;
+            EditorApplication.Instance.EditorLayer.OnDraw -= DrawWindow;
     }
-
+    
     private void DrawToolbar() {
 //        ImGui.PushID(Title + "Menubar");
 //        if(ImGui.BeginMenuBar()) {

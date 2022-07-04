@@ -30,7 +30,7 @@ public static class Hierarchy {
         Scene = scene;
     }
     
-    internal static void Awake() {
+    public static void Awake() {
         if(Scene is null)
             return;
         while(_entitiesToBeDeleted.TryPop(out Node node)) {
@@ -42,9 +42,11 @@ public static class Hierarchy {
         Scene.Awake();
     }
     
-    internal static void Update(float elapsedTime) {
+    public static void Update(float elapsedTime) {
         if(Scene is null)
             return;
+        
+        Time.TotalTimeElapsed += elapsedTime;
         Time.DeltaTime = elapsedTime;
         Scene.Update();
     }

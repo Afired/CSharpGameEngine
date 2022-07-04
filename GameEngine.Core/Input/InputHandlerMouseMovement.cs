@@ -4,14 +4,14 @@ using WindowHandle = Silk.NET.GLFW.WindowHandle;
 
 namespace GameEngine.Core.Input; 
 
-internal partial class InputHandler {
+public partial class InputHandler {
     
     private Vector2 _windowCenter;
 
     private static bool _catchCursor = false;
     
     
-    internal void ResetMouseDelta() {
+    public void ResetMouseDelta() {
         if(!_catchCursor)
             return;
         Input.MouseDelta = Vector2.Zero;
@@ -22,7 +22,7 @@ internal partial class InputHandler {
     }
     
     
-    internal unsafe void HandleMouseInput(WindowHandle* window) {
+    public unsafe void HandleMouseInput(WindowHandle* window) {
         if(!_catchCursor)
             return;
         Glfw.GetCursorPos(window, out double x, out double y);

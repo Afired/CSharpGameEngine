@@ -2,8 +2,10 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using GameEngine.Core.Core;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
+using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using ImGuiNET;
@@ -28,7 +30,7 @@ public class EditorMainMenubar {
     private bool _dragging;
     
     public EditorMainMenubar() {
-        Program.EditorLayer.OnDraw += Draw;
+        EditorApplication.Instance.EditorLayer.OnDraw += Draw;
     }
     
     private void Draw() {
@@ -85,7 +87,7 @@ public class EditorMainMenubar {
 //                Glfw.GetWindowPos(GlfwWindow.Handle, out int x, out int y);
 //                _windowPosRef = new Position(x, y);
                 
-                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), GlfwWindow.Handle);
+                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), RenderingEngine.GlfwWindow.Handle);
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
@@ -114,7 +116,7 @@ public class EditorMainMenubar {
         Texture2D icon2 = TextureRegister.Get("Box") as Texture2D;
         if(ImGui.ImageButton((IntPtr) icon2.ID, new Vector2(16, 16))) {
             unsafe {
-                GlfwWindow.Glfw.MaximizeWindow(GlfwWindow.Handle);
+                RenderingEngine.GlfwWindow.Glfw.MaximizeWindow(RenderingEngine.GlfwWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -126,7 +128,7 @@ public class EditorMainMenubar {
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
         Texture2D icon1 = TextureRegister.Get("Checkerboard") as Texture2D;
         if(ImGui.ImageButton((IntPtr) icon1.ID, new Vector2(16, 16))) {
-            Application.Terminate();
+            EditorApplication.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
     }
@@ -136,7 +138,7 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
-            if(ImGui.MenuItem("Quit")) Application.Terminate();
+            if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
             ImGui.EndMenu();
         }
         

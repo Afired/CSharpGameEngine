@@ -15,8 +15,8 @@ public delegate void OnLoad();
 
 public static unsafe class RenderingEngine {
 
-    internal static WindowHandle* WindowHandle;
-    internal static InputHandler InputHandler;
+    public static WindowHandle* WindowHandle;
+    public static InputHandler InputHandler;
     
     public static event OnLoad OnLoad;
     public static bool IsInit { get; private set; }
@@ -48,7 +48,7 @@ public static unsafe class RenderingEngine {
     public static LayerStack LayerStack { get; private set; }
     
     
-    internal static void Initialize() {
+    public static void Initialize() {
         Setup();
         InputHandler = new InputHandler();
         Glfw.SetKeyCallback(GlfwWindow.Handle, InputHandler.OnKeyAction);
@@ -74,7 +74,7 @@ public static unsafe class RenderingEngine {
         GeometryRegister.Load();
     }
 
-    internal static void Render() {
+    public static void Render() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
         Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);

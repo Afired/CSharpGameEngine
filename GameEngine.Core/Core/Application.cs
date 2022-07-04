@@ -8,12 +8,17 @@ using GameEngine.Core.SceneManagement;
 
 namespace GameEngine.Core.Core;
 
-public static unsafe class Application {
+public abstract unsafe class Application<T> where T : Application<T> {
     
-    public static bool IsRunning { get; private set; }
+    public static T Instance { get; private set; } = null!;
+    public bool IsRunning { get; protected set; }
+
+
+    public Application() {
+        Instance = (this as T)!;
+    }
     
-    
-    public static void Initialize() {
+    public virtual void Initialize() {
         Debugging.Console.Log("Initializing...");
         Debugging.Console.Log("Initializing engine...");
         Debugging.Console.LogSuccess("Initialized engine (1/3)");
@@ -29,7 +34,7 @@ public static unsafe class Application {
         Debugging.Console.LogSuccess("Initialization complete");
     }
     
-    public static void Run() {
+    public virtual void Run() {
         if(IsRunning)
             throw new Exception("Application is already running!");
         IsRunning = true;
@@ -40,7 +45,7 @@ public static unsafe class Application {
         Loop();
     }
     
-    private static void Loop() {
+    protected virtual void Loop() {
         Stopwatch updateTimer = new();
         Stopwatch physicsTimer = new();
         updateTimer.Start();
@@ -81,7 +86,7 @@ public static unsafe class Application {
         
     }
     
-    public static void Terminate() {
+    public virtual void Terminate() {
         IsRunning = false;
         Console.Log("Is terminating...");
     }

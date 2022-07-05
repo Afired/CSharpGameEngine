@@ -16,7 +16,7 @@ public abstract partial class BaseCamera : Transform {
     
     protected override void OnAwake() {
         base.OnAwake();
-        RenderingEngine.SetActiveCamera(this);
+        Rendering.Renderer.SetActiveCamera(this);
     }
     
 }

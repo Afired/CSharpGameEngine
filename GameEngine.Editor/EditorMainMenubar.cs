@@ -10,6 +10,7 @@ using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using ImGuiNET;
 using Silk.NET.GLFW;
+using Renderer = GameEngine.Core.Rendering.Renderer;
 
 namespace GameEngine.Editor.EditorWindows; 
 
@@ -136,7 +137,7 @@ public class EditorMainMenubar {
 //                Glfw.GetWindowPos(GlfwWindow.Handle, out int x, out int y);
 //                _windowPosRef = new Position(x, y);
                 
-                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), RenderingEngine.GlfwWindow.Handle);
+                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Renderer.GlfwWindow.Handle);
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
@@ -165,7 +166,7 @@ public class EditorMainMenubar {
         Texture2D icon2 = TextureRegister.Get("Box") as Texture2D;
         if(ImGui.ImageButton((IntPtr) icon2.ID, new Vector2(16, 16))) {
             unsafe {
-                RenderingEngine.GlfwWindow.Glfw.MaximizeWindow(RenderingEngine.GlfwWindow.Handle);
+                Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);

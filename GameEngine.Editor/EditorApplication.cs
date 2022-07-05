@@ -18,7 +18,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     
     private void InitializeEditor() {
         EditorLayer = new EditorLayer();
-        RenderingEngine.LayerStack.Push(EditorLayer, LayerType.Overlay);
+        Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
     }
     
@@ -45,7 +45,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
                 Hierarchy.Update(updateTime);
             }
             
-            RenderingEngine.InputHandler.ResetMouseDelta();
+            Renderer.InputHandler.ResetMouseDelta();
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
@@ -54,13 +54,13 @@ public unsafe class EditorApplication : Application<EditorApplication> {
                 physicsTimer.Restart();
             }
             
-            RenderingEngine.Render();
+            Renderer.Render();
             
             // handle input
-            RenderingEngine.Glfw.PollEvents();
-            RenderingEngine.InputHandler.HandleMouseInput(RenderingEngine.WindowHandle);
+            Renderer.Glfw.PollEvents();
+            Renderer.InputHandler.HandleMouseInput(Renderer.WindowHandle);
             
-            if(RenderingEngine.Glfw.WindowShouldClose(RenderingEngine.WindowHandle))
+            if(Renderer.Glfw.WindowShouldClose(Renderer.WindowHandle))
                 Terminate();
         }
         

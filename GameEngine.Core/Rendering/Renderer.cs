@@ -13,8 +13,8 @@ namespace GameEngine.Core.Rendering;
 
 public delegate void OnLoad();
 
-public static unsafe class RenderingEngine {
-
+public static unsafe class Renderer {
+    
     public static WindowHandle* WindowHandle;
     public static InputHandler InputHandler;
     

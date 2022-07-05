@@ -28,7 +28,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
         Debugging.Console.LogSuccess("Initialized physics engine (2/3)");
         
         Debugging.Console.Log("Initializing render engine...");
-        RenderingEngine.Initialize();
+        Renderer.Initialize();
         Debugging.Console.LogSuccess("Initialized render engine (3/3)");
         
         Debugging.Console.LogSuccess("Initialization complete");
@@ -39,7 +39,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
             throw new Exception("Application is already running!");
         IsRunning = true;
         // starts loops on all threads
-        Throw.If(!RenderingEngine.IsInit, "rendering engine has not yet been initialized or initialization has not been fully completed");
+        Throw.If(!Renderer.IsInit, "rendering engine has not yet been initialized or initialization has not been fully completed");
         Throw.If(!PhysicsEngine.IsInit, "physics engine has not yet been initialized or initialization has not been fully completed");
         
         Loop();
@@ -66,7 +66,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
             
             Hierarchy.Awake();
             Hierarchy.Update(updateTime);
-            RenderingEngine.InputHandler.ResetMouseDelta();
+            Renderer.InputHandler.ResetMouseDelta();
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
@@ -74,13 +74,13 @@ public abstract unsafe class Application<T> where T : Application<T> {
                 physicsTimer.Restart();
             }
             
-            RenderingEngine.Render();
+            Renderer.Render();
             
             // handle input
             Glfw.PollEvents();
-            RenderingEngine.InputHandler.HandleMouseInput(RenderingEngine.WindowHandle);
+            Renderer.InputHandler.HandleMouseInput(Renderer.WindowHandle);
             
-            if(Glfw.WindowShouldClose(RenderingEngine.WindowHandle))
+            if(Glfw.WindowShouldClose(Renderer.WindowHandle))
                 Terminate();
         }
         

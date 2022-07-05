@@ -20,7 +20,7 @@ public class ViewportWindow : EditorWindow {
         Vector2 desiredSize = ImGui.GetContentRegionAvail();
         Vector2 size = new Vector2(Configuration.WindowWidth, Configuration.WindowHeight);
         size = size / Configuration.WindowHeight * desiredSize.Y;
-        ImGui.Image((IntPtr) RenderingEngine.MainFrameBuffer2.ColorAttachment, size, new Vector2(0, 1) , new Vector2(1, 0));
+        ImGui.Image((IntPtr) Renderer.MainFrameBuffer2.ColorAttachment, size, new Vector2(0, 1) , new Vector2(1, 0));
     }
     
 }

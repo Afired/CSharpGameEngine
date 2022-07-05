@@ -28,7 +28,7 @@ public partial class Renderer : Transform {
 //        ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
 //        ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
         ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
-        ShaderRegister.Get(Shader).GLM_SetMat("projection", RenderingEngine.CurrentCamera.GLM_GetProjectionMatrix());
+        ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
         Geometry geometry = GeometryRegister.Get(Geometry);
         

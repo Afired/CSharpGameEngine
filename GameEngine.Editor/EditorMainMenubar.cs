@@ -41,6 +41,8 @@ public class EditorMainMenubar {
             DrawAppIcon("Checkerboard");
             
             DrawMenuItems();
+
+            DrawPlayControls();
             
             DrawWindowHandleButtons();
 
@@ -51,6 +53,29 @@ public class EditorMainMenubar {
         // pop main menu bar size
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
+    }
+
+    private static void DrawPlayControls() {
+        switch(EditorApplication.Instance.Mode) {
+            case EditorMode.Editing:
+                if(ImGui.Button("Play"))
+                    EditorApplication.Instance.Mode = EditorMode.Playing;
+                return;
+            case EditorMode.Playing:
+                if(ImGui.Button("Pause"))
+                    EditorApplication.Instance.Mode = EditorMode.Paused;
+                if(ImGui.Button("Stop"))
+                    EditorApplication.Instance.Mode = EditorMode.Editing;
+                return;
+            case EditorMode.Paused:
+                if(ImGui.Button("Resume"))
+                    EditorApplication.Instance.Mode = EditorMode.Playing;
+                if(ImGui.Button("Stop"))
+                    EditorApplication.Instance.Mode = EditorMode.Editing;
+                return;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
     
     public const int WM_NCLBUTTONDOWN = 0xA1;

@@ -10,6 +10,7 @@ namespace GameEngine.Editor;
 public unsafe class EditorApplication : Application<EditorApplication> {
     
     internal EditorLayer EditorLayer { get; private set; }
+    public EditorMode Mode { get; set; } = EditorMode.Editing;
     
     public override void Initialize() {
         base.Initialize();
@@ -19,7 +20,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     private void InitializeEditor() {
         EditorLayer = new EditorLayer();
         RenderingEngine.LayerStack.Push(EditorLayer, LayerType.Overlay);
-        EditorGui editorGui = new EditorGui();
+        EditorGui editorGui = new();
     }
     
     protected override void Loop() {
@@ -40,13 +41,17 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             }
             updateTimer.Restart();
             
-            Hierarchy.Awake();
-            Hierarchy.Update(updateTime);
+            if(Mode == EditorMode.Playing) {
+                Hierarchy.Awake();
+                Hierarchy.Update(updateTime);
+            }
+            
             RenderingEngine.InputHandler.ResetMouseDelta();
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
-                PhysicsEngine.DoStep();
+                if(Mode == EditorMode.Playing)
+                    PhysicsEngine.DoStep();
                 physicsTimer.Restart();
             }
             

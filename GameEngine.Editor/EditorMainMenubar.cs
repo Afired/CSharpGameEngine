@@ -56,22 +56,22 @@ public class EditorMainMenubar {
     }
 
     private static void DrawPlayControls() {
-        switch(EditorApplication.Instance.Mode) {
-            case EditorMode.Editing:
+        switch(PlayMode.Current) {
+            case PlayMode.Mode.Editing:
                 if(ImGui.Button("Play"))
-                    EditorApplication.Instance.Mode = EditorMode.Playing;
+                    PlayMode.Start();
                 return;
-            case EditorMode.Playing:
+            case PlayMode.Mode.Playing:
                 if(ImGui.Button("Pause"))
-                    EditorApplication.Instance.Mode = EditorMode.Paused;
+                    PlayMode.Pause();
                 if(ImGui.Button("Stop"))
-                    EditorApplication.Instance.Mode = EditorMode.Editing;
+                    PlayMode.Stop();
                 return;
-            case EditorMode.Paused:
+            case PlayMode.Mode.Paused:
                 if(ImGui.Button("Resume"))
-                    EditorApplication.Instance.Mode = EditorMode.Playing;
+                    PlayMode.Resume();
                 if(ImGui.Button("Stop"))
-                    EditorApplication.Instance.Mode = EditorMode.Editing;
+                    PlayMode.Stop();
                 return;
             default:
                 throw new ArgumentOutOfRangeException();

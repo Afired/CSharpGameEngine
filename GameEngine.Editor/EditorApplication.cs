@@ -10,7 +10,6 @@ namespace GameEngine.Editor;
 public unsafe class EditorApplication : Application<EditorApplication> {
     
     internal EditorLayer EditorLayer { get; private set; }
-    public EditorMode Mode { get; set; } = EditorMode.Editing;
     
     public override void Initialize() {
         base.Initialize();
@@ -41,7 +40,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             }
             updateTimer.Restart();
             
-            if(Mode == EditorMode.Playing) {
+            if(PlayMode.Current == PlayMode.Mode.Playing) {
                 Hierarchy.Awake();
                 Hierarchy.Update(updateTime);
             }
@@ -50,7 +49,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
-                if(Mode == EditorMode.Playing)
+                if(PlayMode.Current == PlayMode.Mode.Playing)
                     PhysicsEngine.DoStep();
                 physicsTimer.Restart();
             }

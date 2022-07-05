@@ -38,11 +38,11 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.MenuBarBg, new Vector4(0.11f, 0.11f, 0.11f, 1.0f));
         if(ImGui.BeginMainMenuBar()) {
             
+            DrawPlayControls();
+            
             DrawAppIcon("Checkerboard");
             
             DrawMenuItems();
-
-            DrawPlayControls();
             
             DrawWindowHandleButtons();
 
@@ -56,18 +56,42 @@ public class EditorMainMenubar {
     }
 
     private static void DrawPlayControls() {
+        
+        void AlignForWidth(float width, float alignment = 0.5f) {
+            float avail = ImGui.GetContentRegionAvail().X;
+            float off = (avail - width) * alignment;
+            if(off > 0.0f)
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + off);
+        }
+        
+        ImGuiStylePtr style = ImGui.GetStyle();
+        float width = 0.0f;
+        
         switch(PlayMode.Current) {
             case PlayMode.Mode.Editing:
+                width += ImGui.CalcTextSize("Play").X;
+                AlignForWidth(width);
+                
                 if(ImGui.Button("Play"))
                     PlayMode.Start();
                 return;
             case PlayMode.Mode.Playing:
+                width += ImGui.CalcTextSize("Pause").X;
+                width += style.ItemSpacing.X;
+                width += ImGui.CalcTextSize("Stop").X;
+                AlignForWidth(width);
+                
                 if(ImGui.Button("Pause"))
                     PlayMode.Pause();
                 if(ImGui.Button("Stop"))
                     PlayMode.Stop();
                 return;
             case PlayMode.Mode.Paused:
+                width += ImGui.CalcTextSize("Resume").X;
+                width += style.ItemSpacing.X;
+                width += ImGui.CalcTextSize("Stop").X;
+                AlignForWidth(width);
+                
                 if(ImGui.Button("Resume"))
                     PlayMode.Resume();
                 if(ImGui.Button("Stop"))

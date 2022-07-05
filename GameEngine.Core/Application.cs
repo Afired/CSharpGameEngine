@@ -6,7 +6,7 @@ using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
 
-namespace GameEngine.Core.Core;
+namespace GameEngine.Core;
 
 public abstract unsafe class Application<T> where T : Application<T> {
     

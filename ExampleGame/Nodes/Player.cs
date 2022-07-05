@@ -1,4 +1,4 @@
-using GameEngine.Core.Core;
+using GameEngine.Core;
 using GameEngine.Core.Input;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;

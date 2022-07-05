@@ -1,11 +1,8 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using GameEngine.Core.Core;
 using GameEngine.Core.Nodes;
-using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
-using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using ImGuiNET;

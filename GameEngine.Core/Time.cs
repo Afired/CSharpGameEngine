@@ -1,4 +1,4 @@
-﻿namespace GameEngine.Core.Core; 
+﻿namespace GameEngine.Core; 
 
 public static class Time {
     

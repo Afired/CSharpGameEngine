@@ -1,5 +1,4 @@
-﻿using GameEngine.Core.Core;
-using GameEngine.Core.Numerics;
+﻿using GameEngine.Core.Numerics;
 using WindowHandle = Silk.NET.GLFW.WindowHandle;
 
 namespace GameEngine.Core.Input; 

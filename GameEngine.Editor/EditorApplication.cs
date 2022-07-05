@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using GameEngine.Core.Core;
+using GameEngine.Core;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;

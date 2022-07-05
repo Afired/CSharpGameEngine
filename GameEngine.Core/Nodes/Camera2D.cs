@@ -1,8 +1,6 @@
-﻿using GameEngine.Core.Core;
-using GameEngine.Core.Numerics;
+﻿using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
 using GlmNet;
-using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes;
 

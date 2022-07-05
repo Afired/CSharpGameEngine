@@ -1,7 +1,6 @@
 //ref https://gist.github.com/tgfrerer/0d2b92763111a4e5da17
 //ref https://stackoverflow.com/questions/1554674/subclassing-a-external-window-in-c-sharp-net
 using System;
-using GameEngine.Core.Core;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.Input;

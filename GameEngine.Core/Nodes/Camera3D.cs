@@ -1,5 +1,4 @@
 ﻿using System;
-using GameEngine.Core.Core;
 using GameEngine.Core.Numerics;
 using GlmNet;
 

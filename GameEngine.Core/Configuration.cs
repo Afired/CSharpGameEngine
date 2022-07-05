@@ -1,6 +1,6 @@
 ﻿using GameEngine.Core.Rendering;
 
-namespace GameEngine.Core.Core; 
+namespace GameEngine.Core; 
 
 //TODO: create and deserialize configuration file when loading
 public static class Configuration {

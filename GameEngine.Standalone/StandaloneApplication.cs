@@ -1,4 +1,4 @@
-using GameEngine.Core.Core;
+using GameEngine.Core;
 
 namespace GameEngine.Standalone; 
 

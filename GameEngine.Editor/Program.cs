@@ -1,6 +1,4 @@
-﻿using GameEngine.Core.Core;
-using GameEngine.Core.Layers;
-using GameEngine.Core.Rendering;
+﻿using GameEngine.Core;
 
 namespace GameEngine.Editor;
 

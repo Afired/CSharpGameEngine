@@ -11,7 +11,8 @@ public class Node {
     public IReadOnlyList<Node> ChildNodes => _childNodes;
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] private readonly List<Node> _childNodes = null!;
-    private bool _hasBeenAwaken = false;
+    internal bool HasBeenAwoken { get; private set; } = false;
+    protected virtual bool AwakeThisNodeBeforeItsChildren => false;
     
     public Node GetRootNode() {
         Node currentNode = this;
@@ -24,12 +25,16 @@ public class Node {
     }
     
     internal void Awake() {
-        foreach(Node childNodes in ChildNodes)
-            childNodes.Awake();
-        if(_hasBeenAwaken)
-            return;
-        OnAwake();
-        _hasBeenAwaken = true;
+        if(!AwakeThisNodeBeforeItsChildren)
+            foreach(Node childNodes in ChildNodes)
+                childNodes.Awake();
+        if(!HasBeenAwoken) {
+            OnAwake();
+            HasBeenAwoken = true;
+        }
+        if(AwakeThisNodeBeforeItsChildren)
+            foreach(Node childNodes in ChildNodes)
+                childNodes.Awake();
     }
     
     internal void Update() {

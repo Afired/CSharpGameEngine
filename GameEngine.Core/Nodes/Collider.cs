@@ -16,6 +16,7 @@ public partial class Collider : Transform {
     
     
     protected override void OnAwake() {
+        base.OnAwake();
         CreateBody();
     }
     

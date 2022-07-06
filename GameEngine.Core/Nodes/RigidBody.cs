@@ -11,7 +11,7 @@ public partial class RigidBody : Collider {
     
     protected override void OnPhysicsUpdate() {
         LocalPosition = new Numerics.Vector3(Body.GetPosition().X, Body.GetPosition().Y, Position.Z); // swap out for world pos
-        Rotation = Body.GetAngle();
+        LocalRotation = Body.GetAngle();
     }
     
 }

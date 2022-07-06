@@ -21,7 +21,7 @@ public partial class Trigger : Transform {
     
     protected override void OnPhysicsUpdate() {
         Vector2 position = new Vector2(Position.X, Position.Y);
-        Body.SetTransform(position, Rotation);
+        Body.SetTransform(position, LocalRotation);
     }
     
     private void CreateBody() {
@@ -29,7 +29,7 @@ public partial class Trigger : Transform {
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
             position = new Vector2(Position.X, Position.Y),
-            angle = Rotation,
+            angle = LocalRotation,
             awake = true,
             allowSleep = false,
             gravityScale = 0

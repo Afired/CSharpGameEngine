@@ -5,6 +5,7 @@ using GameEngine.Core.Serialization;
 namespace GameEngine.Core.Nodes; 
 
 //? cant implement IEnumerable because deserialization is failing -> cant Convert NodeArr<Node> into ICollection<Node>
+//TODO: delay adding and removing Nodes until beginning of next game tick
 public sealed class NodeArr<T> : INodeArr/*, IEnumerable<T>*/ where T : Node {
     
     [Serialized(Editor.Hidden)] private List<T> _list = new();

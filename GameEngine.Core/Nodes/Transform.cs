@@ -26,6 +26,20 @@ public partial class Transform : Node {
     }
     
     [Serialized] public Vector3 Scale { get; set; } = Vector3.One;
-    [Serialized] public float Rotation { get; set; } = 0f;
+    [Serialized] public float LocalRotation { get; set; } = 0f;
+
+    [Serialized] public float Rotation {
+        get {
+            float value = LocalRotation;
+            
+            for(Node? current = ParentNode; current is not null; current = current.ParentNode) {
+                if(current is not Transform transform)
+                    continue;
+                value += transform.LocalRotation;
+            }
+    
+            return value;
+        }
+    }
     
 }

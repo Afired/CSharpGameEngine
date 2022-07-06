@@ -29,7 +29,7 @@ public partial class Camera2D : BaseCamera {
     
     private mat4 GetViewMat() {
         mat4 translationMatrix = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z));
-        mat4 translationAndRotationMatrix = glm.rotate(translationMatrix, glm.radians(Rotation), new vec3(0, 0, 1));
+        mat4 translationAndRotationMatrix = glm.rotate(translationMatrix, glm.radians(LocalRotation), new vec3(0, 0, 1));
         return glm.inverse(translationAndRotationMatrix);
     }
     

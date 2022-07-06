@@ -3,7 +3,7 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Enemy : Transform, Has<Renderer>, Has<Trigger> {
+public partial class Enemy : RigidBody, Has<Renderer>, Has<Trigger> {
     
     protected override void OnAwake() {
         base.OnAwake();
@@ -11,7 +11,7 @@ public partial class Enemy : Transform, Has<Renderer>, Has<Trigger> {
     }
     
     private void OnBeginTrigger(Trigger other) {
-        Console.Log("Enemy hit something!");
+        // Console.Log("Enemy hit something!");
     }
     
 }

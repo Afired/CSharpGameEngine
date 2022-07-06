@@ -37,6 +37,11 @@ public static class Hierarchy {
         while(_entitiesToBeAdded.TryPop(out Node entity)) {
             Scene.Nodes.Add(entity);
         }
+
+        while(_registeredNodes.TryPop(out (Node node, INodeArr nodeArr) entry)) {
+            entry.nodeArr.Add(entry.node);
+        }
+        
         Scene.Awake();
     }
     
@@ -60,6 +65,16 @@ public static class Hierarchy {
         if(Scene is null)
             return;
         Scene.Draw();
+    }
+    
+    // public static void RegisterNode(Node node, Node parent) {
+    //     
+    // }
+    
+    private static readonly Stack<(Node node, INodeArr nodeArr)> _registeredNodes = new();
+    
+    public static void RegisterNode(Node node, INodeArr nodeArr) {
+        _registeredNodes.Push((node, nodeArr));
     }
     
 }

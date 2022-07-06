@@ -25,7 +25,7 @@ public partial class Collider : Transform {
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
             position = new Vector2(Position.X, Position.Y),
-            angle = Rotation
+            angle = LocalRotation
         };
         
         PolygonShape dynamicBox = new PolygonShape();

@@ -1,10 +1,11 @@
 using GameEngine.Core;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes;
 
-public partial class EnemySpawner : Node, Arr<SpawnPoint> {
+public partial class EnemySpawner : Node, Arr<SpawnPoint>, Arr<Enemy> {
     
     [Serialized] private float SpawnInterval { get; set; } = 0.1f;
     [Serialized] private float TimeUntilNextSpawn { get; set; } = 0f;
@@ -23,6 +24,9 @@ public partial class EnemySpawner : Node, Arr<SpawnPoint> {
         // Enemy newEnemy = New<Enemy>();
         // Scene.Current?.Add(newEnemy);
         // newEnemy.Position = SpawnPoints.GetRandom()?.Position ?? Vector3.Zero;
+        Enemy newEnemy = New<Enemy>();
+        Hierarchy.RegisterNode(newEnemy, Enemys);
+        // Enemys.Add(newEnemy);
     }
     
 }

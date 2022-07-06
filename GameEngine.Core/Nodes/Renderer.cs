@@ -22,6 +22,7 @@ public partial class Renderer : Transform {
 //        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(Rotation);
 
         mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
+                            glm.rotate(Rotation, new vec3(0, 0, 1)) *
                             glm.scale(new mat4(1), new vec3(Scale.X, Scale.Y, Scale.Z));
         
         

@@ -4,6 +4,8 @@ namespace GameEngine.Core.Nodes;
 
 public partial class RigidBody : Collider {
     
+    protected override bool TransformIsIndependent => true;
+    
     protected override void OnAwake() {
         BodyType = BodyType.Dynamic;
         base.OnAwake();

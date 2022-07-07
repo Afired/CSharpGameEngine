@@ -3,14 +3,19 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Bullet : RigidBody, Has<Renderer>, Has<Trigger> {
+public partial class Bullet : RigidBody, Has<Renderer>/*, Has<Trigger>*/ {
     
-    protected override void OnAwake() {
-        base.OnAwake();
-        Trigger.OnBeginTrigger += OnEnemyHit;
-    }
+    // protected override void OnAwake() {
+    //     base.OnAwake();
+    //     Trigger.OnBeginTrigger += OnEnemyHit;
+    // }
+    //
+    // private void OnEnemyHit(Trigger other) {
+    //     Console.Log("Bullet hit something!");
+    // }
     
-    private void OnEnemyHit(Trigger other) {
+    protected override void OnBeginCollision(Collider other) {
+        base.OnBeginCollision(other);
         Console.Log("Bullet hit something!");
     }
     

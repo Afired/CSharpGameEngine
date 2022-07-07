@@ -32,7 +32,7 @@ public static class PlayMode {
         if(Current != Mode.Playing && Current != Mode.Paused)
             throw new Exception();
         Current = Mode.Editing;
-        Hierarchy.SetRootNode(Serializer.Deserialize<Node>("Test"));
+        Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
     }
     
     public enum Mode {

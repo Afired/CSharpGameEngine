@@ -210,7 +210,7 @@ public class EditorMainMenubar {
             if(ImGui.MenuItem("Save"))
                 if(Hierarchy.RootNode is not null)
                     Serializer.Serialize(Hierarchy.RootNode, "Test");
-            if(ImGui.MenuItem("Load")) Hierarchy.SetRootNode(Serializer.Deserialize<Node>("Test"));
+            if(ImGui.MenuItem("Load")) Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
             ImGui.EndMenu();
         }
         

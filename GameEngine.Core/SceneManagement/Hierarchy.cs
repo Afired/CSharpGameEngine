@@ -1,62 +1,67 @@
 using System.Collections.Generic;
-using GameEngine.Core.Core;
-using GameEngine.Core.Entities;
-using GameEngine.Core.Physics;
+using GameEngine.Core.Nodes;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.SceneManagement; 
 
 public static class Hierarchy {
     
-    //todo: multiple scenes
     
-    public static Scene Scene { get; private set; }
-    private static Stack<Entity> _entitiesToBeAdded;
+    private static readonly Stack<(Node node, INodeArr nodeArr)> RegisteredNodes = new();
+    public static Node? RootNode { get; private set; }
     
-    static Hierarchy() {
-        _entitiesToBeAdded = new Stack<Entity>();
+    public static void SetRootNode(Node? newRootNode) {
+        RootNode = newRootNode;
     }
     
-    public static void AddEntity(Entity entity) {
-        _entitiesToBeAdded.Push(entity);
-    }
-
-    public static void LoadScene(Scene scene) {
-        PhysicsEngine.InitializeWorld();
-        Scene = scene;
-        foreach(Entity entity in scene.Entities) {
-            entity.Awake();
+    public static void Awake() {
+        
+        while(RegisteredNodes.TryPop(out (Node node, INodeArr nodeArr) entry)) {
+            entry.nodeArr.Add(entry.node);
         }
-    }
-    
-    internal static void Update(float elapsedTime) {
-        if(Scene is null)
+        
+        if(RootNode is null)
             return;
-        Time.DeltaTime = elapsedTime;
-        foreach(Entity entity in Scene.Entities) {
-            entity.Update();
-        }
-
-        while(_entitiesToBeAdded.TryPop(out Entity entity)) {
-            Scene.AddEntity(entity);
-            entity.Awake();
-        }
+        
+        RootNode.Awake();
     }
     
-    internal static void PhysicsUpdate(float physicsTimeStep) {
-        if(Scene is null)
+    public static void Update(float elapsedTime) {
+        if(RootNode is null)
+            return;
+        
+        Time.TotalTimeElapsed += elapsedTime;
+        Time.DeltaTime = elapsedTime;
+        RootNode.Update();
+    }
+    
+    public static void PrePhysicsUpdate() {
+        if(RootNode is null)
+            return;
+        RootNode.PrePhysicsUpdate();
+    }
+    
+    public static void PhysicsUpdate(float physicsTimeStep) {
+        if(RootNode is null)
             return;
         Time.PhysicsTimeStep = physicsTimeStep;
-        foreach(Entity entity in Scene.Entities) {
-            entity.PhysicsUpdate();
-        }
+        RootNode.PhysicsUpdate();
     }
 
     internal static void Draw() {
-        if(Scene is null)
+        if(RootNode is null)
             return;
-        foreach(Entity entity in Scene.Entities) {
-            entity.Draw();
-        }
+        RootNode.Draw();
+    }
+    
+    public static void RegisterNode(Node node, INodeArr nodeArr) {
+        RegisteredNodes.Push((node, nodeArr));
+    }
+    
+    public static void SaveCurrentRootNode() {
+        if(RootNode is null)
+            return;
+        Serializer.Serialize(RootNode, "Test");
     }
     
 }

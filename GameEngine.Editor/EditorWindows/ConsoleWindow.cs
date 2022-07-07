@@ -5,8 +5,9 @@ using ImGuiNET;
 namespace GameEngine.Editor.EditorWindows; 
 
 public class ConsoleWindow : EditorWindow {
-    
-    private List<LogMessage> _logMessages;
+
+    private uint _logCount;
+    private readonly List<LogMessage> _logMessages;
     private int _maxLogs = 50;
     private bool _showNormalLogMessages = true;
     private bool _showSuccessLogMessages = true;
@@ -20,11 +21,12 @@ public class ConsoleWindow : EditorWindow {
         Console.OnLog += OnLog;
     }
     
-    //! CURRENTLY NOT THREAD SAFE
     private void OnLog(string message, LogSeverity logSeverity) {
         _logMessages.Add(new LogMessage(message, logSeverity));
         if(_logMessages.Count > _maxLogs)
             _logMessages.RemoveAt(0);
+        
+        _logCount++;
     }
     
     protected override void Draw() {
@@ -41,8 +43,17 @@ public class ConsoleWindow : EditorWindow {
     }
     
     private void DrawToolBar() {
-        if(ImGui.Button("Clear"))
-            _logMessages.Clear();
+        if(ImGui.BeginMenuBar()) {
+            
+            if(ImGui.Button("Clear")) {
+                _logMessages.Clear();
+                _logCount = 0;
+            }
+            ImGui.Text($"Log Counter: {_logCount}");
+            
+            ImGui.EndMenuBar();
+        }
+        
 //        ImGui.Checkbox("Errors", ref _showErrorLogMessages);
     }
     

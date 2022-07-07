@@ -1,6 +1,6 @@
-﻿using ExampleGame.Pathfinding;
-using GameEngine.Core.Core;
+﻿using GameEngine.Core;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Standalone;
 
@@ -9,10 +9,10 @@ internal class Program {
     public static int Main(string[] args) {
         
         SetConfig();
-        
-        Application.Initialize();
-        Hierarchy.LoadScene(new PathfindingScene());
-        Application.Run();
+        StandaloneApplication standaloneApplication = new();
+        standaloneApplication.Initialize();
+        Hierarchy.LoadScene(SceneSerializer.LoadJson("somePath"));
+        standaloneApplication.Run();
         
         return 0;
     }

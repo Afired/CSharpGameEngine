@@ -1,3 +1,3 @@
-namespace ExampleGame.Pathfinding; 
+/*namespace ExampleGame.Pathfinding; 
 
-public record Edge(Node ConnectedNode, int Cost);
+public record Edge(PNode ConnectedNode, int Cost);*/

@@ -1,5 +1,6 @@
 using System.Reflection;
 using GameEngine.Core;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 
@@ -15,21 +16,7 @@ public class SceneSelectWindow : EditorWindow {
     }
     
     protected override void Draw() {
-//        if(ImGui.Button("Test Scene")) {
-//            Hierarchy.LoadScene(new TestScene());
-//        }
-//        if(ImGui.Button("RigidBody Scene")) {
-//            Hierarchy.LoadScene(new RigidBodyScene());
-//        }
-//        if(ImGui.Button("A* Pathfinding Scene")) {
-//            Hierarchy.LoadScene(new PathfindingScene());
-//        }
-
-        foreach(Type sceneType in _sceneTypes) {
-            if(ImGui.Button(sceneType.Name)) {
-                Hierarchy.LoadScene(Activator.CreateInstance(sceneType) as Scene);
-            }
-        }
+        
     }
     
     public static IEnumerable<Type> GetEnumerableOfType<T>() where T : class, new() {

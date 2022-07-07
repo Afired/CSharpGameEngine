@@ -11,26 +11,26 @@ namespace GameEngine.SourceGenerator.Tracked {
 
         internal static void Execute(GeneratorExecutionContext context) {
 
-            foreach(ComponentInterfaceDefinition definition in ComponentInterfaceRegister.EnumerateDefinitionsFromThisAssembly()) {
+            foreach(NodeDefinition definition in NodeRegister.EnumerateDefinitionsFromThisAssembly()) {
                 
                 const string CLASS_ACCESSIBILITY = "public"; //classSymbol.DeclaredAccessibility.AsText();
                 
                 string autogenProperties = string.Empty;
-                if(definition.HasRequiredComponents) {
+                if(definition.HasChildNodes) {
                     StringBuilder sb = new StringBuilder();
-                    foreach(ComponentInterfaceDefinition required in definition.GetAllRequiredComponents()) {
+                    foreach(NodeDefinition required in definition.GetAllChildNodes()) {
                         sb.Append("    public ");
                         sb.Append(required.Namespace);
                         sb.Append('.');
-                        sb.Append(required.ComponentName);
+                        sb.Append(required.ClassName);
                         sb.Append(' ');
-                        sb.Append(required.ComponentName);
+                        sb.Append(required.ClassName);
                         sb.Append(" => (Entity as ");
                         sb.Append(required.Namespace);
                         sb.Append('.');
                         sb.Append(required.InterfaceName);
                         sb.Append(")!.");
-                        sb.Append(required.ComponentName);
+                        sb.Append(required.ClassName);
                         sb.Append(";\n");
                     }
                     autogenProperties = sb.ToString();
@@ -42,16 +42,16 @@ $@"//using {GAME_ENGINE_ENTITY_NAMESPACE};
 
 {definition.NamespaceAsFileScopedText()}
 
-{CLASS_ACCESSIBILITY} partial class {definition.ComponentName} {{
+{CLASS_ACCESSIBILITY} partial class {definition.ClassName} {{
 
 {autogenProperties}
 
-    public {definition.ComponentName}({GAME_ENGINE_ENTITY_NAMESPACE}.Entity entity) : base(entity) {{ }}
+    public {definition.ClassName}({GAME_ENGINE_ENTITY_NAMESPACE}.Entity entity) : base(entity) {{ }}
 
 }}
 "
                 );
-                context.AddSource($"{definition.ComponentName}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+                context.AddSource($"{definition.ClassName}", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
             }
         }
     }

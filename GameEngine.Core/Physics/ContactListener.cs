@@ -1,7 +1,7 @@
 using Box2D.NetStandard.Collision;
 using Box2D.NetStandard.Dynamics.Contacts;
 using Box2D.NetStandard.Dynamics.World;
-using GameEngine.Core.Components;
+using GameEngine.Core.Nodes;
 
 namespace GameEngine.Core.Physics; 
 

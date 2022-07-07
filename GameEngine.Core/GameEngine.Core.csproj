@@ -9,8 +9,10 @@
     
     <ItemGroup>
       <PackageReference Include="Box2D.NetStandard" Version="2.4.2-alpha" />
+      <PackageReference Include="GlmNet" Version="0.7.0" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Silk.NET.GLFW" Version="2.11.0" />
       <PackageReference Include="Silk.NET.Input.Glfw" Version="2.11.0" />
       <PackageReference Include="Silk.NET.OpenGL" Version="2.11.0" />

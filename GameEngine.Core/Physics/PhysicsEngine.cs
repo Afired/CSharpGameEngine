@@ -3,7 +3,6 @@ using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
 using Box2D.NetStandard.Dynamics.World;
-using GameEngine.Core.Core;
 using GameEngine.Core.SceneManagement;
 
 namespace GameEngine.Core.Physics;
@@ -14,11 +13,11 @@ public static class PhysicsEngine {
     public static World World;
     
     
-    internal static void Initialize() {
+    public static void Initialize() {
         InitializeWorld();
         IsInit = true;
     }
-
+    
     internal static void InitializeWorld() {
         //world
         Vector2 gravity = new Vector2(0, -9.81f);
@@ -57,12 +56,11 @@ public static class PhysicsEngine {
         dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    internal static void DoStep() {
+    public static void DoStep() {
         int velocityIterations = 6;
         int positionIterations = 2;
         
         World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-        Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
     }
     
 }

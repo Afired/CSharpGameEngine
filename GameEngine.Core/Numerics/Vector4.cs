@@ -1,16 +1,16 @@
 using System;
 using System.Globalization;
 using System.Text;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Numerics;
 
 public struct Vector4 : IEquatable<Vector4>, IFormattable {
     
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-    public float W { get; set; }
-    
+    [Serialized] public float X { get; set; }
+    [Serialized] public float Y { get; set; }
+    [Serialized] public float Z { get; set; }
+    [Serialized] public float W { get; set; }
     
     public Vector4(float x, float y, float z, float w) {
         W = w;

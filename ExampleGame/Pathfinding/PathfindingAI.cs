@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using GameEngine.Core.Components;
 using GameEngine.Core.Core;
 using GameEngine.Core.Entities;
@@ -6,12 +6,12 @@ using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Pathfinding; 
 
-public partial class PathfindingAI : Entity, ITransform, IRenderer {
+public partial class PathfindingAI : GameEngine.Core.Entities.Node, ITransform, IRenderer {
     
-    public Node StartNode { get; set; }
-    public Node EndNode { get; set; }
+    public PNode StartNode { get; set; }
+    public PNode EndNode { get; set; }
 
-    private List<Node> _nodePath;
+    private List<PNode> _nodePath;
     
     protected override void OnAwake() {
         base.OnAwake();
@@ -41,3 +41,4 @@ public partial class PathfindingAI : Entity, ITransform, IRenderer {
     }
     
 }
+*/

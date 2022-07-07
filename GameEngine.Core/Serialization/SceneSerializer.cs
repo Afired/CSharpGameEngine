@@ -1,44 +1,43 @@
-using System;
-using System.IO;
-using GameEngine.Core.SceneManagement;
-using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
-
-namespace GameEngine.Core.Serialization; 
-
-public static class SceneSerializer {
+// using System;
+// using System.IO;
+// using GameEngine.Core.Nodes;
+// using GameEngine.Core.SceneManagement;
+// using Newtonsoft.Json;
 //
-//    public static Scene Load(string path) {
-//        var deserializer = new YamlDotNet.Serialization.DeserializerBuilder()
-//            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//            .Build();
+// namespace GameEngine.Core.Serialization; 
 //
-//        var myConfig = deserializer.Deserialize<Scene>(File.ReadAllText("Test.scene"));
-//        return new Scene();
-//    }
-//
-//    public static bool SaveOpenedScene() {
-//        if(Hierarchy.Scene is null)
-//            return false;
-//
-//        return SaveScene("Test", Hierarchy.Scene);
-//    }
-//    
-//    private static bool SaveScene(string path, Scene scene) {
-//        ISerializer serializer = new SerializerBuilder()
-//            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-//            //.IncludeNonPublicProperties()
-//            .IgnoreFields()
-//            .WithTypeResolver()
-//            .Build();
-//        
-//        string stringResult = serializer.Serialize(scene);
-//        
-//        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-//        File.WriteAllText(desktopPath + "\\" + "Test.scene", stringResult);
-//        return true;
-//    }
-    
-}
+// public static class SceneSerializer {
+//     
+//     private static readonly JsonSerializerSettings SerializerSettings = new() {
+//         ContractResolver = new SerializedContractResolver(),
+//         TypeNameHandling = TypeNameHandling.Auto,
+//         // TypeNameHandling = TypeNameHandling.All,
+//         // MaxDepth = 10,
+//         ObjectCreationHandling = ObjectCreationHandling.Replace,
+//         DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+//         PreserveReferencesHandling = PreserveReferencesHandling.All,
+//         ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+//         ConstructorHandling = ConstructorHandling.Default,
+//     };
+//     
+//     public static Scene LoadJson(string path) {
+//         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+//         Scene scene = JsonConvert.DeserializeObject<Scene>(File.ReadAllText(desktopPath + "\\" + "Test.scene"), SerializerSettings)!;
+//         return scene;
+//     }
+//     
+//     public static bool SaveOpenedScene() {
+//         if(Hierarchy.Scene is null)
+//             return false;
+//         
+//         return SaveSceneJson("Test", Hierarchy.Scene);
+//     }
+//     
+//     private static bool SaveSceneJson(string path, Scene scene) {
+//         string stringResult = JsonConvert.SerializeObject(scene, Formatting.Indented, SerializerSettings);
+//         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+//         File.WriteAllText(desktopPath + "\\" + "Test.scene", stringResult);
+//         return true;
+//     }
+//     
+// }

@@ -19,7 +19,7 @@ public class EditorGui {
         ImGui.GetIO().MouseDrawCursor = true;
         
         new EditorDockSpace();
-        new EditorMenubar();
+        new EditorMainMenubar();
         new HierarchyWindow();
         new ViewportWindow();
         new InspectorWindow();

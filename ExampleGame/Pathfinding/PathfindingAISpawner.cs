@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using GameEngine.Core.Core;
 using GameEngine.Core.Entities;
 using GameEngine.Core.Input;
@@ -6,7 +6,7 @@ using GameEngine.Core.SceneManagement;
 
 namespace ExampleGame.Pathfinding; 
 
-public partial class PathfindingAISpawner : Entity {
+public partial class PathfindingAISpawner : GameEngine.Core.Entities.Node {
     
     private float _cooldown = 1f;
     private float _currentTime;
@@ -27,8 +27,8 @@ public partial class PathfindingAISpawner : Entity {
 
         Random random = new();
 
-        Node startNode = grid.GetRandomBorderNode();
-        Node endNode = grid.GetRandomBorderNode();
+        PNode startNode = grid.GetRandomBorderNode();
+        PNode endNode = grid.GetRandomBorderNode();
         
         PathfindingAI pathfindingAi = new() {
             StartNode = startNode,
@@ -40,3 +40,4 @@ public partial class PathfindingAISpawner : Entity {
     }
     
 }
+*/

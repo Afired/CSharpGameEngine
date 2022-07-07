@@ -1,5 +1,3 @@
-using GameEngine.Core.Core;
-using GameEngine.Core.Debugging;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering; 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using GameEngine.Core.Numerics;
+using GlmNet;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Shaders;
@@ -113,17 +114,22 @@ public class Shader {
         int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.UniformMatrix4(location, 1, false, mat.ToArray());
     }
-
+    
+    public void GLM_SetMat(string uniformName, mat4 mat4) {
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        Gl.UniformMatrix4(location, 1, false, mat4.to_array());
+    }
+    
     public void SetInt(string uniformName, int value) {
         int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.Uniform1(location, value);
     }
-
+    
     public void SetFloat(string uniformName, float value) {
         int location = Gl.GetUniformLocation(_programID, "time");
         Gl.Uniform1(location, value);
     }
-
+    
 }
 
 public interface IShader {

@@ -68,8 +68,9 @@ public static class AssemblyManager {
             string configName = "Release";
         #endif
         string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
+        string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
         string pluginRelativePath = $"ExampleGame.Editor\\bin\\{configName}\\net6.0\\ExampleGame.Editor.dll";
-        string pluginFullPath = Path.Combine(editorAssemblyDir, $"..\\..\\..\\..\\{pluginRelativePath}");
+        string pluginFullPath = Path.Combine(projectDir, pluginRelativePath);
         // Assembly loadedAssembly = LoadEditorAssembly(@"ExampleGame.Editor\bin\Debug\net6.0\ExampleGame.Editor.dll");
         Assembly loadedAssembly = LoadEditorAssembly(pluginFullPath);
         _externalEditorAssemblies.Add(loadedAssembly);
@@ -79,17 +80,6 @@ public static class AssemblyManager {
         //LOAD
         PropertyDrawer.LoadLookUp();
     }
-    
-    // private static Assembly LoadEditorAssemblies(string relativePath) {
-    //     string editorAssemblyLocation = typeof(Program).Assembly.Location;
-    //     // Navigate up to the solution root
-    //     string root = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyLocation)))))));
-    //
-    //     string pluginLocation = Path.GetFullPath(Path.Combine(root, relativePath.Replace('\\', Path.DirectorySeparatorChar)));
-    //     Console.Log($"Loading editor assembly from: {pluginLocation}");
-    //     EditorAssemblyLoadContext loadContext = new(pluginLocation);
-    //     return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
-    // }
     
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static Assembly LoadEditorAssembly(string assemblyPath) {
@@ -101,24 +91,6 @@ public static class AssemblyManager {
         return assembly;
     }
     
-    // private static IEnumerable<ICommand> CreateCommands(Assembly assembly) {
-    //     int count = 0;
-    //
-    //     foreach (Type type in assembly.GetTypes())
-    //     {
-    //         if (typeof(ICommand).IsAssignableFrom(type))
-    //         {
-    //             ICommand result = Activator.CreateInstance(type) as ICommand;
-    //             if (result != null)
-    //             {
-    //                 count++;
-    //                 yield return result;
-    //             }
-    //         }
-    //     }
-    //     
-    // }
-    
 }
 
 public class EditorAssemblyLoadContext : AssemblyLoadContext {
@@ -129,29 +101,11 @@ public class EditorAssemblyLoadContext : AssemblyLoadContext {
         _resolver = new AssemblyDependencyResolver(pluginPath);
     }
     
-    // protected override Assembly? Load(AssemblyName assemblyName) {
-    //     string? assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
-    //     if(assemblyPath != null) {
-    //         return LoadFromAssemblyPath(assemblyPath);
-    //     }
-    //     return null;
-    // }
-    
     protected override Assembly? Load(AssemblyName assemblyName) {
         string? assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
-        
         if(assemblyPath != null) {
-            //Using  MemoryStream to prevent attach dll to this .exe
-            MemoryStream ms = new();
-            
-            using(FileStream fs = File.Open(assemblyPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
-                fs.CopyTo(ms);
-            }
-            
-            ms.Position = 0;
-            return LoadFromStream(ms);
+            return LoadFromAssemblyPath(assemblyPath);
         }
-        
         return null;
     }
     

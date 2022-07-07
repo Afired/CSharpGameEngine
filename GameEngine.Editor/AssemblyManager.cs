@@ -7,9 +7,8 @@ namespace GameEngine.Editor;
 
 public static class AssemblyManager {
     
-    private static List<Assembly> _externalEditorAssemblies = new();
-    private static WeakReference? _weak;
-    private static WeakReference<EditorAssemblyLoadContext>? _weakLoadContext;
+    private static readonly List<Assembly> _externalEditorAssemblies = new();
+    private static EditorAssemblyLoadContext? _editorAssemblyLoadContext;
     public static bool IsReloadingEditorAssemblies { get; private set; }
 
     public static void RegisterReloadOfEditorAssemblies() => IsReloadingEditorAssemblies = true;
@@ -28,37 +27,31 @@ public static class AssemblyManager {
     
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static void TryToUnloadEditorAssemblies() {
-        _externalEditorAssemblies = new List<Assembly>();
-        if(_weak is null || _weakLoadContext is null)
+        if(_editorAssemblyLoadContext is null)
             return;
         
         //UNLOAD
+        _externalEditorAssemblies.Clear(); //= new List<Assembly>();
         PropertyDrawer.UnloadLookUp();
         
-        UnloadEditorAssemblies();
+        UnloadEditorAssemblies(out WeakReference weak);
         
         const int MAX_GC_ATTEMPTS = 10;
-        for(int i = 0; _weak.IsAlive && i < MAX_GC_ATTEMPTS; i++) {
+        for(int i = 0; weak.IsAlive && i < MAX_GC_ATTEMPTS; i++) {
             Console.Log($"GC Attempt ({i + 1}/{MAX_GC_ATTEMPTS})");
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
-        
-        _weak = null;
-        _weakLoadContext = null;
     }
     
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void UnloadEditorAssemblies() {
-        if(_weakLoadContext is null)
-            return;
-        
-        if(_weakLoadContext.TryGetTarget(out EditorAssemblyLoadContext? loadContext)) {
-            foreach(Assembly assembly in loadContext.Assemblies) {
-                Console.Log($"Unloading editor assembly from: {assembly.Location}");
-            }
-            loadContext.Unload();
+    private static void UnloadEditorAssemblies(out WeakReference weak) {
+        foreach(Assembly assembly in _editorAssemblyLoadContext.Assemblies) {
+            Console.Log($"Unloading editor assembly from: {assembly.Location}");
         }
+        _editorAssemblyLoadContext.Unload();
+        weak = new WeakReference(_editorAssemblyLoadContext);
+        _editorAssemblyLoadContext = null;
     }
     
     public static void LoadEditorAssemblies() {
@@ -84,10 +77,9 @@ public static class AssemblyManager {
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static Assembly LoadEditorAssembly(string assemblyPath) {
         Console.Log($"Loading editor assembly from: {assemblyPath}");
-        EditorAssemblyLoadContext loadContext = new(assemblyPath);
-        Assembly assembly = loadContext.LoadFromAssemblyPath(assemblyPath);
-        _weak = new WeakReference(loadContext);
-        _weakLoadContext = new WeakReference<EditorAssemblyLoadContext>(loadContext);
+        _editorAssemblyLoadContext = new(assemblyPath);
+        Assembly assembly = _editorAssemblyLoadContext.LoadFromAssemblyPath(assemblyPath);
+        
         return assembly;
     }
     

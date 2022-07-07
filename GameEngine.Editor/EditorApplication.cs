@@ -16,7 +16,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
-        AssemblyManager.ReloadEditorAssemblies();
+        AssemblyManager.LoadEditorAssemblies();
     }
     
     protected override void Loop() {
@@ -26,6 +26,9 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         physicsTimer.Start();
         
         while(IsRunning) {
+
+            if(AssemblyManager.IsReloadingEditorAssemblies)
+                AssemblyManager.ReloadEditorAssemblies();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {

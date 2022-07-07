@@ -9,7 +9,12 @@
     <ItemGroup>
         <ProjectReference Include="..\GameEngine.Editor\GameEngine.Editor.csproj">
             <Private>false</Private>
-            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj">
+            <Private>false</Private>
         </ProjectReference>
     </ItemGroup>
 

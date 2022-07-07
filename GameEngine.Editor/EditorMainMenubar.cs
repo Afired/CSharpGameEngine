@@ -185,6 +185,7 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
+            if(ImGui.MenuItem("Reload Editor Assemblies")) AssemblyManager.RegisterReloadOfEditorAssemblies();
             if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
             ImGui.EndMenu();
         }

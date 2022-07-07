@@ -1,5 +1,4 @@
 using System.Reflection;
-using GameEngine.Core.Nodes;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Editor.NodeDrawers;
@@ -10,14 +9,12 @@ namespace GameEngine.Editor.PropertyDrawers;
 
 public abstract class PropertyDrawer {
     
-    private static Dictionary<Type, PropertyDrawer>? _propertyDrawerLookup;
+    private static readonly Dictionary<Type, PropertyDrawer> _propertyDrawerLookup = new();
     protected internal abstract Type PropertyType { get; }
     protected internal abstract void DrawPropertyInternal(object container, FieldInfo fieldInfo);
     protected internal abstract void DrawPropertyInternal(object container, PropertyInfo propertyInfo);
     
     internal static void Draw(object container, FieldInfo fieldInfo) {
-        _propertyDrawerLookup ??= BuildPropertyDrawerLookup();
-        
         if(_propertyDrawerLookup.TryGetValue(fieldInfo.FieldType, out PropertyDrawer? propertyDrawer)) {
             propertyDrawer.DrawPropertyInternal(container, fieldInfo);
         } else {
@@ -26,7 +23,6 @@ public abstract class PropertyDrawer {
     }
     
     internal static void Draw(object container, PropertyInfo propertyInfo) {
-        _propertyDrawerLookup ??= BuildPropertyDrawerLookup();
         if(_propertyDrawerLookup.TryGetValue(propertyInfo.PropertyType, out PropertyDrawer? propertyDrawer)) {
             propertyDrawer.DrawPropertyInternal(container, propertyInfo);
         } else {
@@ -54,6 +50,22 @@ public abstract class PropertyDrawer {
         //         Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
         // }
         // return propertyDrawerLookup;
+    }
+    
+    public static void UnloadLookUp() {
+        _propertyDrawerLookup.Clear();
+    }
+    
+    public static void LoadLookUp() {
+        _propertyDrawerLookup.Clear();
+        foreach(Assembly editorAssembly in AssemblyManager.EditorAssemblies()) {
+            List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);
+            foreach(Type type in derivedTypes) {
+                PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
+                if(!_propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
+                    Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+            }
+        }
     }
     
 }

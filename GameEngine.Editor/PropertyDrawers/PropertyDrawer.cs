@@ -27,7 +27,6 @@ public abstract class PropertyDrawer {
     
     internal static void Draw(object container, PropertyInfo propertyInfo) {
         _propertyDrawerLookup ??= BuildPropertyDrawerLookup();
-        
         if(_propertyDrawerLookup.TryGetValue(propertyInfo.PropertyType, out PropertyDrawer? propertyDrawer)) {
             propertyDrawer.DrawPropertyInternal(container, propertyInfo);
         } else {
@@ -37,13 +36,24 @@ public abstract class PropertyDrawer {
     
     private static Dictionary<Type, PropertyDrawer> BuildPropertyDrawerLookup() {
         Dictionary<Type, PropertyDrawer> propertyDrawerLookup = new();
-        List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), typeof(PropertyDrawer<>).Assembly);
-        foreach(Type type in derivedTypes) {
-            PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
-            if(!propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
-                Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+        
+        foreach(Assembly editorAssembly in AssemblyManager.EditorAssemblies()) {
+            List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);
+            foreach(Type type in derivedTypes) {
+                PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
+                if(!propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
+                    Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+            }
         }
         return propertyDrawerLookup;
+        
+        // List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), typeof(PropertyDrawer<>).Assembly);
+        // foreach(Type type in derivedTypes) {
+        //     PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
+        //     if(!propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
+        //         Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+        // }
+        // return propertyDrawerLookup;
     }
     
 }

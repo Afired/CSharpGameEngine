@@ -13,13 +13,10 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     
     public override void Initialize() {
         base.Initialize();
-        InitializeEditor();
-    }
-    
-    private void InitializeEditor() {
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
+        AssemblyManager.ReloadEditorAssemblies();
     }
     
     protected override void Loop() {

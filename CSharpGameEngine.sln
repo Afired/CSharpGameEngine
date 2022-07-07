@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine.SourceGenerator"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine.Standalone", "GameEngine.Standalone\GameEngine.Standalone.csproj", "{780A7012-0470-4D84-B83D-D79F83DEDA82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame.Editor", "ExampleGame.Editor\ExampleGame.Editor.csproj", "{1FD95019-0386-4DED-A0EC-E96E1AEAD6F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{780A7012-0470-4D84-B83D-D79F83DEDA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{780A7012-0470-4D84-B83D-D79F83DEDA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{780A7012-0470-4D84-B83D-D79F83DEDA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD95019-0386-4DED-A0EC-E96E1AEAD6F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD95019-0386-4DED-A0EC-E96E1AEAD6F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD95019-0386-4DED-A0EC-E96E1AEAD6F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD95019-0386-4DED-A0EC-E96E1AEAD6F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

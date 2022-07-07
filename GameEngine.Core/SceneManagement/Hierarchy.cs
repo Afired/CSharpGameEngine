@@ -35,7 +35,13 @@ public static class Hierarchy {
         RootNode.Update();
     }
     
-    internal static void PhysicsUpdate(float physicsTimeStep) {
+    public static void PrePhysicsUpdate() {
+        if(RootNode is null)
+            return;
+        RootNode.PrePhysicsUpdate();
+    }
+    
+    public static void PhysicsUpdate(float physicsTimeStep) {
         if(RootNode is null)
             return;
         Time.PhysicsTimeStep = physicsTimeStep;

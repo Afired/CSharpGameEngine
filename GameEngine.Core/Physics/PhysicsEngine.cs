@@ -61,7 +61,6 @@ public static class PhysicsEngine {
         int positionIterations = 2;
         
         World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
-        Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
     }
     
 }

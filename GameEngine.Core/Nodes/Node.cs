@@ -43,6 +43,13 @@ public class Node {
             childNode.Update();
     }
     
+    internal void PrePhysicsUpdate() {
+        OnPrePhysicsUpdate();
+        foreach(Node childNode in ChildNodes) {
+            childNode.PrePhysicsUpdate();
+        }
+    }
+    
     internal void PhysicsUpdate() {
         OnPhysicsUpdate();
         foreach(Node childNode in ChildNodes)
@@ -57,6 +64,7 @@ public class Node {
     
     protected virtual void OnAwake() { }
     protected virtual void OnUpdate() { }
+    protected virtual void OnPrePhysicsUpdate() { }
     protected virtual void OnPhysicsUpdate() { }
     protected virtual void OnDraw() { }
     

@@ -49,8 +49,11 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
-                if(PlayMode.Current == PlayMode.Mode.Playing)
+                if(PlayMode.Current == PlayMode.Mode.Playing) {
+                    Hierarchy.PrePhysicsUpdate();
                     PhysicsEngine.DoStep();
+                    Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
+                }
                 physicsTimer.Restart();
             }
             

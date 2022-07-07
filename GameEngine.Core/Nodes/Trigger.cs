@@ -19,9 +19,8 @@ public partial class Trigger : Transform {
         CreateBody();
     }
     
-    protected override void OnPhysicsUpdate() {
-        Vector2 position = new Vector2(Position.X, Position.Y);
-        Body.SetTransform(position, LocalRotation);
+    protected override void OnPrePhysicsUpdate() {
+        Body.SetTransform(new Vector2(Position.X, Position.Y), LocalRotation);
     }
     
     private void CreateBody() {

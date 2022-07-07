@@ -70,7 +70,9 @@ public abstract unsafe class Application<T> where T : Application<T> {
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {
+                Hierarchy.PrePhysicsUpdate();
                 PhysicsEngine.DoStep();
+                Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
                 physicsTimer.Restart();
             }
             

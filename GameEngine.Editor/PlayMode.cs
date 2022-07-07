@@ -1,3 +1,4 @@
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 
@@ -10,7 +11,8 @@ public static class PlayMode {
     public static void Start() {
         if(Current != Mode.Editing)
             throw new Exception();
-        SceneSerializer.SaveOpenedScene();
+        // SceneSerializer.SaveOpenedScene();
+        Hierarchy.SaveCurrentRootNode();
         Current = Mode.Playing;
     }
     
@@ -30,7 +32,7 @@ public static class PlayMode {
         if(Current != Mode.Playing && Current != Mode.Paused)
             throw new Exception();
         Current = Mode.Editing;
-        Hierarchy.LoadScene(SceneSerializer.LoadJson("somePath"));
+        Hierarchy.SetRootNode(Serializer.Deserialize<Node>("Test"));
     }
     
     public enum Mode {

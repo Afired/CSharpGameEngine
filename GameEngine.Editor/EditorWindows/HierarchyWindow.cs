@@ -31,60 +31,60 @@ public class HierarchyWindow : EditorWindow {
     
     protected override void Draw() {
         if(ImGui.BeginMenuBar()) {
-            ImGui.Text(Hierarchy.Scene is not null ? Hierarchy.Scene.Name : "no scene loaded");
+            ImGui.Text(Hierarchy.RootNode is not null ? $"{Hierarchy.RootNode.GetType().AssemblyQualifiedName}" : "null");
             ImGui.EndMenuBar();
         }
         
-        if(Hierarchy.Scene is not null)
-            DrawNode(Hierarchy.Scene);
+        if(Hierarchy.RootNode is not null)
+            DrawNode(Hierarchy.RootNode);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selected = null;
         }
     }
     
-    private void DrawScene(Scene scene) {
-        
-        ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.CollapsingHeader | ImGuiTreeNodeFlags.DefaultOpen;
-        ImGui.PushID(scene.GetHashCode());
-        bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
-        ImGui.PopID();
-        
-        if(opened) {
-            foreach(Node entity in scene.Nodes) {
-                DrawNode(entity);
-            }
-            ImGui.TreePop();
-            
-            ImGui.Spacing();
-            ImGui.Button("Create new Node", new Vector2(ImGui.GetContentRegionAvail().X + 10, 20));
-            if(ImGui.BeginPopupContextItem("", ImGuiPopupFlags.MouseButtonLeft)) {
-                ImGui.Text("Create new Node");
-                ImGui.Spacing();
-                ImGui.Separator();
-                ImGui.Spacing();
-                if(ImGui.MenuItem(nameof(Node))) {
-                    Node newNode = Node.New<Node>();
-                    Hierarchy.AddEntity(newNode);
-                }
-                foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
-                    if(ImGui.MenuItem(type.Name)) {
-                        Node newNode = Node.New(type);
-                        Hierarchy.AddEntity(newNode);
-                    }
-                }
-                foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
-                    if(ImGui.MenuItem(type.Name)) {
-                        Node newNode = Node.New(type);
-                        Hierarchy.AddEntity(newNode);
-                    }
-                }
-                ImGui.EndPopup();
-            }
-            
-        }
-        
-    }
+    // private void DrawScene(Scene scene) {
+    //     
+    //     ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.CollapsingHeader | ImGuiTreeNodeFlags.DefaultOpen;
+    //     ImGui.PushID(scene.GetHashCode());
+    //     bool opened = ImGui.TreeNodeEx("Scene: " + scene.Name, treeNodeFlags);
+    //     ImGui.PopID();
+    //     
+    //     if(opened) {
+    //         foreach(Node entity in scene.Nodes) {
+    //             DrawNode(entity);
+    //         }
+    //         ImGui.TreePop();
+    //         
+    //         ImGui.Spacing();
+    //         ImGui.Button("Create new Node", new Vector2(ImGui.GetContentRegionAvail().X + 10, 20));
+    //         if(ImGui.BeginPopupContextItem("", ImGuiPopupFlags.MouseButtonLeft)) {
+    //             ImGui.Text("Create new Node");
+    //             ImGui.Spacing();
+    //             ImGui.Separator();
+    //             ImGui.Spacing();
+    //             if(ImGui.MenuItem(nameof(Node))) {
+    //                 Node newNode = Node.New<Node>();
+    //                 Hierarchy.AddEntity(newNode);
+    //             }
+    //             foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
+    //                 if(ImGui.MenuItem(type.Name)) {
+    //                     Node newNode = Node.New(type);
+    //                     Hierarchy.AddEntity(newNode);
+    //                 }
+    //             }
+    //             foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node)))) {
+    //                 if(ImGui.MenuItem(type.Name)) {
+    //                     Node newNode = Node.New(type);
+    //                     Hierarchy.AddEntity(newNode);
+    //                 }
+    //             }
+    //             ImGui.EndPopup();
+    //         }
+    //         
+    //     }
+    //     
+    // }
     
     private void DrawNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
@@ -99,7 +99,8 @@ public class HierarchyWindow : EditorWindow {
         
         if(ImGui.BeginPopupContextItem()) {
             if(ImGui.MenuItem("Delete Node"))
-                Hierarchy.DeleteEntity(node.GetRootNode());
+                Console.LogWarning("Deleting is not implemented yet");
+                // Hierarchy.DeleteEntity(node.GetRootNode());
             ImGui.EndPopup();
         }
         

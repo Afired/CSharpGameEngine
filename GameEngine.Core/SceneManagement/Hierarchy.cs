@@ -1,80 +1,61 @@
 using System.Collections.Generic;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.SceneManagement; 
 
 public static class Hierarchy {
     
-    //todo: multiple scenes
     
-    public static Scene? Scene { get; private set; }
-    private static Stack<Node> _entitiesToBeAdded;
-    private static Stack<Node> _entitiesToBeDeleted;
-
-    static Hierarchy() {
-        _entitiesToBeAdded = new Stack<Node>();
-        _entitiesToBeDeleted = new Stack<Node>();
-    }
+    private static readonly Stack<(Node node, INodeArr nodeArr)> RegisteredNodes = new();
+    public static Node? RootNode { get; private set; }
     
-    public static void AddEntity(Node node) {
-        _entitiesToBeAdded.Push(node);
-    }
-    
-    public static void DeleteEntity(Node node) {
-        _entitiesToBeDeleted.Push(node);
-    }
-    
-    public static void LoadScene(Scene scene) {
-        Scene = scene;
+    public static void SetRootNode(Node? newRootNode) {
+        RootNode = newRootNode;
     }
     
     public static void Awake() {
-        if(Scene is null)
-            return;
-        while(_entitiesToBeDeleted.TryPop(out Node node)) {
-            Scene.Nodes.Remove(node);
-        }
-        while(_entitiesToBeAdded.TryPop(out Node entity)) {
-            Scene.Nodes.Add(entity);
-        }
-
-        while(_registeredNodes.TryPop(out (Node node, INodeArr nodeArr) entry)) {
+        
+        while(RegisteredNodes.TryPop(out (Node node, INodeArr nodeArr) entry)) {
             entry.nodeArr.Add(entry.node);
         }
         
-        Scene.Awake();
+        if(RootNode is null)
+            return;
+        
+        RootNode.Awake();
     }
     
     public static void Update(float elapsedTime) {
-        if(Scene is null)
+        if(RootNode is null)
             return;
         
         Time.TotalTimeElapsed += elapsedTime;
         Time.DeltaTime = elapsedTime;
-        Scene.Update();
+        RootNode.Update();
     }
     
     internal static void PhysicsUpdate(float physicsTimeStep) {
-        if(Scene is null)
+        if(RootNode is null)
             return;
         Time.PhysicsTimeStep = physicsTimeStep;
-        Scene.PhysicsUpdate();
+        RootNode.PhysicsUpdate();
     }
 
     internal static void Draw() {
-        if(Scene is null)
+        if(RootNode is null)
             return;
-        Scene.Draw();
+        RootNode.Draw();
     }
     
-    // public static void RegisterNode(Node node, Node parent) {
-    //     
-    // }
-    
-    private static readonly Stack<(Node node, INodeArr nodeArr)> _registeredNodes = new();
-    
     public static void RegisterNode(Node node, INodeArr nodeArr) {
-        _registeredNodes.Push((node, nodeArr));
+        RegisteredNodes.Push((node, nodeArr));
+    }
+    
+    public static void SaveCurrentRootNode() {
+        if(RootNode is null)
+            return;
+        Serializer.Serialize(RootNode, "Test");
     }
     
 }

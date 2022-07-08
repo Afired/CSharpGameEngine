@@ -25,7 +25,8 @@ public static class AssemblyManager {
     public static void ReloadEditorAssemblies() {
         ClearEditorResources();
         if(TryToUnloadEditorAssemblies()) {
-            CompileExternalEditorAssemblies();
+            if(!CompileExternalEditorAssemblies())
+                Console.LogWarning("Reloading latest editor assemblies...");
             LoadEditorAssemblies();
         } else {
             RecoverLatestEditorAssemblies();
@@ -34,7 +35,7 @@ public static class AssemblyManager {
         GenerateEditorResources();
     }
 
-    private static void CompileExternalEditorAssemblies() {
+    private static bool CompileExternalEditorAssemblies() {
         string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
         string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
         string pluginRelativePath = $"ExampleGame.Editor";
@@ -56,8 +57,17 @@ public static class AssemblyManager {
         Process process = Process.Start(processInfo) ?? throw new Exception();
 
         process.OutputDataReceived += (sender, dataArgs) => {
-            if(dataArgs.Data is not null)
-                Console.Log(dataArgs.Data);
+            string? data = dataArgs.Data;
+            
+            if(data is null)
+                return;
+            
+            if(data.Contains("Warning", StringComparison.CurrentCultureIgnoreCase))
+                Console.LogWarning(data);
+            else if(data.Contains("Error", StringComparison.CurrentCultureIgnoreCase))
+                Console.LogError(data);
+            else
+                Console.Log(data);
         };
         process.BeginOutputReadLine();
 
@@ -70,11 +80,18 @@ public static class AssemblyManager {
         process.WaitForExit();
         
         int exitCode = process.ExitCode;
-        Console.Log($"Exit Code: '{exitCode}'");
         process.Close();
         
+        Console.Log($"Exit Code: '{exitCode}'");
         Console.Log("**********************************************************************************************************************");
+        
+        if(exitCode != 0) {
+            Console.LogError("Failed to compile external editor assemblies!");
+            return false;
+        }
+        
         Console.LogSuccess("Successfully compiled external editor assemblies!");
+        return true;
     }
     
     private static void RecoverLatestEditorAssemblies() {

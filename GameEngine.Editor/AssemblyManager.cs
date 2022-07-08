@@ -7,6 +7,9 @@ using GameEngine.Editor.PropertyDrawers;
 namespace GameEngine.Editor; 
 
 public static class AssemblyManager {
+
+    private const string EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame.Editor";
+    private const string EXTERNAL_EDITOR_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.Editor.dll";
     
     private static readonly List<Assembly> _externalEditorAssemblies = new();
     private static List<WeakReference> _oldExternalEditorAssembliesRefs = new();
@@ -36,16 +39,11 @@ public static class AssemblyManager {
     }
 
     private static bool CompileExternalEditorAssemblies() {
-        string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
-        string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
-        string pluginRelativePath = $"ExampleGame.Editor";
-        string pluginFullPath = Path.Combine(projectDir, pluginRelativePath);
-        
         Console.Log("Compiling external editor assemblies...");
         Console.Log("**********************************************************************************************************************");
         
         ProcessStartInfo processInfo = new() {
-            WorkingDirectory = pluginFullPath,
+            WorkingDirectory = EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR,
             FileName = "cmd.exe",
             Arguments = "/c dotnet build",
             CreateNoWindow = true,
@@ -167,17 +165,7 @@ public static class AssemblyManager {
     }
     
     public static void LoadEditorAssemblies() {
-        #if DEBUG
-            const string CONFIG_NAME = "Debug";
-        #else
-            const string CONFIG_NAME = "Release";
-        #endif
-        string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
-        string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
-        string pluginRelativePath = $"ExampleGame.Editor\\bin\\{CONFIG_NAME}\\net6.0\\ExampleGame.Editor.dll";
-        string pluginFullPath = Path.Combine(projectDir, pluginRelativePath);
-        // Assembly loadedAssembly = LoadEditorAssembly(@"ExampleGame.Editor\bin\Debug\net6.0\ExampleGame.Editor.dll");
-        Assembly loadedAssembly = LoadEditorAssembly(pluginFullPath);
+        Assembly loadedAssembly = LoadEditorAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL);
         _externalEditorAssemblies.Add(loadedAssembly);
         
         Console.LogSuccess("Successfully loaded external editor assemblies!");

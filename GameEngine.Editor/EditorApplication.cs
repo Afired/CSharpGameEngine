@@ -13,13 +13,11 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     
     public override void Initialize() {
         base.Initialize();
-        InitializeEditor();
-    }
-    
-    private void InitializeEditor() {
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
+        AssemblyManager.LoadEditorAssemblies();
+        AssemblyManager.GenerateEditorResources();
     }
     
     protected override void Loop() {
@@ -29,6 +27,9 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         physicsTimer.Start();
         
         while(IsRunning) {
+
+            if(AssemblyManager.IsReloadingEditorAssemblies)
+                AssemblyManager.ReloadEditorAssemblies();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {

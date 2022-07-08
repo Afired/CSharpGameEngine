@@ -8,7 +8,7 @@ public partial class Transform : Node {
     protected virtual bool TransformIsIndependent => false;
     [Serialized] public Vector3 LocalPosition { get; set; } = Vector3.Zero;
     
-    [Serialized] public Vector3 Position {
+    public Vector3 Position {
         get {
             if(TransformIsIndependent)
                 return LocalPosition;

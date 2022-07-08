@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Shaders;
@@ -41,6 +42,8 @@ public class EditorMainMenubar {
             DrawAppIcon("Checkerboard");
             
             DrawMenuItems();
+            if(ImGui.Button("recompile external editor assemblies"))
+                AssemblyManager.RegisterReloadOfEditorAssemblies();
             
             DrawWindowHandleButtons();
 
@@ -185,6 +188,11 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
+            if(ImGui.MenuItem("Clear Editor Resources")) AssemblyManager.ClearEditorResources();
+            if(ImGui.MenuItem("Generate Editor Resources")) AssemblyManager.GenerateEditorResources();
+            if(ImGui.MenuItem("Reload Editor Assemblies")) AssemblyManager.RegisterReloadOfEditorAssemblies();
+            if(ImGui.MenuItem("Unload Editor Assemblies")) AssemblyManager.TryToUnloadEditorAssemblies();
+            if(ImGui.MenuItem("Load Editor Assemblies")) AssemblyManager.LoadEditorAssemblies();
             if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
             ImGui.EndMenu();
         }

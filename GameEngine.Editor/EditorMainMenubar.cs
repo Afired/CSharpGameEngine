@@ -42,6 +42,8 @@ public class EditorMainMenubar {
             DrawAppIcon("Checkerboard");
             
             DrawMenuItems();
+            if(ImGui.Button("recompile external editor assemblies"))
+                AssemblyManager.RegisterReloadOfEditorAssemblies();
             
             DrawWindowHandleButtons();
 

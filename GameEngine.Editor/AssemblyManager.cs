@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
@@ -24,23 +25,71 @@ public static class AssemblyManager {
     public static void ReloadEditorAssemblies() {
         ClearEditorResources();
         if(TryToUnloadEditorAssemblies()) {
+            CompileExternalEditorAssemblies();
             LoadEditorAssemblies();
         } else {
-            Console.Log($"Trying to recover latest external editor assemblies...");
-            Console.LogWarning($"Note that after a recovery, the editor is unable to reload assemblies! Exit the editor gracefully and restart it!");
-            _externalEditorAssemblies.Clear();
-            foreach(WeakReference externalAssemblyRef in _oldExternalEditorAssembliesRefs) {
-                if(externalAssemblyRef.IsAlive) {
-                    Assembly assembly = (externalAssemblyRef.Target as Assembly)!;
-                    Console.Log($"Restoring old editor assembly: '{assembly.Location}'...");
-                    _externalEditorAssemblies.Add(assembly);
-                } else {
-                    Console.LogWarning($"Failed to recover old editor assembly");
-                }
-            }
+            RecoverLatestEditorAssemblies();
         }
         IsReloadingEditorAssemblies = false;
         GenerateEditorResources();
+    }
+
+    private static void CompileExternalEditorAssemblies() {
+        string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
+        string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
+        string pluginRelativePath = $"ExampleGame.Editor";
+        string pluginFullPath = Path.Combine(projectDir, pluginRelativePath);
+        
+        Console.Log("Compiling external editor assemblies...");
+        Console.Log("**********************************************************************************************************************");
+        
+        ProcessStartInfo processInfo = new() {
+            WorkingDirectory = pluginFullPath,
+            FileName = "cmd.exe",
+            Arguments = "/c dotnet build",
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardOutput = true,
+        };
+        
+        Process process = Process.Start(processInfo) ?? throw new Exception();
+
+        process.OutputDataReceived += (sender, dataArgs) => {
+            if(dataArgs.Data is not null)
+                Console.Log(dataArgs.Data);
+        };
+        process.BeginOutputReadLine();
+
+        process.ErrorDataReceived += (sender, dataArgs) => {
+            if(dataArgs.Data is not null)
+                Console.LogError(dataArgs.Data);
+        };
+        process.BeginErrorReadLine();
+        
+        process.WaitForExit();
+        
+        int exitCode = process.ExitCode;
+        Console.Log($"Exit Code: '{exitCode}'");
+        process.Close();
+        
+        Console.Log("**********************************************************************************************************************");
+        Console.LogSuccess("Successfully compiled external editor assemblies!");
+    }
+    
+    private static void RecoverLatestEditorAssemblies() {
+        Console.Log($"Trying to recover latest external editor assemblies...");
+        Console.LogWarning($"Note that after a recovery, the editor is unable to reload assemblies! Exit the editor gracefully and restart it!");
+        _externalEditorAssemblies.Clear();
+        foreach(WeakReference externalAssemblyRef in _oldExternalEditorAssembliesRefs) {
+            if(externalAssemblyRef.IsAlive) {
+                Assembly assembly = (externalAssemblyRef.Target as Assembly)!;
+                Console.Log($"Restoring old editor assembly: '{assembly.Location}'...");
+                _externalEditorAssemblies.Add(assembly);
+            } else {
+                Console.LogWarning($"Failed to recover old editor assembly");
+            }
+        }
     }
     
     public static void GenerateEditorResources() {

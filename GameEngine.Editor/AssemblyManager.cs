@@ -159,7 +159,7 @@ public static class AssemblyManager {
             Console.Log($"Unloading external editor assembly from: '{assembly.Location}'...");
         }
         
-        //crashes when unloading fails, editor recovers and then user tries to unload
+        //crashes when unloading fails, editor recovers and then user tries to unload again
         _editorAssemblyLoadContext.Unload();
         
         editorAssemblyLoadContextRef = new WeakReference(_editorAssemblyLoadContext);
@@ -168,13 +168,13 @@ public static class AssemblyManager {
     
     public static void LoadEditorAssemblies() {
         #if DEBUG
-            string configName = "Debug";
+            const string CONFIG_NAME = "Debug";
         #else
-            string configName = "Release";
+            const string CONFIG_NAME = "Release";
         #endif
         string editorAssemblyDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(EditorApplication))!.Location)!;
         string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(editorAssemblyDir))))!;
-        string pluginRelativePath = $"ExampleGame.Editor\\bin\\{configName}\\net6.0\\ExampleGame.Editor.dll";
+        string pluginRelativePath = $"ExampleGame.Editor\\bin\\{CONFIG_NAME}\\net6.0\\ExampleGame.Editor.dll";
         string pluginFullPath = Path.Combine(projectDir, pluginRelativePath);
         // Assembly loadedAssembly = LoadEditorAssembly(@"ExampleGame.Editor\bin\Debug\net6.0\ExampleGame.Editor.dll");
         Assembly loadedAssembly = LoadEditorAssembly(pluginFullPath);

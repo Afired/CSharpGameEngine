@@ -52,11 +52,11 @@ public abstract class PropertyDrawer {
         // return propertyDrawerLookup;
     }
     
-    public static void UnloadLookUp() {
+    public static void ClearLookUp() {
         _propertyDrawerLookup.Clear();
     }
     
-    public static void LoadLookUp() {
+    public static void GenerateLookUp() {
         _propertyDrawerLookup.Clear();
         foreach(Assembly editorAssembly in AssemblyManager.EditorAssemblies()) {
             List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);

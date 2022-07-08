@@ -17,6 +17,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
         AssemblyManager.LoadEditorAssemblies();
+        AssemblyManager.GenerateEditorResources();
     }
     
     protected override void Loop() {

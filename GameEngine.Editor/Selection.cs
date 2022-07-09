@@ -2,14 +2,15 @@ namespace GameEngine.Editor;
 
 public static class Selection {
     
-    public static object? Current { get; private set; }
+    public static object? Current => _currentRef.Target;
+    private static readonly WeakReference _currentRef = new(null);
     
     public static void Select<T>(T? obj) where T : class {
-        Current = obj;
+        _currentRef.Target = obj;
     }
     
     public static void Clear() {
-        Current = null;
+        _currentRef.Target = null;
     }
     
 }

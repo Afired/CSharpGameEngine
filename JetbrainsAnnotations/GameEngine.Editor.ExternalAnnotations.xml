@@ -1,0 +1,7 @@
+<assembly name="GameEngine.Editor">
+    <member name="T:GameEngine.Editor.PropertyDrawers.PropertyDrawer">
+        <attribute ctor="M:JetBrains.Annotations.UsedImplicitlyAttribute.#ctor(JetBrains.Annotations.ImplicitUseTargetFlags)">
+            <argument>4</argument>
+        </attribute>
+    </member>
+</assembly>

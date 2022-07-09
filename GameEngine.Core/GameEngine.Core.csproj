@@ -26,5 +26,9 @@
     <ItemGroup>
       <ProjectReference Include="..\GameEngine.SourceGenerator\GameEngine.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
-
+    
+    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+        <Copy SourceFiles="..\JetbrainsAnnotations\$(AssemblyName).ExternalAnnotations.xml" DestinationFolder="$(OutDir)" />
+    </Target>
+    
 </Project>

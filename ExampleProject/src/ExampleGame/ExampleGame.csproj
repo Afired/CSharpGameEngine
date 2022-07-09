@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -11,7 +11,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <OutputPath>$(ProjectRoot)\bin\Debug\</OutputPath>
     </PropertyGroup>
-    
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <OutputPath>$(ProjectRoot)\bin\Release\</OutputPath>
     </PropertyGroup>
@@ -22,10 +22,6 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Reference Include="GameEngine.Editor">
-            <HintPath>$(GameEnginePath)\GameEngine.Editor\bin\Debug\net6.0\GameEngine.Editor.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
         <Reference Include="GameEngine.Core">
             <HintPath>$(GameEnginePath)\GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll</HintPath>
             <Private>false</Private>
@@ -33,7 +29,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="ImGui.NET" Version="1.78.0" />
+        <Analyzer Include="$(GameEnginePath)\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"/>
     </ItemGroup>
     
 </Project>

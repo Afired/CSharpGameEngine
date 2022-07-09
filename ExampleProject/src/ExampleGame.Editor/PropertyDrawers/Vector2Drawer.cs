@@ -1,7 +1,6 @@
 ﻿using GameEngine.Core.Numerics;
 using GameEngine.Editor.PropertyDrawers;
 using ImGuiNET;
-using Console = GameEngine.Core.Debugging.Console;
 
 namespace ExampleGame.Editor.PropertyDrawers;
 

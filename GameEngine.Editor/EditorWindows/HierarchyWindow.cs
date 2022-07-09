@@ -12,19 +12,6 @@ public delegate void OnSelect(Node node);
 
 public class HierarchyWindow : EditorWindow {
     
-    public static event OnSelect? OnSelect;
-    
-    private object? v_selected;
-    public object? Selected {
-        get => v_selected;
-        set {
-            v_selected = value;
-            if(v_selected is Node selectedNode)
-                OnSelect?.Invoke(selectedNode);
-        }
-    }
-    
-    
     public HierarchyWindow() {
         Title = "Hierarchy";
     }
@@ -39,7 +26,7 @@ public class HierarchyWindow : EditorWindow {
             DrawNode(Hierarchy.RootNode);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
-            Selected = null;
+            Selection.Clear();
         }
     }
     
@@ -88,13 +75,13 @@ public class HierarchyWindow : EditorWindow {
     
     private void DrawNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
-                                           (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+                                           (Selection.Current == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth;
         ImGui.PushID(node.GetHashCode());
         bool opened = ImGui.TreeNodeEx(node.GetType().Name, treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = node;
+            Selection.Select(node);
         }
         
         if(ImGui.BeginPopupContextItem()) {
@@ -139,7 +126,7 @@ public class HierarchyWindow : EditorWindow {
     
     private void DrawNodeArr(INodeArr nodes) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
-                                           (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+                                           (Selection.Current == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth |
                                            ImGuiTreeNodeFlags.AllowItemOverlap |
                                            ImGuiTreeNodeFlags.FramePadding;
@@ -148,7 +135,7 @@ public class HierarchyWindow : EditorWindow {
         bool opened = ImGui.TreeNodeEx(nodes.GetType().GenericTypeArguments[0].Name + "s", treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = nodes;
+            Selection.Select(nodes);
         }
         
         ImGui.SameLine();

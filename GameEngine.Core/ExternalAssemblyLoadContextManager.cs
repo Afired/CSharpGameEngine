@@ -27,6 +27,7 @@ public class ExternalAssemblyLoadContextManager : IDisposable {
         _externalAssemblyLoadContext.LoadFromAssemblyPath(assemblyPath);
         if(isDependency)
             _externalAssemblyLoadContext.AddDependency(assemblyPath);
+        Console.LogSuccess($"Successfully loaded external assembly from {assemblyPath}");
     }
     
     [MethodImpl(MethodImplOptions.NoInlining)]

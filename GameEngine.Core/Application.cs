@@ -94,7 +94,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
     
     protected static bool CompileExternalAssembly(string dir) {
         Console.Log("");
-        Console.Log($"Compiling external assemblies in {dir}...");
+        Console.Log($"Compiling external assembly in {dir}...");
         Console.Log("**********************************************************************************************************************");
         
         ProcessStartInfo processInfo = new() {
@@ -139,12 +139,12 @@ public abstract unsafe class Application<T> where T : Application<T> {
         Console.Log("**********************************************************************************************************************");
         
         if(exitCode != 0) {
-            Console.LogError("Failed to compile external assemblies!");
+            Console.LogError("Failed to compile external assembly!");
             Console.Log("");
             return false;
         }
         
-        Console.LogSuccess("Successfully compiled external assemblies!");
+        Console.LogSuccess("Successfully compiled external assembly!");
         Console.Log("");
         return true;
     }

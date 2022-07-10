@@ -16,7 +16,7 @@ public partial class Enemy : RigidBody, Has<Renderer>/*, Has<Trigger>*/ {
     
     protected override void OnBeginCollision(Collider other) {
         base.OnBeginCollision(other);
-        // Console.LogWarning("Enemy hit something!");
+        Console.LogWarning("Enemy hit something!");
     }
     
 }

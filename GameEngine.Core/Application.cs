@@ -88,12 +88,16 @@ public abstract unsafe class Application<T> where T : Application<T> {
         IsReloadingExternalAssemblies = false;
     }
     
-    private static bool CompileExternalAssemblies() {
+    protected virtual void CompileExternalAssemblies() {
+        CompileExternalAssembly(EXTERNAL_ASSEMBLY_PROJ_DIR);
+    }
+    
+    protected static bool CompileExternalAssembly(string dir) {
         Console.Log("Compiling external assemblies...");
         Console.Log("**********************************************************************************************************************");
         
         ProcessStartInfo processInfo = new() {
-            WorkingDirectory = EXTERNAL_ASSEMBLY_PROJ_DIR,
+            WorkingDirectory = dir,
             FileName = "cmd.exe",
             Arguments = "/c dotnet build",
             CreateNoWindow = true,

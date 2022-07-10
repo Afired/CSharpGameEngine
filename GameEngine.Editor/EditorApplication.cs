@@ -4,10 +4,14 @@ using GameEngine.Core.Layers;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Editor.PropertyDrawers;
 
 namespace GameEngine.Editor;
 
 public unsafe class EditorApplication : Application<EditorApplication> {
+    
+    private const string EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame.Editor";
+    private const string EXTERNAL_EDITOR_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.Editor.dll";
     
     internal EditorLayer EditorLayer { get; private set; }
     
@@ -18,12 +22,18 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         EditorGui editorGui = new();
     }
     
+    protected override void CompileExternalAssemblies() {
+        base.CompileExternalAssemblies();
+        CompileExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR);
+    }
+    
     public override void LoadExternalAssemblies() {
+        _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
         base.LoadExternalAssemblies();
-        ExternalEditorAssemblyManager.LoadEditorAssemblies();
-        ExternalEditorAssemblyManager.GenerateEditorResources();
+        PropertyDrawer.GenerateLookUp();
         _ealcm.AddUnloadTask(() => {
             Selection.Clear();
+            PropertyDrawer.ClearLookUp();
             return true;
         });
     }
@@ -38,8 +48,6 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             
             if(IsReloadingExternalAssemblies)
                 ReloadExternalAssemblies();
-            if(ExternalEditorAssemblyManager.IsReloadingEditorAssemblies)
-                ExternalEditorAssemblyManager.ReloadEditorAssemblies();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {

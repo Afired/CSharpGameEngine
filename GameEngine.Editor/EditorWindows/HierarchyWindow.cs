@@ -154,7 +154,7 @@ public class HierarchyWindow : EditorWindow {
                 nodes.Add(newNode);
             }
             
-            foreach(Assembly assembly in ExternalAssemblyManager.Assemblies()) {
+            foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies) {
                 foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
                     if(ImGui.MenuItem(type.Name)) {
                         Node newNode = Node.New(type);

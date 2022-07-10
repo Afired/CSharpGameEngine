@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using GameEngine.Core.Guard;
 using GameEngine.Core.Physics;
@@ -11,9 +15,16 @@ namespace GameEngine.Core;
 
 public abstract unsafe class Application<T> where T : Application<T> {
     
+    private const string EXTERNAL_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame";
+    private const string EXTERNAL_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.dll";
+    
     public static T Instance { get; private set; } = null!;
     public bool IsRunning { get; protected set; }
-
+    
+    public bool IsReloadingExternalAssemblies { get; private set; }
+    public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
+    protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
+    public IEnumerable<Assembly> ExternalAssemblies => _ealcm.ExternalAssemblies;
 
     public Application() {
         Instance = (this as T)!;
@@ -33,9 +44,102 @@ public abstract unsafe class Application<T> where T : Application<T> {
         Debugging.Console.LogSuccess("Initialized render engine (3/3)");
         
         Debugging.Console.LogSuccess("Initialization complete");
-        
-        ExternalAssemblyManager.LoadExternalAssemblies();
+
+        LoadExternalAssemblies();
+    }
+    
+    public virtual void LoadExternalAssemblies() {
+        _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
         Serializer.LoadAssemblyIfNotLoadedAlready();
+        Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+        
+        _ealcm.AddUnloadTask(() => {
+            Hierarchy.SaveCurrentRootNode();
+            Hierarchy.Clear();
+            Renderer.SetActiveCamera(null);
+            Serializer.UnloadResources();
+            ClearTypeDescriptorCache();
+            PhysicsEngine.World = null;
+            return true;
+        });
+    }
+    
+    public static void ClearTypeDescriptorCache() {
+        var typeConverterAssembly = typeof(TypeConverter).Assembly;
+        
+        var reflectTypeDescriptionProviderType = typeConverterAssembly.GetType("System.ComponentModel.ReflectTypeDescriptionProvider");
+        var reflectTypeDescriptorProviderTable = reflectTypeDescriptionProviderType.GetField("s_attributeCache", BindingFlags.Static | BindingFlags.NonPublic);
+        var attributeCacheTable = (Hashtable)reflectTypeDescriptorProviderTable.GetValue(null);
+        attributeCacheTable?.Clear();
+        
+        var reflectTypeDescriptorType = typeConverterAssembly.GetType("System.ComponentModel.TypeDescriptor");
+        var reflectTypeDescriptorTypeTable = reflectTypeDescriptorType.GetField("s_defaultProviders", BindingFlags.Static | BindingFlags.NonPublic);
+        var defaultProvidersTable = (Hashtable)reflectTypeDescriptorTypeTable.GetValue(null);
+        defaultProvidersTable?.Clear();
+        
+        var providerTableWeakTable = (Hashtable)reflectTypeDescriptorType.GetField("s_providerTable", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        providerTableWeakTable?.Clear();
+    }
+    
+    protected virtual void ReloadExternalAssemblies() {
+        _ealcm.Unload();
+        CompileExternalAssemblies();
+        LoadExternalAssemblies();
+        IsReloadingExternalAssemblies = false;
+    }
+    
+    private static bool CompileExternalAssemblies() {
+        Console.Log("Compiling external assemblies...");
+        Console.Log("**********************************************************************************************************************");
+        
+        ProcessStartInfo processInfo = new() {
+            WorkingDirectory = EXTERNAL_ASSEMBLY_PROJ_DIR,
+            FileName = "cmd.exe",
+            Arguments = "/c dotnet build",
+            CreateNoWindow = true,
+            UseShellExecute = false,
+            RedirectStandardError = true,
+            RedirectStandardOutput = true,
+        };
+        
+        Process process = Process.Start(processInfo) ?? throw new Exception();
+
+        process.OutputDataReceived += (sender, dataArgs) => {
+            string? data = dataArgs.Data;
+            
+            if(data is null)
+                return;
+            
+            if(data.Contains("Warning", StringComparison.CurrentCultureIgnoreCase))
+                Console.LogWarning(data);
+            else if(data.Contains("Error", StringComparison.CurrentCultureIgnoreCase))
+                Console.LogError(data);
+            else
+                Console.Log(data);
+        };
+        process.BeginOutputReadLine();
+
+        process.ErrorDataReceived += (sender, dataArgs) => {
+            if(dataArgs.Data is not null)
+                Console.LogError(dataArgs.Data);
+        };
+        process.BeginErrorReadLine();
+        
+        process.WaitForExit();
+        
+        int exitCode = process.ExitCode;
+        process.Close();
+        
+        Console.Log($"Exit Code: '{exitCode}'");
+        Console.Log("**********************************************************************************************************************");
+        
+        if(exitCode != 0) {
+            Console.LogError("Failed to compile external assemblies!");
+            return false;
+        }
+        
+        Console.LogSuccess("Successfully compiled external assemblies!");
+        return true;
     }
     
     public virtual void Run() {

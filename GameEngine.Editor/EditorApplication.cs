@@ -16,9 +16,16 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
+    }
+    
+    public override void LoadExternalAssemblies() {
+        base.LoadExternalAssemblies();
         ExternalEditorAssemblyManager.LoadEditorAssemblies();
         ExternalEditorAssemblyManager.GenerateEditorResources();
-        ExternalAssemblyManager.OnClearGameResources += Selection.Clear;
+        _ealcm.AddUnloadTask(() => {
+            Selection.Clear();
+            return true;
+        });
     }
     
     protected override void Loop() {
@@ -29,8 +36,8 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         
         while(IsRunning) {
             
-            if(ExternalAssemblyManager.IsReloadingExternalAssemblies)
-                ExternalAssemblyManager.ReloadExternalAssemblies();
+            if(IsReloadingExternalAssemblies)
+                ReloadExternalAssemblies();
             if(ExternalEditorAssemblyManager.IsReloadingEditorAssemblies)
                 ExternalEditorAssemblyManager.ReloadEditorAssemblies();
             

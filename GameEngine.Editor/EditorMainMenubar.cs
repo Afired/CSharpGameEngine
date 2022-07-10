@@ -46,7 +46,7 @@ public class EditorMainMenubar {
             if(ImGui.Button("recompile external editor assemblies"))
                 ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
             if(ImGui.Button("recompile external game assemblies"))
-                ExternalAssemblyManager.RegisterReloadOfExternalAssemblies();
+                EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
             
             DrawWindowHandleButtons();
 

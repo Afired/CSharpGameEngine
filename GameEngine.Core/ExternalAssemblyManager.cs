@@ -46,7 +46,7 @@ public static class ExternalAssemblyManager {
         IsReloadingExternalAssemblies = false;
         GenerateGameResources();
     }
-
+    
     private static bool CompileExternalAssemblies() {
         Console.Log("Compiling external assemblies...");
         Console.Log("**********************************************************************************************************************");
@@ -217,7 +217,7 @@ public static class ExternalAssemblyManager {
 
 public class ExternalAssemblyLoadContext : AssemblyLoadContext {
     
-    private AssemblyDependencyResolver _resolver;
+    private readonly AssemblyDependencyResolver _resolver;
     
     public ExternalAssemblyLoadContext(string pluginPath) : base(true) {
         _resolver = new AssemblyDependencyResolver(pluginPath);

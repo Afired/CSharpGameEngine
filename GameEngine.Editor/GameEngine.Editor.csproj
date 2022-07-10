@@ -9,8 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-<!--      <ProjectReference Include="..\ExampleGame\ExampleGame.csproj" />-->
-      <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj" />
+      <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj">
+<!--          <ExcludeAssets>compile</ExcludeAssets>-->
+      </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +21,10 @@
         <None Update="Assets\Textures\Box.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="YamlDotNet" Version="11.2.1" />
     </ItemGroup>
     
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">

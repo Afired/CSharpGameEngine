@@ -18,7 +18,7 @@
     
     <ItemGroup>
         <Using Remove="System; System.Collections.Generic; System.IO; System.Linq; System.Net.Http; System.Threading; System.Threading.Tasks;" />
-        <Using Include="System.Collections.Generic; GameEngine.Core.Debugging" />
+        <Using Include="System.Collections.Generic;" />
     </ItemGroup>
     
     <ItemGroup>
@@ -26,14 +26,27 @@
             <HintPath>$(GameEnginePath)\GameEngine.Editor\bin\Debug\net6.0\GameEngine.Editor.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="GameEngine.Core">
-            <HintPath>$(GameEnginePath)\GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
+<!--        <Reference Include="GameEngine.Core">-->
+<!--            <HintPath>$(GameEnginePath)\GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll</HintPath>-->
+<!--            <Private>false</Private>-->
+<!--        </Reference>-->
     </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.78.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+<!--        <ProjectReference Include="..\ExampleGame\ExampleGame.csproj">-->
+<!--            <Private>false</Private>-->
+<!--            <EmbedInteropTypes>true</EmbedInteropTypes>-->
+<!--            <ExcludeAssets>compile</ExcludeAssets>-->
+<!--        </ProjectReference>-->
+
+        <Reference Include="ExampleGame">
+            <HintPath>$(ProjectRoot)\bin\Debug\net6.0\ExampleGame.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
     
 </Project>

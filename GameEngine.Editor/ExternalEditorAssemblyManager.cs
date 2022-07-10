@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using GameEngine.Core;
 using GameEngine.Editor.PropertyDrawers;
 
 namespace GameEngine.Editor; 
@@ -184,14 +185,18 @@ public static class ExternalEditorAssemblyManager {
 
 public class ExternalEditorAssemblyLoadContext : AssemblyLoadContext {
     
-    private AssemblyDependencyResolver _resolver;
+    private const string EXTERNAL_GAME_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.dll";
+    private readonly AssemblyDependencyResolver _resolver;
+    private readonly AssemblyDependencyResolver _gameAssemblyDependencyResolver;
     
     public ExternalEditorAssemblyLoadContext(string pluginPath) : base(true) {
         _resolver = new AssemblyDependencyResolver(pluginPath);
+        _gameAssemblyDependencyResolver = new AssemblyDependencyResolver(EXTERNAL_GAME_ASSEMBLY_DLL);
     }
     
     protected override Assembly? Load(AssemblyName assemblyName) {
         string? assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+        assemblyPath ??= _gameAssemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
         if(assemblyPath != null) {
             return LoadFromAssemblyPath(assemblyPath);
         }

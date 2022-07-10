@@ -295,7 +295,7 @@ public class ExternalAssemblyLoadContextManager {
         _externalAssemblyLoadContext = null;
     }
     
-    public void SubscribeToUnloadWithWeakLink<T>(T lifetimeDependency, Func<T, bool> @delegate) {
+    public void AddUnloadTask<T>(T lifetimeDependency, Func<T, bool> @delegate) {
         _unloadLifetimeDelegates.Add((new WeakReference(lifetimeDependency), @delegate));
     }
     

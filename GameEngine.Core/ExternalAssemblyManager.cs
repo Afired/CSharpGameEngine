@@ -1,9 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
@@ -126,8 +129,27 @@ public static class ExternalAssemblyManager {
         Hierarchy.Clear();                                                                      // https://stackoverflow.com/questions/33557737/does-json-net-cache-types-serialization-information
         Renderer.SetActiveCamera(null);                                                         // https://github.com/dotnet/runtime/issues/30656
         OnClearGameResources?.Invoke();                                                         // https://github.com/dotnet/runtime/issues/13283
-        Serializer.ClearCache();                                                                // even System.Text.Json https://github.com/dotnet/runtime/issues/65323
+        Serializer.UnloadResources();                                                                // even System.Text.Json https://github.com/dotnet/runtime/issues/65323
+        ClearTypeDescriptorCache();
+        PhysicsEngine.World = null;
         Console.LogSuccess($"Successfully cleared game resources!");
+    }
+    
+    public static void ClearTypeDescriptorCache() {
+        var typeConverterAssembly = typeof(TypeConverter).Assembly;
+        
+        var reflectTypeDescriptionProviderType = typeConverterAssembly.GetType("System.ComponentModel.ReflectTypeDescriptionProvider");
+        var reflectTypeDescriptorProviderTable = reflectTypeDescriptionProviderType.GetField("s_attributeCache", BindingFlags.Static | BindingFlags.NonPublic);
+        var attributeCacheTable = (Hashtable)reflectTypeDescriptorProviderTable.GetValue(null);
+        attributeCacheTable?.Clear();
+        
+        var reflectTypeDescriptorType = typeConverterAssembly.GetType("System.ComponentModel.TypeDescriptor");
+        var reflectTypeDescriptorTypeTable = reflectTypeDescriptorType.GetField("s_defaultProviders", BindingFlags.Static | BindingFlags.NonPublic);
+        var defaultProvidersTable = (Hashtable)reflectTypeDescriptorTypeTable.GetValue(null);
+        defaultProvidersTable?.Clear();
+        
+        var providerTableWeakTable = (Hashtable)reflectTypeDescriptorType.GetField("s_providerTable", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        providerTableWeakTable?.Clear();
     }
     
     [MethodImpl(MethodImplOptions.NoInlining)]

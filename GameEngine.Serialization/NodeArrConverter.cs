@@ -3,7 +3,7 @@ using GameEngine.Core.Nodes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace GameEngine.Core.Serialization; 
+namespace GameEngine.Serialization; 
 
 public class NodeArrConverter : JsonConverter {
     

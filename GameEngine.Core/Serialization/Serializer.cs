@@ -1,101 +1,80 @@
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using GameEngine.Core.Nodes;
-using Newtonsoft.Json;
 
 namespace GameEngine.Core.Serialization; 
 
 public static class Serializer {
+
+    private const string SERIALIZATION_ASSEMBLY_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\GameEngine.Serialization.dll";
+    private static ExternalAssemblyLoadContext? _serializationAssemblyLoadContext;
+    private static Assembly? _serializationAssembly;
     
-    private static JsonSerializerSettings SerializerSettings => _cachedSerializerSettingsWithCachedContractResolver ??= new JsonSerializerSettings {
-        ContractResolver = new SerializedContractResolver(),
-        TypeNameHandling = TypeNameHandling.Auto,
-        // TypeNameHandling = TypeNameHandling.All,
-        // MaxDepth = 10,
-        ObjectCreationHandling = ObjectCreationHandling.Replace,
-        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-        PreserveReferencesHandling = PreserveReferencesHandling.All,
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        ConstructorHandling = ConstructorHandling.Default,
-    };
-    private static JsonSerializerSettings? _cachedSerializerSettingsWithCachedContractResolver;
-    
-    public static void ClearCache() {
-        _cachedSerializerSettingsWithCachedContractResolver = null;
-        
-        // var typeConverterAssembly = typeof(TypeConverter).Assembly;
-        // var reflectTypeDescriptionProviderType = typeConverterAssembly.GetType("System.ComponentModel.ReflectTypeDescriptionProvider");
-        //
-        // var reflectTypeDescriptorProviderTable = reflectTypeDescriptionProviderType.GetField("s_attributeCache", BindingFlags.Static | BindingFlags.NonPublic);
-        // var attributeCacheTable = (Hashtable)reflectTypeDescriptorProviderTable.GetValue(null);
-        // attributeCacheTable?.Clear();
+    public static void UnloadResources() {
+        TryToUnloadExternalAssemblies();
     }
     
-    public static T Deserialize<T>(string fileName) where T : Node {
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Directory.CreateDirectory($"{desktopPath}\\Project");
-        T t = JsonConvert.DeserializeObject<T>(File.ReadAllText($"{desktopPath}\\Project\\{fileName}.node"), SerializerSettings)!;
-        return t;
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static bool TryToUnloadExternalAssemblies() {
+        if(_serializationAssemblyLoadContext is null) {
+            Console.LogSuccess($"Successfully serialization assembly");
+            return true;
+        }
+        
+        UnloadExternalAssemblies(out WeakReference externalAssemblyLoadContextRef);
+        
+        const int MAX_GC_ATTEMPTS = 10;
+        for(int i = 0; externalAssemblyLoadContextRef.IsAlive; i++) {
+            if(i >= MAX_GC_ATTEMPTS) {
+                Console.LogError($"Failed to unload serialization assembly!");
+                return false;
+            }
+            Console.Log($"GC Attempt ({i + 1}/{MAX_GC_ATTEMPTS})...");
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+        
+        Console.LogSuccess($"Successfully unloaded serialization assembly!");
+        return true;
+    }
+    
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void UnloadExternalAssemblies(out WeakReference editorAssemblyLoadContextRef) {
+        _serializationAssembly = null;
+        
+        //crashes when unloading fails, editor recovers and then user tries to unload again
+        _serializationAssemblyLoadContext.Unload();
+        
+        editorAssemblyLoadContextRef = new WeakReference(_serializationAssemblyLoadContext);
+        _serializationAssemblyLoadContext = null;
+    }
+    
+    public static void LoadAssemblyIfNotLoadedAlready() {
+        if(_serializationAssemblyLoadContext is not null)
+            return;
+        _serializationAssemblyLoadContext = new ExternalAssemblyLoadContext(SERIALIZATION_ASSEMBLY_DLL_PATH);
+        _serializationAssembly = _serializationAssemblyLoadContext.LoadFromAssemblyPath(SERIALIZATION_ASSEMBLY_DLL_PATH);
+        
+        // load references
+        _serializationAssemblyLoadContext.LoadFromAssemblyPath(@"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\Newtonsoft.Json.dll");
     }
     
     public static Node Deserialize(string fileName) {
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Directory.CreateDirectory($"{desktopPath}\\Project");
-        TrimFirstLine(File.ReadAllText($"{desktopPath}\\Project\\{fileName}.node"), out string assemblyTypeDefAsString, out string objAsString);
-        SplitAssemblyTypeDefString(assemblyTypeDefAsString, out string assemblyName, out string typeName);
-        Type nodeType = GetTypeFromString(assemblyName, typeName);
-        Node node = (Node) JsonConvert.DeserializeObject(objAsString, nodeType, SerializerSettings)!;
-        return node;
-    }
-    
-    public static Type GetTypeFromString(string assemblyName, string typeAsString) {
-        foreach(TypeInfo typeInfo in Assembly.GetAssembly(typeof(Node))!.DefinedTypes) {
-            if(typeInfo.FullName == typeAsString)
-                return typeInfo.AsType();
-        }
-        throw new Exception();
-    }
-    
-    public static void SplitAssemblyTypeDefString(string assemblyTypeDefAsString, out string assemblyName, out string typeName) {
-        for(int i = 0; i < assemblyTypeDefAsString.Length; i++) {
-            if(assemblyTypeDefAsString[i] == ':') {
-                assemblyName = assemblyTypeDefAsString[..i];
-                typeName = assemblyTypeDefAsString[(i + 2)..];
-                return;
-            }
-        }
-        throw new Exception();
-    }
-    
-    public static int GetIndexOfFirstOccurrenceOfCharacter(string str, char character) {
-        for(int i = 0; i < str.Length; i++) {
-            if(str[i] == character)
-                return i;
-        }
-
-        return -1;
-    }
-    
-    public static void TrimFirstLine(string str, out string firstLine, out string other) {
-        int index = GetIndexOfFirstOccurrenceOfCharacter(str, '\n');
-        if(index == -1) {
-            firstLine = str;
-            other = string.Empty;
-            return;
-        }
-        firstLine = str[..index];
-        other = str[(index + 1)..];
+        LoadAssemblyIfNotLoadedAlready();
+        Type? serializerType = _serializationAssembly.GetType("GameEngine.Serialization.Serializer");
+        MethodInfo? deserializeMethod = serializerType.GetMethod("Deserialize", BindingFlags.Static | BindingFlags.Public);
+        object? result = deserializeMethod.Invoke(null, new object?[] { fileName });
+        
+        return result as Node;
     }
     
     public static void Serialize<T>(T node, string fileName) where T : Node {
-        string stringResult = JsonConvert.SerializeObject(node, Formatting.Indented, SerializerSettings);
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Directory.CreateDirectory($"{desktopPath}\\Project");
-        Type nodeType = node.GetType();
-        File.WriteAllText($"{desktopPath}\\Project\\{fileName}.node", $"{nodeType.Assembly.GetName().Name}::{nodeType.Namespace}.{nodeType.Name}\n{stringResult}");
+        LoadAssemblyIfNotLoadedAlready();
+        Type? serializerType = _serializationAssembly.GetType("GameEngine.Serialization.Serializer");
+        MethodInfo? serializeMethod = serializerType.GetMethod("Serialize", BindingFlags.Static | BindingFlags.Public);
+        serializeMethod.Invoke(null, new object?[] { node, fileName });
     }
     
 }

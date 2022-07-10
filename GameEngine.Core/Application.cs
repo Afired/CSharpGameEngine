@@ -5,6 +5,7 @@ using GameEngine.Core.Guard;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core;
 
@@ -34,6 +35,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
         Debugging.Console.LogSuccess("Initialization complete");
         
         ExternalAssemblyManager.LoadExternalAssemblies();
+        Serializer.LoadAssemblyIfNotLoadedAlready();
     }
     
     public virtual void Run() {

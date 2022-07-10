@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GameEngine.Core.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace GameEngine.Core.Serialization; 
+namespace GameEngine.Serialization; 
 
 public class SerializedContractResolver : DefaultContractResolver {
     

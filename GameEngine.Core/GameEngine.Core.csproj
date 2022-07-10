@@ -12,7 +12,6 @@
       <PackageReference Include="GlmNet" Version="0.7.0" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
-<!--      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />-->
       <PackageReference Include="Silk.NET.GLFW" Version="2.11.0" />
       <PackageReference Include="Silk.NET.Input.Glfw" Version="2.11.0" />
       <PackageReference Include="Silk.NET.OpenGL" Version="2.11.0" />
@@ -20,7 +19,6 @@
       <PackageReference Include="Silk.NET.Windowing.Glfw" Version="2.11.0" />
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
       <PackageReference Include="StbImageSharp" Version="2.22.6" />
-      <PackageReference Include="YamlDotNet" Version="11.2.1" />
     </ItemGroup>
     
     <ItemGroup>

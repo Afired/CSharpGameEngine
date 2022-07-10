@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using GameEngine.Core;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -43,7 +44,9 @@ public class EditorMainMenubar {
             
             DrawMenuItems();
             if(ImGui.Button("recompile external editor assemblies"))
-                AssemblyManager.RegisterReloadOfEditorAssemblies();
+                ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
+            if(ImGui.Button("recompile external game assemblies"))
+                ExternalAssemblyManager.RegisterReloadOfExternalAssemblies();
             
             DrawWindowHandleButtons();
 
@@ -188,11 +191,11 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
-            if(ImGui.MenuItem("Clear Editor Resources")) AssemblyManager.ClearEditorResources();
-            if(ImGui.MenuItem("Generate Editor Resources")) AssemblyManager.GenerateEditorResources();
-            if(ImGui.MenuItem("Reload Editor Assemblies")) AssemblyManager.RegisterReloadOfEditorAssemblies();
-            if(ImGui.MenuItem("Unload Editor Assemblies")) AssemblyManager.TryToUnloadEditorAssemblies();
-            if(ImGui.MenuItem("Load Editor Assemblies")) AssemblyManager.LoadEditorAssemblies();
+            if(ImGui.MenuItem("Clear Editor Resources")) ExternalEditorAssemblyManager.ClearEditorResources();
+            if(ImGui.MenuItem("Generate Editor Resources")) ExternalEditorAssemblyManager.GenerateEditorResources();
+            if(ImGui.MenuItem("Reload Editor Assemblies")) ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
+            if(ImGui.MenuItem("Unload Editor Assemblies")) ExternalEditorAssemblyManager.TryToUnloadEditorAssemblies();
+            if(ImGui.MenuItem("Load Editor Assemblies")) ExternalEditorAssemblyManager.LoadEditorAssemblies();
             if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
             ImGui.EndMenu();
         }

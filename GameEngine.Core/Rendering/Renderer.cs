@@ -1,3 +1,4 @@
+using System;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Nodes;
@@ -19,7 +20,8 @@ public static unsafe class Renderer {
     
     public static event OnLoad OnLoad;
     public static bool IsInit { get; private set; }
-    public static BaseCamera CurrentCamera { get; private set; }
+    public static BaseCamera? CurrentCamera => _currentCameraRef.Target as BaseCamera;
+    private static readonly WeakReference _currentCameraRef = new(null);
     
     public static GlfwWindow GlfwWindow;
     public static GL Gl => GlfwWindow.Gl;
@@ -167,8 +169,8 @@ public static unsafe class Renderer {
         return vao;
     }
     
-    public static void SetActiveCamera(BaseCamera baseCamera) {
-        CurrentCamera = baseCamera;
+    public static void SetActiveCamera(BaseCamera? baseCamera) {
+        _currentCameraRef.Target = baseCamera;
     }
     
 }

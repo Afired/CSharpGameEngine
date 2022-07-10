@@ -6,14 +6,14 @@ using GameEngine.Editor.PropertyDrawers;
 
 namespace GameEngine.Editor; 
 
-public static class AssemblyManager {
+public static class ExternalEditorAssemblyManager {
 
     private const string EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame.Editor";
     private const string EXTERNAL_EDITOR_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.Editor.dll";
     
     private static readonly List<Assembly> _externalEditorAssemblies = new();
     private static List<WeakReference> _oldExternalEditorAssembliesRefs = new();
-    private static EditorAssemblyLoadContext? _editorAssemblyLoadContext;
+    private static ExternalEditorAssemblyLoadContext? _editorAssemblyLoadContext;
     public static bool IsReloadingEditorAssemblies { get; private set; }
 
     public static void RegisterReloadOfEditorAssemblies() => IsReloadingEditorAssemblies = true;
@@ -133,7 +133,7 @@ public static class AssemblyManager {
         for(int i = 0; editorAssemblyLoadContextRef.IsAlive; i++) {
             if(i >= MAX_GC_ATTEMPTS) {
                 Console.LogError($"Failed to unload external editor assemblies!");
-                _editorAssemblyLoadContext = (editorAssemblyLoadContextRef.Target as EditorAssemblyLoadContext)!;
+                _editorAssemblyLoadContext = (editorAssemblyLoadContextRef.Target as ExternalEditorAssemblyLoadContext)!;
                 return false;
             }
             Console.Log($"GC Attempt ({i + 1}/{MAX_GC_ATTEMPTS})...");
@@ -182,11 +182,11 @@ public static class AssemblyManager {
     
 }
 
-public class EditorAssemblyLoadContext : AssemblyLoadContext {
+public class ExternalEditorAssemblyLoadContext : AssemblyLoadContext {
     
     private AssemblyDependencyResolver _resolver;
     
-    public EditorAssemblyLoadContext(string pluginPath) : base(true) {
+    public ExternalEditorAssemblyLoadContext(string pluginPath) : base(true) {
         _resolver = new AssemblyDependencyResolver(pluginPath);
     }
     

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using GameEngine.Core.Nodes;
@@ -8,7 +10,7 @@ namespace GameEngine.Core.Serialization;
 
 public static class Serializer {
     
-    private static readonly JsonSerializerSettings SerializerSettings = new() {
+    private static JsonSerializerSettings SerializerSettings => _cachedSerializerSettingsWithCachedContractResolver ??= new JsonSerializerSettings {
         ContractResolver = new SerializedContractResolver(),
         TypeNameHandling = TypeNameHandling.Auto,
         // TypeNameHandling = TypeNameHandling.All,
@@ -19,6 +21,18 @@ public static class Serializer {
         ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
         ConstructorHandling = ConstructorHandling.Default,
     };
+    private static JsonSerializerSettings? _cachedSerializerSettingsWithCachedContractResolver;
+    
+    public static void ClearCache() {
+        _cachedSerializerSettingsWithCachedContractResolver = null;
+        
+        // var typeConverterAssembly = typeof(TypeConverter).Assembly;
+        // var reflectTypeDescriptionProviderType = typeConverterAssembly.GetType("System.ComponentModel.ReflectTypeDescriptionProvider");
+        //
+        // var reflectTypeDescriptorProviderTable = reflectTypeDescriptionProviderType.GetField("s_attributeCache", BindingFlags.Static | BindingFlags.NonPublic);
+        // var attributeCacheTable = (Hashtable)reflectTypeDescriptorProviderTable.GetValue(null);
+        // attributeCacheTable?.Clear();
+    }
     
     public static T Deserialize<T>(string fileName) where T : Node {
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);

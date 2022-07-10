@@ -33,7 +33,7 @@ public abstract class PropertyDrawer {
     private static Dictionary<Type, PropertyDrawer> BuildPropertyDrawerLookup() {
         Dictionary<Type, PropertyDrawer> propertyDrawerLookup = new();
         
-        foreach(Assembly editorAssembly in AssemblyManager.EditorAssemblies()) {
+        foreach(Assembly editorAssembly in ExternalEditorAssemblyManager.EditorAssemblies()) {
             List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);
             foreach(Type type in derivedTypes) {
                 PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
@@ -58,7 +58,7 @@ public abstract class PropertyDrawer {
     
     public static void GenerateLookUp() {
         _propertyDrawerLookup.Clear();
-        foreach(Assembly editorAssembly in AssemblyManager.EditorAssemblies()) {
+        foreach(Assembly editorAssembly in ExternalEditorAssemblyManager.EditorAssemblies()) {
             List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);
             foreach(Type type in derivedTypes) {
                 PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();

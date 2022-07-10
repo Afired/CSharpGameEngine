@@ -32,6 +32,8 @@ public abstract unsafe class Application<T> where T : Application<T> {
         Debugging.Console.LogSuccess("Initialized render engine (3/3)");
         
         Debugging.Console.LogSuccess("Initialization complete");
+        
+        ExternalAssemblyManager.LoadExternalAssemblies();
     }
     
     public virtual void Run() {

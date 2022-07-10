@@ -14,6 +14,11 @@ public static class Hierarchy {
         RootNode = newRootNode;
     }
     
+    public static void Clear() {
+        RootNode = null;
+        RegisteredNodes.Clear();
+    }
+    
     public static void Awake() {
         
         while(RegisteredNodes.TryPop(out (Node node, INodeArr nodeArr) entry)) {

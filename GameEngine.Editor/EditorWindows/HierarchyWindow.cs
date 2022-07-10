@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Reflection;
-using ExampleGame;
+using GameEngine.Core;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
@@ -153,18 +153,16 @@ public class HierarchyWindow : EditorWindow {
                 Node newNode = Node.New(nodes.GetNodeType);
                 nodes.Add(newNode);
             }
-            foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
-                if(ImGui.MenuItem(type.Name)) {
-                    Node newNode = Node.New(type);
-                    nodes.Add(newNode);
+            
+            foreach(Assembly assembly in ExternalAssemblyManager.Assemblies()) {
+                foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
+                    if(ImGui.MenuItem(type.Name)) {
+                        Node newNode = Node.New(type);
+                        nodes.Add(newNode);
+                    }
                 }
             }
-            foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
-                if(ImGui.MenuItem(type.Name)) {
-                    Node newNode = Node.New(type);
-                    nodes.Add(newNode);
-                }
-            }
+            
             ImGui.EndPopup();
         }
         

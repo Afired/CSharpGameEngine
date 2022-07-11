@@ -1,5 +1,5 @@
 namespace ExampleGame.Nodes; 
 
-public struct MyValueFloat {
-        
+public class MyValueFloat {
+        public float Value = 0.2f;
 }

@@ -5,12 +5,12 @@ using Renderer = GameEngine.Core.Rendering.Renderer;
 
 namespace GameEngine.Editor.NodeDrawers; 
 
-public class Camera2DDrawer : NodeDrawer<Camera2D> {
+public class BaseCameraDrawer : NodeDrawer<BaseCamera> {
     
-    protected override void DrawNode(Camera2D node) {
-        DrawDefaultDrawers(node, typeof(Camera2D));
+    protected override void DrawNode(BaseCamera node) {
+        DrawDefaultDrawers(node, typeof(BaseCamera));
 //        ImGui.Spacing();
-        if(ImGui.Button("Set as active Camera"))
+        if(ImGui.Button("Set active"))
             Renderer.SetActiveCamera(node);
     }
     

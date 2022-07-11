@@ -9,7 +9,10 @@
     
     <ItemGroup>
       <PackageReference Include="Box2D.NetStandard" Version="2.4.2-alpha" />
+      <PackageReference Include="CjClutter.ObjLoader.Unofficial" Version="1.1.0" />
       <PackageReference Include="GlmNet" Version="0.7.0" />
+      <PackageReference Include="GlmSharp" Version="0.9.8" />
+      <PackageReference Include="glTF2Loader" Version="1.0.0" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
       <PackageReference Include="Silk.NET.GLFW" Version="2.11.0" />

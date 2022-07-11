@@ -4,9 +4,9 @@ namespace GameEngine.Core.Rendering.Geometry;
 
 public class Geometry {
     
-    public uint Vao { get; private set; }
-    public uint Vbo { get; private set; }
-    public int VertexCount { get; private set; }
+    public uint Vao { get; protected set; }
+    public uint Vbo { get; protected set; }
+    public int VertexCount { get; protected set; }
 
     private float[] _vertexData;
 

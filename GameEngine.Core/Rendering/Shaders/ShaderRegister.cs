@@ -40,6 +40,7 @@ public static class ShaderRegister {
         Console.Log($"Compiling shaders...");
         _invalidShaderShader = InvalidShader.Create();
         DefaultShader.Initialize();
+        DiffuseShader.Initialize();
         string[] paths = AssetManager.GetAllShaderPaths();
         for (int i = 0; i < paths.Length; i++) {
             Register(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), new Shader(paths[i]));

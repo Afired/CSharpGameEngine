@@ -52,11 +52,11 @@ public partial class Camera3D : BaseCamera {
         vec3 moveWorld = RotateVectorByQuaternion(moveRelative, orientation);
         Position += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * Time.DeltaTime;
         
-        float yaw = -Input.Input.MouseDelta.X;
-        float pitch = Input.Input.MouseDelta.Y;
+        float yaw = -Input.Input.MouseDelta.X * 0.005f;
+        float pitch = Input.Input.MouseDelta.Y * 0.005f;
         
-        orientation = quat.FromAxisAngle(Time.DeltaTime * yaw, new vec3(0, 1, 0)) * orientation;
-        orientation = orientation * quat.FromAxisAngle(Time.DeltaTime * pitch, new vec3(1, 0, 0));
+        orientation = quat.FromAxisAngle(yaw, new vec3(0, 1, 0)) * orientation;
+        orientation = orientation * quat.FromAxisAngle(pitch, new vec3(1, 0, 0));
         
         RotationX = orientation.x;
         RotationY = orientation.y;

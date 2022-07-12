@@ -38,8 +38,9 @@ public partial class MeshRenderer : Transform {
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
         Geometry geometry = GeometryRegister.Get(Geometry);
-        if(geometry is null)
+        if(geometry is null) {
             return;
+        }
         
         Gl.BindVertexArray(geometry.Vao);
         

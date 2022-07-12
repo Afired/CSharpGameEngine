@@ -7,16 +7,15 @@ public class Geometry {
     public uint Vao { get; protected set; }
     public uint Vbo { get; protected set; }
     public int VertexCount { get; protected set; }
-
-    private float[] _vertexData;
-
+    
     public Geometry(float[] vertexData) {
-        _vertexData = vertexData;
         VertexCount = vertexData.Length / 5;
-        InitializeGeometry();
+        InitializeGeometry(vertexData);
     }
     
-    private void InitializeGeometry() {
+    protected Geometry() { }
+    
+    private void InitializeGeometry(float[] vertexData) {
         
         Vao = Gl.GenVertexArray();
         Vbo = Gl.GenBuffer();
@@ -26,8 +25,8 @@ public class Geometry {
         
 
         unsafe {
-            fixed(float* v = &_vertexData[0]) {
-                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * _vertexData.Length), v, BufferUsageARB.StaticDraw);
+            fixed(float* v = &vertexData[0]) {
+                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
             }
             
             // xyz

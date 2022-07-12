@@ -50,45 +50,47 @@ public static class GeometryRegister {
         };
         Register("Quad", new Geometry(quadVertexData));
         
-        LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car.obj", "car");
+        // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car.obj", "car");
         LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car_tri.obj", "car_tri");
-        LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd.obj", "honkai girl");
+        // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd.obj", "honkai girl");
         LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd_tri.obj", "honkai girl_tri");
+        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\staff.obj", "staff");
+        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\temple.obj", "church");
         // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\demon_girl.obj", "demon girl");
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\demon_girl.obj", "demon girl_tri");
     }
     
-    private static void LoadObj(string path, string name) {
-        ObjLoaderFactory objLoaderFactory = new();
-        IObjLoader loader = objLoaderFactory.Create(new MaterialNullStreamProvider());
-    
-        LoadResult result;
-        using (FileStream fs = File.OpenRead(path)) {
-            result = loader.Load(fs);
-        }
-        
-        IList<Vertex> vertexList = result.Vertices;
-        // IList<Texture> uvList = result.Textures;
-        // IList<Normal> normalsList = result.Normals;
-        
-        
-        
-        Face face = result.Groups[0].Faces[0];
-        int faceCount = face.Count;
-        
-        float[] vertices = new float[vertexList.Count * 5];
-        for(int i = 0; i < vertexList.Count; i++) {
-            vertices[i * 5 + 0] = vertexList[i].X;
-            vertices[i * 5 + 1] = vertexList[i].Y;
-            vertices[i * 5 + 2] = vertexList[i].Z;
-            // vertices[i * 5 + 3] = uvList[i].X;
-            // vertices[i * 5 + 4] = uvList[i].Y;
-            
-            vertices[i * 5 + 3] = 0;
-            vertices[i * 5 + 4] = 0;
-        }
-        Register(name, new Geometry(vertices));
-    }
+    // private static void LoadObj(string path, string name) {
+    //     ObjLoaderFactory objLoaderFactory = new();
+    //     IObjLoader loader = objLoaderFactory.Create(new MaterialNullStreamProvider());
+    //
+    //     LoadResult result;
+    //     using (FileStream fs = File.OpenRead(path)) {
+    //         result = loader.Load(fs);
+    //     }
+    //     
+    //     IList<Vertex> vertexList = result.Vertices;
+    //     // IList<Texture> uvList = result.Textures;
+    //     // IList<Normal> normalsList = result.Normals;
+    //     
+    //     
+    //     
+    //     Face face = result.Groups[0].Faces[0];
+    //     int faceCount = face.Count;
+    //     
+    //     float[] vertices = new float[vertexList.Count * 5];
+    //     for(int i = 0; i < vertexList.Count; i++) {
+    //         vertices[i * 5 + 0] = vertexList[i].X;
+    //         vertices[i * 5 + 1] = vertexList[i].Y;
+    //         vertices[i * 5 + 2] = vertexList[i].Z;
+    //         // vertices[i * 5 + 3] = uvList[i].X;
+    //         // vertices[i * 5 + 4] = uvList[i].Y;
+    //         
+    //         vertices[i * 5 + 3] = 0;
+    //         vertices[i * 5 + 4] = 0;
+    //     }
+    //     Register(name, new Geometry(vertices));
+    // }
     
     private static void LoadObjFaces(string path, string name) {
         ObjLoaderFactory objLoaderFactory = new();
@@ -99,15 +101,16 @@ public static class GeometryRegister {
             result = loader.Load(fs);
         }
         
+        
+        string groupName = result.Groups[0].Name;
+        
         IList<Vertex> vertexList = result.Vertices;
         // IList<Texture> uvList = result.Textures;
-        // IList<Normal> normalsList = result.Normals;
+        IList<Normal> normalList = result.Normals;
         
         
         IList<Face> faces = result.Groups[0].Faces;
-        string groupName = result.Groups[0].Name;
-        
-        float[] vertices = new float[faces.Count * 3 * 5];
+        _Vertex[] vertices = new _Vertex[faces.Count * 3];
         
         for(int i = 0; i < faces.Count; i++) {
             Face face = faces[i];
@@ -120,60 +123,42 @@ public static class GeometryRegister {
             {
                 //vertex1
                 FaceVertex faceVertex = face[0];
-                if(faceVertex.VertexIndex < vertexList.Count) {
-                    Vertex vertex = vertexList[faceVertex.VertexIndex];
-                
-                    vertices[(i * 3 + 0) * 5 + 0] = vertex.X;
-                    vertices[(i * 3 + 0) * 5 + 1] = vertex.Y;
-                    vertices[(i * 3 + 0) * 5 + 2] = vertex.Z;
-                    // vertices[(i * 3 + 0) * 5 + 3] = 0;
-                    // vertices[(i * 3 + 0) * 5 + 4] = 0;
-                } else {
-                    Console.LogError($"Vertex index was out of bounds!");
-                    vertices[(i * 3 + 0) * 5 + 0] = 100;
-                    vertices[(i * 3 + 0) * 5 + 1] = 100;
-                    vertices[(i * 3 + 0) * 5 + 2] = 100;
-                }
+                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
+                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
+                    
+                vertices[i * 3 + 0] = new _Vertex(
+                    new _Position(position.X, position.Y, position.Z),
+                    new _UV(0, 0),
+                    new _Normal(normal.X, normal.Y, normal.Z)
+                );
             }
             {
                 //vertex2
                 FaceVertex faceVertex = face[1];
-                if(faceVertex.VertexIndex < vertexList.Count) {
-                    Vertex vertex = vertexList[faceVertex.VertexIndex];
-
-                    vertices[(i * 3 + 1) * 5 + 0] = vertex.X;
-                    vertices[(i * 3 + 1) * 5 + 1] = vertex.Y;
-                    vertices[(i * 3 + 1) * 5 + 2] = vertex.Z;
-                    // vertices[(i * 3 + 1) * 5 + 3] = 0;
-                    // vertices[(i * 3 + 1) * 5 + 4] = 0;}
-                } else {
-                    Console.LogError($"Vertex index was out of bounds!");
-                    vertices[(i * 3 + 0) * 5 + 0] = 100;
-                    vertices[(i * 3 + 0) * 5 + 1] = 100;
-                    vertices[(i * 3 + 0) * 5 + 2] = 100;
-                }
+                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
+                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
+                    
+                vertices[i * 3 + 1] = new _Vertex(
+                    new _Position(position.X, position.Y, position.Z),
+                    new _UV(0, 0),
+                    new _Normal(normal.X, normal.Y, normal.Z)
+                );
             }
             {
                 //vertex3
                 FaceVertex faceVertex = face[2];
-                if(faceVertex.VertexIndex < vertexList.Count) {
-                    Vertex vertex = vertexList[faceVertex.VertexIndex];
-
-                    vertices[(i * 3 + 2) * 5 + 0] = vertex.X;
-                    vertices[(i * 3 + 2) * 5 + 1] = vertex.Y;
-                    vertices[(i * 3 + 2) * 5 + 2] = vertex.Z;
-                    // vertices[(i * 3 + 2) * 5 + 3] = 0;
-                    // vertices[(i * 3 + 2) * 5 + 4] = 0;
-                } else {
-                    Console.LogError($"Vertex index was out of bounds!");
-                    vertices[(i * 3 + 0) * 5 + 0] = 100;
-                    vertices[(i * 3 + 0) * 5 + 1] = 100;
-                    vertices[(i * 3 + 0) * 5 + 2] = 100;
-                }
+                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
+                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
+                    
+                vertices[i * 3 + 2] = new _Vertex(
+                    new _Position(position.X, position.Y, position.Z),
+                    new _UV(0, 0),
+                    new _Normal(normal.X, normal.Y, normal.Z)
+                );
             }
         }
         
-        Register(name, new Geometry(vertices));
+        Register(name, new PosUvNormalGeometry(vertices));
     }
     
 }

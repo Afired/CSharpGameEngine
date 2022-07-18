@@ -58,6 +58,7 @@ public static class GeometryRegister {
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\staff.obj", "staff");
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\temple.obj", "church");
         LoadModelUsingAssimp(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\honkai girl.gltf", "honkai girl");
+        RegisterTestModelWithEBOs();
     }
     
     // private static void LoadObj(string path, string name) {
@@ -219,6 +220,44 @@ public static class GeometryRegister {
             Register(name + i, new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
         }
         
+    }
+
+    private static void RegisterTestModelWithEBOs() {
+        
+        float[] vertices = {
+            0.5f,  0.5f, 0.0f,  // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f,  // bottom left
+            -0.5f,  0.5f, 0.0f, // top left 
+        };
+        uint[] indices = {  // note that we start from 0!
+            0, 1, 3,   // first triangle
+            1, 2, 3, // second triangle
+        };
+
+        _Vertex[] vertexData = {
+            new(
+                new _Position(0.5f, 0.5f, 0.0f),
+                new _UV(1, 1),
+                new _Normal(0, 1, 0)
+            ),
+            new(
+                new _Position(0.5f, -0.5f, 0.0f),
+                new _UV(0, 1),
+                new _Normal(0, 1, 0)
+            ),
+            new(
+                new _Position(-0.5f, -0.5f, 0.0f),
+                new _UV(1, 0),
+                new _Normal(0, 1, 0)
+            ),
+            new(
+                new _Position(-0.5f, 0.5f, 0.0f),
+                new _UV(0, 0),
+                new _Normal(0, 1, 0)
+            ),
+        };
+        Register("EBO_Test_Quad", new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
     }
     
 }

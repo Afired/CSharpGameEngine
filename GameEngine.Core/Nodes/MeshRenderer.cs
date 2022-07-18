@@ -26,6 +26,8 @@ public partial class MeshRenderer : Transform {
         
         ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        TextureRegister.Get(Texture).Bind();
+        ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
         
         Geometry geometry = GeometryRegister.Get(Geometry);
         if(geometry is null) {
@@ -34,19 +36,13 @@ public partial class MeshRenderer : Transform {
         
         Gl.BindVertexArray(geometry.Vao);
         
-        TextureRegister.Get(Texture).Bind();
-        ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
-        
-        GLEnum err;
-        while((err = Gl.GetError()) != GLEnum.NoError) {
-            Console.LogError(err.ToString());
+        if(geometry is PosUvNormalGeometryIndexedBuffer posUvNormalGeometryEbo) {
+            // indexed drawing - currently doesnt work :/
+            Gl.DrawElements(PrimitiveType.Triangles, (uint) posUvNormalGeometryEbo.EboLength, DrawElementsType.UnsignedInt, 0); //(uint) posUvNormalGeometryEbo.EboLength / 3
+        } else {
+            // normal drawing
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
         }
-        Console.Log("_______________");
-        
-        // normal drawing
-        // Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
-        // indexed drawing - currently doesnt work :/
-        Gl.DrawElements(PrimitiveType.Triangles, (uint) (geometry as PosUvNormalGeometryIndexedBuffer).EboLength * 3, DrawElementsType.UnsignedInt, 0);
         
         Gl.BindVertexArray(0);
     }

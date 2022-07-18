@@ -9,8 +9,7 @@ namespace GameEngine.Core.Nodes;
 public abstract partial class BaseCamera : Transform {
     
     [Serialized] public Color BackgroundColor { get; set; } = Configuration.DefaultBackgroundColor;
-    public abstract Matrix4x4 GetProjectionMatrix();
-
+    
     public abstract mat4 GLM_GetProjectionMatrix();
     
     protected override void OnAwake() {

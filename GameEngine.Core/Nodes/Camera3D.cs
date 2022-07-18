@@ -18,23 +18,15 @@ public partial class Camera3D : BaseCamera {
     [Serialized] public float RotationY = 0;
     [Serialized] public float RotationZ = 0;
     [Serialized] public float RotationW = 1;
-    public override Matrix4x4 GetProjectionMatrix() {
-        // Matrix4x4 transMatrix = Matrix4x4.CreateTranslation(Position);
-        // Matrix4x4 rotMatrix = Matrix4x4.CreateRotationZ(LocalRotation);
-        // Matrix4x4 perMatrix = Matrix4x4.CreatePerspectiveFieldOfView(_fieldOfView, (float) Configuration.WindowWidth / (float) Configuration.WindowHeight, NearPlaneDistance, FarPlaneDistance);
-        //
-        // return transMatrix * rotMatrix * perMatrix;
-        return default;
-    }
     
     protected override void OnUpdate() {
         base.OnUpdate();
         
         quat orientation = new quat(RotationX, RotationY, RotationZ, RotationW);
         quat orientationConj = orientation.Conjugate;
-        vec3 up = new vec3(orientation * vec4.UnitY * orientationConj);
-        vec3 forwards = new vec3(orientation * -vec4.UnitZ * orientationConj);
-        vec3 right = new vec3(orientation * vec4.UnitX * orientationConj);
+        // vec3 up = new vec3(orientation * vec4.UnitY * orientationConj);
+        // vec3 forwards = new vec3(orientation * -vec4.UnitZ * orientationConj);
+        // vec3 right = new vec3(orientation * vec4.UnitX * orientationConj);
         
         float x = 0;
         x += Input.Input.IsKeyDown(KeyCode.A) ? -1 : 0;
@@ -84,8 +76,9 @@ public partial class Camera3D : BaseCamera {
         else if(Input.Input.IsKeyDown(KeyCode.U))
             typeof(InputHandler).GetField("_catchCursor", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, false);
         
-        float aspectRatio = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
-        mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatio, ClippingDistance.X, ClippingDistance.Y);
+        float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
+        // float aspectRatioWindow = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
+        mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatioGameFrameBuffer, ClippingDistance.X, ClippingDistance.Y);
         mat4 viewProjectionMat = projectionMatrix * GetViewMat();
         
         return new GlmNet.mat4(
@@ -94,22 +87,8 @@ public partial class Camera3D : BaseCamera {
             new GlmNet.vec4(viewProjectionMat.m20, viewProjectionMat.m21, viewProjectionMat.m22, viewProjectionMat.m23),
             new GlmNet.vec4(viewProjectionMat.m30, viewProjectionMat.m31, viewProjectionMat.m32, viewProjectionMat.m33)
         );
-        
-        // float aspectRatio = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
-        // GlmNet.mat4 projectionMatrix = GlmNet.glm.perspective(GlmNet.glm.radians(FOV), aspectRatio, ClippingDistance.X, ClippingDistance.Y);
-        // GlmNet.mat4 viewProjectionMat = projectionMatrix * GetViewMat();
-        // return viewProjectionMat;
     }
     
-    // private GlmNet.mat4 GetViewMat() {
-    //     quat quat = new quat(RotationX, RotationY, RotationZ, RotationW);
-    //     vec3 quatAxis = quat.Axis;
-    //     GlmNet.mat4 translationAndRotationMatrix = GlmNet.glm.translate(new GlmNet.mat4(1), new GlmNet.vec3(Position.X, Position.Y, Position.Z)) *
-    //                                                GlmNet.glm.rotate(quatAxis.x, new GlmNet.vec3(1, 0, 0)) *
-    //                                                GlmNet.glm.rotate(quatAxis.y, new GlmNet.vec3(0, 1, 0)) *
-    //                                                GlmNet.glm.rotate(quatAxis.z, new GlmNet.vec3(0, 0, 1));
-    //     return GlmNet.glm.inverse(translationAndRotationMatrix);
-    // }
     
     private mat4 GetViewMat() {
         mat4 t = mat4.Translate(Position.X, Position.Y, Position.Z) * new quat(RotationX, RotationY, RotationZ, RotationW).Normalized.ToMat4;

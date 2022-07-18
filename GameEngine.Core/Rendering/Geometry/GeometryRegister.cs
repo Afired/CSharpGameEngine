@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using Assimp;
+using Assimp.Configs;
 using GameEngine.Core.Debugging;
 using GameEngine.Core.Guard;
-using glTFLoader.Schema;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Loaders;
+using Face = ObjLoader.Loader.Data.Elements.Face;
 
 namespace GameEngine.Core.Rendering.Geometry;
 
@@ -50,14 +53,11 @@ public static class GeometryRegister {
         };
         Register("Quad", new Geometry(quadVertexData));
         
-        // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car.obj", "car");
-        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car_tri.obj", "car_tri");
-        // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd.obj", "honkai girl");
+        // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car_tri.obj", "car_tri");
         LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd_tri.obj", "honkai girl_tri");
-        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\staff.obj", "staff");
-        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\temple.obj", "church");
-        // LoadObj(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\demon_girl.obj", "demon girl");
-        // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\demon_girl.obj", "demon girl_tri");
+        // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\staff.obj", "staff");
+        // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\temple.obj", "church");
+        LoadModelUsingAssimp(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\honkai girl.gltf", "honkai girl");
     }
     
     // private static void LoadObj(string path, string name) {
@@ -159,6 +159,66 @@ public static class GeometryRegister {
         }
         
         Register(name, new PosUvNormalGeometry(vertices));
+    }
+
+    // private static void LoadGltf(string path, string name) {
+    //     ModelRoot modelRoot = ModelRoot.Load(path, new ReadSettings() {
+    //         Validation = ValidationMode.TryFix
+    //     });
+    //
+    //     int i = 0;
+    //     foreach(Node node in modelRoot.DefaultScene.VisualChildren) {
+    //         foreach(MeshPrimitive meshPrimitive in node.Mesh.Primitives) {
+    //             Register(name + i, new PosGeometry(meshPrimitive.IndexAccessor));
+    //             i++;
+    //         }
+    //     }
+    //     
+    //     
+    //     // IReadOnlyList<Mesh>? meshes = modelRoot.CreateMeshes();
+    //     // IReadOnlyList<MeshPrimitive>? primitives = meshes[0].Primitives;
+    //     // int logicalIndex = primitives[0].LogicalIndex;
+    //
+    //     // Accessor? accessor = modelRoot.LogicalAccessors[0];
+    //     // var count = modelRoot.LogicalAccessors[0].Count;
+    //     // var bufferview = modelRoot.LogicalAccessors[0].SourceBufferView;
+    //     // var vector3Array = modelRoot.LogicalAccessors[0].AsVector3Array();
+    //
+    //     // Register(name + 0, new PosGeometry(modelRoot.LogicalAccessors[0]));
+    //     // Register(name + 1, new PosGeometry(modelRoot.LogicalAccessors[1]));
+    //     // Register(name + 4, new PosGeometry(modelRoot.LogicalAccessors[4]));
+    //     // Register(name + 8, new PosGeometry(modelRoot.LogicalAccessors[8]));
+    //     // Register(name + 12, new PosGeometry(modelRoot.LogicalAccessors[12]));
+    //     // Register(name + 16, new PosGeometry(modelRoot.LogicalAccessors[16]));
+    // }
+
+    private static void LoadModelUsingAssimp(string filePath, string name) {
+        AssimpContext importer = new AssimpContext();
+        importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
+        Scene model = importer.ImportFile(filePath, PostProcessPreset.TargetRealTimeMaximumQuality);
+        
+        for(int i = 0; i < model.Meshes.Count; i++) {
+            
+            List<Vector3D> posList = model.Meshes[i].Vertices;
+            List<Vector3D> normalList = model.Meshes[i].Normals;
+            
+            _Vertex[] vertexData = new _Vertex[posList.Count];
+            
+            for(int j = 0; j < posList.Count; j++) {
+                Vector3D position = posList[j];
+                Vector3D normal = normalList[j];
+                
+                vertexData[j] = new _Vertex(
+                    new _Position(position.X, position.Y, position.Z),
+                    new _UV(0, 0),
+                    new _Normal(normal.X, normal.Y, normal.Z)
+                );
+            }
+
+            uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
+            Register(name + i, new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
+        }
+        
     }
     
 }

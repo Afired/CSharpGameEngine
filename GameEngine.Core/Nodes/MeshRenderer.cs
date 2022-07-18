@@ -1,5 +1,4 @@
 using GameEngine.Core.Numerics;
-using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Serialization;
@@ -19,21 +18,12 @@ public partial class MeshRenderer : Transform {
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
         
-//        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
-//        Matrix4x4 sca = Matrix4x4.CreateScale(Scale.X, Scale.Y, Scale.Z);
-//        Matrix4x4 rotMat = Matrix4x4.CreateRotationZ(Rotation);
-
         mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
-                            // glm.rotate(Rotation, new vec3(0, 0, 1)) *
-                            // glm.rotate(Time.TotalTimeElapsed, new vec3(0, 1, 0)) *
                             glm.rotate(Rotation3D.X / 10, new vec3(1, 0, 0)) *
                             glm.rotate(Rotation3D.Y / 10, new vec3(0, 1, 0)) *
                             glm.rotate(Rotation3D.Z / 10, new vec3(0, 0, 1)) *
                             glm.scale(new mat4(1), new vec3(Scale.X, Scale.Y, Scale.Z));
         
-        
-//        ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
-//        ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
         ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
@@ -47,7 +37,17 @@ public partial class MeshRenderer : Transform {
         TextureRegister.Get(Texture).Bind();
         ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
         
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
+        GLEnum err;
+        while((err = Gl.GetError()) != GLEnum.NoError) {
+            Console.LogError(err.ToString());
+        }
+        Console.Log("_______________");
+        
+        // normal drawing
+        // Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
+        // indexed drawing - currently doesnt work :/
+        Gl.DrawElements(PrimitiveType.Triangles, (uint) (geometry as PosUvNormalGeometryIndexedBuffer).EboLength * 3, DrawElementsType.UnsignedInt, 0);
+        
         Gl.BindVertexArray(0);
     }
     

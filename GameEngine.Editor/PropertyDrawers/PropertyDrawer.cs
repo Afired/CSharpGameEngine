@@ -42,14 +42,6 @@ public abstract class PropertyDrawer {
             }
         }
         return propertyDrawerLookup;
-        
-        // List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), typeof(PropertyDrawer<>).Assembly);
-        // foreach(Type type in derivedTypes) {
-        //     PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new NullReferenceException();
-        //     if(!propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
-        //         Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
-        // }
-        // return propertyDrawerLookup;
     }
     
     public static void ClearLookUp() {
@@ -75,19 +67,19 @@ public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
     protected internal sealed override Type PropertyType => typeof(TProperty);
     
     protected internal sealed override void DrawPropertyInternal(object container, FieldInfo fieldInfo) {
-        TProperty value = (TProperty) fieldInfo.GetValue(container);
+        TProperty? value = (TProperty?) fieldInfo.GetValue(container);
         DrawProperty(ref value, new Property(fieldInfo));
         fieldInfo.SetValue(container, value);
     }
     
     protected internal sealed override void DrawPropertyInternal(object container, PropertyInfo propertyInfo) {
-        TProperty value = (TProperty) propertyInfo.GetValue(container);
+        TProperty? value = (TProperty?) propertyInfo.GetValue(container);
         DrawProperty(ref value, new Property(propertyInfo));
         if(propertyInfo.CanWrite)
             propertyInfo.SetValue(container, value);
     }
     
-    protected abstract void DrawProperty(ref TProperty value, Property property);
+    protected abstract void DrawProperty(ref TProperty? value, Property property);
     
 }
 

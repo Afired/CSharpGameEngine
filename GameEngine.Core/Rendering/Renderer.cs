@@ -31,14 +31,15 @@ public static unsafe class Renderer {
     public static FrameBuffer MainFrameBuffer1 { get; private set; }
     // this frame buffer is used for post processing (ping pong frame buffer 2)
     public static FrameBuffer MainFrameBuffer2 { get; private set; }
+    public static FrameBuffer FinalFrameBuffer { get; private set; }
 
-    private static FrameBuffer _activeFrameBuffer;
-    private static FrameBuffer _inactiveFrameBuffer;
+    public static FrameBuffer ActiveFrameBuffer { get; private set; }
+    public static FrameBuffer _inactiveFrameBuffer { get; private set; }
 
     internal static void SwapActiveFrameBuffer() {
         // Swap via deconstruction
-        (_activeFrameBuffer, _inactiveFrameBuffer) = (_inactiveFrameBuffer, _activeFrameBuffer);
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
+        (ActiveFrameBuffer, _inactiveFrameBuffer) = (_inactiveFrameBuffer, ActiveFrameBuffer);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
     
@@ -60,9 +61,10 @@ public static unsafe class Renderer {
     
     private static void Setup() {
         GlfwWindow = new GlfwWindow();
-        MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
-        MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
-        _activeFrameBuffer = MainFrameBuffer1;
+        MainFrameBuffer1 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer1
+        MainFrameBuffer2 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer2
+        FinalFrameBuffer = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, true); // final framebuffer
+        ActiveFrameBuffer = MainFrameBuffer1;
         _inactiveFrameBuffer = MainFrameBuffer2;
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LayerStack = new LayerStack();
@@ -91,9 +93,10 @@ public static unsafe class Renderer {
         }
         
         //todo: post processing stack
-        DoPostProcessing();
+        // DoPostProcessing();
         
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
+        FinalFrameBuffer.Bind();
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Attach();
             layer.Draw();
@@ -112,7 +115,7 @@ public static unsafe class Renderer {
         ShaderRegister.Get("ScreenShader").Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, _activeFrameBuffer.ColorAttachment);
+        Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     

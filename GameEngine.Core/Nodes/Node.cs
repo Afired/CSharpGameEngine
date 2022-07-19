@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GameEngine.Core.Serialization;
+using JetBrains.Annotations;
 
 namespace GameEngine.Core.Nodes; 
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;

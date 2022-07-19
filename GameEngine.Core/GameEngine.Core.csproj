@@ -16,6 +16,7 @@
       <PackageReference Include="glTF2Loader" Version="1.0.0" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
       <PackageReference Include="Silk.NET.GLFW" Version="2.11.0" />
       <PackageReference Include="Silk.NET.Input.Glfw" Version="2.11.0" />
       <PackageReference Include="Silk.NET.OpenGL" Version="2.11.0" />

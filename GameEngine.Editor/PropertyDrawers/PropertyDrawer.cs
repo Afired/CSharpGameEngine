@@ -1,9 +1,10 @@
 using System.Reflection;
 using GameEngine.Editor.NodeDrawers;
+using JetBrains.Annotations;
 
 namespace GameEngine.Editor.PropertyDrawers;
 
-
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public abstract class PropertyDrawer {
     
     private static readonly Dictionary<Type, PropertyDrawer> _propertyDrawerLookup = new();

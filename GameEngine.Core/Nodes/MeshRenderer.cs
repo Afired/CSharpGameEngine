@@ -38,7 +38,7 @@ public partial class MeshRenderer : Transform {
         
         if(geometry is PosUvNormalGeometryIndexedBuffer posUvNormalGeometryEbo) {
             // indexed drawing - currently doesnt work :/
-            Gl.DrawElements(PrimitiveType.Triangles, (uint) posUvNormalGeometryEbo.EboLength, DrawElementsType.UnsignedInt, 0); //(uint) posUvNormalGeometryEbo.EboLength / 3
+            Gl.DrawElements(PrimitiveType.Triangles, (uint) posUvNormalGeometryEbo.EboLength, DrawElementsType.UnsignedInt, 0);
         } else {
             // normal drawing
             Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);

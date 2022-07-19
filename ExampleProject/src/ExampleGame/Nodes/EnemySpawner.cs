@@ -5,7 +5,7 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes;
 
-public partial class EnemySpawner : Transform, Arr<SpawnPoint>, Arr<Enemy> {
+public partial class PhysicsSpawner : Transform, Arr<PhysicsQuad> {
     
     [Serialized] private float SpawnInterval { get; set; } = 0.1f;
     [Serialized] private float TimeUntilNextSpawn { get; set; } = 0f;
@@ -21,13 +21,9 @@ public partial class EnemySpawner : Transform, Arr<SpawnPoint>, Arr<Enemy> {
     }
     
     private void SpawnEnemy() {
-        // Enemy newEnemy = New<Enemy>();
-        // Scene.Current?.Add(newEnemy);
-        // newEnemy.Position = SpawnPoints.GetRandom()?.Position ?? Vector3.Zero;
-        Enemy newEnemy = New<Enemy>();
-        newEnemy.Position = Position;
-        Hierarchy.RegisterNode(newEnemy, Enemys);
-        // Enemys.Add(newEnemy);
+        PhysicsQuad physicsQuad = New<PhysicsQuad>();
+        physicsQuad.Position = Position;
+        Hierarchy.RegisterNode(physicsQuad, PhysicsQuads);
     }
     
 }

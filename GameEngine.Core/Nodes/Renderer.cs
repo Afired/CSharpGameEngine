@@ -10,7 +10,7 @@ namespace GameEngine.Core.Nodes;
 
 public partial class Renderer : Transform {
     
-    [Serialized] public string Texture { get; set; } = "checkerboard";
+    [Serialized] public string Texture { get; set; } = "box";
     [Serialized] public string Shader { get; set; } = "default";
     [Serialized] public string Geometry { get; set; } = "quad";
     

@@ -212,7 +212,7 @@ public class EditorMainMenubar {
             if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
             if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
             if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
-            if(ImGui.MenuItem("Scene Select")) { new SceneSelectWindow(); }
+            if(ImGui.MenuItem("Terminal")) { new TerminalWindow(); }
             ImGui.EndMenu();
         }
         

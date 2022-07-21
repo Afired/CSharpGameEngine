@@ -14,14 +14,14 @@
       </ProjectReference>
     </ItemGroup>
 
-    <ItemGroup>
-        <None Update="Assets\**\*.*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Assets\Textures\Box.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
+<!--    <ItemGroup>-->
+<!--        <None Update="Assets\**\*.*">-->
+<!--            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--        </None>-->
+<!--        <None Update="Assets\Textures\Box.png">-->
+<!--          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--        </None>-->
+<!--    </ItemGroup>-->
 
     <ItemGroup>
       <PackageReference Include="YamlDotNet" Version="11.2.1" />

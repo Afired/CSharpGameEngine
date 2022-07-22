@@ -72,7 +72,7 @@ public static class Serializer {
     }
     
     public static void TrimFirstLine(string str, out string firstLine, out string other) {
-        int index = GetIndexOfFirstOccurrenceOfCharacter(str, '\n');
+        int index = Math.Min(GetIndexOfFirstOccurrenceOfCharacter(str, '\n'), GetIndexOfFirstOccurrenceOfCharacter(str, '\r'));
         if(index == -1) {
             firstLine = str;
             other = string.Empty;

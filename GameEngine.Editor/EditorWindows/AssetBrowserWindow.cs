@@ -1,3 +1,6 @@
+using System.Reflection;
+using GameEngine.Core;
+using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using ImGuiNET;
@@ -36,7 +39,7 @@ public class AssetBrowserWindow : EditorWindow {
         ImGui.PushID(filePath.GetHashCode());
         ImGui.TreeNodeEx(Path.GetFileName(filePath), treeNodeFlags);
         ImGui.PopID();
-        if(ImGui.IsItemClicked()) {
+        if(ImGui.IsItemClicked(ImGuiMouseButton.Right) || ImGui.IsItemClicked(ImGuiMouseButton.Left)) {
             Selected = filePath;
         }
         
@@ -63,13 +66,32 @@ public class AssetBrowserWindow : EditorWindow {
         ImGui.PushID(currentPath.GetHashCode());
         bool opened = ImGui.TreeNodeEx(Path.GetFileName(currentPath), treeNodeFlags);
         ImGui.PopID();
-        if(ImGui.IsItemClicked()) {
+        if(ImGui.IsItemClicked(ImGuiMouseButton.Right) || ImGui.IsItemClicked(ImGuiMouseButton.Left)) {
             Selected = currentPath;
         }
         
-        if(ImGui.BeginPopupContextItem()) {
-            if(ImGui.MenuItem("Delete Folder"))
-                Console.LogWarning("Deleting is not implemented yet");
+        // if(ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right)) {
+        //     ImGui.BeginPopup()
+        // }
+        if(ImGui.BeginPopupContextItem(currentPath, ImGuiPopupFlags.MouseButtonRight)) {
+            ImGui.Text("Create Node");
+            ImGui.Spacing();
+            ImGui.Separator();
+            ImGui.Spacing();
+            
+            foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(Application<>).Assembly)) {
+                foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node))).Append(typeof(Node))) {
+                    if(ImGui.MenuItem(type.Name)) {
+                        Node newNode = Node.New(type);
+                        string nodeName = $"New {type.Name}";
+                        while(File.Exists($@"{currentPath}\{nodeName}.node")) {
+                            nodeName += "_";
+                        }
+                        File.WriteAllText($@"{currentPath}\{nodeName}.node", Serializer.SerializeNode(newNode));
+                    }
+                }
+            }
+            
             ImGui.EndPopup();
         }
         

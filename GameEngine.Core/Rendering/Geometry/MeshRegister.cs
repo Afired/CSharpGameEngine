@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using Assimp;
 using Assimp.Configs;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Debugging;
 using GameEngine.Core.Guard;
+using GameEngine.Core.Rendering.Textures;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Loaders;
@@ -45,12 +47,18 @@ public static class MeshRegister {
         };
         Register("Quad", new Geometry(quadVertexData));
         
+        string[] paths = AssetManager.GetAllModelPaths();
+        for (int i = 0; i < paths.Length; i++) {
+            LoadObjFaces(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower());
+            Console.LogSuccess($"Loading model ({i + 1}/{paths.Length}) '{paths[i]}'");
+        }
+        
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\car_tri.obj", "car_tri");
-        LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd_tri.obj", "honkai girl_tri");
+        // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\higokumaru-honkai-impact-3rd_tri.obj", "honkai girl_tri");
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\staff.obj", "staff");
         // LoadObjFaces(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\temple.obj", "church");
-        LoadModelUsingAssimp(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\honkai girl.gltf", "honkai girl");
-        RegisterTestModelWithEBOs();
+        // LoadModelUsingAssimp(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Assets\Models\honkai girl.gltf", "honkai girl");
+        // RegisterTestModelWithEBOs();
     }
     
     // private static void LoadObj(string path, string name) {

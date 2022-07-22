@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GameEngine.Core;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -204,7 +205,7 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Project")) {
             if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Open Project")) { }
+            if(ImGui.MenuItem("Open Project")) { AssetManager.OpenProject(@"D:\Dev\C#\CSharpGameEngine\ExampleProject"); }
             ImGui.EndMenu();
         }
         

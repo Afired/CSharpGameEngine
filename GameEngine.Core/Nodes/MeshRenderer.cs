@@ -1,6 +1,8 @@
 using GameEngine.Core.Numerics;
+using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
+using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
@@ -29,7 +31,7 @@ public partial class MeshRenderer : Transform {
         TextureRegister.Get(Texture).Bind();
         ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
         
-        Geometry geometry = GeometryRegister.Get(Geometry);
+        Geometry geometry = MeshRegister.Get(Geometry);
         if(geometry is null) {
             return;
         }

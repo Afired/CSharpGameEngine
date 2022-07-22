@@ -13,28 +13,19 @@ using Face = ObjLoader.Loader.Data.Elements.Face;
 
 namespace GameEngine.Core.Rendering.Geometry;
 
-public static class GeometryRegister {
+public static class MeshRegister {
     
-    internal static Dictionary<string, Geometry> _geometryRegister;
+    private static readonly Dictionary<string, Geometry> _meshRegister = new();
     
-    
-    static GeometryRegister() {
-        _geometryRegister = new Dictionary<string, Geometry>();
-    }
-
     public static void Register(string name, Geometry shader) {
         name = name.ToLower();
-        Throw.If(_geometryRegister.ContainsKey(name), "duplicate geometry");
-        _geometryRegister.Add(name, shader);
+        Throw.If(_meshRegister.ContainsKey(name), "duplicate geometry");
+        _meshRegister.Add(name, shader);
     }
-
-    public static Geometry Get(string name) {
-        if(name is null) {
-            Console.LogWarning($"Geometry not found 'null'");
-            return null;
-        }
+    
+    public static Geometry? Get(string name) {
         name = name.ToLower();
-        if(_geometryRegister.TryGetValue(name, out Geometry shader))
+        if(_meshRegister.TryGetValue(name, out Geometry shader))
             return shader;
         Console.LogWarning($"Geometry not found '{name}'");
         return null;

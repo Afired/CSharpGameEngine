@@ -44,8 +44,6 @@ public class AssetBrowserWindow : EditorWindow {
         }
         
         if(ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) {
-            Console.Log($"double clicked: {filePath}");
-            Console.Log(Path.GetExtension(filePath));
             if(Path.GetExtension(filePath) == ".node") {
                 Hierarchy.SetRootNode(Serializer.DeserializeNode(filePath));
                 Hierarchy.CurrentlyLoadedNodesAssetPath = filePath;
@@ -62,7 +60,7 @@ public class AssetBrowserWindow : EditorWindow {
     private void DrawFolder(string currentPath) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
                                            (Selected == currentPath ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
-                                           ImGuiTreeNodeFlags.SpanFullWidth;
+                                           ImGuiTreeNodeFlags.SpanFullWidth | ImGuiTreeNodeFlags.OpenOnDoubleClick;
         ImGui.PushID(currentPath.GetHashCode());
         bool opened = ImGui.TreeNodeEx(Path.GetFileName(currentPath), treeNodeFlags);
         ImGui.PopID();

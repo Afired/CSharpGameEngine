@@ -205,7 +205,9 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Project")) {
             if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Reload meshes async")) { MeshRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Meshes")) { MeshRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Textures")) { TextureRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Shaders")) { ShaderRegister.Reload(); }
             if(ImGui.MenuItem("Open Project")) { Project.Open(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Example.geproj"); }
             ImGui.EndMenu();
         }

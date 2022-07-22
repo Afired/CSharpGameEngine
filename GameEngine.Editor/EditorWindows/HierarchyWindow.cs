@@ -17,6 +17,7 @@ public class HierarchyWindow : EditorWindow {
     }
     
     protected override void Draw() {
+        
         if(ImGui.BeginMenuBar()) {
             
             if(Hierarchy.RootNode is null)

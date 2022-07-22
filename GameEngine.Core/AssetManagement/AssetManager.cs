@@ -14,8 +14,6 @@ public static class AssetManager {
     public const string ENGINE_DIRECTORY = @"D:\Dev\C#\CSharpGameEngine";
     public const string ENGINE_CORE_DIRECTORY = ENGINE_DIRECTORY + @"\GameEngine.Core";
     public const string ENGINE_CORE_ASSET_DIRECTORY = ENGINE_CORE_DIRECTORY + @"\Assets";
-    public const string ENGINE_EDITOR_DIRECTORY = ENGINE_DIRECTORY + @"\GameEngine.Editor";
-    public const string ENGINE_EDITOR_ASSET_DIRECTORY = ENGINE_EDITOR_DIRECTORY + @"\Assets";
     
     public const string PROJECT_DIRECTORY = @"D:\Dev\C#\CSharpGameEngine\ExampleProject";
     public const string PROJECT_ASSET_DIRECTORY = PROJECT_DIRECTORY + @"\Assets";

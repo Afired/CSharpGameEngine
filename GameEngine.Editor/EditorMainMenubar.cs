@@ -40,7 +40,9 @@ public class EditorMainMenubar {
             
             DrawPlayControls();
             
-            DrawAppIcon("Checkerboard");
+            Texture2D appIcon = EditorResources.GetIcon("AppIcon");
+            ImGui.SetCursorPos(new Vector2(8, 8));
+            ImGui.Image((IntPtr) appIcon.ID, new Vector2(16, 16));
             
             DrawMenuItems();
             // if(ImGui.Button("recompile external editor assemblies"))
@@ -166,8 +168,8 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
-        Texture2D icon2 = TextureRegister.Get("Box") as Texture2D;
-        if(ImGui.ImageButton((IntPtr) icon2.ID, new Vector2(16, 16))) {
+        Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
+        if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
             unsafe {
                 Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
             }
@@ -179,8 +181,8 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
-        Texture2D icon1 = TextureRegister.Get("Checkerboard") as Texture2D;
-        if(ImGui.ImageButton((IntPtr) icon1.ID, new Vector2(16, 16))) {
+        Texture2D toggleFullscreenIcon = EditorResources.GetIcon("ToggleFullscreenIcon");
+        if(ImGui.ImageButton((IntPtr) toggleFullscreenIcon.ID, new Vector2(16, 16))) {
             EditorApplication.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
@@ -227,10 +229,5 @@ public class EditorMainMenubar {
         
         ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
     }
-
-    private static void DrawAppIcon(string iconName) {
-        Texture2D icon = TextureRegister.Get(iconName) as Texture2D;
-        ImGui.SetCursorPos(new Vector2(8, 8));
-        ImGui.Image((IntPtr) icon.ID, new Vector2(16, 16));
-    }
+    
 }

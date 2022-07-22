@@ -18,6 +18,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     public override void Initialize() {
         CompileExternalAssemblies();
         base.Initialize();
+        EditorResources.Load();
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();

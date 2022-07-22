@@ -32,7 +32,8 @@ public static class PlayMode {
         if(Current != Mode.Playing && Current != Mode.Paused)
             throw new Exception();
         Current = Mode.Editing;
-        Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+        // Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+        //TODO: open scene again
     }
     
     public enum Mode {

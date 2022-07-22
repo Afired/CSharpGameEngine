@@ -29,10 +29,14 @@ public static class Serializer {
     //     return t;
     // }
     
-    public static Node Deserialize(string fileName) {
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Directory.CreateDirectory($"{desktopPath}\\Project");
-        TrimFirstLine(File.ReadAllText($"{desktopPath}\\Project\\{fileName}.node"), out string assemblyTypeDefAsString, out string objAsString);
+    public static string SerializeNode(object obj) {
+        string json = JsonConvert.SerializeObject(obj, Formatting.Indented, SerializerSettings);
+        Type nodeType = obj.GetType();
+        return $"{nodeType.Assembly.GetName().Name}::{nodeType.Namespace}.{nodeType.Name}\n{json}";
+    }
+    
+    public static Node DeserializeNode(string filePath) {
+        TrimFirstLine(File.ReadAllText(filePath), out string assemblyTypeDefAsString, out string objAsString);
         SplitAssemblyTypeDefString(assemblyTypeDefAsString, out string assemblyName, out string typeName);
         Type nodeType = GetTypeFromString(assemblyName, typeName);
         Node node = (Node) JsonConvert.DeserializeObject(objAsString, nodeType, SerializerSettings)!;
@@ -76,14 +80,6 @@ public static class Serializer {
         }
         firstLine = str[..index];
         other = str[(index + 1)..];
-    }
-    
-    public static void Serialize(object obj, string fileName) {
-        string stringResult = JsonConvert.SerializeObject(obj, Formatting.Indented, SerializerSettings);
-        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        Directory.CreateDirectory($"{desktopPath}\\Project");
-        Type nodeType = obj.GetType();
-        File.WriteAllText($"{desktopPath}\\Project\\{fileName}.node", $"{nodeType.Assembly.GetName().Name}::{nodeType.Namespace}.{nodeType.Name}\n{stringResult}");
     }
     
 }

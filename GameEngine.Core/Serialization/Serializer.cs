@@ -8,9 +8,10 @@ using GameEngine.Core.Nodes;
 namespace GameEngine.Core.Serialization; 
 
 public static class Serializer {
-
+    
     private const string SERIALIZATION_ASSEMBLY_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\GameEngine.Serialization.dll";
-
+    private const string NEWTONSOFT_JSON_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\Newtonsoft.Json.dll";
+    
     private static readonly ExternalAssemblyLoadContextManager _ealcm = new();
     
     public static void UnloadResources() {
@@ -23,23 +24,23 @@ public static class Serializer {
         _ealcm.LoadExternalAssembly(SERIALIZATION_ASSEMBLY_DLL_PATH, true);
         
         // load references
-        _ealcm.LoadExternalAssembly(@"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\Newtonsoft.Json.dll", true);
+        _ealcm.LoadExternalAssembly(NEWTONSOFT_JSON_DLL_PATH, true);
     }
     
-    public static Node Deserialize(string fileName) {
+    public static Node DeserializeNode(string filePath) {
         LoadAssemblyIfNotLoadedAlready();
         Type? serializerType = _ealcm.ExternalAssemblies.First().GetType("GameEngine.Serialization.Serializer");
-        MethodInfo? deserializeMethod = serializerType.GetMethod("Deserialize", BindingFlags.Static | BindingFlags.Public);
-        object? result = deserializeMethod.Invoke(null, new object?[] { fileName });
+        MethodInfo? deserializeMethod = serializerType.GetMethod("DeserializeNode", BindingFlags.Static | BindingFlags.Public);
+        object? result = deserializeMethod.Invoke(null, new object?[] { filePath });
         
         return result as Node;
     }
     
-    public static void Serialize<T>(T node, string fileName) where T : Node {
+    public static string SerializeNode<T>(T node) where T : Node {
         LoadAssemblyIfNotLoadedAlready();
         Type? serializerType = _ealcm.ExternalAssemblies.First().GetType("GameEngine.Serialization.Serializer");
-        MethodInfo? serializeMethod = serializerType.GetMethod("Serialize", BindingFlags.Static | BindingFlags.Public);
-        serializeMethod.Invoke(null, new object?[] { node, fileName });
+        MethodInfo? serializeMethod = serializerType.GetMethod("SerializeNode", BindingFlags.Static | BindingFlags.Public);
+        return (string) serializeMethod.Invoke(null, new object?[] { node });
     }
     
 }

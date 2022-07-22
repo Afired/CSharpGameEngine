@@ -223,9 +223,7 @@ public class EditorMainMenubar {
         if(ImGui.BeginMenu("Scene")) {
             if(ImGui.MenuItem("New")) Hierarchy.SetRootNode(Node.New<Scene>());
             if(ImGui.MenuItem("Save"))
-                if(Hierarchy.RootNode is not null)
-                    Serializer.Serialize(Hierarchy.RootNode, "Test");
-            if(ImGui.MenuItem("Load")) Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+                Hierarchy.SaveCurrentRootNode();
             ImGui.EndMenu();
         }
         

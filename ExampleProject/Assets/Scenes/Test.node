@@ -1,0 +1,84 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera3D, GameEngine.Core",
+          "ClippingDistance": {
+            "$id": "5",
+            "X": 0.01,
+            "Y": 100.0
+          },
+          "FOV": 90.0,
+          "FlyingSpeed": 10.0,
+          "RotationW": 1.0,
+          "BackgroundColor": {
+            "$id": "6",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "Scale": {
+            "$id": "7",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "8",
+            "$values": []
+          }
+        },
+        {
+          "$id": "9",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Texture": "checkerboard",
+          "Shader": "diffuse",
+          "Geometry": "staff",
+          "LocalPosition": {
+            "$id": "10",
+            "Y": -8.0,
+            "Z": -13.0
+          },
+          "Scale": {
+            "$id": "11",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "12",
+            "$values": []
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "13",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "9"
+      }
+    ]
+  }
+}

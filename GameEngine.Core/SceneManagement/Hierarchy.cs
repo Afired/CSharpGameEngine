@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Serialization;
@@ -66,7 +67,8 @@ public static class Hierarchy {
     public static void SaveCurrentRootNode() {
         if(RootNode is null)
             return;
-        Serializer.Serialize(RootNode, "Test");
+        // Serializer.Serialize(RootNode, "Test");
+        throw new NotImplementedException();
     }
     
 }

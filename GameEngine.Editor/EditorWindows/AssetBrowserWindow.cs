@@ -1,3 +1,5 @@
+using GameEngine.Core.SceneManagement;
+using GameEngine.Core.Serialization;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -26,16 +28,24 @@ public class AssetBrowserWindow : EditorWindow {
         
     }
     
-    private void DrawFile(string currentPath) {
+    private void DrawFile(string filePath) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.Bullet |
                                            ImGuiTreeNodeFlags.NoTreePushOnOpen |
-                                           (Selected == currentPath ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+                                           (Selected == filePath ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth;
-        ImGui.PushID(currentPath.GetHashCode());
-        ImGui.TreeNodeEx(Path.GetFileName(currentPath), treeNodeFlags);
+        ImGui.PushID(filePath.GetHashCode());
+        ImGui.TreeNodeEx(Path.GetFileName(filePath), treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = currentPath;
+            Selected = filePath;
+        }
+        
+        if(ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) {
+            Console.Log($"double clicked: {filePath}");
+            Console.Log(Path.GetExtension(filePath));
+            if(Path.GetExtension(filePath) == ".node") {
+                Hierarchy.SetRootNode(Serializer.DeserializeNode(filePath));
+            }
         }
         
         if(ImGui.BeginPopupContextItem()) {

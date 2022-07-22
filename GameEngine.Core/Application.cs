@@ -31,27 +31,27 @@ public abstract unsafe class Application<T> where T : Application<T> {
     }
     
     public virtual void Initialize() {
-        Debugging.Console.Log("Initializing...");
-        Debugging.Console.Log("Initializing engine...");
-        Debugging.Console.LogSuccess("Initialized engine (1/3)");
+        Console.Log("Initializing...");
+        Console.Log("Initializing engine...");
+        Console.LogSuccess("Initialized engine (1/3)");
         
-        Debugging.Console.Log("Initializing physics engine...");
+        Console.Log("Initializing physics engine...");
         PhysicsEngine.Initialize();
-        Debugging.Console.LogSuccess("Initialized physics engine (2/3)");
+        Console.LogSuccess("Initialized physics engine (2/3)");
         
-        Debugging.Console.Log("Initializing render engine...");
+        Console.Log("Initializing render engine...");
         Renderer.Initialize();
-        Debugging.Console.LogSuccess("Initialized render engine (3/3)");
+        Console.LogSuccess("Initialized render engine (3/3)");
         
-        Debugging.Console.LogSuccess("Initialization complete");
-
-        LoadExternalAssemblies();
+        Console.LogSuccess("Initialization complete");
+        
+        // LoadExternalAssemblies();
     }
     
     public virtual void LoadExternalAssemblies() {
         _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
         Serializer.LoadAssemblyIfNotLoadedAlready();
-        Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+        // Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
         
         _ealcm.AddUnloadTask(() => {
             Hierarchy.SaveCurrentRootNode();

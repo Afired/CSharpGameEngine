@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using GameEngine.Core;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.SceneManagement;
@@ -46,8 +47,7 @@ public class EditorMainMenubar {
             ImGui.Image((IntPtr) appIcon.ID, new Vector2(16, 16));
             
             DrawMenuItems();
-            // if(ImGui.Button("recompile external editor assemblies"))
-            //     ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
+            
             if(ImGui.Button("recompile external assemblies"))
                 EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
             
@@ -205,7 +205,8 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Project")) {
             if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Open Project")) { AssetManager.OpenProject(@"D:\Dev\C#\CSharpGameEngine\ExampleProject"); }
+            if(ImGui.MenuItem("Reload meshes async")) { MeshRegister.Reload(); }
+            if(ImGui.MenuItem("Open Project")) { Project.Open(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Example.geproj"); }
             ImGui.EndMenu();
         }
         

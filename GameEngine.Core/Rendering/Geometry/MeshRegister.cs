@@ -1,7 +1,10 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Assimp;
 using Assimp.Configs;
 using GameEngine.Core.AssetManagement;
@@ -11,24 +14,26 @@ using GameEngine.Core.Rendering.Textures;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Loaders;
+using Silk.NET.OpenGL;
 using Face = ObjLoader.Loader.Data.Elements.Face;
 
 namespace GameEngine.Core.Rendering.Geometry;
 
 public static class MeshRegister {
     
-    private static readonly Dictionary<string, Geometry> _meshRegister = new();
+    private static readonly ConcurrentDictionary<string, Geometry> _meshRegister = new();
     
     public static void Register(string name, Geometry shader) {
         name = name.ToLower();
         Throw.If(_meshRegister.ContainsKey(name), "duplicate geometry");
-        _meshRegister.Add(name, shader);
+        // _meshRegister.Add(name, shader);
+        _meshRegister.TryAdd(name, shader);
     }
     
     public static Geometry? Get(string name) {
         name = name.ToLower();
-        if(_meshRegister.TryGetValue(name, out Geometry shader))
-            return shader;
+        if(_meshRegister.TryGetValue(name, out Geometry geometry))
+            return geometry;
         Console.LogWarning($"Geometry not found '{name}'");
         return null;
     }
@@ -47,7 +52,7 @@ public static class MeshRegister {
         };
         Register("Quad", new Geometry(quadVertexData));
         
-        string[] paths = AssetManager.GetAllModelPaths();
+        string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
         for (int i = 0; i < paths.Length; i++) {
             LoadObjFaces(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower());
             Console.LogSuccess($"Loading model ({i + 1}/{paths.Length}) '{paths[i]}'");

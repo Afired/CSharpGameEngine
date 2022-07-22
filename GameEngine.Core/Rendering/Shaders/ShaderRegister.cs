@@ -32,7 +32,7 @@ public static class ShaderRegister {
         _invalidShaderShader = InvalidShader.Create();
         DefaultShader.Initialize();
         DiffuseShader.Initialize();
-        string[] paths = AssetManager.GetAllShaderPaths();
+        string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("glsl");
         for (int i = 0; i < paths.Length; i++) {
             Register(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), new Shader(paths[i]));
             Console.LogSuccess($"Compiling shaders ({i + 1}/{paths.Length}) '{paths[i]}'");

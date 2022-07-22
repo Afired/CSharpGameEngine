@@ -1,4 +1,3 @@
-using GameEngine.Core.AssetManagement;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -14,12 +13,12 @@ public class AssetBrowserWindow : EditorWindow {
     protected override void Draw() {
         
         if(ImGui.BeginMenuBar()) {
-            ImGui.Text(AssetManager.ProjectAssetDirectory ?? "");
+            ImGui.Text(Project.Current?.ProjectAssetDirectory ?? string.Empty);
             ImGui.EndMenuBar();
         }
         
-        if(AssetManager.ProjectAssetDirectory is not null)
-            DrawFolder(AssetManager.ProjectAssetDirectory);
+        if(Project.Current is not null)
+            DrawFolder(Project.Current.ProjectAssetDirectory!);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
             Selection.Clear();

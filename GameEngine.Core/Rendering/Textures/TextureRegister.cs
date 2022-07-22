@@ -28,7 +28,7 @@ public static class TextureRegister {
     public static void Reload() {
         _textureRegister.Clear();
         Console.Log($"Loading textures...");
-        string[] paths = AssetManager.GetAllTexturePaths();
+        string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("png");
         for (int i = 0; i < paths.Length; i++) {
             Register(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), new Texture2D(paths[i]));
             Console.LogSuccess($"Loading textures ({i + 1}/{paths.Length}) '{paths[i]}'");

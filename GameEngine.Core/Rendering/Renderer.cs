@@ -73,9 +73,9 @@ public static unsafe class Renderer {
     }
     
     private static void LoadResources() {
-        ShaderRegister.Load();
-        TextureRegister.Load();
-        MeshRegister.Load();
+        ShaderRegister.Reload();
+        TextureRegister.Reload();
+        MeshRegister.Reload();
     }
 
     public static void Render() {

@@ -31,7 +31,8 @@ public static class MeshRegister {
         return null;
     }
     
-    public static void Load() {
+    public static void Reload() {
+        _meshRegister.Clear();
         Console.Log($"Initializing geometry...");
         float[] quadVertexData = {
             -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left

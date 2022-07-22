@@ -25,7 +25,8 @@ public static class TextureRegister {
         throw new Exception(name);
     }
     
-    public static void Load() {
+    public static void Reload() {
+        _textureRegister.Clear();
         Console.Log($"Loading textures...");
         string[] paths = AssetManager.GetAllTexturePaths();
         for (int i = 0; i < paths.Length; i++) {

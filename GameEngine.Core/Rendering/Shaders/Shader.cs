@@ -21,11 +21,12 @@ public static class StringExtension {
     }
 }
 
+//TODO: delete program when disposing shader
 public class Shader {
-
+    
     private uint _programID;
-
-
+    
+    
     public Shader(string vertexCode, string fragmentCode) {
         (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
         Compile(shaderInfo);
@@ -129,11 +130,5 @@ public class Shader {
         int location = Gl.GetUniformLocation(_programID, "time");
         Gl.Uniform1(location, value);
     }
-    
-}
-
-public interface IShader {
-    
-    public Shader Shader { get; set; }
     
 }

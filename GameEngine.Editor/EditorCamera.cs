@@ -7,12 +7,15 @@ namespace GameEngine.Editor;
 
 public class EditorCamera : BaseCamera {
     
-    private static EditorCamera? _instance; 
-    public static EditorCamera Instance =>
-        _instance ??= new EditorCamera {
+    public static EditorCamera Instance => _instance ??= NewDefault();
+    private static EditorCamera? _instance;
+    
+    private static EditorCamera NewDefault() {
+        return new EditorCamera {
             Position = new Vector3(0, 0, -5),
             IsMainCamera = true
         };
+    }
     
     public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
     
@@ -92,9 +95,9 @@ public class EditorCamera : BaseCamera {
         );
     }
     
-    
     private GlmSharp.mat4 GetViewMat() {
         GlmSharp.mat4 t = GlmSharp.mat4.Translate(Position.X, Position.Y, Position.Z) * new quat(RotationX, RotationY, RotationZ, RotationW).Normalized.ToMat4;
         return t.Inverse;
     }
+    
 }

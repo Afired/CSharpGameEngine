@@ -66,18 +66,54 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$id": "12",
             "$values": []
           }
+        },
+        {
+          "$id": "13",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Texture": "checkerboard",
+          "Shader": "default",
+          "Geometry": "car",
+          "Scale": {
+            "$id": "14",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "15",
+            "$values": []
+          }
+        },
+        {
+          "$id": "16",
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "17",
+            "$values": []
+          }
         }
       ]
     }
   },
   "_childNodes": {
-    "$id": "13",
+    "$id": "18",
     "$values": [
       {
         "$ref": "4"
       },
       {
         "$ref": "9"
+      },
+      {
+        "$ref": "13"
+      },
+      {
+        "$ref": "16"
       }
     ]
   }

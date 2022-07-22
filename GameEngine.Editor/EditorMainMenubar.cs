@@ -220,8 +220,8 @@ public class EditorMainMenubar {
             ImGui.EndMenu();
         }
         
-        if(ImGui.BeginMenu("Scene")) {
-            if(ImGui.MenuItem("New")) Hierarchy.SetRootNode(Node.New<Scene>());
+        if(ImGui.BeginMenu("Hierarchy")) {
+            if(ImGui.MenuItem("New Scene")) Hierarchy.SetRootNode(Node.New<Scene>());
             if(ImGui.MenuItem("Save"))
                 Hierarchy.SaveCurrentRootNode();
             ImGui.EndMenu();

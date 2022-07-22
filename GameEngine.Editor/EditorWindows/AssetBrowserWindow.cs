@@ -45,6 +45,7 @@ public class AssetBrowserWindow : EditorWindow {
             Console.Log(Path.GetExtension(filePath));
             if(Path.GetExtension(filePath) == ".node") {
                 Hierarchy.SetRootNode(Serializer.DeserializeNode(filePath));
+                Hierarchy.CurrentlyLoadedNodesAssetPath = filePath;
             }
         }
         

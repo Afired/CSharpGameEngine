@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Serialization;
 
@@ -65,10 +66,20 @@ public static class Hierarchy {
     }
     
     public static void SaveCurrentRootNode() {
-        if(RootNode is null)
+        if(RootNode is null) {
+            Console.LogWarning($"There is nothing loaded in Hierarchy, therefore saving is skipped!");
             return;
-        // Serializer.Serialize(RootNode, "Test");
-        throw new NotImplementedException();
+        }
+
+        if(CurrentlyLoadedNodesAssetPath is null) {
+            Console.LogWarning($"Could not save node of type {RootNode.GetType()} because there is no asset path defined");
+            return;
+        }
+        
+        File.WriteAllText(CurrentlyLoadedNodesAssetPath, Serializer.SerializeNode(RootNode));
+        Console.LogSuccess($"Saved node of type {RootNode.GetType()} to {CurrentlyLoadedNodesAssetPath}");
     }
+    
+    public static string? CurrentlyLoadedNodesAssetPath { get; set; } //TODO: replace with managed asset reference
     
 }

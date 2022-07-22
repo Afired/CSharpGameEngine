@@ -18,7 +18,16 @@ public class HierarchyWindow : EditorWindow {
     
     protected override void Draw() {
         if(ImGui.BeginMenuBar()) {
-            ImGui.Text(Hierarchy.RootNode is not null ? $"{Hierarchy.RootNode.GetType().AssemblyQualifiedName}" : "null");
+            
+            if(Hierarchy.RootNode is null)
+                ImGui.Text("none");
+            else {
+                Type nodeType = Hierarchy.RootNode.GetType();
+                ImGui.Text(Hierarchy.CurrentlyLoadedNodesAssetPath ?? "null");
+                if(ImGui.Button("Save"))
+                    Hierarchy.SaveCurrentRootNode();
+            }
+            
             ImGui.EndMenuBar();
         }
         

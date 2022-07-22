@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using GameEngine.Core.Input;
+﻿using GameEngine.Core.Input;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
 using GlmSharp;
@@ -70,11 +68,6 @@ public partial class Camera3D : BaseCamera {
     }
     
     public override GlmNet.mat4 GLM_GetProjectionMatrix() {
-        
-        if(Input.Input.IsKeyDown(KeyCode.L))
-            typeof(InputHandler).GetField("_catchCursor", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, true);
-        else if(Input.Input.IsKeyDown(KeyCode.U))
-            typeof(InputHandler).GetField("_catchCursor", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, false);
         
         float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
         // float aspectRatioWindow = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;

@@ -65,9 +65,10 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             if(PlayMode.Current == PlayMode.Mode.Playing) {
                 Hierarchy.Awake();
                 Hierarchy.Update(updateTime);
-            }
+            } else
+                EditorCamera.Instance.EditorUpdate(updateTime);
             
-            Renderer.InputHandler.ResetMouseDelta();
+            Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {

@@ -181,7 +181,7 @@ public abstract unsafe class Application<T> where T : Application<T> {
             
             Hierarchy.Awake();
             Hierarchy.Update(updateTime);
-            Renderer.InputHandler.ResetMouseDelta();
+            Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {

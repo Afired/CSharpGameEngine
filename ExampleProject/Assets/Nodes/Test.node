@@ -20,7 +20,10 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "FOV": 90.0,
           "FlyingSpeed": 10.0,
-          "RotationW": 1.0,
+          "RotationX": 0.00750021,
+          "RotationY": -6.100163E-08,
+          "RotationZ": -1.2845703E-08,
+          "RotationW": 0.9999724,
           "BackgroundColor": {
             "$id": "6",
             "R": 0.1,
@@ -28,8 +31,15 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "B": 0.1,
             "A": 1.0
           },
-          "Scale": {
+          "IsMainCamera": true,
+          "LocalPosition": {
             "$id": "7",
+            "X": 1.0975541,
+            "Y": 1.1592977,
+            "Z": -3.7866356
+          },
+          "Scale": {
+            "$id": "8",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -38,23 +48,23 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "8",
+            "$id": "9",
             "$values": []
           }
         },
         {
-          "$id": "9",
+          "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": "checkerboard",
           "Shader": "diffuse",
           "Geometry": "staff",
           "LocalPosition": {
-            "$id": "10",
+            "$id": "11",
             "Y": -8.0,
             "Z": -13.0
           },
           "Scale": {
-            "$id": "11",
+            "$id": "12",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -63,18 +73,18 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "12",
+            "$id": "13",
             "$values": []
           }
         },
         {
-          "$id": "13",
+          "$id": "14",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": "checkerboard",
           "Shader": "default",
           "Geometry": "car",
           "Scale": {
-            "$id": "14",
+            "$id": "15",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -83,17 +93,17 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "15",
+            "$id": "16",
             "$values": []
           }
         },
         {
-          "$id": "16",
+          "$id": "17",
           "ParentNode": {
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "17",
+            "$id": "18",
             "$values": []
           }
         }
@@ -101,19 +111,19 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "18",
+    "$id": "19",
     "$values": [
       {
         "$ref": "4"
       },
       {
-        "$ref": "9"
+        "$ref": "10"
       },
       {
-        "$ref": "13"
+        "$ref": "14"
       },
       {
-        "$ref": "16"
+        "$ref": "17"
       }
     ]
   }

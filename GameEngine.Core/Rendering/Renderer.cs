@@ -86,7 +86,10 @@ public static unsafe class Renderer {
         
         // render and draw frame
         if(CurrentCamera is not null) {
-            DrawBackground();
+            
+            //draw background
+            Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
+            
 //            foreach(Layer layer in LayerStack.GetNormalLayers()) {
 //                layer.Draw();
 //            }
@@ -131,10 +134,6 @@ public static unsafe class Renderer {
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private static void DrawBackground() {
-        Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
-    }
-
     private static uint GetFullScreenRenderQuadVao() {
         
         float[] vertexData = {

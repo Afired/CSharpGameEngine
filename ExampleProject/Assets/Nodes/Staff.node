@@ -20,10 +20,10 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "FOV": 90.0,
           "FlyingSpeed": 10.0,
-          "RotationX": 0.012597491,
-          "RotationY": 0.9843426,
-          "RotationZ": -0.078915775,
-          "RotationW": 0.15713249,
+          "RotationX": 0.011813007,
+          "RotationY": 0.9786456,
+          "RotationZ": -0.058789246,
+          "RotationW": 0.19664611,
           "BackgroundColor": {
             "$id": "6",
             "R": 0.1143791,
@@ -34,9 +34,8 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "IsMainCamera": true,
           "LocalPosition": {
             "$id": "7",
-            "X": -0.34425768,
-            "Y": 7.14923,
-            "Z": -13.29426
+            "Y": 10.0,
+            "Z": -15.0
           },
           "Scale": {
             "$id": "8",
@@ -56,10 +55,14 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": "checkerboard",
-          "Shader": "diffuse",
-          "Geometry": "staff",
-          "Scale": {
+          "Shader": "vertexdisplacement",
+          "Geometry": "honkai",
+          "Rotation3D": {
             "$id": "11",
+            "Y": -37.0
+          },
+          "Scale": {
+            "$id": "12",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -68,7 +71,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "12",
+            "$id": "13",
             "$values": []
           }
         }
@@ -76,7 +79,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "13",
+    "$id": "14",
     "$values": [
       {
         "$ref": "4"

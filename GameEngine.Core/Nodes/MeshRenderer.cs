@@ -30,6 +30,7 @@ public partial class MeshRenderer : Transform {
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         TextureRegister.Get(Texture).Bind();
         ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
+        ShaderRegister.Get(Shader).SetFloat("time", Time.TotalTimeElapsed);
         
         Geometry geometry = MeshRegister.Get(Geometry);
         if(geometry is null) {

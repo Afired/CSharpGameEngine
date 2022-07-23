@@ -127,7 +127,7 @@ public class Shader {
     }
     
     public void SetFloat(string uniformName, float value) {
-        int location = Gl.GetUniformLocation(_programID, "time");
+        int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.Uniform1(location, value);
     }
     

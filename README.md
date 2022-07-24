@@ -1,4 +1,4 @@
-# Simple C# Game Engine
+# C# Game Engine
 ![C# 10](https://img.shields.io/badge/-C%23_10-b5faaa)
 ![.NET 6.0](https://img.shields.io/badge/-.NET_6.0-acfcf0)
 ![GLFW](https://img.shields.io/badge/-GLFW-e1aafa)
@@ -6,22 +6,14 @@
 ![Box2D](https://img.shields.io/badge/-Box2D-fad5aa)
 ![ImGui](https://img.shields.io/badge/-ImGui-f6faaa)
 
-## About
-Goal of this project is to create a game engine with an entity component system,
-**capable of inheritance** and **composition** patterns while at the same time
-enforcing implementation to provide **type-safety** and avoiding anonymous game
-objects. Although this is also preventing run-time changes like adding new components,
-it brings the advantage of being able to cast game objects into it's components
-`(GameObject as ITransform)` instead of having to retrieve it through some generic
-getter method `(GetComponent<T>)`. Since casts are not creating much overhead, there
-is **no need to cache references** to components like it is common in other game engines.
-This also prevents null references, should a component be switched out with another instance.
+## Editor
+Import Assets, configure Nodes, composite Scenes, preview in Play Mode, serialize Data, reload Assemblies...
 
-## Branches
-- master
-    - uml-planning
-    - development
-        - feature-branches
+## Nodes
+The Node System is a type save and reliable way of structuring code and creating logic. Thanks to the use of source generators the correct way of implementing the subclass sandbox pattern is handled automatically. Nodes are capable of inheritance and Composition, making them both reusable and flexible at the same time.Even the Scene is a Node which can be inherited from, making it easy to create unique level logic/data or share similar ones.
 
-## Setup
-_Currently there is no special setup needed._
+## Physics
+Nodes like Trigger, Collider or RigidBody come out of the box and provide 2D physics using Box 2D under the hood.
+
+## Extensibility
+One of the main goals of this project is to create an engine which can be easily extended. Providing an intuitive API for extending the Editor or making Tools is therefore also high priority.This is achieved by loading custom editor assemblies, in which you can define Editor Windows, Property Drawers, Node Drawers and more to come..

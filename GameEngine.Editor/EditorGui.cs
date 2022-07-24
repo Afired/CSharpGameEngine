@@ -25,7 +25,7 @@ public class EditorGui {
         new InspectorWindow();
         new ConsoleWindow();
         new AssetBrowserWindow();
-        new SceneSelectWindow();
+        new TerminalWindow();
         //Program.EditorLayer.OnDraw += RenderDemoWindow;
     }
 

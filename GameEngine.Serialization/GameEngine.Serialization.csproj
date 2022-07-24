@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj">
+            <Private>false</Private>
+        </ProjectReference>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>C:\Program Files\dotnet\sdk\6.0.300\Microsoft\Microsoft.NET.Build.Extensions\net461\lib\netstandard.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+    
+</Project>

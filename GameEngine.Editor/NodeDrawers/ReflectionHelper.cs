@@ -8,7 +8,7 @@ public static class ReflectionHelper {
         // Get all types from the given assembly
         Type[] types = assembly.GetTypes();
         List<Type> derivedTypes = new List<Type>();
-
+        
         for (int i = 0, count = types.Length; i < count; i++) {
             Type type = types[i];
             if (IsSubclassOf(type, baseType)) {
@@ -20,7 +20,7 @@ public static class ReflectionHelper {
         
         return derivedTypes;
     }
-
+    
     public static bool IsSubclassOf(Type type, Type baseType) {
         if (type == null || baseType == null || type == baseType)
             return false;

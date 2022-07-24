@@ -1,0 +1,7 @@
+<assembly name="GameEngine.Core">
+    <member name="T:GameEngine.Core.Nodes.Node">
+        <attribute ctor="M:JetBrains.Annotations.UsedImplicitlyAttribute.#ctor(JetBrains.Annotations.ImplicitUseTargetFlags)">
+            <argument>4</argument>
+        </attribute>
+    </member>
+</assembly>

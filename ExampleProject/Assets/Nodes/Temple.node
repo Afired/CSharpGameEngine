@@ -1,0 +1,89 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera3D, GameEngine.Core",
+          "ClippingDistance": {
+            "$id": "5",
+            "X": 0.01,
+            "Y": 100.0
+          },
+          "FOV": 90.0,
+          "FlyingSpeed": 10.0,
+          "RotationX": 0.012597491,
+          "RotationY": 0.9843426,
+          "RotationZ": -0.078915775,
+          "RotationW": 0.15713249,
+          "BackgroundColor": {
+            "$id": "6",
+            "R": 0.1143791,
+            "G": 0.12572637,
+            "B": 0.16666669,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalPosition": {
+            "$id": "7",
+            "X": -0.34425768,
+            "Y": 7.14923,
+            "Z": -13.29426
+          },
+          "Scale": {
+            "$id": "8",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "9",
+            "$values": []
+          }
+        },
+        {
+          "$id": "10",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Texture": "checkerboard",
+          "Shader": "diffuse",
+          "Geometry": "temple",
+          "Scale": {
+            "$id": "11",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "12",
+            "$values": []
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "13",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "10"
+      }
+    ]
+  }
+}

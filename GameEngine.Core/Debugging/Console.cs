@@ -6,7 +6,7 @@ public delegate void OnLog(string message, LogSeverity logSeverity);
 
 public static class Console {
 
-    public static event OnLog OnLog;
+    public static event OnLog? OnLog;
     
     public static void Log(string message) {
         if(!Configuration.DoDebugLogs) 
@@ -17,13 +17,13 @@ public static class Console {
     public static void LogWarning(string message) {
         if(!Configuration.DoDebugWarnings) 
             return;
-        Log("A Warning occurred: ", message, ConsoleColor.Yellow, LogSeverity.Warning);
+        Log("Warning: ", message, ConsoleColor.Yellow, LogSeverity.Warning);
     }
     
     public static void LogError(string message) {
         if(!Configuration.DoDebugErrors) 
             return;
-        Log("An Error occurred: ", message, ConsoleColor.Red, LogSeverity.Error);
+        Log("Error: ", message, ConsoleColor.Red, LogSeverity.Error);
     }
     
     public static void LogSuccess(string message) {

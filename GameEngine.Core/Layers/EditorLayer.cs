@@ -6,7 +6,7 @@ namespace GameEngine.Core.Layers;
 public class EditorLayer : Layer {
     
     public EditorLayer() {
-        SwapBuffers = true;
+        SwapBuffers = false;
     }
     
     protected override void OnAttach() {

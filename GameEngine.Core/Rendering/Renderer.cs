@@ -1,8 +1,10 @@
+using System;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
+using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
 using Silk.NET.GLFW;
@@ -19,7 +21,8 @@ public static unsafe class Renderer {
     
     public static event OnLoad OnLoad;
     public static bool IsInit { get; private set; }
-    public static BaseCamera CurrentCamera { get; private set; }
+    public static BaseCamera? CurrentCamera => _currentCameraRef.Target as BaseCamera;
+    private static readonly WeakReference _currentCameraRef = new(null);
     
     public static GlfwWindow GlfwWindow;
     public static GL Gl => GlfwWindow.Gl;
@@ -29,14 +32,15 @@ public static unsafe class Renderer {
     public static FrameBuffer MainFrameBuffer1 { get; private set; }
     // this frame buffer is used for post processing (ping pong frame buffer 2)
     public static FrameBuffer MainFrameBuffer2 { get; private set; }
+    public static FrameBuffer FinalFrameBuffer { get; private set; }
 
-    private static FrameBuffer _activeFrameBuffer;
-    private static FrameBuffer _inactiveFrameBuffer;
+    public static FrameBuffer ActiveFrameBuffer { get; private set; }
+    public static FrameBuffer _inactiveFrameBuffer { get; private set; }
 
     internal static void SwapActiveFrameBuffer() {
         // Swap via deconstruction
-        (_activeFrameBuffer, _inactiveFrameBuffer) = (_inactiveFrameBuffer, _activeFrameBuffer);
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, _activeFrameBuffer.ID);
+        (ActiveFrameBuffer, _inactiveFrameBuffer) = (_inactiveFrameBuffer, ActiveFrameBuffer);
+        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
     
@@ -58,9 +62,10 @@ public static unsafe class Renderer {
     
     private static void Setup() {
         GlfwWindow = new GlfwWindow();
-        MainFrameBuffer1 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
-        MainFrameBuffer2 = new FrameBuffer(new FrameBufferConfig() { Width = Configuration.WindowWidth, Height = Configuration.WindowHeight, AutomaticResize = true });
-        _activeFrameBuffer = MainFrameBuffer1;
+        MainFrameBuffer1 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer1
+        MainFrameBuffer2 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer2
+        FinalFrameBuffer = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, true); // final framebuffer
+        ActiveFrameBuffer = MainFrameBuffer1;
         _inactiveFrameBuffer = MainFrameBuffer2;
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LayerStack = new LayerStack();
@@ -68,9 +73,9 @@ public static unsafe class Renderer {
     }
     
     private static void LoadResources() {
-        ShaderRegister.Load();
-        TextureRegister.Load();
-        GeometryRegister.Load();
+        ShaderRegister.Reload();
+        TextureRegister.Reload();
+        MeshRegister.Reload();
     }
 
     public static void Render() {
@@ -81,7 +86,10 @@ public static unsafe class Renderer {
         
         // render and draw frame
         if(CurrentCamera is not null) {
-            DrawBackground();
+            
+            //draw background
+            Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
+            
 //            foreach(Layer layer in LayerStack.GetNormalLayers()) {
 //                layer.Draw();
 //            }
@@ -89,9 +97,10 @@ public static unsafe class Renderer {
         }
         
         //todo: post processing stack
-        DoPostProcessing();
+        // DoPostProcessing();
         
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
+        FinalFrameBuffer.Bind();
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Attach();
             layer.Draw();
@@ -110,7 +119,7 @@ public static unsafe class Renderer {
         ShaderRegister.Get("ScreenShader").Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, _activeFrameBuffer.ColorAttachment);
+        Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
@@ -125,10 +134,6 @@ public static unsafe class Renderer {
         Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private static void DrawBackground() {
-        Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
-    }
-
     private static uint GetFullScreenRenderQuadVao() {
         
         float[] vertexData = {
@@ -167,8 +172,8 @@ public static unsafe class Renderer {
         return vao;
     }
     
-    public static void SetActiveCamera(BaseCamera baseCamera) {
-        CurrentCamera = baseCamera;
+    public static void SetActiveCamera(BaseCamera? baseCamera) {
+        _currentCameraRef.Target = baseCamera;
     }
     
 }

@@ -2,6 +2,7 @@ using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
+using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
@@ -10,7 +11,7 @@ namespace GameEngine.Core.Nodes;
 
 public partial class Renderer : Transform {
     
-    [Serialized] public string Texture { get; set; } = "checkerboard";
+    [Serialized] public string Texture { get; set; } = "box";
     [Serialized] public string Shader { get; set; } = "default";
     [Serialized] public string Geometry { get; set; } = "quad";
     
@@ -31,7 +32,7 @@ public partial class Renderer : Transform {
         ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
-        Geometry geometry = GeometryRegister.Get(Geometry);
+        Geometry geometry = MeshRegister.Get(Geometry);
         
         Gl.BindVertexArray(geometry.Vao);
         

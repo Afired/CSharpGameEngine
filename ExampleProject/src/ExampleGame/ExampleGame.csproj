@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GameEnginePath>D:\Dev\C#\CSharpGameEngine</GameEnginePath>
+        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>$(ProjectRoot)\bin\Debug\</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>$(ProjectRoot)\bin\Release\</OutputPath>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <Using Remove="System; System.Collections.Generic; System.IO; System.Linq; System.Net.Http; System.Threading; System.Threading.Tasks;" />
+        <Using Include="System.Collections.Generic; GameEngine.Core.Debugging" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Reference Include="GameEngine.Core">
+            <HintPath>$(GameEnginePath)\GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Analyzer Include="$(GameEnginePath)\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll" />
+    </ItemGroup>
+    
+</Project>

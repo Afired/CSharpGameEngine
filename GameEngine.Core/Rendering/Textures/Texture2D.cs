@@ -52,7 +52,7 @@ public class Texture2D : Texture {
     }
 
     public void Dispose() {
-        Gl.DeleteTexture(ID);
+        //TODO: Gl.DeleteTexture(ID);
     }
 
     public override void Bind(uint slot = 0) {

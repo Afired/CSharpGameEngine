@@ -1,0 +1,17 @@
+GameEngine.Core::GameEngine.Core.Nodes.MeshRenderer
+{
+  "$id": "1",
+  "Texture": "checkerboard",
+  "Shader": "diffuse",
+  "Geometry": "car_tri",
+  "Scale": {
+    "$id": "2",
+    "X": 1.0,
+    "Y": 1.0,
+    "Z": 1.0
+  },
+  "_childNodes": {
+    "$id": "3",
+    "$values": []
+  }
+}

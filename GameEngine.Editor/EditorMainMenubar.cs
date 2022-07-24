@@ -1,7 +1,10 @@
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using GameEngine.Core;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.SceneManagement;
@@ -39,11 +42,14 @@ public class EditorMainMenubar {
             
             DrawPlayControls();
             
-            DrawAppIcon("Checkerboard");
+            Texture2D appIcon = EditorResources.GetIcon("AppIcon");
+            ImGui.SetCursorPos(new Vector2(8, 8));
+            ImGui.Image((IntPtr) appIcon.ID, new Vector2(16, 16));
             
             DrawMenuItems();
-            if(ImGui.Button("recompile external editor assemblies"))
-                AssemblyManager.RegisterReloadOfEditorAssemblies();
+            
+            if(ImGui.Button("recompile external assemblies"))
+                EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
             
             DrawWindowHandleButtons();
 
@@ -163,8 +169,8 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
-        Texture2D icon2 = TextureRegister.Get("Box") as Texture2D;
-        if(ImGui.ImageButton((IntPtr) icon2.ID, new Vector2(16, 16))) {
+        Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
+        if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
             unsafe {
                 Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
             }
@@ -176,8 +182,8 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
-        Texture2D icon1 = TextureRegister.Get("Checkerboard") as Texture2D;
-        if(ImGui.ImageButton((IntPtr) icon1.ID, new Vector2(16, 16))) {
+        Texture2D toggleFullscreenIcon = EditorResources.GetIcon("ToggleFullscreenIcon");
+        if(ImGui.ImageButton((IntPtr) toggleFullscreenIcon.ID, new Vector2(16, 16))) {
             EditorApplication.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
@@ -188,18 +194,21 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Application")) {
             if(ImGui.MenuItem("Preferences")) { }
-            if(ImGui.MenuItem("Clear Editor Resources")) AssemblyManager.ClearEditorResources();
-            if(ImGui.MenuItem("Generate Editor Resources")) AssemblyManager.GenerateEditorResources();
-            if(ImGui.MenuItem("Reload Editor Assemblies")) AssemblyManager.RegisterReloadOfEditorAssemblies();
-            if(ImGui.MenuItem("Unload Editor Assemblies")) AssemblyManager.TryToUnloadEditorAssemblies();
-            if(ImGui.MenuItem("Load Editor Assemblies")) AssemblyManager.LoadEditorAssemblies();
+            // if(ImGui.MenuItem("Clear Editor Resources")) ExternalEditorAssemblyManager.ClearEditorResources();
+            // if(ImGui.MenuItem("Generate Editor Resources")) ExternalEditorAssemblyManager.GenerateEditorResources();
+            // if(ImGui.MenuItem("Reload Editor Assemblies")) ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
+            // if(ImGui.MenuItem("Unload Editor Assemblies")) ExternalEditorAssemblyManager.TryToUnloadEditorAssemblies();
+            // if(ImGui.MenuItem("Load Editor Assemblies")) ExternalEditorAssemblyManager.LoadEditorAssemblies();
             if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
             ImGui.EndMenu();
         }
         
         if(ImGui.BeginMenu("Project")) {
             if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Open Project")) { }
+            if(ImGui.MenuItem("Reload Meshes")) { MeshRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Textures")) { TextureRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Shaders")) { ShaderRegister.Reload(); }
+            if(ImGui.MenuItem("Open Project")) { Project.Open(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Example.geproj"); }
             ImGui.EndMenu();
         }
         
@@ -209,25 +218,18 @@ public class EditorMainMenubar {
             if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
             if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
             if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
-            if(ImGui.MenuItem("Scene Select")) { new SceneSelectWindow(); }
+            if(ImGui.MenuItem("Terminal")) { new TerminalWindow(); }
             ImGui.EndMenu();
         }
         
-        if(ImGui.BeginMenu("Scene")) {
-            if(ImGui.MenuItem("New")) Hierarchy.SetRootNode(Node.New<Scene>());
+        if(ImGui.BeginMenu("Hierarchy")) {
+            if(ImGui.MenuItem("New Scene")) Hierarchy.SetRootNode(Node.New<Scene>());
             if(ImGui.MenuItem("Save"))
-                if(Hierarchy.RootNode is not null)
-                    Serializer.Serialize(Hierarchy.RootNode, "Test");
-            if(ImGui.MenuItem("Load")) Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
+                Hierarchy.SaveCurrentRootNode();
             ImGui.EndMenu();
         }
         
         ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
     }
-
-    private static void DrawAppIcon(string iconName) {
-        Texture2D icon = TextureRegister.Get(iconName) as Texture2D;
-        ImGui.SetCursorPos(new Vector2(8, 8));
-        ImGui.Image((IntPtr) icon.ID, new Vector2(16, 16));
-    }
+    
 }

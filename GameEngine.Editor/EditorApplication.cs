@@ -4,20 +4,41 @@ using GameEngine.Core.Layers;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Editor.PropertyDrawers;
 
 namespace GameEngine.Editor;
 
 public unsafe class EditorApplication : Application<EditorApplication> {
     
+    private const string EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame.Editor";
+    private const string EXTERNAL_EDITOR_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.Editor.dll";
+    
     internal EditorLayer EditorLayer { get; private set; }
     
     public override void Initialize() {
+        EditorAssetManager.Init();
+        // CompileExternalAssemblies();
         base.Initialize();
+        EditorResources.Load();
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
-        AssemblyManager.LoadEditorAssemblies();
-        AssemblyManager.GenerateEditorResources();
+    }
+    
+    protected override void CompileExternalAssemblies() {
+        base.CompileExternalAssemblies();
+        CompileExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR);
+    }
+    
+    public override void LoadExternalAssemblies() {
+        _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
+        base.LoadExternalAssemblies();
+        PropertyDrawer.GenerateLookUp();
+        _ealcm.AddUnloadTask(() => {
+            Selection.Clear();
+            PropertyDrawer.ClearLookUp();
+            return true;
+        });
     }
     
     protected override void Loop() {
@@ -27,9 +48,9 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         physicsTimer.Start();
         
         while(IsRunning) {
-
-            if(AssemblyManager.IsReloadingEditorAssemblies)
-                AssemblyManager.ReloadEditorAssemblies();
+            
+            if(IsReloadingExternalAssemblies)
+                ReloadExternalAssemblies();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {
@@ -44,9 +65,10 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             if(PlayMode.Current == PlayMode.Mode.Playing) {
                 Hierarchy.Awake();
                 Hierarchy.Update(updateTime);
-            }
+            } else
+                EditorCamera.Instance.EditorUpdate(updateTime);
             
-            Renderer.InputHandler.ResetMouseDelta();
+            Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Configuration.FixedTimeStep) {

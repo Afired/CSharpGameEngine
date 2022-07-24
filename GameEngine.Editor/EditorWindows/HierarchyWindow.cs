@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Reflection;
-using ExampleGame;
+using GameEngine.Core;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
@@ -12,26 +12,23 @@ public delegate void OnSelect(Node node);
 
 public class HierarchyWindow : EditorWindow {
     
-    public static event OnSelect? OnSelect;
-    
-    private object? v_selected;
-    public object? Selected {
-        get => v_selected;
-        set {
-            v_selected = value;
-            if(v_selected is Node selectedNode)
-                OnSelect?.Invoke(selectedNode);
-        }
-    }
-    
-    
     public HierarchyWindow() {
         Title = "Hierarchy";
     }
     
     protected override void Draw() {
+        
         if(ImGui.BeginMenuBar()) {
-            ImGui.Text(Hierarchy.RootNode is not null ? $"{Hierarchy.RootNode.GetType().AssemblyQualifiedName}" : "null");
+            
+            if(Hierarchy.RootNode is null)
+                ImGui.Text("none");
+            else {
+                Type nodeType = Hierarchy.RootNode.GetType();
+                ImGui.Text(Hierarchy.CurrentlyLoadedNodesAssetPath ?? "null");
+                if(ImGui.Button("Save"))
+                    Hierarchy.SaveCurrentRootNode();
+            }
+            
             ImGui.EndMenuBar();
         }
         
@@ -39,7 +36,7 @@ public class HierarchyWindow : EditorWindow {
             DrawNode(Hierarchy.RootNode);
         
         if(ImGui.IsMouseDown(ImGuiMouseButton.Left) && ImGui.IsWindowHovered()) {
-            Selected = null;
+            Selection.Clear();
         }
     }
     
@@ -88,13 +85,13 @@ public class HierarchyWindow : EditorWindow {
     
     private void DrawNode(Node node) {
         ImGuiTreeNodeFlags treeNodeFlags = (node.ChildNodes.Count == 0 ? ImGuiTreeNodeFlags.Bullet : ImGuiTreeNodeFlags.OpenOnArrow) |
-                                           (Selected == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+                                           (Selection.Current == node ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth;
         ImGui.PushID(node.GetHashCode());
         bool opened = ImGui.TreeNodeEx(node.GetType().Name, treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = node;
+            Selection.Select(node);
         }
         
         if(ImGui.BeginPopupContextItem()) {
@@ -139,7 +136,7 @@ public class HierarchyWindow : EditorWindow {
     
     private void DrawNodeArr(INodeArr nodes) {
         ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags.OpenOnArrow |
-                                           (Selected == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
+                                           (Selection.Current == nodes ? ImGuiTreeNodeFlags.Selected : ImGuiTreeNodeFlags.None) |
                                            ImGuiTreeNodeFlags.SpanFullWidth |
                                            ImGuiTreeNodeFlags.AllowItemOverlap |
                                            ImGuiTreeNodeFlags.FramePadding;
@@ -148,7 +145,7 @@ public class HierarchyWindow : EditorWindow {
         bool opened = ImGui.TreeNodeEx(nodes.GetType().GenericTypeArguments[0].Name + "s", treeNodeFlags);
         ImGui.PopID();
         if(ImGui.IsItemClicked()) {
-            Selected = nodes;
+            Selection.Select(nodes);
         }
         
         ImGui.SameLine();
@@ -166,18 +163,16 @@ public class HierarchyWindow : EditorWindow {
                 Node newNode = Node.New(nodes.GetNodeType);
                 nodes.Add(newNode);
             }
-            foreach(Type type in typeof(Node).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
-                if(ImGui.MenuItem(type.Name)) {
-                    Node newNode = Node.New(type);
-                    nodes.Add(newNode);
+            
+            foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(Application<>).Assembly)) {
+                foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
+                    if(ImGui.MenuItem(type.Name)) {
+                        Node newNode = Node.New(type);
+                        nodes.Add(newNode);
+                    }
                 }
             }
-            foreach(Type type in typeof(AssemblyRef).Assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(nodes.GetNodeType))) {
-                if(ImGui.MenuItem(type.Name)) {
-                    Node newNode = Node.New(type);
-                    nodes.Add(newNode);
-                }
-            }
+            
             ImGui.EndPopup();
         }
         

@@ -11,9 +11,6 @@ namespace GameEngine.Editor;
 
 public unsafe class EditorApplication : Application<EditorApplication> {
     
-    private const string EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\src\ExampleGame.Editor";
-    private const string EXTERNAL_EDITOR_ASSEMBLY_DLL = @"D:\Dev\C#\CSharpGameEngine\ExampleProject\bin\Debug\net6.0\ExampleGame.Editor.dll";
-    
     internal EditorLayer EditorLayer { get; private set; }
     
     public override void Initialize() {

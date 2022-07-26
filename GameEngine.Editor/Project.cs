@@ -24,8 +24,6 @@ public class Project {
     }
     
     public static void Open(string projFilePath) {
-        //TODO: make sure its a file with extension .geproj
-        
         if(Path.GetExtension(projFilePath) != ".geproj") {
             Console.LogWarning($"Trying to open project, but linked file is not of type .geproj");
             return;

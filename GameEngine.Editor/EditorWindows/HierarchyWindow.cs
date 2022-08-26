@@ -120,8 +120,10 @@ public class HierarchyWindow : EditorWindow {
                     DrawNode(valueAsNode);
                 } else if(value is INodeArr valueAsNodeList) {
                     DrawNodeArr(valueAsNodeList);
+                } else if(value is null) {
+                    ImGui.Text("null");
                 } else {
-                    Console.LogWarning($"There is a property defined with Serialized(Inspector) which cant be displayed | node: {node.GetType()}, property: {value?.GetType()}");
+                    Console.LogWarning($"There is a property defined with Serialized(Hierarchy) which cant be displayed | node: {node.GetType()}, property: {value?.GetType()}");
                 }
                 
             }

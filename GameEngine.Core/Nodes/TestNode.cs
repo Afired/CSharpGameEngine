@@ -1,33 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
 
-// before we directly compared the actual strings which means this is not being detected: [GameEngine.AutoGenerator.GenerateComponentInterface]
-// now we directly look if the attribute string contains the name
-//todo: even this would work because we check for the actual string containing the name: [Something.Blablabla.GenerateComponentInterface.Blabla]
-
-public partial class TestNode : Node/*, Has<Transform>, Arr<Transform>*/ {
+public partial class TestNode : Node {
     
-    // [Serialized] public NodeArr<Node> MyNodeArray { get; set; }
-    // [Serialized] public List<Node> MyNodeList { get; set; }
-    [Serialized] public GenericClass<BaseClass> MyIntGenericClass { get; set; }
-
-    protected override void OnAwake() {
-        // MyNodeArray = new NodeArr<Node>(this);
-        // MyNodeList = new List<Node>();
-        MyIntGenericClass = new GenericClass<BaseClass>();
-        MyIntGenericClass.Values.Add(new BaseClass());
-        MyIntGenericClass.Values.Add(new Class1());
-    }
+    [Serialized] private float[] MyFloatArray { get; set; } = new[] {
+        1f, 2f, 3f
+    };
     
+//    [Serialized] public Many<string>? MyStringList { get; set; } = new Many<string>() {
+//        genericObjects = new[] {
+//            "1",
+//            "2",
+//            "3",
+//        }
+//    };
+
 }
 
-public class GenericClass<T> {
-    [Serialized] public List<T> Values { get; set; } = new();
+public class Many<T1> : IMany {
+
+    public T1[] genericObjects;
+
+    public object[] objects => genericObjects.Cast<object>().ToArray();
 }
 
-public class BaseClass { }
-public class Class1 : BaseClass { }
-public class Class2 : BaseClass { }
+public interface IMany {
+    
+    public object[] objects { get; }
+
+}

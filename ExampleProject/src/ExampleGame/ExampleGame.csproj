@@ -7,7 +7,7 @@
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(ProjectRoot)' == '' ">
-        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot> <!-- replace with relative path -->
+        <ProjectRoot>'$(ProjectDir)'\..\..\..</ProjectRoot>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

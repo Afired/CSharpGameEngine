@@ -6,6 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     
+    <PropertyGroup Condition=" '$(ProjectRoot)' == '' ">
+        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot> <!-- replace with relative path -->
+    </PropertyGroup>
+    
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <OutputPath>$(ProjectRoot)\bin\Debug\</OutputPath>
     </PropertyGroup>

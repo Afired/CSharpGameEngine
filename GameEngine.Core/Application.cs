@@ -89,15 +89,25 @@ public abstract unsafe class Application<T> where T : Application<T> {
 //        CompileExternalAssembly(EXTERNAL_ASSEMBLY_PROJ_DIR);
     }
     
-    protected static bool CompileExternalAssembly(string dir) {
+    protected static bool CompileExternalAssembly(string dir, DotnetBuildProperty[] dotnetBuildProperties) {
         Console.Log("");
         Console.Log($"Compiling external assembly in {dir}...");
         Console.Log("**********************************************************************************************************************");
+
+        string propertiesAsArgument = dotnetBuildProperties.Length > 0 ? " /p:" : string.Empty;
+        foreach(DotnetBuildProperty property in dotnetBuildProperties) {
+            propertiesAsArgument += property.Name;
+            propertiesAsArgument += "=";
+            propertiesAsArgument += property.Value;
+            propertiesAsArgument += ";";
+        }
+        if(propertiesAsArgument.Length > 0)
+            propertiesAsArgument = propertiesAsArgument[..^1];
         
         ProcessStartInfo processInfo = new() {
             WorkingDirectory = dir,
             FileName = "cmd.exe",
-            Arguments = "/c dotnet build",
+            Arguments = $"/c dotnet build {propertiesAsArgument}",
             CreateNoWindow = true,
             UseShellExecute = false,
             RedirectStandardError = true,
@@ -206,3 +216,5 @@ public abstract unsafe class Application<T> where T : Application<T> {
     }
     
 }
+
+public readonly record struct DotnetBuildProperty(string Name, string Value);

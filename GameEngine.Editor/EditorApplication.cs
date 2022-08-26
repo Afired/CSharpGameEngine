@@ -26,12 +26,19 @@ public unsafe class EditorApplication : Application<EditorApplication> {
     protected override void CompileExternalAssemblies() {
         // base.CompileExternalAssemblies();
         foreach(string externalGameAssemblyDirectory in Project.Current.GetExternalGameAssemblyDirectories()) {
-            CompileExternalAssembly(externalGameAssemblyDirectory);
+            CompileExternalAssembly(externalGameAssemblyDirectory, new DotnetBuildProperty[] {
+                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location),
+                new("GamEngineSourceGeneratorDLL", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location) + @"\..\..\..\..\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"),
+                new("ProjectRoot", Project.Current.ProjectDirectory),
+            });
         }
         
-        // CompileExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_PROJ_DIR);
         foreach(string externalEditorAssemblyDirectory in Project.Current.GetExternalEditorAssemblyDirectories()) {
-            CompileExternalAssembly(externalEditorAssemblyDirectory);
+            CompileExternalAssembly(externalEditorAssemblyDirectory, new DotnetBuildProperty[] {
+                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location),
+                new("GameEngineEditorDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Editor.EditorApplication))!.Location),
+                new("ProjectRoot", Project.Current.ProjectDirectory),
+            });
         }
     }
     

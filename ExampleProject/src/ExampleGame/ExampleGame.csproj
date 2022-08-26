@@ -4,8 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <GameEnginePath>D:\Dev\C#\CSharpGameEngine</GameEnginePath>
-        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -23,13 +21,13 @@
     
     <ItemGroup>
         <Reference Include="GameEngine.Core">
-            <HintPath>$(GameEnginePath)\GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll</HintPath>
+            <HintPath>$(GameEngineCoreDLL)</HintPath>
             <Private>false</Private>
         </Reference>
     </ItemGroup>
     
     <ItemGroup>
-        <Analyzer Include="$(GameEnginePath)\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll" />
+        <Analyzer Include="$(GamEngineSourceGeneratorDLL)" />
     </ItemGroup>
     
 </Project>

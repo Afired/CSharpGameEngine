@@ -4,8 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <GameEnginePath>D:\Dev\C#\CSharpGameEngine</GameEnginePath>
-        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -23,7 +21,7 @@
     
     <ItemGroup>
         <Reference Include="GameEngine.Editor">
-            <HintPath>$(GameEnginePath)\GameEngine.Editor\bin\Debug\net6.0\GameEngine.Editor.dll</HintPath>
+            <HintPath>$(GameEngineEditorDLL)</HintPath>
             <Private>false</Private>
         </Reference>
 <!--        <Reference Include="GameEngine.Core">-->

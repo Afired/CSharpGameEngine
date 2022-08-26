@@ -27,7 +27,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Analyzer Include="$(GamEngineSourceGeneratorDLL)" />
+        <Analyzer Include="$(GameEngineSourceGeneratorDLL)" />
     </ItemGroup>
     
 </Project>

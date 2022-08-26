@@ -16,4 +16,9 @@ cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 
+setx GameEngineCoreDLL %~dp0GameEngine.Core\bin\Debug\net6.0\GameEngine.Core.dll
+setx GameEngineSourceGeneratorDLL %~dp0GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll
+setx GameEngineEditorDLL %~dp0GameEngine.Editor\bin\Debug\net6.0\GameEngine.Editor.dll
+
+
 start cmd /C GameEngine.Editor.lnk

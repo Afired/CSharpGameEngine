@@ -14,6 +14,10 @@
         <OutputPath>$(ProjectRoot)\bin\Release\</OutputPath>
     </PropertyGroup>
     
+    <PropertyGroup Condition=" '$(ProjectRoot)' == '' ">
+        <ProjectRoot>D:\Dev\C#\CSharpGameEngine\ExampleProject</ProjectRoot> <!-- replace with relative path -->
+    </PropertyGroup>
+    
     <ItemGroup>
         <Using Remove="System; System.Collections.Generic; System.IO; System.Linq; System.Net.Http; System.Threading; System.Threading.Tasks;" />
         <Using Include="System.Collections.Generic;" />

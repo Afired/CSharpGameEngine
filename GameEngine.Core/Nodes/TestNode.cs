@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
@@ -11,25 +9,12 @@ public partial class TestNode : Node {
         1f, 2f, 3f
     };
     
-//    [Serialized] public Many<string>? MyStringList { get; set; } = new Many<string>() {
-//        genericObjects = new[] {
-//            "1",
-//            "2",
-//            "3",
-//        }
+//    [Serialized] private List<float> MyFloatList { get; set; } = new() {
+//        1f,
+//        2f,
+//        3f,
 //    };
-
-}
-
-public class Many<T1> : IMany {
-
-    public T1[] genericObjects;
-
-    public object[] objects => genericObjects.Cast<object>().ToArray();
-}
-
-public interface IMany {
     
-    public object[] objects { get; }
-
+    [Serialized] private List<string> Names { get; set; }
+    
 }

@@ -2,29 +2,20 @@ using System.Reflection;
 
 namespace GameEngine.Editor.PropertyDrawers; 
 
-public record class Property {
+public readonly record struct Property {
     
-    private readonly MemberInfo _memberInfo;
+    public string Name { get; init; }
+    public bool IsReadonly { get; init; }
+    // todo: get attributes
     
     public Property(PropertyInfo propertyInfo) {
-        _memberInfo = propertyInfo;
+        Name = propertyInfo.Name;
+        IsReadonly = !propertyInfo.CanWrite;
     }
     
     public Property(FieldInfo fieldInfo) {
-        _memberInfo = fieldInfo;
+        Name = fieldInfo.Name;
+        IsReadonly = false;
     }
     
-    public bool IsReadonly {
-        get {
-            return _memberInfo switch {
-                FieldInfo => false,
-                PropertyInfo propertyInfo => !propertyInfo.CanWrite,
-                _ => throw new InvalidCastException()
-            };
-        }
-    }
-    
-    public string Name => _memberInfo.Name;
-    
-    // todo: get attributes
 }

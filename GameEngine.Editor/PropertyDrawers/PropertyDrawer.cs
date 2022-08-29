@@ -8,28 +8,67 @@ namespace GameEngine.Editor.PropertyDrawers;
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public abstract class PropertyDrawer {
     
-    private static readonly Dictionary<Type, PropertyDrawer> _propertyDrawerLookup = new(); // <PropertyType, PropertyDrawer>
+    private static readonly Dictionary<Type, PropertyDrawer> _propertyDrawerCache = new();  // <PropertyType, PropertyDrawer>
     private static readonly Dictionary<Type, Type> _genericPropertyDrawerTypeCache = new(); // <PropertyType, PropertyDrawerType<>>
     protected internal abstract Type PropertyType { get; }
     protected internal abstract void DrawInternal(object container, FieldInfo fieldInfo);
     protected internal abstract void DrawInternal(object container, PropertyInfo propertyInfo);
     
+    public static bool DrawNull(object container, FieldInfo fieldInfo) {
+        if(ImGui.Button($"init<{fieldInfo.FieldType}>")) {
+            if(fieldInfo.FieldType == typeof(string)) {
+                fieldInfo.SetValue(container, string.Empty);
+                return true;
+            }
+            try {
+                fieldInfo.SetValue(container, Activator.CreateInstance(fieldInfo.FieldType));
+                return true;
+            } catch(Exception e) {
+                Console.LogWarning(e.Message);
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public static bool DrawNull(object container, PropertyInfo propertyInfo) {
+        if(ImGui.Button($"init<{propertyInfo.PropertyType}>")) {
+            if(propertyInfo.PropertyType == typeof(string)) {
+                propertyInfo.SetValue(container, string.Empty);
+                return true;
+            }
+            try {
+                propertyInfo.SetValue(container, Activator.CreateInstance(propertyInfo.PropertyType));
+                return true;
+            } catch(Exception e) {
+                Console.LogWarning(e.Message);
+                return false;
+            }
+        }
+        return false;
+    }
+    
+    public static object? DrawNullDirect(Type type) {
+        if(ImGui.Button($"init<{type}>")) {
+            if(type == typeof(string))
+                return string.Empty;
+            try {
+                return Activator.CreateInstance(type);
+            } catch(Exception e) {
+                Console.LogWarning(e.Message);
+                return null;
+            }
+        }
+        return null;
+    }
+    
     public static void Draw(object container, FieldInfo fieldInfo) {
         
-        if(fieldInfo.GetValue(container) is null) {
-            if(ImGui.Button($"init<{fieldInfo.FieldType}>")) {
-                if(fieldInfo.FieldType == typeof(string)) {
-                    fieldInfo.SetValue(container, string.Empty);
-                } else try {
-                    fieldInfo.SetValue(container, Activator.CreateInstance(fieldInfo.FieldType));
-                } catch(Exception e) {
-                    Console.Log(e.Message);
-                    return;
-                }
-            } else return;
-        }
+        if(fieldInfo.GetValue(container) is null)
+            if(!DrawNull(container, fieldInfo))
+                return;
         
-        if(_propertyDrawerLookup.TryGetValue(fieldInfo.FieldType, out PropertyDrawer? propertyDrawer))
+        if(_propertyDrawerCache.TryGetValue(fieldInfo.FieldType, out PropertyDrawer? propertyDrawer))
             propertyDrawer.DrawInternal(container, fieldInfo);
         
         else if(fieldInfo.FieldType.IsGenericType) {
@@ -52,20 +91,11 @@ public abstract class PropertyDrawer {
             return;
         }
         
-        if(propertyInfo.GetValue(container) is null) {
-            if(ImGui.Button($"init<{propertyInfo.PropertyType}>")) {
-                if(propertyInfo.PropertyType == typeof(string)) {
-                    propertyInfo.SetValue(container, string.Empty);
-                } else try {
-                    propertyInfo.SetValue(container, Activator.CreateInstance(propertyInfo.PropertyType));
-                } catch(Exception e) {
-                    Console.Log(e.Message);
-                    return;
-                }
-            } else return;
-        }
+        if(propertyInfo.GetValue(container) is null)
+            if(!DrawNull(container, propertyInfo))
+                return;
         
-        if(_propertyDrawerLookup.TryGetValue(propertyInfo.PropertyType, out PropertyDrawer? propertyDrawer))
+        if(_propertyDrawerCache.TryGetValue(propertyInfo.PropertyType, out PropertyDrawer? propertyDrawer))
             propertyDrawer.DrawInternal(container, propertyInfo);
         
         else if(propertyInfo.PropertyType.IsGenericType) {
@@ -84,24 +114,10 @@ public abstract class PropertyDrawer {
     
     public static object? DrawDirect(Type type, object? value, Property property) {
         
-        if(value is null) {
-            
-            if(ImGui.Button($"init<{type}>")) {
-                if(type == typeof(string)) {
-                    return string.Empty;
-                }
-
-                try {
-                    value = Activator.CreateInstance(type);
-                } catch(Exception e) {
-                    Console.Log(e.Message);
-                }
-            }
-            
-            return value;
-        }
+        if(value is null)
+            return DrawNullDirect(type);
         
-        if(_propertyDrawerLookup.TryGetValue(value.GetType(), out PropertyDrawer? propertyDrawer)) {
+        if(_propertyDrawerCache.TryGetValue(value.GetType(), out PropertyDrawer? propertyDrawer)) {
             return propertyDrawer.DrawDirectInternal(type, value, property);
             
         } else if(value.GetType().IsGenericType) {
@@ -123,33 +139,29 @@ public abstract class PropertyDrawer {
     
     private static Array? DrawArrayDirect(Type type, Array? array, Property property) {
         
-        if(array is null) {
-            if(ImGui.Button($"init<{type}>")) {
-                array = (Array) Activator.CreateInstance(type);
-            }
-        } else {
-            ImGui.Text("Start Array");
-            for(int i = 0; i < array.Length; i++) {
+        if(array is null)
+            return (Array) DrawNullDirect(type);
+        
+        ImGui.Text("Start Array");
+        for(int i = 0; i < array.Length; i++) {
 
-                object? element = array.GetValue(i);
+            object? element = array.GetValue(i);
 
-                if(element is null) {
-                    ImGui.Text("Element is null");
-                    continue;
-                }
-                
-                Type explicitElementType = element.GetType();
-                
-                if(_propertyDrawerLookup.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                    array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, property), i);
-                } else { //todo: nested arrays
-                    Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-                }
-                
+            if(element is null) {
+                ImGui.Text("Element is null");
+                continue;
             }
-            ImGui.Text("End Array");
-            
+                
+            Type explicitElementType = element.GetType();
+                
+            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
+                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, property), i);
+            } else { //todo: nested arrays
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
+            }
+                
         }
+        ImGui.Text("End Array");
         return array;
     }
     
@@ -160,84 +172,71 @@ public abstract class PropertyDrawer {
             return;
         }
         
-        Type type = propertyInfo.PropertyType;
-        Type elementType = type.GetElementType()!;
-        
         Array? array = (Array?) propertyInfo.GetValue(container);
         
-        if(array is null) {
-            if(ImGui.Button($"init<{propertyInfo.PropertyType}>")) {
-                array = (Array) Activator.CreateInstance(propertyInfo.PropertyType);
-            }
-        } else {
+        if(array is null)
+            if(!DrawNull(container, propertyInfo))
+                return;
+        
+        ImGui.Text("Start Array");
+        for(int i = 0; i < array.Length; i++) {
             
-            ImGui.Text("Start Array");
-            for(int i = 0; i < array.Length; i++) {
-
-                object? element = array.GetValue(i);
-
-                if(element is null) {
-                    ImGui.Text("Element is null");
-                    continue;
-                }
-                
-                Type explicitElementType = element.GetType();
-                
-                if(_propertyDrawerLookup.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                    array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(propertyInfo)), i);
-                } else { //todo: nested arrays
-                    Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-                }
-                
+            object? element = array.GetValue(i);
+            
+            if(element is null) {
+                ImGui.Text("Element is null");
+                continue;
             }
-            ImGui.Text("End Array");
+            
+            Type explicitElementType = element.GetType();
+            
+            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
+                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(propertyInfo)), i);
+            } else { //todo: nested arrays
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
+            }
             
         }
+        ImGui.Text("End Array");
         
         if(propertyInfo.CanWrite)
             propertyInfo.SetValue(container, array);
     }
     
     private static void DrawArray(object container, FieldInfo fieldInfo) {
-        Type type = fieldInfo.FieldType;
-        Type elementType = type.GetElementType()!;
         
         Array? array = (Array?) fieldInfo.GetValue(container);
         
-        if(array is null) {
-            if(ImGui.Button($"init<{fieldInfo.FieldType}>")) {
-                array = (Array) Activator.CreateInstance(fieldInfo.FieldType);
-            }
-        } else {
+        if(array is null)
+            if(!DrawNull(container, fieldInfo))
+                return;
+        
+        ImGui.Text("Start Array");
+        for(int i = 0; i < array.Length; i++) {
             
-            ImGui.Text("Start Array");
-            for(int i = 0; i < array.Length; i++) {
-
-                object? element = array.GetValue(i);
-
-                if(element is null) {
-                    ImGui.Text("Element is null");
-                    continue;
-                }
-                
-                Type explicitElementType = element.GetType();
-                
-                if(_propertyDrawerLookup.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                    array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(fieldInfo)), i);
-                } else { //todo: nested arrays
-                    Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-                }
-                
+            object? element = array.GetValue(i);
+            
+            if(element is null) {
+                ImGui.Text("Element is null");
+                continue;
             }
-            ImGui.Text("End Array");
+            
+            Type explicitElementType = element.GetType();
+                
+            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
+                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(fieldInfo)), i);
+            } else { //todo: nested arrays
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
+            }
             
         }
+        ImGui.Text("End Array");
         
         fieldInfo.SetValue(container, array);
     }
     
     public static void ClearLookUp() {
-        _propertyDrawerLookup.Clear();
+        _propertyDrawerCache.Clear();
         _genericPropertyDrawerTypeCache.Clear();
     }
     
@@ -256,7 +255,7 @@ public abstract class PropertyDrawer {
                 }
                 
                 PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new Exception();
-                if(!_propertyDrawerLookup.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
+                if(!_propertyDrawerCache.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
                     Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
                 
             }

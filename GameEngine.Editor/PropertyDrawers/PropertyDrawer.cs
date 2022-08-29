@@ -142,6 +142,11 @@ public abstract class PropertyDrawer {
         if(array is null)
             return (Array) DrawNullDirect(type);
         
+        if(type.GetArrayRank() > 1) {
+            Console.LogWarning($"Can't display multi-dimensional arrays ({type.GetArrayRank()})");
+            return array;
+        }
+        
         ImGui.Text("Start Array");
         for(int i = 0; i < array.Length; i++) {
 
@@ -166,6 +171,11 @@ public abstract class PropertyDrawer {
     }
     
     private static void DrawArray(object container, PropertyInfo propertyInfo) {
+        
+        if(propertyInfo.PropertyType.GetArrayRank() > 1) {
+            Console.LogWarning($"Can't display multi-dimensional arrays ({propertyInfo.PropertyType.GetArrayRank()})");
+            return;
+        }
         
         if(!propertyInfo.CanWrite) {
             Console.LogWarning("Readonly serialized properties aren't supported at this time. They can't be drawn by any property drawers");
@@ -204,6 +214,11 @@ public abstract class PropertyDrawer {
     }
     
     private static void DrawArray(object container, FieldInfo fieldInfo) {
+        
+        if(fieldInfo.FieldType.GetArrayRank() > 1) {
+            Console.LogWarning($"Can't display multi-dimensional arrays ({fieldInfo.FieldType.GetArrayRank()})");
+            return;
+        }
         
         Array? array = (Array?) fieldInfo.GetValue(container);
         

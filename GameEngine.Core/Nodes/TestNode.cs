@@ -16,15 +16,15 @@ public partial class TestNode : Node {
 //    };
     
 //    [Serialized] private List<List<string>> _nestedStringList;
-    
-    [Serialized] private string[][] _nestedStringArray;
+
+    [Serialized] private string[,] _nestedStringArray = new string[3, 3];
     
 //    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
 //        { "First", 1f },
 //        { "SomeOtherKey", 420f },
 //        { "Nice", 69f },
 //    };
-
+    
 //    [Serialized] private string TestNullString { get; set; }
 
 //    [Serialized] private List<float> FloatList { get; set; }

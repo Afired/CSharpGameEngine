@@ -13,6 +13,7 @@ public abstract class PropertyDrawer {
     protected internal abstract Type PropertyType { get; }
     protected internal abstract void DrawInternal(object container, FieldInfo fieldInfo);
     protected internal abstract void DrawInternal(object container, PropertyInfo propertyInfo);
+    protected internal abstract object? DrawDirectInternal(Type type, object? value, Property property);
     
     public static bool DrawNull(object container, FieldInfo fieldInfo) {
         if(ImGui.Button($"init<{fieldInfo.FieldType}>")) {
@@ -272,15 +273,15 @@ public abstract class PropertyDrawer {
                 PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new Exception();
                 if(!_propertyDrawerCache.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
                     Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
-                
             }
         }
     }
     
-    protected internal abstract object? DrawDirectInternal(Type type, object? value, Property property);
 }
 
 public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
+    
+    protected abstract void DrawProperty(ref TProperty value, Property property);
     
     protected internal sealed override Type PropertyType => typeof(TProperty);
     
@@ -296,8 +297,6 @@ public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
         if(propertyInfo.CanWrite)
             propertyInfo.SetValue(container, value);
     }
-    
-    protected abstract void DrawProperty(ref TProperty value, Property property);
     
     protected internal sealed override object? DrawDirectInternal(Type type, object? value, Property property) {
         TProperty? castValue = (TProperty?) value;

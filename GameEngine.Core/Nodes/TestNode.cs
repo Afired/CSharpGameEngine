@@ -1,33 +1,32 @@
-using System;
 using System.Collections.Generic;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
 
-// before we directly compared the actual strings which means this is not being detected: [GameEngine.AutoGenerator.GenerateComponentInterface]
-// now we directly look if the attribute string contains the name
-//todo: even this would work because we check for the actual string containing the name: [Something.Blablabla.GenerateComponentInterface.Blabla]
-
-public partial class TestNode : Node/*, Has<Transform>, Arr<Transform>*/ {
+public partial class TestNode : Node {
     
-    // [Serialized] public NodeArr<Node> MyNodeArray { get; set; }
-    // [Serialized] public List<Node> MyNodeList { get; set; }
-    [Serialized] public GenericClass<BaseClass> MyIntGenericClass { get; set; }
-
-    protected override void OnAwake() {
-        // MyNodeArray = new NodeArr<Node>(this);
-        // MyNodeList = new List<Node>();
-        MyIntGenericClass = new GenericClass<BaseClass>();
-        MyIntGenericClass.Values.Add(new BaseClass());
-        MyIntGenericClass.Values.Add(new Class1());
-    }
+//    [Serialized] private float[] MyFloatArray { get; set; } = new[] {
+//        1f, 2f, 3f
+//    };
     
-}
+//    [Serialized] private List<float> MyFloatList { get; set; } = new() {
+//        1f,
+//        2f,
+//        3f,
+//    };
+    
+//    [Serialized] private List<List<string>> _nestedStringList;
 
-public class GenericClass<T> {
-    [Serialized] public List<T> Values { get; set; } = new();
-}
+    [Serialized] private string[,] _nestedStringArray = new string[3, 3];
+    
+//    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
+//        { "First", 1f },
+//        { "SomeOtherKey", 420f },
+//        { "Nice", 69f },
+//    };
+    
+//    [Serialized] private string TestNullString { get; set; }
 
-public class BaseClass { }
-public class Class1 : BaseClass { }
-public class Class2 : BaseClass { }
+//    [Serialized] private List<float> FloatList { get; set; }
+
+}

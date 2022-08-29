@@ -4,10 +4,10 @@ using GameEngine.Core.Rendering.Textures;
 namespace GameEngine.Editor; 
 
 public static class EditorResources {
-    
-    public const string ENGINE_DIRECTORY = @"D:\Dev\C#\CSharpGameEngine";
-    public const string ENGINE_EDITOR_DIRECTORY = ENGINE_DIRECTORY + @"\GameEngine.Editor";
-    public const string ENGINE_EDITOR_ASSET_DIRECTORY = ENGINE_EDITOR_DIRECTORY + @"\Assets";
+
+    public static string ENGINE_DIRECTORY = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..");
+    public static string ENGINE_EDITOR_DIRECTORY = ENGINE_DIRECTORY + @"\GameEngine.Editor";
+    public static string ENGINE_EDITOR_ASSET_DIRECTORY = ENGINE_EDITOR_DIRECTORY + @"\Assets";
     
     private static readonly Dictionary<string, Texture2D> _iconRegister = new();
     

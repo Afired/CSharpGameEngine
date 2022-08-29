@@ -208,7 +208,7 @@ public class EditorMainMenubar {
             if(ImGui.MenuItem("Reload Meshes")) { MeshRegister.Reload(); }
             if(ImGui.MenuItem("Reload Textures")) { TextureRegister.Reload(); }
             if(ImGui.MenuItem("Reload Shaders")) { ShaderRegister.Reload(); }
-            if(ImGui.MenuItem("Open Project")) { Project.Open(@"D:\Dev\C#\CSharpGameEngine\ExampleProject\Example.geproj"); }
+            if(ImGui.MenuItem("Open Project")) { Project.OpenWithFileExplorer(); }
             ImGui.EndMenu();
         }
         

@@ -1,0 +1,5 @@
+GameAssemblies:
+- "src/ExampleGame/ExampleGame.csproj"
+
+EditorAssemblies:
+- "src/ExampleGame.Editor/ExampleGame.Editor.csproj"

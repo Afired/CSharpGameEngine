@@ -5,14 +5,7 @@ public class PropertyDrawerList<T> : PropertyDrawer<List<T?>> {
     
     protected override void DrawProperty(ref List<T?> list, Property property) {
         
-//        if(list is null)
-//            if(ImGui.Button("Initialize"))
-//                list = new List<T?>();
-        
-//        if(list is null)
-//            return;
-        
-        ImGui.Text(property.Name);
+        ImGui.Text($"{property.Name}[{list.Count}]");
         
         for(int i = 0; i < list.Count; i++) {
             list[i] = (T?) PropertyDrawer.DrawDirect(typeof(T), list[i], new Property() {
@@ -24,6 +17,8 @@ public class PropertyDrawerList<T> : PropertyDrawer<List<T?>> {
         if(ImGui.Button("Add")) {
             list.Add(default(T));
         }
+        
+        ImGui.SameLine();
         
         if(ImGui.Button("Remove Last")) {
             if(list.Count > 0)

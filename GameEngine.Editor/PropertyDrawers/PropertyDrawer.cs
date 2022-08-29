@@ -47,7 +47,7 @@ public abstract class PropertyDrawer {
             
         } else if(propertyInfo.PropertyType.IsGenericType) {
             if(_genericPropertyDrawerTypeCache.TryGetValue(propertyInfo.PropertyType.GetGenericTypeDefinition(), out Type? propertyDrawerType)) {
-                Type genericPropertyDrawerType = propertyDrawerType.MakeGenericType(propertyInfo.PropertyType.GetGenericArguments()[0]);
+                Type genericPropertyDrawerType = propertyDrawerType.MakeGenericType(propertyInfo.PropertyType.GetGenericArguments());
                 PropertyDrawer genericPropertyDrawer = Activator.CreateInstance(genericPropertyDrawerType) as PropertyDrawer ?? throw new Exception();
                 genericPropertyDrawer.DrawInternal(container, propertyInfo);
             }
@@ -83,7 +83,7 @@ public abstract class PropertyDrawer {
             
         } else if(value.GetType().IsGenericType) {
             if(_genericPropertyDrawerTypeCache.TryGetValue(value.GetType().GetGenericTypeDefinition(), out Type? propertyDrawerType)) {
-                Type genericPropertyDrawerType = propertyDrawerType.MakeGenericType(value.GetType().GetGenericArguments()[0]);
+                Type genericPropertyDrawerType = propertyDrawerType.MakeGenericType(value.GetType().GetGenericArguments());
                 PropertyDrawer genericPropertyDrawer = Activator.CreateInstance(genericPropertyDrawerType) as PropertyDrawer ?? throw new Exception();
                 return genericPropertyDrawer.DrawDirectInternal(type, value, property);
             }
@@ -154,10 +154,10 @@ public abstract class PropertyDrawer {
                 if(type.IsGenericType) {
                     Type[] inheritedPropertyDrawersGenericTypes = type.GetGenericArguments();
 
-                    if(inheritedPropertyDrawersGenericTypes.Length != 1) {
-                        Console.LogWarning($"Failed to register generic property drawer for {type.ToString()} | generic property drawers currently only support one generic argument");
-                        continue;
-                    }
+//                    if(inheritedPropertyDrawersGenericTypes.Length != 1) {
+//                        Console.LogWarning($"Failed to register generic property drawer for {type.ToString()} | generic property drawers currently only support one generic argument");
+//                        continue;
+//                    }
                     
                     Type basePropertyDrawerType = type.BaseType!;
                     Type[] basePropertyDrawersGenericTypes = basePropertyDrawerType.GetGenericArguments();
@@ -200,12 +200,6 @@ public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
     }
     
     protected abstract void DrawProperty(ref TProperty value, Property property);
-    
-//    protected internal sealed override object? DrawDirectInternal(object? value, PropertyInfo propertyInfo) {
-//        TProperty? castValue = (TProperty?) value;
-//        DrawProperty(ref castValue, new Property(propertyInfo));
-//        return castValue;
-//    }
     
     protected internal sealed override object? DrawDirectInternal(Type type, object? value, Property property) {
         TProperty? castValue = (TProperty?) value;

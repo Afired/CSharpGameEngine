@@ -2,9 +2,9 @@ using ImGuiNET;
 
 namespace GameEngine.Editor.PropertyDrawers; 
 
-public class PropertyDrawerString : PropertyDrawer<string?> {
+public class PropertyDrawerString : PropertyDrawer<string> {
     
-    protected override void DrawProperty(ref string? value, Property property) {
+    protected override void DrawProperty(ref string value, Property property) {
         ImGui.Columns(2);
         ImGui.Text(property.Name);
         ImGui.NextColumn();

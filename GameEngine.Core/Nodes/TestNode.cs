@@ -16,7 +16,15 @@ public partial class TestNode : Node {
 //    };
     
     [Serialized] private List<string> Names { get; set; }
-    [Serialized] private string TestNullString { get; set; }
-//    [Serialized] private List<float> FloatList { get; set; }
+
+    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
+        { "First", 1f },
+        { "SomeOtherKey", 420f },
+        { "Nice", 69f },
+    };
     
+//    [Serialized] private string TestNullString { get; set; }
+
+//    [Serialized] private List<float> FloatList { get; set; }
+
 }

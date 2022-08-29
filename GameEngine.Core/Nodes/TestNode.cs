@@ -20,10 +20,29 @@ public partial class TestNode : Node {
 
 //    [Serialized] private string[,] _nestedStringArray = new string[3, 3];
     
-    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
-        { "First", 1f },
-        { "SomeOtherKey", 420f },
-        { "Nice", 69f },
+//    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
+//        { "First", 1f },
+//        { "SomeOtherKey", 420f },
+//        { "Nice", 69f },
+//    };
+    
+    [Serialized] private Dictionary<string, Dictionary<string, float>> NestedDictionary { get; set; } = new Dictionary<string, Dictionary<string, float>>() {
+        {
+            "TestDictionary",
+            new Dictionary<string, float>() {
+                { "First", 1f },
+                { "SomeOtherKey", 420f },
+                { "Nice", 69f },
+            }
+        },
+        {
+            "Some Other Dictionary",
+            new Dictionary<string, float>() {
+                { "First", 1f },
+                { "SomeOtherKey", 420f },
+                { "Nice", 69f },
+            }
+        }
     };
     
 //    [Serialized] private string TestNullString { get; set; }

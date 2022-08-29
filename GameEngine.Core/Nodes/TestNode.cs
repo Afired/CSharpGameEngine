@@ -15,13 +15,13 @@ public partial class TestNode : Node {
 //        3f,
 //    };
     
-    [Serialized] private List<string> Names { get; set; }
-
-    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
-        { "First", 1f },
-        { "SomeOtherKey", 420f },
-        { "Nice", 69f },
-    };
+    [Serialized] private List<List<string>> _nestedStringList;
+    
+//    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
+//        { "First", 1f },
+//        { "SomeOtherKey", 420f },
+//        { "Nice", 69f },
+//    };
     
 //    [Serialized] private string TestNullString { get; set; }
 

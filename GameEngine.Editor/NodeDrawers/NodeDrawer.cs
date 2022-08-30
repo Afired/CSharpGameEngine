@@ -93,7 +93,7 @@ public abstract class NodeDrawer {
         return members;
     }
     
-    protected static List<MemberInfo> GetSerializedMembersDisplayedInInspector(Type type) {
+    public static List<MemberInfo> GetSerializedMembersDisplayedInInspector(Type type) {
         List<MemberInfo> members = new();
         members.AddRange(
             type

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
@@ -26,27 +27,45 @@ public partial class TestNode : Node {
 //        { "Nice", 69f },
 //    };
     
-    [Serialized] private Dictionary<string, Dictionary<string, float>> NestedDictionary { get; set; } = new Dictionary<string, Dictionary<string, float>>() {
-        {
-            "TestDictionary",
-            new Dictionary<string, float>() {
-                { "First", 1f },
-                { "SomeOtherKey", 420f },
-                { "Nice", 69f },
-            }
-        },
-        {
-            "Some Other Dictionary",
-            new Dictionary<string, float>() {
-                { "First", 1f },
-                { "SomeOtherKey", 420f },
-                { "Nice", 69f },
-            }
-        }
-    };
+//    [Serialized] private Dictionary<string, Dictionary<string, float>> NestedDictionary { get; set; } = new Dictionary<string, Dictionary<string, float>>() {
+//        {
+//            "TestDictionary",
+//            new Dictionary<string, float>() {
+//                { "First", 1f },
+//                { "SomeOtherKey", 420f },
+//                { "Nice", 69f },
+//            }
+//        },
+//        {
+//            "Some Other Dictionary",
+//            new Dictionary<string, float>() {
+//                { "First", 1f },
+//                { "SomeOtherKey", 420f },
+//                { "Nice", 69f },
+//            }
+//        }
+//    };
     
 //    [Serialized] private string TestNullString { get; set; }
 
 //    [Serialized] private List<float> FloatList { get; set; }
+    
+    [Serialized] private SerializableClass? SerializableClass { get; set; }
+    [Serialized] private AutoSerializedNestedClass AutoSerializedNestedClass { get; set; }
+    
+}
 
+[Serializable]
+public class SerializableClass {
+    
+    [Serialized] private float SomeFloatValue { get; set; }
+    [Serialized] private string? SomeName { get; set; }
+    
+}
+
+[Serializable]
+public class AutoSerializedNestedClass {
+    
+    [Serialized] private AutoSerializedNestedClass NestedClass { get; set; }
+    
 }

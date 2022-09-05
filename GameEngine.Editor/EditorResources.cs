@@ -22,7 +22,7 @@ public static class EditorResources {
     
     public static Texture2D GetIcon(string name) {
         name = name.ToLower();
-        if(_iconRegister.TryGetValue(name, out Texture2D texture))
+        if(_iconRegister.TryGetValue(name, out Texture2D? texture))
             return texture;
         Console.LogWarning($"Icon not found '{name}'");
         //todo: return missing texture texture

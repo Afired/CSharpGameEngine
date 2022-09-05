@@ -161,28 +161,45 @@ public class EditorMainMenubar {
 
     private static void DrawWindowHandleButtons() {
         
+        ImGui.PushID("minimize");
+        ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
+        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
+        ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 96, 0));
+        Texture2D minimizeIcon = EditorResources.GetIcon("MinimizeIcon");
+        if(ImGui.ImageButton((IntPtr) minimizeIcon.ID, new Vector2(16, 16))) {
+            unsafe {
+                Renderer.GlfwWindow.Glfw.IconifyWindow(Renderer.GlfwWindow.Handle);
+            }
+        }
+        ImGui.PopStyleColor(3);
+        ImGui.PopID();
+        
+        ImGui.PushID("maximize");
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
-        Texture2D exitIcon = EditorResources.GetIcon("FullscreenIcon");
-        if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
+        Texture2D fullscreenIcon = EditorResources.GetIcon("MaximizeIcon");
+        if(ImGui.ImageButton((IntPtr) fullscreenIcon.ID, new Vector2(16, 16))) {
             unsafe {
                 Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
+        ImGui.PopID();
         
-        
+        ImGui.PushID("close");
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
-        Texture2D toggleFullscreenIcon = EditorResources.GetIcon("ExitIcon");
-        if(ImGui.ImageButton((IntPtr) toggleFullscreenIcon.ID, new Vector2(16, 16))) {
+        Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
+        if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
             EditorApplication.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
+        ImGui.PopID();
     }
 
     private static void DrawMenuItems() {

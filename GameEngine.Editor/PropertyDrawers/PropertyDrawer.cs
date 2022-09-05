@@ -127,6 +127,10 @@ public abstract class PropertyDrawer {
         } else if(propertyInfo.PropertyType.IsArray)
             DrawArray(container, propertyInfo);
         
+        else if(propertyInfo.PropertyType.IsEnum) {
+            new PropertyDrawerEnum().DrawInternal(container, propertyInfo);
+        }
+        
         else {
             if(propertyInfo.PropertyType.IsSerializable) {
                 ImGui.Text(propertyInfo.Name + ":");

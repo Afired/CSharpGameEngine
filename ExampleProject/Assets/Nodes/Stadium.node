@@ -98,6 +98,8 @@ ExampleGame::ExampleGame.Nodes.Stadium
           "$id": "18",
           "Name": "Player 1",
           "Speed": 10.0,
+          "MoveRightKey": 68,
+          "MoveLeftKey": 65,
           "Paddle": {
             "$id": "19",
             "SpriteRenderer": {
@@ -176,6 +178,8 @@ ExampleGame::ExampleGame.Nodes.Stadium
           "$id": "30",
           "Name": "Player 2",
           "Speed": 10.0,
+          "MoveRightKey": 262,
+          "MoveLeftKey": 263,
           "Paddle": {
             "$id": "31",
             "SpriteRenderer": {

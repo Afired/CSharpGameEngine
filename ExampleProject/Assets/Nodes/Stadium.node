@@ -17,8 +17,14 @@ ExampleGame::ExampleGame.Nodes.Stadium
       "A": 1.0
     },
     "IsMainCamera": true,
-    "Scale": {
+    "LocalPosition": {
       "$id": "5",
+      "X": 5.0,
+      "Y": 5.0,
+      "Z": -10.0
+    },
+    "Scale": {
+      "$id": "6",
       "X": 1.0,
       "Y": 1.0,
       "Z": 1.0
@@ -27,33 +33,43 @@ ExampleGame::ExampleGame.Nodes.Stadium
       "$ref": "1"
     },
     "_childNodes": {
-      "$id": "6",
+      "$id": "7",
       "$values": []
     }
   },
   "Ball": {
-    "$id": "7",
+    "$id": "8",
     "SpriteRenderer": {
-      "$id": "8",
+      "$id": "9",
       "Texture": "box",
       "Shader": "default",
       "Geometry": "quad",
       "Scale": {
-        "$id": "9",
+        "$id": "10",
         "X": 1.0,
         "Y": 1.0,
         "Z": 1.0
       },
       "ParentNode": {
-        "$ref": "7"
+        "$ref": "8"
       },
       "_childNodes": {
-        "$id": "10",
+        "$id": "11",
         "$values": []
       }
     },
+    "Velocity": {
+      "$id": "12",
+      "X": 2.986147,
+      "Y": -99.955414
+    },
+    "LocalPosition": {
+      "$id": "13",
+      "X": 7.3993587,
+      "Y": -104.81071
+    },
     "Scale": {
-      "$id": "11",
+      "$id": "14",
       "X": 1.0,
       "Y": 1.0,
       "Z": 1.0
@@ -62,43 +78,206 @@ ExampleGame::ExampleGame.Nodes.Stadium
       "$ref": "1"
     },
     "_childNodes": {
-      "$id": "12",
+      "$id": "15",
       "$values": [
         {
-          "$ref": "8"
+          "$ref": "9"
         }
       ]
     }
   },
   "Players": {
-    "$id": "13",
+    "$id": "16",
     "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
       "$ref": "1"
     },
     "_list": {
-      "$id": "14",
-      "$values": []
+      "$id": "17",
+      "$values": [
+        {
+          "$id": "18",
+          "Name": "Player 1",
+          "Speed": 10.0,
+          "Paddle": {
+            "$id": "19",
+            "SpriteRenderer": {
+              "$id": "20",
+              "Texture": "box",
+              "Shader": "default",
+              "Geometry": "quad",
+              "Scale": {
+                "$id": "21",
+                "X": 10.0,
+                "Y": 1.0,
+                "Z": 1.0
+              },
+              "ParentNode": {
+                "$ref": "19"
+              },
+              "_childNodes": {
+                "$id": "22",
+                "$values": []
+              }
+            },
+            "LocalPosition": {
+              "$id": "23",
+              "Y": 5.0
+            },
+            "Scale": {
+              "$id": "24",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "18"
+            },
+            "_childNodes": {
+              "$id": "25",
+              "$values": [
+                {
+                  "$ref": "20"
+                }
+              ]
+            }
+          },
+          "Trigger": {
+            "$id": "26",
+            "Scale": {
+              "$id": "27",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "18"
+            },
+            "_childNodes": {
+              "$id": "28",
+              "$values": []
+            }
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "29",
+            "$values": [
+              {
+                "$ref": "19"
+              },
+              {
+                "$ref": "26"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "30",
+          "Name": "Player 2",
+          "Speed": 10.0,
+          "Paddle": {
+            "$id": "31",
+            "SpriteRenderer": {
+              "$id": "32",
+              "Texture": "box",
+              "Shader": "default",
+              "Geometry": "quad",
+              "Scale": {
+                "$id": "33",
+                "X": 10.0,
+                "Y": 1.0,
+                "Z": 1.0
+              },
+              "ParentNode": {
+                "$ref": "31"
+              },
+              "_childNodes": {
+                "$id": "34",
+                "$values": []
+              }
+            },
+            "LocalPosition": {
+              "$id": "35",
+              "Y": -5.0
+            },
+            "Scale": {
+              "$id": "36",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "30"
+            },
+            "_childNodes": {
+              "$id": "37",
+              "$values": [
+                {
+                  "$ref": "32"
+                }
+              ]
+            }
+          },
+          "Trigger": {
+            "$id": "38",
+            "Scale": {
+              "$id": "39",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "30"
+            },
+            "_childNodes": {
+              "$id": "40",
+              "$values": []
+            }
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "41",
+            "$values": [
+              {
+                "$ref": "31"
+              },
+              {
+                "$ref": "38"
+              }
+            ]
+          }
+        }
+      ]
     }
   },
   "Name": "New Scene",
   "Nodes": {
-    "$id": "15",
+    "$id": "42",
     "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
       "$ref": "1"
     },
     "_list": {
-      "$id": "16",
+      "$id": "43",
       "$values": []
     }
   },
   "_childNodes": {
-    "$id": "17",
+    "$id": "44",
     "$values": [
       {
         "$ref": "2"
       },
       {
-        "$ref": "7"
+        "$ref": "8"
+      },
+      {
+        "$ref": "18"
+      },
+      {
+        "$ref": "30"
       }
     ]
   }

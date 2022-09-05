@@ -82,8 +82,26 @@ public abstract class PropertyDrawer {
         } else if(fieldInfo.FieldType.IsArray)
             DrawArray(container, fieldInfo);
         
-        else
-            Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {fieldInfo.FieldType}");
+        else {
+            if(fieldInfo.FieldType.IsSerializable) {
+                ImGui.Text(fieldInfo.Name + ":");
+                ImGui.Indent();
+                List<MemberInfo> memberInfos = NodeDrawer.GetSerializedMembersDisplayedInInspector(fieldInfo.FieldType);
+                if(memberInfos.Count == 0) {
+                    ImGui.Unindent();
+                    return;
+                }
+                foreach(MemberInfo memberInfo in memberInfos) {
+                    if(memberInfo is PropertyInfo nestedPropertyInfo)
+                        Draw(fieldInfo.GetValue(container), nestedPropertyInfo);
+                    else if(memberInfo is FieldInfo nestedFieldInfo)
+                        Draw(fieldInfo.GetValue(container), nestedFieldInfo);
+                }
+                ImGui.Unindent();
+            } else {
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {fieldInfo.FieldType}, neither is it marked as Serializable");
+            }
+        }
     }
     
     public static void Draw(object container, PropertyInfo propertyInfo) {
@@ -109,8 +127,26 @@ public abstract class PropertyDrawer {
         } else if(propertyInfo.PropertyType.IsArray)
             DrawArray(container, propertyInfo);
         
-        else
-            Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {propertyInfo.PropertyType}");
+        else {
+            if(propertyInfo.PropertyType.IsSerializable) {
+                ImGui.Text(propertyInfo.Name + ":");
+                ImGui.Indent();
+                List<MemberInfo> memberInfos = NodeDrawer.GetSerializedMembersDisplayedInInspector(propertyInfo.PropertyType);
+                if(memberInfos.Count == 0) {
+                    ImGui.Unindent();
+                    return;
+                }
+                foreach(MemberInfo memberInfo in memberInfos) {
+                    if(memberInfo is PropertyInfo nestedPropertyInfo)
+                        Draw(propertyInfo.GetValue(container), nestedPropertyInfo);
+                    else if(memberInfo is FieldInfo nestedFieldInfo)
+                        Draw(propertyInfo.GetValue(container), nestedFieldInfo);
+                }
+                ImGui.Unindent();
+            } else {
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {propertyInfo.PropertyType}, neither is it marked as Serializable");
+            }
+        }
     }
     
     public static object? DrawDirect(Type type, object? value, Property property) {
@@ -131,9 +167,25 @@ public abstract class PropertyDrawer {
         } else if(value.GetType().IsArray) {
             return DrawArrayDirect(value.GetType(), (Array) value, property);
             
-        }  else {
-            Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {value.GetType()}");
-            
+        } else {
+            if(type.IsSerializable) {
+                ImGui.Text(property.Name + ":");
+                ImGui.Indent();
+                List<MemberInfo> memberInfos = NodeDrawer.GetSerializedMembersDisplayedInInspector(type);
+                if(memberInfos.Count == 0) {
+                    ImGui.Unindent();
+                    return value;
+                }
+                foreach(MemberInfo memberInfo in memberInfos) {
+                    if(memberInfo is PropertyInfo nestedPropertyInfo)
+                        Draw(value, nestedPropertyInfo);
+                    else if(memberInfo is FieldInfo nestedFieldInfo)
+                        Draw(value, nestedFieldInfo);
+                }
+                ImGui.Unindent();
+            } else {
+                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {type}, neither is it marked as Serializable");
+            }
         }
         return value;
     }
@@ -141,7 +193,7 @@ public abstract class PropertyDrawer {
     private static Array? DrawArrayDirect(Type type, Array? array, Property property) {
         
         if(array is null)
-            return (Array) DrawNullDirect(type);
+            return (Array?) DrawNullDirect(type);
         
         if(type.GetArrayRank() > 1) {
             Console.LogWarning($"Can't display multi-dimensional arrays ({type.GetArrayRank()})");
@@ -266,13 +318,13 @@ public abstract class PropertyDrawer {
                     Type[] basePropertyDrawersGenericTypes = basePropertyDrawerType.GetGenericArguments();
                     
                     if(!_genericPropertyDrawerTypeCache.TryAdd(basePropertyDrawersGenericTypes[0].GetGenericTypeDefinition(), type))
-                        Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+                        Console.LogWarning($"Failed to register property drawer for {type}");
                     continue;
                 }
                 
                 PropertyDrawer propertyDrawer = Activator.CreateInstance(type) as PropertyDrawer ?? throw new Exception();
                 if(!_propertyDrawerCache.TryAdd(propertyDrawer.PropertyType, propertyDrawer))
-                    Console.LogWarning($"Failed to register property drawer for {type.ToString()}");
+                    Console.LogWarning($"Failed to register property drawer for {type}");
             }
         }
     }

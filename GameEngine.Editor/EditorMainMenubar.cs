@@ -1,14 +1,10 @@
 using System.Numerics;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using GameEngine.Core;
-using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.SceneManagement;
-using GameEngine.Core.Serialization;
 using ImGuiNET;
 using Silk.NET.GLFW;
 using Renderer = GameEngine.Core.Rendering.Renderer;
@@ -169,7 +165,7 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 1f, 1f, 0.15f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
-        Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
+        Texture2D exitIcon = EditorResources.GetIcon("FullscreenIcon");
         if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
             unsafe {
                 Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
@@ -182,7 +178,7 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(1f, 0f, 0f, 0.75f));
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
-        Texture2D toggleFullscreenIcon = EditorResources.GetIcon("ToggleFullscreenIcon");
+        Texture2D toggleFullscreenIcon = EditorResources.GetIcon("ExitIcon");
         if(ImGui.ImageButton((IntPtr) toggleFullscreenIcon.ID, new Vector2(16, 16))) {
             EditorApplication.Instance.Terminate();
         }

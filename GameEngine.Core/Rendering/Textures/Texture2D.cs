@@ -12,22 +12,19 @@ public class Texture2D : Texture {
     public uint ID { get; private set; }
     
     public unsafe Texture2D(string path) {
-        using(var stream = File.OpenRead(path)) {
-            
-            ImageInfo? info = ImageInfo.FromStream(stream);
-            if(!info.HasValue)
-                throw new Exception();
-            Width = (uint) info.Value.Width;
-            Height = (uint)info.Value.Height;
+        using var stream = File.OpenRead(path);
+        ImageInfo? info = ImageInfo.FromStream(stream);
+        if(!info.HasValue)
+            throw new Exception();
+        Width = (uint) info.Value.Width;
+        Height = (uint)info.Value.Height;
 //            info.Value.ColorComponents;
 //            info.Value.BitsPerChannel;
             
-            ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+        ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
             
-            fixed(void* data = image.Data) {
-                Load(Gl, data, Width, Height);
-            }
-            
+        fixed(void* data = image.Data) {
+            Load(Gl, data, Width, Height);
         }
     }
     

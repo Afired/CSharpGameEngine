@@ -13,17 +13,29 @@ using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core;
 
-public abstract unsafe class Application<T> where T : Application<T> {
+public abstract class Application {
+    
+    protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
+    public IEnumerable<Assembly> ExternalAssemblies => _ealcm.ExternalAssemblies;
+    
+    public static IEnumerable<Assembly> GetExternalAssembliesStatic => NonGenericAppInstance._ealcm.ExternalAssemblies;
+    private static Application NonGenericAppInstance { get; set; } = null!;
+    
+    public Application() {
+        NonGenericAppInstance = this;
+    }
+    
+}
+
+public abstract unsafe class Application<T> : Application where T : Application<T> {
     
     public static T Instance { get; private set; } = null!;
     public bool IsRunning { get; protected set; }
     
     public bool IsReloadingExternalAssemblies { get; private set; }
     public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
-    protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
-    public IEnumerable<Assembly> ExternalAssemblies => _ealcm.ExternalAssemblies;
-
-    public Application() {
+    
+    public Application() : base() {
         Instance = (this as T)!;
     }
     

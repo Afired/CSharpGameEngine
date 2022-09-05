@@ -1,0 +1,105 @@
+ExampleGame::ExampleGame.Nodes.Stadium
+{
+  "$id": "1",
+  "Camera2D": {
+    "$id": "2",
+    "Zoom": 10.0,
+    "ClippingDistance": {
+      "$id": "3",
+      "X": 0.01,
+      "Y": 100.0
+    },
+    "BackgroundColor": {
+      "$id": "4",
+      "R": 0.1,
+      "G": 0.1,
+      "B": 0.1,
+      "A": 1.0
+    },
+    "IsMainCamera": true,
+    "Scale": {
+      "$id": "5",
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0
+    },
+    "ParentNode": {
+      "$ref": "1"
+    },
+    "_childNodes": {
+      "$id": "6",
+      "$values": []
+    }
+  },
+  "Ball": {
+    "$id": "7",
+    "SpriteRenderer": {
+      "$id": "8",
+      "Texture": "box",
+      "Shader": "default",
+      "Geometry": "quad",
+      "Scale": {
+        "$id": "9",
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      },
+      "ParentNode": {
+        "$ref": "7"
+      },
+      "_childNodes": {
+        "$id": "10",
+        "$values": []
+      }
+    },
+    "Scale": {
+      "$id": "11",
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0
+    },
+    "ParentNode": {
+      "$ref": "1"
+    },
+    "_childNodes": {
+      "$id": "12",
+      "$values": [
+        {
+          "$ref": "8"
+        }
+      ]
+    }
+  },
+  "Players": {
+    "$id": "13",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "14",
+      "$values": []
+    }
+  },
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "15",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "16",
+      "$values": []
+    }
+  },
+  "_childNodes": {
+    "$id": "17",
+    "$values": [
+      {
+        "$ref": "2"
+      },
+      {
+        "$ref": "7"
+      }
+    ]
+  }
+}

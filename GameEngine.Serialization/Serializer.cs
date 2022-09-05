@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using GameEngine.Core;
 using GameEngine.Core.Nodes;
 using Newtonsoft.Json;
 
@@ -44,9 +47,11 @@ public static class Serializer {
     }
     
     public static Type GetTypeFromString(string assemblyName, string typeAsString) {
-        foreach(TypeInfo typeInfo in Assembly.GetAssembly(typeof(Node))!.DefinedTypes) {
-            if(typeInfo.FullName == typeAsString)
-                return typeInfo.AsType();
+        foreach(Assembly assembly in Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Node)))) {
+            foreach(TypeInfo typeInfo in assembly.DefinedTypes) {
+                if(typeInfo.FullName == typeAsString)
+                    return typeInfo.AsType();
+            }
         }
         throw new Exception();
     }

@@ -28,7 +28,7 @@ public class EditorGui {
         new TerminalWindow();
         //Program.EditorLayer.OnDraw += RenderDemoWindow;
     }
-
+    
     private void RenderDemoWindow() {
         ImGui.ShowDemoWindow();
     }

@@ -1,0 +1,347 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera2D, GameEngine.Core",
+          "Zoom": 10.0,
+          "ClippingDistance": {
+            "$id": "5",
+            "X": 0.01,
+            "Y": 100.0
+          },
+          "BackgroundColor": {
+            "$id": "6",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalPosition": {
+            "$id": "7",
+            "Y": 5.0,
+            "Z": -10.0
+          },
+          "Scale": {
+            "$id": "8",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "9",
+            "$values": []
+          }
+        },
+        {
+          "$id": "10",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "11",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "12",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "10"
+            },
+            "_childNodes": {
+              "$id": "13",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "14",
+            "Y": 3.0
+          },
+          "Scale": {
+            "$id": "15",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "16",
+            "$values": [
+              {
+                "$ref": "11"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "17",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "18",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "19",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "17"
+            },
+            "_childNodes": {
+              "$id": "20",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "21",
+            "X": 6.0,
+            "Y": 5.0
+          },
+          "Scale": {
+            "$id": "22",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "23",
+            "$values": [
+              {
+                "$ref": "18"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "24",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "25",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "26",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "24"
+            },
+            "_childNodes": {
+              "$id": "27",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "28",
+            "X": -6.0,
+            "Y": 5.0
+          },
+          "Scale": {
+            "$id": "29",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "30",
+            "$values": [
+              {
+                "$ref": "25"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "31",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "32",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "33",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "31"
+            },
+            "_childNodes": {
+              "$id": "34",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "35",
+            "X": -1.0,
+            "Y": 7.0
+          },
+          "Scale": {
+            "$id": "36",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "37",
+            "$values": [
+              {
+                "$ref": "32"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "38",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "39",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "40",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "38"
+            },
+            "_childNodes": {
+              "$id": "41",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "42",
+            "X": 2.0,
+            "Y": 5.0
+          },
+          "Scale": {
+            "$id": "43",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "44",
+            "$values": [
+              {
+                "$ref": "39"
+              }
+            ]
+          }
+        },
+        {
+          "$id": "45",
+          "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
+          "Renderer": {
+            "$id": "46",
+            "Texture": "box",
+            "Shader": "default",
+            "Geometry": "quad",
+            "Scale": {
+              "$id": "47",
+              "X": 1.0,
+              "Y": 1.0,
+              "Z": 1.0
+            },
+            "ParentNode": {
+              "$ref": "45"
+            },
+            "_childNodes": {
+              "$id": "48",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "49",
+            "X": 0.75,
+            "Y": 7.25
+          },
+          "Scale": {
+            "$id": "50",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "51",
+            "$values": [
+              {
+                "$ref": "46"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "52",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "10"
+      },
+      {
+        "$ref": "17"
+      },
+      {
+        "$ref": "24"
+      },
+      {
+        "$ref": "31"
+      },
+      {
+        "$ref": "38"
+      },
+      {
+        "$ref": "45"
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera2D, GameEngine.Core",
+          "Zoom": 20.0,
+          "ClippingDistance": {
+            "$id": "5",
+            "X": 0.01,
+            "Y": 100.0
+          },
+          "BackgroundColor": {
+            "$id": "6",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalPosition": {
+            "$id": "7",
+            "X": 12.0,
+            "Y": 14.0,
+            "Z": -10.0
+          },
+          "Scale": {
+            "$id": "8",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "9",
+            "$values": []
+          }
+        },
+        {
+          "$id": "10",
+          "$type": "ExampleGame.Nodes.PhysicsSpawner, ExampleGame",
+          "SpawnInterval": 0.1,
+          "PhysicsQuads": {
+            "$id": "11",
+            "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+              "$ref": "10"
+            },
+            "_list": {
+              "$id": "12",
+              "$values": []
+            }
+          },
+          "LocalPosition": {
+            "$id": "13",
+            "Y": 15.0
+          },
+          "Scale": {
+            "$id": "14",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "15",
+            "$values": []
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "16",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "10"
+      }
+    ]
+  }
+}

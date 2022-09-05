@@ -10,7 +10,7 @@ public partial class Player : Node, Has<Paddle>, Has<Trigger> {
     
     [Serialized] public int Score { get; private set; }
     [Serialized] public string? Name { get; init; }
-    [Serialized] public float Speed { get; init; } = 100f;
+    [Serialized] public float Speed { get; init; } = 10f;
     
     protected override void OnAwake() {
         base.OnAwake();

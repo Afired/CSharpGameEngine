@@ -1,7 +1,10 @@
+using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using Silk.NET.OpenGL;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using StbImageSharp;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace GameEngine.Core.Rendering.Textures;
@@ -12,21 +15,40 @@ public class Texture2D : Texture {
     public uint Height { get; init; }
     public uint ID { get; private set; }
     
-    public unsafe Texture2D( string path) {
+    public unsafe Texture2D(string path) {
+        
+        using(var stream = File.OpenRead(path)) {
+            
+            ImageInfo? info = ImageInfo.FromStream(stream);
+            if(!info.HasValue)
+                throw new Exception();
+            Width = (uint) info.Value.Width;
+            Height = (uint)info.Value.Height;
+//            info.Value.ColorComponents;
+//            info.Value.BitsPerChannel;
+            
+            ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+            
+            fixed(void* data = image.Data) {
+                Load(Gl, data, Width, Height);
+            }
+            
+        }
+        
         
         //Loading an image using imagesharp.
-        Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
-        Width = (uint) img.Width;
-        Height = (uint) img.Height;
-        
-        // OpenGL has image origin in the bottom-left corner.
-        fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0))) {
-            //Loading the actual image.
-            Load(Gl, data, Width, Height);
-        }
-
-        //Deleting the img from imagesharp.
-        img.Dispose();
+//        Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
+//        Width = (uint) img.Width;
+//        Height = (uint) img.Height;
+//        
+//        // OpenGL has image origin in the bottom-left corner.
+//        fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0))) {
+//            //Loading the actual image.
+//            Load(Gl, data, Width, Height);
+//        }
+//
+//        //Deleting the img from imagesharp.
+//        img.Dispose();
     }
     
     private unsafe void Load(GL gl, void* data, uint width, uint height) {

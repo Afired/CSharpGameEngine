@@ -23,7 +23,7 @@
       <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.11.0" />
       <PackageReference Include="Silk.NET.Windowing.Glfw" Version="2.11.0" />
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-      <PackageReference Include="StbImageSharp" Version="2.22.6" />
+      <PackageReference Include="StbImageSharp" Version="2.27.11" />
     </ItemGroup>
     
     <ItemGroup>

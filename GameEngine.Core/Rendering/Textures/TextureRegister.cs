@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using GameEngine.Core.AssetManagement;
@@ -9,6 +8,7 @@ namespace GameEngine.Core.Rendering.Textures;
 public static class TextureRegister {
     
     private static readonly Dictionary<string, Texture> _textureRegister = new();
+    private static Texture2D _missingTexture2D = null!;
     
     private static void Register(string name, Texture texture) {
         name = name.ToLower();
@@ -18,15 +18,15 @@ public static class TextureRegister {
     
     public static Texture Get(string name) {
         name = name.ToLower();
-        if(_textureRegister.TryGetValue(name, out Texture texture))
+        if(_textureRegister.TryGetValue(name, out Texture? texture))
             return texture;
         Console.LogWarning($"Texture not found '{name}'");
-        //todo: return missing texture texture
-        throw new Exception(name);
+        return _missingTexture2D;
     }
     
     public static void Reload() {
         _textureRegister.Clear();
+        _missingTexture2D = Texture2D.CreateMissingTexture();
         Console.Log($"Loading textures...");
         string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("png");
         for (int i = 0; i < paths.Length; i++) {

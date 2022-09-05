@@ -9,7 +9,7 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class Renderer : Transform {
+public partial class SpriteRenderer : Transform {
     
     [Serialized] public string Texture { get; set; } = "box";
     [Serialized] public string Shader { get; set; } = "default";

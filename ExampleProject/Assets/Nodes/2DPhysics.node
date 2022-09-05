@@ -49,7 +49,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "10",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "11",
             "Texture": "box",
             "Shader": "default",
@@ -93,7 +93,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "17",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "18",
             "Texture": "box",
             "Shader": "default",
@@ -138,7 +138,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "24",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "25",
             "Texture": "box",
             "Shader": "default",
@@ -183,7 +183,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "31",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "32",
             "Texture": "box",
             "Shader": "default",
@@ -228,7 +228,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "38",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "39",
             "Texture": "box",
             "Shader": "default",
@@ -273,7 +273,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "45",
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
-          "Renderer": {
+          "SpriteRenderer": {
             "$id": "46",
             "Texture": "box",
             "Shader": "default",

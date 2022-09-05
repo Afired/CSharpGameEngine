@@ -6,7 +6,7 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Player : Transform, Has<Renderer>, Has<Blaster> {
+public partial class Player : Transform, Has<SpriteRenderer>, Has<Blaster> {
     
     [Serialized] public float Speed { get; init; } = 5f;
     private Vector2 _inputAxis;

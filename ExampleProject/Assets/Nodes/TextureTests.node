@@ -9,11 +9,36 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     },
     "_list": {
       "$id": "3",
-      "$values": []
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.SpriteRenderer, GameEngine.Core",
+          "Texture": "box",
+          "Shader": "default",
+          "Geometry": "quad",
+          "Scale": {
+            "$id": "5",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "6",
+            "$values": []
+          }
+        }
+      ]
     }
   },
   "_childNodes": {
-    "$id": "4",
-    "$values": []
+    "$id": "7",
+    "$values": [
+      {
+        "$ref": "4"
+      }
+    ]
   }
 }

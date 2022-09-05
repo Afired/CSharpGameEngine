@@ -3,7 +3,7 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Bullet : RigidBody, Has<Renderer> {
+public partial class Bullet : RigidBody, Has<SpriteRenderer> {
     
     protected override void OnBeginCollision(Collider other) {
         base.OnBeginCollision(other);

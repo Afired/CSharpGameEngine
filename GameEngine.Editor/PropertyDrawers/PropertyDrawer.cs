@@ -80,7 +80,7 @@ public abstract class PropertyDrawer {
             }
             
         } else if(fieldInfo.FieldType.IsArray)
-            DrawArray(container, fieldInfo);
+            new PropertyDrawerArray().DrawInternal(container, fieldInfo);
         
         else {
             if(fieldInfo.FieldType.IsSerializable) {
@@ -125,7 +125,7 @@ public abstract class PropertyDrawer {
             }
             
         } else if(propertyInfo.PropertyType.IsArray)
-            DrawArray(container, propertyInfo);
+            new PropertyDrawerArray().DrawInternal(container, propertyInfo);
         
         else if(propertyInfo.PropertyType.IsEnum) {
             new PropertyDrawerEnum().DrawInternal(container, propertyInfo);
@@ -169,7 +169,7 @@ public abstract class PropertyDrawer {
             }
             
         } else if(value.GetType().IsArray) {
-            return DrawArrayDirect(value.GetType(), (Array) value, property);
+            return new PropertyDrawerArray().DrawDirectInternal(type, value, property);
             
         } else {
             if(type.IsSerializable) {
@@ -192,119 +192,6 @@ public abstract class PropertyDrawer {
             }
         }
         return value;
-    }
-    
-    private static Array? DrawArrayDirect(Type type, Array? array, Property property) {
-        
-        if(array is null)
-            return (Array?) DrawNullDirect(type);
-        
-        if(type.GetArrayRank() > 1) {
-            Console.LogWarning($"Can't display multi-dimensional arrays ({type.GetArrayRank()})");
-            return array;
-        }
-        
-        ImGui.Text("Start Array");
-        for(int i = 0; i < array.Length; i++) {
-
-            object? element = array.GetValue(i);
-
-            if(element is null) {
-                ImGui.Text("Element is null");
-                continue;
-            }
-                
-            Type explicitElementType = element.GetType();
-                
-            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, property), i);
-            } else { //todo: nested arrays
-                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-            }
-                
-        }
-        ImGui.Text("End Array");
-        return array;
-    }
-    
-    private static void DrawArray(object container, PropertyInfo propertyInfo) {
-        
-        if(propertyInfo.PropertyType.GetArrayRank() > 1) {
-            Console.LogWarning($"Can't display multi-dimensional arrays ({propertyInfo.PropertyType.GetArrayRank()})");
-            return;
-        }
-        
-        if(!propertyInfo.CanWrite) {
-            Console.LogWarning("Readonly serialized properties aren't supported at this time. They can't be drawn by any property drawers");
-            return;
-        }
-        
-        Array? array = (Array?) propertyInfo.GetValue(container);
-        
-        if(array is null)
-            if(!DrawNull(container, propertyInfo))
-                return;
-        
-        ImGui.Text("Start Array");
-        for(int i = 0; i < array.Length; i++) {
-            
-            object? element = array.GetValue(i);
-            
-            if(element is null) {
-                ImGui.Text("Element is null");
-                continue;
-            }
-            
-            Type explicitElementType = element.GetType();
-            
-            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(propertyInfo)), i);
-            } else { //todo: nested arrays
-                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-            }
-            
-        }
-        ImGui.Text("End Array");
-        
-        if(propertyInfo.CanWrite)
-            propertyInfo.SetValue(container, array);
-    }
-    
-    private static void DrawArray(object container, FieldInfo fieldInfo) {
-        
-        if(fieldInfo.FieldType.GetArrayRank() > 1) {
-            Console.LogWarning($"Can't display multi-dimensional arrays ({fieldInfo.FieldType.GetArrayRank()})");
-            return;
-        }
-        
-        Array? array = (Array?) fieldInfo.GetValue(container);
-        
-        if(array is null)
-            if(!DrawNull(container, fieldInfo))
-                return;
-        
-        ImGui.Text("Start Array");
-        for(int i = 0; i < array.Length; i++) {
-            
-            object? element = array.GetValue(i);
-            
-            if(element is null) {
-                ImGui.Text("Element is null");
-                continue;
-            }
-            
-            Type explicitElementType = element.GetType();
-                
-            if(_propertyDrawerCache.TryGetValue(explicitElementType, out PropertyDrawer? propertyDrawer)) {
-                array.SetValue(propertyDrawer.DrawDirectInternal(explicitElementType, element, new Property(fieldInfo)), i);
-            } else { //todo: nested arrays
-                Console.LogWarning($"Property can't be drawn because there is no property drawer defined for {explicitElementType}");
-            }
-            
-        }
-        ImGui.Text("End Array");
-        
-        fieldInfo.SetValue(container, array);
     }
     
     public static void ClearLookUp() {

@@ -7,9 +7,11 @@ namespace GameEngine.Core.Nodes;
 
 public partial class TestNode : Node {
     
-//    [Serialized] private float[] MyFloatArray { get; set; } = new[] {
-//        1f, 2f, 3f
-//    };
+    [Serialized] private float[] MyFloatArray { get; set; } = new[] {
+        1f, 2f, 3f
+    };
+    
+    [Serialized] private string[,] _nestedStringArray = new string[3, 3];
     
 //    [Serialized] private List<float> MyFloatList { get; set; } = new() {
 //        1f,
@@ -18,8 +20,6 @@ public partial class TestNode : Node {
 //    };
     
 //    [Serialized] private List<List<string>> _nestedStringList;
-
-//    [Serialized] private string[,] _nestedStringArray = new string[3, 3];
     
 //    [Serialized] private Dictionary<string, float> SerializedDictionary { get; set; } = new() {
 //        { "First", 1f },
@@ -50,8 +50,8 @@ public partial class TestNode : Node {
 
 //    [Serialized] private List<float> FloatList { get; set; }
     
-    [Serialized] private SerializableClass? SerializableClass { get; set; }
-    [Serialized] private AutoSerializedNestedClass AutoSerializedNestedClass { get; set; }
+//    [Serialized] private SerializableClass? SerializableClass { get; set; }
+//    [Serialized] private AutoSerializedNestedClass AutoSerializedNestedClass { get; set; }
     
 }
 

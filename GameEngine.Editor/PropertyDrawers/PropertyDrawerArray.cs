@@ -6,19 +6,32 @@ public class PropertyDrawerArray : PropertyDrawer<Array> {
     
     protected override void DrawProperty(ref Array array, Property property) {
         
-        ImGui.Text("Start Array");
-        for(int i = 0; i < array.Length; i++) {
-
-            object? element = array.GetValue(i);
-
-            if(element is null) {
-                ImGui.Text("Element is null");
-                continue;
-            }
-                
-            array.SetValue(PropertyDrawer.DrawDirect(element.GetType(), element, property), i);
+        int dimensions = array.GetType().GetArrayRank();
+        
+        //todo: nested arrays
+        if(dimensions > 1) {
+            Console.LogWarning($"Can't display multi-dimensional arrays (size: {dimensions})");
+            return;
         }
-        ImGui.Text("End Array");
+        
+        ImGui.Text($"{property.Name}({array.Length})");
+        
+        ImGui.Indent();
+        
+        for(int i = 0; i < array.Length; i++) {
+            
+            object? element = array.GetValue(i);
+            
+            Type elementType = array.GetType().GetElementType()!;
+            
+            array.SetValue(PropertyDrawer.DrawDirect(elementType, element, new Property() {
+                Name = $"[{i}]",
+                IsReadonly = false,
+            }), i);
+            
+        }
+        
+        ImGui.Unindent();
         
     }
     

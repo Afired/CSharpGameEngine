@@ -222,7 +222,7 @@ public abstract class PropertyDrawer {
     
 }
 
-public abstract class PropertyDrawer<TProperty> : PropertyDrawer {
+public abstract class PropertyDrawer<TProperty> : PropertyDrawer where TProperty : notnull {
     
     protected abstract void DrawProperty(ref TProperty value, Property property);
     

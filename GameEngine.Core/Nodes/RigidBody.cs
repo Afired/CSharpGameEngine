@@ -16,15 +16,13 @@ public partial class RigidBody : Collider {
     }
     
     protected override void OnPrePhysicsUpdate() {
-        Body.SetTransform(new Vector2(LocalPosition.X, LocalPosition.Y), LocalRotation);
+        base.OnPrePhysicsUpdate();
         Body.SetLinearVelocity(new Vector2(Velocity.X, Velocity.Y));
         Body.SetGravityScale(Gravity);
     }
     
     protected override void OnPhysicsUpdate() {
-        LocalPosition = new Numerics.Vector3(Body.GetPosition().X, Body.GetPosition().Y, Position.Z); // swap out for world pos
-        LocalRotation = Body.GetAngle();
-        
+        base.OnPhysicsUpdate();
         Vector2 vec2 = Body.GetLinearVelocity();
         Velocity = new Numerics.Vector2(vec2.X, vec2.Y);
         Gravity = Body.GetGravityScale();

@@ -82,6 +82,9 @@ public abstract class PropertyDrawer {
         } else if(fieldInfo.FieldType.IsArray)
             new PropertyDrawerArray().DrawInternal(container, fieldInfo);
         
+        else if(fieldInfo.FieldType.IsEnum)
+            new PropertyDrawerEnum().DrawInternal(container, fieldInfo);
+        
         else {
             if(fieldInfo.FieldType.IsSerializable) {
                 ImGui.Text(fieldInfo.Name + ":");
@@ -127,9 +130,8 @@ public abstract class PropertyDrawer {
         } else if(propertyInfo.PropertyType.IsArray)
             new PropertyDrawerArray().DrawInternal(container, propertyInfo);
         
-        else if(propertyInfo.PropertyType.IsEnum) {
+        else if(propertyInfo.PropertyType.IsEnum)
             new PropertyDrawerEnum().DrawInternal(container, propertyInfo);
-        }
         
         else {
             if(propertyInfo.PropertyType.IsSerializable) {

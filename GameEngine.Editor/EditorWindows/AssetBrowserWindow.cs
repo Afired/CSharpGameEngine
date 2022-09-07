@@ -1,5 +1,7 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 using GameEngine.Core;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
@@ -38,7 +40,18 @@ public class AssetBrowserWindow : EditorWindow {
                                            ImGuiTreeNodeFlags.SpanFullWidth;
         ImGui.PushID(filePath.GetHashCode());
         ImGui.TreeNodeEx(Path.GetFileName(filePath), treeNodeFlags);
+        if(ImGui.BeginDragDropSource()) {
+            unsafe {
+                Guid guid = AssetManager.Instance.GetGuidOfAsset(filePath);
+                IntPtr guidPtr = Marshal.AllocHGlobal(sizeof(Guid));
+                Marshal.StructureToPtr(guid, guidPtr, false);
+                ImGui.SetDragDropPayload(typeof(Guid).FullName, guidPtr, (uint) sizeof(Guid));
+                ImGui.EndDragDropSource();
+                Marshal.FreeHGlobal(guidPtr);
+            }
+        }
         ImGui.PopID();
+        
         if(ImGui.IsItemClicked(ImGuiMouseButton.Right) || ImGui.IsItemClicked(ImGuiMouseButton.Left)) {
             Selected = filePath;
         }
@@ -99,7 +112,7 @@ public class AssetBrowserWindow : EditorWindow {
                 DrawFolder(directoryPath);
             }
             
-            foreach(string filePath in Directory.EnumerateFiles(currentPath)) {
+            foreach(string filePath in Directory.EnumerateFiles(currentPath).Where(filePath => Path.GetExtension(filePath) != ".meta")) {
                 DrawFile(filePath);
             }
             

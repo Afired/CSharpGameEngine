@@ -16,7 +16,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "SpriteRenderer": {
             "$id": "5",
             "Texture": "adf92fe3-513a-4eca-bd7d-17288c6ea575",
-            "Shader": "default",
             "Scale": {
               "$id": "6",
               "X": 1.0,
@@ -68,7 +67,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "SpriteRenderer": {
             "$id": "13",
             "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
-            "Shader": "default",
             "Scale": {
               "$id": "14",
               "X": 10.0,

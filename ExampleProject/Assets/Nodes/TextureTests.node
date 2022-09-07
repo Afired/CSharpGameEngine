@@ -13,7 +13,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "4",
           "$type": "GameEngine.Core.Nodes.SpriteRenderer, GameEngine.Core",
-          "Shader": "default",
           "Scale": {
             "$id": "5",
             "X": 1.0,

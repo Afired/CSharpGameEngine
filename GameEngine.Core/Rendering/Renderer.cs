@@ -46,7 +46,7 @@ public static unsafe class Renderer {
     
     private static uint _fullscreenVao;
     
-    public static string ScreenShader = "ScreenShader";
+    public static Guid ScreenShader = new("fb20011e-1126-4439-8a9f-b11d7aa4f447");
     
     public static LayerStack LayerStack { get; private set; }
     
@@ -116,7 +116,7 @@ public static unsafe class Renderer {
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         // use default screen shader
-        ShaderRegister.Get("ScreenShader").Use();
+        ShaderRegister.Get(ScreenShader).Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
         Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);

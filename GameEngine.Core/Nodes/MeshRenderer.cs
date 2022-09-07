@@ -1,6 +1,5 @@
 using System;
 using GameEngine.Core.Numerics;
-using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -13,7 +12,7 @@ namespace GameEngine.Core.Nodes;
 public partial class MeshRenderer : Transform {
     
     [Serialized] public Guid Texture { get; set; }
-    [Serialized] public string Shader { get; set; } = "default";
+    [Serialized] public Guid Shader { get; set; }
     [Serialized] public Guid Mesh { get; set; }
     
     [Serialized] public Vector3 Rotation3D { get; private set; }

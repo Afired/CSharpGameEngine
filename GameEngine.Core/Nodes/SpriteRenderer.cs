@@ -11,7 +11,7 @@ namespace GameEngine.Core.Nodes;
 public partial class SpriteRenderer : Transform {
     
     [Serialized] public Guid Texture { get; set; }
-    [Serialized] public string Shader { get; set; } = "default";
+    [Serialized] public Guid Shader { get; set; }
     public Guid Mesh { get; } = MeshRegister.QuadGuid;
     
     protected override void OnDraw() {

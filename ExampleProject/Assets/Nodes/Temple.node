@@ -55,7 +55,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
-          "Shader": "diffuse",
           "Mesh": "e55a48e2-c372-4e0d-958f-2e48b467e96e",
           "Scale": {
             "$id": "11",

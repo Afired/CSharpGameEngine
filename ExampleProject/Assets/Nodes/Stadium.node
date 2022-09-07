@@ -42,7 +42,6 @@ ExampleGame::ExampleGame.Nodes.Stadium
     "SpriteRenderer": {
       "$id": "9",
       "Texture": "adf92fe3-513a-4eca-bd7d-17288c6ea575",
-      "Shader": "default",
       "Scale": {
         "$id": "10",
         "X": 1.0,
@@ -99,7 +98,6 @@ ExampleGame::ExampleGame.Nodes.Stadium
             "SpriteRenderer": {
               "$id": "19",
               "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
-              "Shader": "default",
               "Scale": {
                 "$id": "20",
                 "X": 10.0,
@@ -178,7 +176,6 @@ ExampleGame::ExampleGame.Nodes.Stadium
             "SpriteRenderer": {
               "$id": "31",
               "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
-              "Shader": "default",
               "Scale": {
                 "$id": "32",
                 "X": 10.0,

@@ -1,7 +1,7 @@
 GameEngine.Core::GameEngine.Core.Nodes.MeshRenderer
 {
   "$id": "1",
-  "Shader": "diffuse",
+  "Shader": "892d11a5-8c1c-49ce-8f85-ae9c97e08e1e",
   "Mesh": "8dabe47d-2d8d-49f6-99f5-40c066c45db5",
   "Scale": {
     "$id": "2",

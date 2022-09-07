@@ -1,3 +1,4 @@
+using System;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
@@ -11,7 +12,7 @@ namespace GameEngine.Core.Nodes;
 
 public partial class MeshRenderer : Transform {
     
-    [Serialized] public string Texture { get; set; } = "checkerboard";
+    [Serialized] public Guid Texture { get; set; }
     [Serialized] public string Shader { get; set; } = "default";
     [Serialized] public string Geometry { get; set; } = "car";
     

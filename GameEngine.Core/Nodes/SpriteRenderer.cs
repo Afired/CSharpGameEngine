@@ -1,5 +1,4 @@
-using GameEngine.Core.Numerics;
-using GameEngine.Core.Rendering;
+using System;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -11,7 +10,7 @@ namespace GameEngine.Core.Nodes;
 
 public partial class SpriteRenderer : Transform {
     
-    [Serialized] public string Texture { get; set; } = "box";
+    [Serialized] public Guid Texture { get; set; }
     [Serialized] public string Shader { get; set; } = "default";
     [Serialized] public string Geometry { get; set; } = "quad";
     

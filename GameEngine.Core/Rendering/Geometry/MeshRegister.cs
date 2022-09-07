@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -21,26 +22,25 @@ namespace GameEngine.Core.Rendering.Geometry;
 
 public static class MeshRegister {
     
-    private static readonly ConcurrentDictionary<string, Geometry> _meshRegister = new();
+    private static readonly ConcurrentDictionary<Guid, Geometry> _meshRegister = new();
+    public static readonly Guid QuadGuid = new("605b3a35-5e06-4cc4-8da2-3f2d07471b51");
+    public static readonly Guid EboTestQuadGuid = new("c52031b8-94da-4697-998d-ab4b1489ecd6");
     
-    public static void Register(string name, Geometry shader) {
-        name = name.ToLower();
-        Throw.If(_meshRegister.ContainsKey(name), "duplicate geometry");
-        // _meshRegister.Add(name, shader);
-        _meshRegister.TryAdd(name, shader);
+    public static void Register(Guid guid, Geometry mesh) {
+        Throw.If(_meshRegister.ContainsKey(guid), "duplicate mesh");
+        _meshRegister.TryAdd(guid, mesh);
     }
     
-    public static Geometry? Get(string name) {
-        name = name.ToLower();
-        if(_meshRegister.TryGetValue(name, out Geometry geometry))
-            return geometry;
-        Console.LogWarning($"Geometry not found '{name}'");
+    public static Geometry? Get(Guid guid) {
+        if(_meshRegister.TryGetValue(guid, out Geometry? mesh))
+            return mesh;
+        Console.LogWarning($"Mesh not found '{guid}'");
         return null;
     }
     
     public static void Reload() {
         _meshRegister.Clear();
-        Console.Log($"Initializing geometry...");
+        Console.Log($"Initializing mesh...");
         float[] quadVertexData = {
             -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
             0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
@@ -50,7 +50,7 @@ public static class MeshRegister {
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
         };
-        Register("Quad", new Geometry(quadVertexData));
+        Register(QuadGuid, new Geometry(quadVertexData));
         
         string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
         for (int i = 0; i < paths.Length; i++) {
@@ -164,9 +164,9 @@ public static class MeshRegister {
             }
         }
         
-        Register(name, new PosUvNormalGeometry(vertices));
+        Register(AssetManager.Instance.GetGuidOfAsset(path), new PosUvNormalGeometry(vertices));
     }
-
+    
     // private static void LoadGltf(string path, string name) {
     //     ModelRoot modelRoot = ModelRoot.Load(path, new ReadSettings() {
     //         Validation = ValidationMode.TryFix
@@ -222,7 +222,10 @@ public static class MeshRegister {
             }
 
             uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
-            Register(name + i, new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
+            if(i == 0)
+                Register(AssetManager.Instance.GetGuidOfAsset(filePath), new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
+            else
+                Console.LogWarning("Loading of Models with more than 1 mesh is currently not supported");
         }
         
     }
@@ -262,7 +265,7 @@ public static class MeshRegister {
                 new _Normal(0, 1, 0)
             ),
         };
-        Register("EBO_Test_Quad", new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
+        Register(EboTestQuadGuid, new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
     }
     
 }

@@ -12,7 +12,7 @@ public partial class SpriteRenderer : Transform {
     
     [Serialized] public Guid Texture { get; set; }
     [Serialized] public string Shader { get; set; } = "default";
-    [Serialized] public string Geometry { get; set; } = "quad";
+    public Guid Mesh { get; } = MeshRegister.QuadGuid;
     
     protected override void OnDraw() {
         ShaderRegister.Get(Shader).Use();
@@ -31,7 +31,9 @@ public partial class SpriteRenderer : Transform {
         ShaderRegister.Get(Shader).GLM_SetMat("model", transformMat);
         ShaderRegister.Get(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
-        Geometry geometry = MeshRegister.Get(Geometry);
+        Geometry? geometry = MeshRegister.Get(Mesh);
+        if(geometry is null)
+            return;
         
         Gl.BindVertexArray(geometry.Vao);
         

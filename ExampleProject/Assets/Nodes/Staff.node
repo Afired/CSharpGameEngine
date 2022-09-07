@@ -54,9 +54,8 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
-          "Texture": "checkerboard",
           "Shader": "vertexdisplacement",
-          "Geometry": "honkai",
+          "Mesh": "b3185240-3baf-4248-be0e-70f1b16c95f3",
           "Rotation3D": {
             "$id": "11",
             "Y": -37.0

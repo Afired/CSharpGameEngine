@@ -14,7 +14,7 @@ public partial class MeshRenderer : Transform {
     
     [Serialized] public Guid Texture { get; set; }
     [Serialized] public string Shader { get; set; } = "default";
-    [Serialized] public string Geometry { get; set; } = "car";
+    [Serialized] public Guid Mesh { get; set; }
     
     [Serialized] public Vector3 Rotation3D { get; private set; }
     
@@ -33,10 +33,9 @@ public partial class MeshRenderer : Transform {
         ShaderRegister.Get(Shader).SetInt("u_Texture", 0);
         ShaderRegister.Get(Shader).SetFloat("time", Time.TotalTimeElapsed);
         
-        Geometry geometry = MeshRegister.Get(Geometry);
-        if(geometry is null) {
+        Geometry? geometry = MeshRegister.Get(Mesh);
+        if(geometry is null)
             return;
-        }
         
         Gl.BindVertexArray(geometry.Vao);
         

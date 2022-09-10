@@ -55,9 +55,20 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
-          "Mesh": "cd864d91-9be5-4509-8294-c83ad0693131",
-          "Scale": {
+          "Texture": {
             "$id": "11",
+            "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
+          },
+          "Shader": {
+            "$id": "12",
+            "Guid": "892d11a5-8c1c-49ce-8f85-ae9c97e08e1e"
+          },
+          "Mesh": {
+            "$id": "13",
+            "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
+          },
+          "Scale": {
+            "$id": "14",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -66,7 +77,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "12",
+            "$id": "15",
             "$values": []
           }
         }
@@ -74,7 +85,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "13",
+    "$id": "16",
     "$values": [
       {
         "$ref": "4"

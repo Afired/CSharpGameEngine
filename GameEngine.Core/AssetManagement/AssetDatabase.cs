@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -82,14 +83,27 @@ public class AssetDatabase {
         Load(Geometry.QuadGuid, new Geometry(quadVertexData));
         
         string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
-        for (int i = 0; i < paths.Length; i++) {
-            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadObjFaces(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
-            Console.LogSuccess($"Loading model ({i + 1}/{paths.Length}) '{paths[i]}'");
-        }
+        Thread thread = new Thread(() => LoadObjsThreaded(paths));
+        thread.Start();
+//        for (int i = 0; i < paths.Length; i++) {
+//            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
+//            Console.LogSuccess($"Loading model ({i + 1}/{paths.Length}) '{paths[i]}'");
+//        }
         
     }
     
-    private static Geometry LoadObjFaces(string path, string name) {
+    private static void LoadObjsThreaded(string[] paths) {
+        for (int i = 0; i < paths.Length; i++) {
+            _Vertex[] vertices = LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower());
+            int capturedIndex = i;
+            Application.TaskQueue.Enqueue(() => {
+                Load(AssetManager.Instance.GetGuidOfAsset(paths[capturedIndex]), new PosUvNormalGeometry(vertices));
+            });
+//            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
+        }
+    }
+    
+    private static _Vertex[] LoadVertices(string path, string name) {
         ObjLoaderFactory objLoaderFactory = new();
         IObjLoader loader = objLoaderFactory.Create(new MaterialNullStreamProvider());
     
@@ -154,7 +168,7 @@ public class AssetDatabase {
                 );
             }
         }
-        return new PosUvNormalGeometry(vertices);
-    }
+        return vertices;
+    } // PosUvNormalGeometry
     
 }

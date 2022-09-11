@@ -87,6 +87,8 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             
             if(IsReloadingExternalAssemblies)
                 ReloadExternalAssemblies();
+
+            ExecuteQueuedTasks();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
             if(Configuration.TargetFrameRate > 0) {

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using GameEngine.Core.Guard;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
@@ -15,6 +17,8 @@ namespace GameEngine.Core;
 
 public abstract class Application {
     
+    public static readonly ConcurrentQueue<Action> TaskQueue = new();
+    
     protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
     public IEnumerable<Assembly> ExternalAssemblies => _ealcm.ExternalAssemblies;
     
@@ -23,6 +27,12 @@ public abstract class Application {
     
     public Application() {
         NonGenericAppInstance = this;
+    }
+    
+    protected void ExecuteQueuedTasks() {
+        while(TaskQueue.TryDequeue(out Action? task)) {
+            task.Invoke();
+        }
     }
     
 }

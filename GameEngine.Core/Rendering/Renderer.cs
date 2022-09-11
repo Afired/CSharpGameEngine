@@ -3,9 +3,6 @@ using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Nodes;
-using GameEngine.Core.Rendering.Geometry;
-using GameEngine.Core.Rendering.Shaders;
-using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
 using Silk.NET.GLFW;
@@ -76,9 +73,6 @@ public static unsafe class Renderer {
     
     private static void LoadResources() {
         AssetDatabase.Reload();
-//        ShaderRegister.Reload();
-//        TextureRegister.Reload();
-//        MeshRegister.Reload();
     }
 
     public static void Render() {

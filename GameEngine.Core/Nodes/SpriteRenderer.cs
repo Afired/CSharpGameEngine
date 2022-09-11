@@ -1,8 +1,6 @@
 using System;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Rendering.Geometry;
-using GameEngine.Core.Rendering.Shaders;
-using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;

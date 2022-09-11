@@ -1,3 +1,4 @@
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -39,12 +40,13 @@ public class Project {
         // Reload Assemblies
         EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
         
-        TextureRegister.Reload();
-        ShaderRegister.Reload();
-        MeshRegister.Reload();
+//        TextureRegister.Reload();
+//        ShaderRegister.Reload();
+//        MeshRegister.Reload();
+        AssetDatabase.Reload();
     }
     
-    public static void OpenWithFileExplorer() {
+    public static void OpenProjectWithFileExplorer() {
         DialogResult dialogResult = Dialog.FileOpen("geproj", null);
         if(dialogResult.IsCancelled)
             return;

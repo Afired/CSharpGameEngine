@@ -1,4 +1,5 @@
 using System;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Nodes;
@@ -9,6 +10,7 @@ using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
+using Shader = GameEngine.Core.Rendering.Shaders.Shader;
 
 namespace GameEngine.Core.Rendering;
 
@@ -73,9 +75,10 @@ public static unsafe class Renderer {
     }
     
     private static void LoadResources() {
-        ShaderRegister.Reload();
-        TextureRegister.Reload();
-        MeshRegister.Reload();
+        AssetDatabase.Reload();
+//        ShaderRegister.Reload();
+//        TextureRegister.Reload();
+//        MeshRegister.Reload();
     }
 
     public static void Render() {
@@ -116,7 +119,7 @@ public static unsafe class Renderer {
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         // use default screen shader
-        ShaderRegister.Get(ScreenShader).Use();
+        AssetDatabase.Get<Shader>(ScreenShader).Use();
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
         Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);
@@ -126,8 +129,8 @@ public static unsafe class Renderer {
     private static void DoPostProcessing() {
         SwapActiveFrameBuffer();
         // use screen shader
-        ShaderRegister.Get(ScreenShader).Use();
-        ShaderRegister.Get(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
+        AssetDatabase.Get<Shader>(ScreenShader).Use();
+        AssetDatabase.Get<Shader>(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
         Gl.BindVertexArray(_fullscreenVao);
         Gl.Disable(EnableCap.DepthTest);
         Gl.BindTexture(TextureTarget.Texture2D, _inactiveFrameBuffer.ColorAttachment);

@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
@@ -218,10 +219,11 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Project")) {
             if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Reload Meshes")) { MeshRegister.Reload(); }
-            if(ImGui.MenuItem("Reload Textures")) { TextureRegister.Reload(); }
-            if(ImGui.MenuItem("Reload Shaders")) { ShaderRegister.Reload(); }
-            if(ImGui.MenuItem("Open Project")) { Project.OpenWithFileExplorer(); }
+//            if(ImGui.MenuItem("Reload Meshes")) { MeshRegister.Reload(); }
+//            if(ImGui.MenuItem("Reload Textures")) { TextureRegister.Reload(); }
+//            if(ImGui.MenuItem("Reload Shaders")) { ShaderRegister.Reload(); }
+            if(ImGui.MenuItem("Reload Asset Database")) { AssetDatabase.Reload(); }
+            if(ImGui.MenuItem("Open Project")) { Project.OpenProjectWithFileExplorer(); }
             ImGui.EndMenu();
         }
         

@@ -7,6 +7,7 @@ namespace GameEngine.Core.Rendering.Textures;
 
 public class Texture2D : Texture {
     
+    public static Texture2D MissingTexture { get; internal set; }
     public uint Width { get; init; }
     public uint Height { get; init; }
     public uint ID { get; private set; }

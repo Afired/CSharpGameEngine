@@ -24,6 +24,7 @@ public static class StringExtension {
 //TODO: delete program when disposing shader
 public class Shader {
     
+    public static Shader InvalidShader { get; internal set; }
     private uint _programID;
     
     

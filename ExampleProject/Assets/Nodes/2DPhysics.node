@@ -51,7 +51,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "11",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "12",
               "X": 1.0,
@@ -93,7 +92,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "18",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "19",
               "X": 1.0,
@@ -136,7 +134,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "25",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "26",
               "X": 1.0,
@@ -179,7 +176,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "32",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "33",
               "X": 1.0,
@@ -222,7 +218,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "39",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "40",
               "X": 1.0,
@@ -265,7 +260,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "ExampleGame.Nodes.PhysicsQuad, ExampleGame",
           "SpriteRenderer": {
             "$id": "46",
-            "Texture": "c5857218-9fc9-4395-8be7-98048bd8df17",
             "Scale": {
               "$id": "47",
               "X": 1.0,

@@ -1,21 +1,22 @@
-using System;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Rendering.Geometry;
+using GameEngine.Core.Rendering.Shaders;
+using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
-using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
 namespace GameEngine.Core.Nodes; 
 
 public partial class SpriteRenderer : Transform {
     
-    [Serialized] public Guid Texture { get; set; }
-    [Serialized] public Guid Shader { get; set; }
+    [Serialized] public Asset<Texture2D> Texture { get; set; }
+    [Serialized] public Asset<Shader> Shader { get; set; }
     
     protected override void OnDraw() {
-        AssetDatabase.Get<Shader>(Shader).Use();
+        
+        Shader.Get().Use();
         
 //        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
 //        Matrix4x4 sca = Matrix4x4.CreateScale(Scale.X, Scale.Y, Scale.Z);
@@ -28,8 +29,8 @@ public partial class SpriteRenderer : Transform {
         
 //        ShaderRegister.Get(Shader).SetMatrix4x4("model", sca * rotMat * trans);
 //        ShaderRegister.Get(Shader).SetMatrix4x4("projection", RenderingEngine.CurrentCamera.GetProjectionMatrix());
-        AssetDatabase.Get<Shader>(Shader).GLM_SetMat("model", transformMat);
-        AssetDatabase.Get<Shader>(Shader).GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        Shader.Get().GLM_SetMat("model", transformMat);
+        Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
         Geometry? geometry = AssetDatabase.Get<Geometry>(Geometry.QuadGuid);
         if(geometry is null)
@@ -37,8 +38,8 @@ public partial class SpriteRenderer : Transform {
         
         Gl.BindVertexArray(geometry.Vao);
         
-        AssetDatabase.Get<Texture>(Texture).Bind();
-        AssetDatabase.Get<Shader>(Shader).SetInt("u_Texture", 0);
+        Texture.Get().Bind();
+        Shader.Get().SetInt("u_Texture", 0);
         
         Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
         Gl.BindVertexArray(0);

@@ -7,6 +7,7 @@ using GameEngine.Core.Rendering.Textures;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Loaders;
+using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
 namespace GameEngine.Core.AssetManagement; 
 
@@ -34,9 +35,16 @@ public class AssetDatabase {
         _assetCache.Clear();
     }
     
-    public static T? Get<T>(Guid guid) {
+    public static T? Get<T>(Guid guid) where T : class {
         if(_assetCache.TryGetValue(guid, out object? texture))
             return (T) texture;
+        
+        //TODO: Refactor handling of defaults
+        if(typeof(T).IsAssignableTo(typeof(Shader)))
+            return Shader.InvalidShader as T;
+        if(typeof(T).IsAssignableTo(typeof(Texture)))
+            return Texture2D.MissingTexture as T;
+        
         return default;
     }
     

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
 using GlmNet;
 using Silk.NET.OpenGL;
@@ -22,7 +23,7 @@ public static class StringExtension {
 }
 
 //TODO: delete program when disposing shader
-public class Shader {
+public class Shader : IAsset {
     
     public static Shader InvalidShader { get; internal set; }
     private uint _programID;

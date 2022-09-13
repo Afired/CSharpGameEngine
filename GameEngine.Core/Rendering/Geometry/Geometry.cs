@@ -1,9 +1,10 @@
 using System;
+using GameEngine.Core.AssetManagement;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 
 
-public class Geometry {
+public class Geometry : IAsset {
     
     public uint Vao { get; protected set; }
     public uint Vbo { get; protected set; }

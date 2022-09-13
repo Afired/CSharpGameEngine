@@ -11,9 +11,9 @@ namespace GameEngine.Core.Nodes;
 
 public partial class MeshRenderer : Transform {
     
-    [Serialized] public Asset<Texture> Texture { get; set; }
-    [Serialized] public Asset<Shader> Shader { get; set; }
-    [Serialized] public Asset<Geometry> Mesh { get; set; }
+    [Serialized] public AssetRef<Texture> Texture { get; set; }
+    [Serialized] public AssetRef<Shader> Shader { get; set; }
+    [Serialized] public AssetRef<Geometry> Mesh { get; set; }
     
     [Serialized] public Vector3 Rotation3D { get; private set; }
     

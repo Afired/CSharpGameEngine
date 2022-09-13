@@ -11,8 +11,8 @@ namespace GameEngine.Core.Nodes;
 
 public partial class SpriteRenderer : Transform {
     
-    [Serialized] public Asset<Texture2D> Texture { get; set; }
-    [Serialized] public Asset<Shader> Shader { get; set; }
+    [Serialized] public AssetRef<Texture2D> Texture { get; set; }
+    [Serialized] public AssetRef<Shader> Shader { get; set; }
     
     protected override void OnDraw() {
         

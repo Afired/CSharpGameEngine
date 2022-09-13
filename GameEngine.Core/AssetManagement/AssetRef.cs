@@ -3,7 +3,7 @@ using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.AssetManagement; 
 
-public readonly struct Asset<T> where T : class {
+public readonly struct AssetRef<T> where T : class, IAsset {
     
     [Serialized(Editor.Hidden)] public Guid Guid { get; }
     
@@ -11,7 +11,7 @@ public readonly struct Asset<T> where T : class {
         return AssetDatabase.Get<T>(Guid);
     }
     
-    public Asset(Guid guid) {
+    public AssetRef(Guid guid) {
         Guid = guid;
     }
     

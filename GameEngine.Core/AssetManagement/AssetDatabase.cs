@@ -14,9 +14,9 @@ namespace GameEngine.Core.AssetManagement;
 
 public class AssetDatabase {
     
-    private static readonly Dictionary<Guid, object> _assetCache = new();
+    private static readonly Dictionary<Guid, IAsset> _assetCache = new();
     
-    public static void Load(Guid guid, object asset) {
+    public static void Load(Guid guid, IAsset asset) {
         if(_assetCache.ContainsKey(guid)) {
             Console.LogWarning($"failed to load asset with guid {guid}, there already is loaded an asset with that guid");
             return;
@@ -37,7 +37,7 @@ public class AssetDatabase {
     }
     
     public static T? Get<T>(Guid guid) where T : class {
-        if(_assetCache.TryGetValue(guid, out object? texture))
+        if(_assetCache.TryGetValue(guid, out IAsset? texture))
             return (T) texture;
         
         //TODO: Refactor handling of defaults

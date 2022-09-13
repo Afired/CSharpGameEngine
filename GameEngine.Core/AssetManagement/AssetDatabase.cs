@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using Assimp;
+using Assimp.Configs;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Loaders;
+using Face = ObjLoader.Loader.Data.Elements.Face;
+using Mesh = GameEngine.Core.Rendering.Geometry.Mesh;
 using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
 namespace GameEngine.Core.AssetManagement; 
@@ -83,13 +88,10 @@ public class AssetDatabase {
         Load(Mesh.QuadGuid, new Mesh(quadVertexData));
         
         string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
-        Thread thread = new Thread(() => LoadObjsThreaded(paths));
-        thread.Start();
-//        for (int i = 0; i < paths.Length; i++) {
-//            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
-//            Console.LogSuccess($"Loading model ({i + 1}/{paths.Length}) '{paths[i]}'");
-//        }
         
+        for (int i = 0; i < paths.Length; i++) {
+            LoadModelUsingAssimp(paths[i]);
+        }
     }
     
     private static void LoadObjsThreaded(string[] paths) {
@@ -170,5 +172,45 @@ public class AssetDatabase {
         }
         return vertices;
     } // PosUvNormalGeometry
+    
+    private static void LoadModelUsingAssimp(string filePath) {
+        AssimpContext importer = new AssimpContext();
+        importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
+        Scene model = importer.ImportFile(filePath, PostProcessPreset.TargetRealTimeMaximumQuality);
+
+        Mesh[] meshes = new Mesh[model.MeshCount];
+        
+        for(int i = 0; i < model.Meshes.Count; i++) {
+            
+            List<Vector3D> posList = model.Meshes[i].Vertices;
+            List<Vector3D> normalList = model.Meshes[i].Normals;
+            
+            _Vertex[] vertexData = new _Vertex[posList.Count];
+            
+            for(int j = 0; j < posList.Count; j++) {
+                Vector3D position = posList[j];
+                Vector3D normal = normalList[j];
+                
+                vertexData[j] = new _Vertex(
+                    new _Position(position.X, position.Y, position.Z),
+                    new _UV(0, 0),
+                    new _Normal(normal.X, normal.Y, normal.Z)
+                );
+            }
+
+            uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
+
+            meshes[i] = new PosUvNormalMeshIndexedBuffer(vertexData, indices);
+            
+//            Load(AssetManager.Instance.GetGuidOfAsset(filePath), new PosUvNormalMeshIndexedBuffer(vertexData, indices));
+//            continue;
+//            if(i == 0)
+////                Register(AssetManager.Instance.GetGuidOfAsset(filePath), new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
+//                Load(AssetManager.Instance.GetGuidOfAsset(filePath + "_" + i), new PosUvNormalMeshIndexedBuffer(vertexData, indices));
+//            else
+//                Console.LogWarning("Loading of Models with more than 1 mesh is currently not supported");
+        }
+        Load(AssetManager.Instance.GetGuidOfAsset(filePath), new Model(meshes));
+    }
     
 }

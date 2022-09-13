@@ -6,7 +6,7 @@ namespace GameEngine.Editor.PropertyDrawers;
 
 public class PropertyDrawerAsset<T> : PropertyDrawer<AssetRef<T>> where T : class, IAsset {
     
-    protected override void DrawProperty(ref AssetRef<T> assetRefRef, Property property) {
+    protected override void DrawProperty(ref AssetRef<T> assetRef, Property property) {
         ImGui.Columns(2);
         ImGui.Text(property.Name);
         ImGui.NextColumn();
@@ -14,7 +14,7 @@ public class PropertyDrawerAsset<T> : PropertyDrawer<AssetRef<T>> where T : clas
         ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
         ImGui.PushID(property.Name);
         
-        ImGui.Text(assetRefRef.Guid.ToString());
+        ImGui.Text(assetRef.Guid.ToString());
         if(ImGui.BeginDragDropTarget()) {
             ImGuiPayloadPtr payload = ImGui.AcceptDragDropPayload(typeof(Guid).FullName);
             unsafe {
@@ -22,7 +22,7 @@ public class PropertyDrawerAsset<T> : PropertyDrawer<AssetRef<T>> where T : clas
                     object? data = Marshal.PtrToStructure(payload.Data, typeof(Guid));
                     if(data is not null) {
                         Guid receivedGuid = (Guid) data;
-                        assetRefRef = new AssetRef<T>(receivedGuid);
+                        assetRef = new AssetRef<T>(receivedGuid);
                     }
                 }
             }

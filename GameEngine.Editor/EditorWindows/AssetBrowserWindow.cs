@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GameEngine.Core;
@@ -64,6 +65,10 @@ public class AssetBrowserWindow : EditorWindow {
         }
         
         if(ImGui.BeginPopupContextItem()) {
+            if(ImGui.MenuItem("Open in Explorer"))
+                Process.Start("explorer.exe" , Path.GetDirectoryName(filePath));
+            if(ImGui.MenuItem("Open File"))
+                Process.Start("explorer.exe" , filePath);
             if(ImGui.MenuItem("Delete File"))
                 Console.LogWarning("Deleting is not implemented yet");
             ImGui.EndPopup();
@@ -81,26 +86,26 @@ public class AssetBrowserWindow : EditorWindow {
             Selected = currentPath;
         }
         
-        // if(ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right)) {
-        //     ImGui.BeginPopup()
-        // }
         if(ImGui.BeginPopupContextItem(currentPath, ImGuiPopupFlags.MouseButtonRight)) {
-            ImGui.Text("Create Node");
-            ImGui.Spacing();
-            ImGui.Separator();
-            ImGui.Spacing();
             
-            foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(Application<>).Assembly)) {
-                foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(Node))).Append(typeof(Node))) {
-                    if(ImGui.MenuItem(type.Name)) {
-                        Node newNode = Node.New(type);
-                        string nodeName = $"New {type.Name}";
-                        while(File.Exists($@"{currentPath}\{nodeName}.node")) {
-                            nodeName += "_";
+            if(ImGui.MenuItem("Open in Explorer"))
+                Process.Start("explorer.exe" , currentPath);
+            
+            if(ImGui.BeginMenu("Create Node")) {
+                foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(Application<>).Assembly)) {
+                    foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(Node)))) {
+                        if(ImGui.MenuItem(type.Name)) {
+                            Node newNode = Node.New(type);
+                            string nodeName = $"New {type.Name}";
+                            while(File.Exists($@"{currentPath}\{nodeName}.node")) {
+                                nodeName += "_";
+                            }
+                            File.WriteAllText($@"{currentPath}\{nodeName}.node", Serializer.SerializeNode(newNode));
                         }
-                        File.WriteAllText($@"{currentPath}\{nodeName}.node", Serializer.SerializeNode(newNode));
                     }
                 }
+                
+                ImGui.EndMenu();
             }
             
             ImGui.EndPopup();

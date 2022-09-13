@@ -80,7 +80,7 @@ public class AssetDatabase {
             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
         };
-        Load(Geometry.QuadGuid, new Geometry(quadVertexData));
+        Load(Mesh.QuadGuid, new Mesh(quadVertexData));
         
         string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
         Thread thread = new Thread(() => LoadObjsThreaded(paths));
@@ -97,7 +97,7 @@ public class AssetDatabase {
             _Vertex[] vertices = LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower());
             int capturedIndex = i;
             Application.TaskQueue.Enqueue(() => {
-                Load(AssetManager.Instance.GetGuidOfAsset(paths[capturedIndex]), new PosUvNormalGeometry(vertices));
+                Load(AssetManager.Instance.GetGuidOfAsset(paths[capturedIndex]), new PosUvNormalMesh(vertices));
             });
 //            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
         }

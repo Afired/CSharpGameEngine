@@ -4,12 +4,12 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 
 
-public class PosUvNormalGeometryIndexedBuffer : Geometry {
+public class PosUvNormalMeshIndexedBuffer : Mesh {
     
     public uint Ebo { get; protected set; }
     public int EboLength { get; private set; }
 
-    public PosUvNormalGeometryIndexedBuffer(_Vertex[] vertexData, uint[] indices) : base() {
+    public PosUvNormalMeshIndexedBuffer(_Vertex[] vertexData, uint[] indices) : base() {
         VertexCount = vertexData.Length;
         InitializeGeometry(vertexData, indices);
         EboLength = indices.Length;

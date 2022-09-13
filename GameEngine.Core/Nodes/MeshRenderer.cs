@@ -13,7 +13,7 @@ public partial class MeshRenderer : Transform {
     
     [Serialized] public AssetRef<Texture> Texture { get; set; }
     [Serialized] public AssetRef<Shader> Shader { get; set; }
-    [Serialized] public AssetRef<Geometry> Mesh { get; set; }
+    [Serialized] public AssetRef<Mesh> Mesh { get; set; }
     
     [Serialized] public Vector3 Rotation3D { get; private set; }
     
@@ -32,13 +32,13 @@ public partial class MeshRenderer : Transform {
         Shader.Get().SetInt("u_Texture", 0);
         Shader.Get().SetFloat("time", Time.TotalTimeElapsed);
         
-        Geometry? geometry = Mesh.Get();
+        Mesh? geometry = Mesh.Get();
         if(geometry is null)
             return;
         
         Gl.BindVertexArray(geometry.Vao);
         
-        if(geometry is PosUvNormalGeometryIndexedBuffer posUvNormalGeometryEbo) {
+        if(geometry is PosUvNormalMeshIndexedBuffer posUvNormalGeometryEbo) {
             // indexed drawing - currently doesnt work :/
             Gl.DrawElements(PrimitiveType.Triangles, (uint) posUvNormalGeometryEbo.EboLength, DrawElementsType.UnsignedInt, 0);
         } else {

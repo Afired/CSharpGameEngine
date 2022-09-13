@@ -32,7 +32,7 @@ public partial class SpriteRenderer : Transform {
         Shader.Get().GLM_SetMat("model", transformMat);
         Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
-        Geometry? geometry = AssetDatabase.Get<Geometry>(Geometry.QuadGuid);
+        Mesh? geometry = AssetDatabase.Get<Mesh>(Mesh.QuadGuid);
         if(geometry is null)
             return;
         

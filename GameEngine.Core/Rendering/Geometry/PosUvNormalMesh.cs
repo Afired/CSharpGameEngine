@@ -4,9 +4,9 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 
 
-public class PosUvNormalGeometry : Geometry {
+public class PosUvNormalMesh : Mesh {
 
-    public PosUvNormalGeometry(_Vertex[] vertexData) : base() {
+    public PosUvNormalMesh(_Vertex[] vertexData) : base() {
         VertexCount = vertexData.Length;
         InitializeGeometry(vertexData);
     }

@@ -4,19 +4,19 @@ using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 
 
-public class Geometry : IAsset {
+public class Mesh : IAsset {
     
     public uint Vao { get; protected set; }
     public uint Vbo { get; protected set; }
     public int VertexCount { get; protected set; }
     public static readonly Guid QuadGuid = new("605b3a35-5e06-4cc4-8da2-3f2d07471b51");
     
-    public Geometry(float[] vertexData) {
+    public Mesh(float[] vertexData) {
         VertexCount = vertexData.Length / 5;
         InitializeGeometry(vertexData);
     }
     
-    protected Geometry() { }
+    protected Mesh() { }
     
     private void InitializeGeometry(float[] vertexData) {
         
@@ -26,7 +26,6 @@ public class Geometry : IAsset {
         Gl.BindVertexArray(Vao);
         Gl.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
         
-
         unsafe {
             fixed(float* v = &vertexData[0]) {
                 Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);

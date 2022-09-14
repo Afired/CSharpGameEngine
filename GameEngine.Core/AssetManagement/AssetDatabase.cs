@@ -87,10 +87,13 @@ public class AssetDatabase {
         };
         Load(Mesh.QuadGuid, new Mesh(quadVertexData));
         
-        string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
-        
-        for (int i = 0; i < paths.Length; i++) {
-            LoadModelUsingAssimp(paths[i]);
+        string[] objPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
+        for(int i = 0; i < objPaths.Length; i++) {
+            LoadModelUsingAssimp(objPaths[i]);
+        }
+        string[] fbxPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("fbx");
+        for(int i = 0; i < fbxPaths.Length; i++) {
+            LoadModelUsingAssimp(fbxPaths[i]);
         }
     }
     
@@ -184,16 +187,24 @@ public class AssetDatabase {
             
             List<Vector3D> posList = model.Meshes[i].Vertices;
             List<Vector3D> normalList = model.Meshes[i].Normals;
-            
+            List<Vector3D>[] textureCoordinateChannels = model.Meshes[i].TextureCoordinateChannels;
+
             _Vertex[] vertexData = new _Vertex[posList.Count];
             
             for(int j = 0; j < posList.Count; j++) {
                 Vector3D position = posList[j];
                 Vector3D normal = normalList[j];
                 
+                _UV uv = new _UV(0, 0);
+                if(textureCoordinateChannels.Length >= 1) {
+                    List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
+                    if(uvChannel0.Count > j)
+                        uv = new _UV(uvChannel0[j].X, uvChannel0[j].Y);
+                }
+                
                 vertexData[j] = new _Vertex(
                     new _Position(position.X, position.Y, position.Z),
-                    new _UV(0, 0),
+                    uv,
                     new _Normal(normal.X, normal.Y, normal.Z)
                 );
             }

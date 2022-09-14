@@ -57,22 +57,52 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": {
             "$id": "11",
-            "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
+            "Guid": "555dfa02-7b12-4adc-bf19-2ac98697ac46"
           },
           "Shader": {
             "$id": "12",
-            "Guid": "892d11a5-8c1c-49ce-8f85-ae9c97e08e1e"
+            "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
           },
           "Mesh": {
             "$id": "13",
-            "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
+            "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
           },
           "Model": {
             "$id": "14",
-            "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
+            "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
+          },
+          "Rotation3D": {
+            "$id": "15",
+            "X": -15.0,
+            "Z": -6.0
+          },
+          "Textures": {
+            "$id": "16",
+            "$values": [
+              {
+                "$id": "17",
+                "Guid": "ae6b1a4c-61f4-44fd-8044-c394eb1e6be4"
+              },
+              {
+                "$id": "18",
+                "Guid": "555dfa02-7b12-4adc-bf19-2ac98697ac46"
+              },
+              {
+                "$id": "19",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+              },
+              {
+                "$id": "20",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+              },
+              {
+                "$id": "21",
+                "Guid": "3130215a-8c5a-4b30-902d-d32cfadeb869"
+              }
+            ]
           },
           "Scale": {
-            "$id": "15",
+            "$id": "22",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -81,7 +111,75 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "16",
+            "$id": "23",
+            "$values": []
+          }
+        },
+        {
+          "$id": "24",
+          "$type": "GameEngine.Core.Nodes.SpriteRenderer, GameEngine.Core",
+          "Texture": {
+            "$id": "25",
+            "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+          },
+          "Shader": {
+            "$id": "26",
+            "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
+          },
+          "LocalPosition": {
+            "$id": "27",
+            "X": -10.0
+          },
+          "Scale": {
+            "$id": "28",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "29",
+            "$values": []
+          }
+        },
+        {
+          "$id": "30",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Texture": {
+            "$id": "31",
+            "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
+          },
+          "Shader": {
+            "$id": "32",
+            "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
+          },
+          "Model": {
+            "$id": "33",
+            "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
+          },
+          "Textures": {
+            "$id": "34",
+            "$values": []
+          },
+          "LocalPosition": {
+            "$id": "35",
+            "X": 11.0,
+            "Y": -9.0,
+            "Z": 12.0
+          },
+          "Scale": {
+            "$id": "36",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "37",
             "$values": []
           }
         }
@@ -89,13 +187,19 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "17",
+    "$id": "38",
     "$values": [
       {
         "$ref": "4"
       },
       {
         "$ref": "10"
+      },
+      {
+        "$ref": "24"
+      },
+      {
+        "$ref": "30"
       }
     ]
   }

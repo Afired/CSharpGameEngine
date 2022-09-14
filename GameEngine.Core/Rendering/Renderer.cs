@@ -149,23 +149,21 @@ public static unsafe class Renderer {
         Gl.BindVertexArray(vao);
         Gl.BindBuffer(GLEnum.ArrayBuffer, vbo);
         
-
-        unsafe {
-            fixed(float* v = &vertexData[0]) {
-                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
-            }
-            
-            // xyz
-            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
-            Gl.EnableVertexAttribArray(0);
-            
-            // texture coordinates
-            Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-            Gl.EnableVertexAttribArray(1);
-
-            Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-            Gl.BindVertexArray(0);
+        fixed(float* v = &vertexData[0]) {
+            Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
         }
+        
+        // xyz
+        Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+        Gl.EnableVertexAttribArray(0);
+        
+        // texture coordinates
+        Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+        Gl.EnableVertexAttribArray(1);
+        
+        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+        Gl.BindVertexArray(0);
+        
         return vao;
     }
     

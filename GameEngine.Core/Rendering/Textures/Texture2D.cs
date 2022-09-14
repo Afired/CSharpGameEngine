@@ -21,9 +21,10 @@ public class Texture2D : Texture {
         Height = (uint)info.Value.Height;
 //            info.Value.ColorComponents;
 //            info.Value.BitsPerChannel;
-            
+        
+        StbImage.stbi_set_flip_vertically_on_load(1);
         ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
-            
+        
         fixed(void* data = image.Data) {
             Load(Gl, data, Width, Height);
         }
@@ -51,7 +52,7 @@ public class Texture2D : Texture {
         //Generating the opengl handle;
         ID = gl.GenTexture();
         Bind();
-
+        
         //Setting the data of a texture.
         gl.TexImage2D(TextureTarget.Texture2D, 0, (int) InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, data);
         //Setting some texture perameters so the texture behaves as expected.
@@ -67,11 +68,11 @@ public class Texture2D : Texture {
     ~Texture2D() {
         Dispose();
     }
-
+    
     public void Dispose() {
         //TODO: Gl.DeleteTexture(ID);
     }
-
+    
     public override void Bind(uint slot = 0) {
         //When we bind a texture we can choose which textureslot we can bind it to.
         TextureUnit textureSlot = TextureUnit.Texture0;

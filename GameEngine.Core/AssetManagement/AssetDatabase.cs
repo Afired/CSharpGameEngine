@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Assimp;
@@ -8,10 +7,6 @@ using Assimp.Configs;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
-using ObjLoader.Loader.Data.Elements;
-using ObjLoader.Loader.Data.VertexData;
-using ObjLoader.Loader.Loaders;
-using Face = ObjLoader.Loader.Data.Elements.Face;
 using Mesh = GameEngine.Core.Rendering.Geometry.Mesh;
 using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
@@ -76,107 +71,94 @@ public class AssetDatabase {
         }
         
         Console.Log($"Loading Meshes");
-        float[] quadVertexData = {
-            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
-            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
-
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right
-            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+//        float[] quadVertexData = {
+//            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
+//            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
+//            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
+//
+//            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right
+//            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
+//            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
+//        };
+        
+        _Vertex[] quadVertexData = {
+            new(new(-0.5f, 0.5f, 0.0f), new(0.0f, 1.0f), new()),
+            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
+            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
+            
+            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
+            new(new(0.5f, -0.5f, 0.0f), new(1.0f, 0.0f), new()),
+            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
         };
-        Load(Mesh.QuadGuid, new Mesh(quadVertexData));
+        Load(Mesh.QuadGuid, new PosUvNormalMesh(quadVertexData));
         
         string[] objPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
-        for(int i = 0; i < objPaths.Length; i++) {
-            LoadModelUsingAssimp(objPaths[i]);
-        }
+        LoadModelsThreaded(objPaths);
         string[] fbxPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("fbx");
-        for(int i = 0; i < fbxPaths.Length; i++) {
-            LoadModelUsingAssimp(fbxPaths[i]);
+        LoadModelsThreaded(fbxPaths);
+    }
+    
+    private static void LoadModels(string[] paths) {
+        for(int i = 0; i < paths.Length; i++) {
+            LoadModel(paths[i]);
         }
     }
     
-    private static void LoadObjsThreaded(string[] paths) {
-        for (int i = 0; i < paths.Length; i++) {
-            _Vertex[] vertices = LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower());
-            int capturedIndex = i;
-            Application.TaskQueue.Enqueue(() => {
-                Load(AssetManager.Instance.GetGuidOfAsset(paths[capturedIndex]), new PosUvNormalMesh(vertices));
-            });
-//            Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), LoadVertices(paths[i], Path.GetFileNameWithoutExtension(paths[i]).ToLower()));
+    private static void LoadModelsThreaded(string[] paths) {
+        Thread thread = new Thread(new ThreadStart(() => LoadMeshData(paths)));
+        thread.Start();
+        
+        static void LoadMeshData(string[] paths) {
+            
+            foreach(string path in paths) {
+                AssimpContext importer = new AssimpContext();
+                importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
+                Scene model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
+                
+                (_Vertex[] vertexData, uint[] indexData)[] meshData = new (_Vertex[], uint[])[model.MeshCount];
+                
+                for(int i = 0; i < model.Meshes.Count; i++) {
+                    
+                    List<Vector3D> posList = model.Meshes[i].Vertices;
+                    List<Vector3D> normalList = model.Meshes[i].Normals;
+                    List<Vector3D>[] textureCoordinateChannels = model.Meshes[i].TextureCoordinateChannels;
+                    
+                    _Vertex[] vertexData = new _Vertex[posList.Count];
+                    
+                    for(int j = 0; j < posList.Count; j++) {
+                        Vector3D position = posList[j];
+                        Vector3D normal = normalList[j];
+                        
+                        _UV uv = new _UV(0, 0);
+                        if(textureCoordinateChannels.Length >= 1) {
+                            List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
+                            if(uvChannel0.Count > j)
+                                uv = new _UV(uvChannel0[j].X, uvChannel0[j].Y);
+                        }
+                        
+                        vertexData[j] = new _Vertex(
+                            new _Position(position.X, position.Y, position.Z),
+                            uv,
+                            new _Normal(normal.X, normal.Y, normal.Z)
+                        );
+                    }
+                    
+                    meshData[i] = (vertexData, model.Meshes[i].GetIndices().Cast<uint>().ToArray());
+                }
+                
+                Application.TaskQueue.Enqueue(() => {
+                    Mesh[] meshes = new Mesh[meshData.Length];
+                    for(int i = 0; i < meshData.Length; i++) {
+                        meshes[i] = new PosUvNormalMeshIndexedBuffer(meshData[i].vertexData, meshData[i].indexData);
+                    }
+                    Load(AssetManager.Instance.GetGuidOfAsset(path), new Model(meshes));
+                });
+            }
         }
+        
     }
     
-    private static _Vertex[] LoadVertices(string path, string name) {
-        ObjLoaderFactory objLoaderFactory = new();
-        IObjLoader loader = objLoaderFactory.Create(new MaterialNullStreamProvider());
-    
-        LoadResult result;
-        using (FileStream fs = File.OpenRead(path)) {
-            result = loader.Load(fs);
-        }
-        
-        
-        string groupName = result.Groups[0].Name;
-        
-        IList<Vertex> vertexList = result.Vertices;
-        // IList<Texture> uvList = result.Textures;
-        IList<Normal> normalList = result.Normals;
-        
-        
-        IList<Face> faces = result.Groups[0].Faces;
-        _Vertex[] vertices = new _Vertex[faces.Count * 3];
-        
-        for(int i = 0; i < faces.Count; i++) {
-            Face face = faces[i];
-            
-            if(face.Count != 3) {
-                Console.LogError($"Skipped face, because it had {face.Count} vertices!");
-                continue;
-            }
-            
-            {
-                //vertex1
-                FaceVertex faceVertex = face[0];
-                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
-                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
-                    
-                vertices[i * 3 + 0] = new _Vertex(
-                    new _Position(position.X, position.Y, position.Z),
-                    new _UV(0, 0),
-                    new _Normal(normal.X, normal.Y, normal.Z)
-                );
-            }
-            {
-                //vertex2
-                FaceVertex faceVertex = face[1];
-                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
-                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
-                    
-                vertices[i * 3 + 1] = new _Vertex(
-                    new _Position(position.X, position.Y, position.Z),
-                    new _UV(0, 0),
-                    new _Normal(normal.X, normal.Y, normal.Z)
-                );
-            }
-            {
-                //vertex3
-                FaceVertex faceVertex = face[2];
-                Vertex position = faceVertex.VertexIndex < vertexList.Count ? vertexList[faceVertex.VertexIndex] : new Vertex(0, 0, 0);
-                Normal normal = faceVertex.NormalIndex < normalList.Count ? normalList[faceVertex.NormalIndex] : new Normal(0, 0, 0);
-                    
-                vertices[i * 3 + 2] = new _Vertex(
-                    new _Position(position.X, position.Y, position.Z),
-                    new _UV(0, 0),
-                    new _Normal(normal.X, normal.Y, normal.Z)
-                );
-            }
-        }
-        return vertices;
-    } // PosUvNormalGeometry
-    
-    private static void LoadModelUsingAssimp(string filePath) {
+    private static void LoadModel(string filePath) {
         AssimpContext importer = new AssimpContext();
         importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
         Scene model = importer.ImportFile(filePath, PostProcessPreset.TargetRealTimeMaximumQuality);

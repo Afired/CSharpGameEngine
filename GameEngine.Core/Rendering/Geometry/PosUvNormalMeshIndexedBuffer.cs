@@ -1,5 +1,3 @@
-using System.Linq;
-using ObjLoader.Loader.Data.VertexData;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 

@@ -1,10 +1,12 @@
+using System;
 using System.Numerics;
+using GameEngine.Core.AssetManagement;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Geometry; 
 
 public class PosMesh : Mesh {
-
+    
     public PosMesh(_Vertex[] vertexData) : base() {
         VertexCount = vertexData.Length;
         InitializeGeometry(vertexData);

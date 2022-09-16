@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 namespace GameEngine.Core.Nodes; 
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
-public class Node : IAsset {
+public class Node {
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }

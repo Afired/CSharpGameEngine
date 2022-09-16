@@ -7,7 +7,6 @@ namespace GameEngine.Core.Rendering.Textures;
 
 public class Texture2D : Texture {
     
-    public static Texture2D MissingTexture { get; internal set; }
     public uint Width { get; init; }
     public uint Height { get; init; }
     public uint ID { get; private set; }
@@ -34,17 +33,6 @@ public class Texture2D : Texture {
         Width = width;
         Height = height;
         Load(Gl, data, Width, Height);
-    }
-    
-    internal static unsafe Texture2D CreateMissingTexture() {
-        fixed(void* data = new byte[] {
-                  204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255,
-                  0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255,
-                  204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255,
-                  0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255
-              }) {
-            return new Texture2D(data, 4, 4);
-        }
     }
     
     private unsafe void Load(GL gl, void* data, uint width, uint height) {

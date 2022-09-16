@@ -5,43 +5,35 @@ namespace GameEngine.Core.Rendering.Geometry;
 
 public abstract class Mesh : IAsset {
     
+    public static string[] Extensions { get; } = Array.Empty<string>();
     public uint Vao { get; protected set; }
     public uint Vbo { get; protected set; }
     public int VertexCount { get; protected set; }
     public static readonly Guid QuadGuid = new("605b3a35-5e06-4cc4-8da2-3f2d07471b51");
     
-//    public Mesh(float[] vertexData) {
-//        VertexCount = vertexData.Length / 5;
-//        InitializeGeometry(vertexData);
-//    }
-//    
-//    protected Mesh() { }
-//    
-//    private void InitializeGeometry(float[] vertexData) {
-//        
-//        Vao = Gl.GenVertexArray();
-//        Vbo = Gl.GenBuffer();
-//        
-//        Gl.BindVertexArray(Vao);
-//        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
-//        
-//        unsafe {
-//            fixed(float* v = &vertexData[0]) {
-//                Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
-//            }
-//            
-//            // xyz
-//            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
-//            Gl.EnableVertexAttribArray(0);
-//            
-//            // texture coordinates
-//            Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-//            Gl.EnableVertexAttribArray(1);
-//
-//            Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-//            Gl.BindVertexArray(0);
-//        }
-//        
-//    }
+    private static PosUvNormalMesh CreateDefault() {
+        _Vertex[] quadVertexData = {
+            new(new(-0.5f, 0.5f, 0.0f), new(0.0f, 1.0f), new()),
+            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
+            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
+            
+            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
+            new(new(0.5f, -0.5f, 0.0f), new(1.0f, 0.0f), new()),
+            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
+        };
+        return new PosUvNormalMesh(quadVertexData);
+    }
+    
+    public static IAsset Default(Type assetType) {
+        return CreateDefault();
+    }
+    
+    public static IAsset DefaultGen<T>() where T : IAsset, new() {
+        return Default(typeof(T));
+    }
+    
+    public static void LoadAssets(string[] path) {
+        AssetDatabase.Load(QuadGuid, CreateDefault());
+    }
     
 }

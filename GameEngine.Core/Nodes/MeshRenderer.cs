@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering.Geometry;
-using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
@@ -16,11 +15,10 @@ public partial class MeshRenderer : Transform {
     
     [Serialized] public AssetRef<Texture> Texture { get; set; }
     [Serialized] public AssetRef<Shader> Shader { get; set; }
-    [Serialized] public AssetRef<Mesh> Mesh { get; set; }
     [Serialized] public AssetRef<Model> Model { get; set; }
     [Serialized] public Vector3 Rotation3D { get; private set; }
     
-    [Serialized] public List<AssetRef<Texture>> Textures { get; set; } = new();
+    [Serialized] public List<AssetRef<Texture>>? Textures { get; set; } = new();
     
     protected override unsafe void OnDraw() {
         Shader.Get().Use();
@@ -37,10 +35,7 @@ public partial class MeshRenderer : Transform {
         Shader.Get().SetInt("u_Texture", 0);
         Shader.Get().SetFloat("time", Time.TotalTimeElapsed);
         
-        Model? model = Model.Get();
-        
-        if(model is null)
-            return;
+        Model model = Model.Get();
         
         if(Textures is null)
             return;
@@ -49,8 +44,7 @@ public partial class MeshRenderer : Transform {
         
         for(int i = 0; i < meshes.Length; i++) {
             
-            Texture texture = Texture2D.MissingTexture;
-            if(Textures.Count > i) texture = Textures[i].Get();
+            Texture texture = Textures.Count > i ? Textures[i].Get() : AssetDatabase.Get<Texture>(Guid.Empty);
             
             texture.Bind(0);
             

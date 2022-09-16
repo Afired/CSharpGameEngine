@@ -23,11 +23,10 @@ public static class StringExtension {
 }
 
 //TODO: delete program when disposing shader
-public class Shader : IAsset {
-    
-    public static Shader InvalidShader { get; internal set; }
+public sealed class Shader : IAsset {
+
+    public static string[] Extensions { get; } = { "glsl" };
     private uint _programID;
-    
     
     public Shader(string vertexCode, string fragmentCode) {
         (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
@@ -101,7 +100,7 @@ public class Shader : IAsset {
         }
         return result;
     }
-
+    
     private static ShaderType ShaderTypeFromString(string type) => type switch {
         "vertex" => ShaderType.VertexShader,
         "fragment" => ShaderType.FragmentShader,
@@ -112,7 +111,7 @@ public class Shader : IAsset {
     public void Use() {
         Gl.UseProgram(_programID);
     }
-
+    
     public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
         int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.UniformMatrix4(location, 1, false, mat.ToArray());
@@ -131,6 +130,21 @@ public class Shader : IAsset {
     public void SetFloat(string uniformName, float value) {
         int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.Uniform1(location, value);
+    }
+    
+    public static IAsset Default(Type assetType) {
+        return InvalidShader.Create();
+    }
+    
+    public static IAsset DefaultGen<T>() where T : IAsset, new() {
+        return InvalidShader.Create();
+    }
+    
+    public static void LoadAssets(string[] paths) {
+        for (int i = 0; i < paths.Length; i++) {
+            AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), new Shader(paths[i]));
+            Console.LogSuccess($"Compiling shaders ({i + 1}/{paths.Length}) '{paths[i]}'");
+        }
     }
     
 }

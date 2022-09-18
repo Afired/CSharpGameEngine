@@ -10,6 +10,7 @@ public class Texture2D : Texture {
     public uint Width { get; init; }
     public uint Height { get; init; }
     public uint ID { get; private set; }
+    public static Guid MissingTexture2D { get; } = new Guid("7cba6a44-a877-4ed4-975a-552dd8d13c4d");
     
     public unsafe Texture2D(string path) {
         using var stream = File.OpenRead(path);

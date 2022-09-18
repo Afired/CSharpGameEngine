@@ -22,10 +22,10 @@ public static class StringExtension {
     }
 }
 
-//TODO: delete program when disposing shader
-public sealed class Shader : IAsset {
-
-    public static string[] Extensions { get; } = { "glsl" };
+public class Shader : IAsset {
+    
+    private static Shader? _default;
+    public static Shader Default => _default ??= InvalidShader.Create();
     private uint _programID;
     
     public Shader(string vertexCode, string fragmentCode) {
@@ -38,19 +38,19 @@ public sealed class Shader : IAsset {
         (ShaderType, string)[] shaderInfo = SplitIntoShader(contents);
         Compile(shaderInfo);
     }
-
+    
     private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo) {
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
         for(int i = 0; i < shaderInfo.Length; i++) {
-
+            
             ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
-
+            
             shaderIDs[i] = Gl.CreateShader(type);
             Gl.ShaderSource(shaderIDs[i], src);
             Gl.CompileShader(shaderIDs[i]);
-
+            
             //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             //if(status[0] == 0) {
             //    string error = GL.GetShaderInfoLog(shaderIDs[i]);
@@ -130,21 +130,6 @@ public sealed class Shader : IAsset {
     public void SetFloat(string uniformName, float value) {
         int location = Gl.GetUniformLocation(_programID, uniformName);
         Gl.Uniform1(location, value);
-    }
-    
-    public static IAsset Default(Type assetType) {
-        return InvalidShader.Create();
-    }
-    
-    public static IAsset DefaultGen<T>() where T : IAsset, new() {
-        return InvalidShader.Create();
-    }
-    
-    public static void LoadAssets(string[] paths) {
-        for (int i = 0; i < paths.Length; i++) {
-            AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(paths[i]), new Shader(paths[i]));
-            Console.LogSuccess($"Compiling shaders ({i + 1}/{paths.Length}) '{paths[i]}'");
-        }
     }
     
 }

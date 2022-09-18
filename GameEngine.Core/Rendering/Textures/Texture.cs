@@ -4,8 +4,7 @@ using GameEngine.Core.AssetManagement;
 namespace GameEngine.Core.Rendering.Textures; 
 
 public abstract class Texture : IAsset {
-
-    public static string[] Extensions { get; } = { "png" };
+    
     public abstract void Bind(uint slot = 0);
     
     public static unsafe IAsset Default(Type assetType) {
@@ -17,10 +16,6 @@ public abstract class Texture : IAsset {
               }) {
             return new Texture2D(data, 4, 4);
         }
-    }
-    
-    public static IAsset DefaultGen<T>() where T : IAsset, new() {
-        return Default(typeof(T));
     }
     
     public static void LoadAssets(string[] paths) {

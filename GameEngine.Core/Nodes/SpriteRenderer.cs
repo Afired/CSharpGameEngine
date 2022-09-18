@@ -16,6 +16,18 @@ public partial class SpriteRenderer : Transform {
     
     protected override void OnDraw() {
         
+        if(Shader.Get() is null)
+            return;
+        if(Texture.Get() is null)
+            return;
+        Model? model = AssetDatabase.Get<Model>(Mesh.QuadGuid);
+        if(model is null)
+            return;
+        if(model.Meshes.Length != 1)
+            return;
+        Mesh mesh = model.Meshes[0];
+        
+        
         Shader.Get().Use();
         
 //        Matrix4x4 trans = Matrix4x4.CreateTranslation(Position.X, Position.Y, Position.Z);
@@ -32,16 +44,12 @@ public partial class SpriteRenderer : Transform {
         Shader.Get().GLM_SetMat("model", transformMat);
         Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
-        Mesh? geometry = AssetDatabase.Get<Mesh>(Mesh.QuadGuid);
-        if(geometry is null)
-            return;
-        
-        Gl.BindVertexArray(geometry.Vao);
+        Gl.BindVertexArray(mesh.Vao);
         
         Texture.Get().Bind();
         Shader.Get().SetInt("u_Texture", 0);
         
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) geometry.VertexCount);
+        Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) mesh.VertexCount);
         Gl.BindVertexArray(0);
     }
     

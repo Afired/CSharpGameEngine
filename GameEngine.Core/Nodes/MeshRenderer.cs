@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering.Geometry;
+using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
@@ -44,7 +45,7 @@ public partial class MeshRenderer : Transform {
         
         for(int i = 0; i < meshes.Length; i++) {
             
-            Texture texture = Textures.Count > i ? Textures[i].Get() : AssetDatabase.Get<Texture>(Guid.Empty);
+            Texture texture = Textures.Count > i ? Textures[i].Get() : AssetDatabase.Get<Texture>(Texture2D.MissingTexture2D);
             
             texture.Bind(0);
             

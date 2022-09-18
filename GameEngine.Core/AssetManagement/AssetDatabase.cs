@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GameEngine.Core.Rendering.Geometry;
+
 //using System.Threading;
 //using Assimp;
 //using Assimp.Configs;
@@ -16,7 +19,7 @@ namespace GameEngine.Core.AssetManagement;
 public static class AssetDatabase {
     
     private static readonly Dictionary<Guid, IAsset> _assetCache = new();
-    private static readonly List<IAsset> _defaultAssets = new();
+    private static readonly List<IAssetImporter> _assetImporterCache = new();
     
     public static void Load(Guid guid, IAsset asset) {
         if(_assetCache.ContainsKey(guid)) {
@@ -36,43 +39,61 @@ public static class AssetDatabase {
     
     public static void UnloadAll() {
         _assetCache.Clear();
+        _assetImporterCache.Clear();
     }
     
-    public static T Get<T>(Guid guid) where T : class {
-        if(_assetCache.TryGetValue(guid, out IAsset? texture))
-            return (T) texture;
+    public static T? Get<T>(Guid guid) where T : class, IAsset {
+        if(_assetCache.TryGetValue(guid, out IAsset? asset)) {
+            if(asset is T t)
+                return t;
+            
+            //TODO: return registered default asset instead
+            return default(T);
+        }
         
         //TODO: Refactor handling of defaults
-        IAsset? result = _defaultAssets.FirstOrDefault(asset => asset.GetType() == typeof(T));
-        result ??= _defaultAssets.FirstOrDefault(asset => asset.GetType().IsAssignableTo(typeof(T)));
+//        IAsset? result = _defaultAssets.FirstOrDefault(asset => asset.GetType() == typeof(T));
+//        result ??= _defaultAssets.FirstOrDefault(asset => asset.GetType().IsAssignableTo(typeof(T)));
         
-        if(result is null)
-            throw new Exception($"No default asset found for type {typeof(T)}");
-
-        return (T) result;
+        return default(T);
     }
     
     public static void Reload() {
         UnloadAll();
         
-        //TODO: include asset definitions in other assemblies
-        IEnumerable<Type> assetTypes = Assembly.GetAssembly(typeof(Application))!.GetTypes().Where(type => type.IsAssignableTo(typeof(IAsset)) && type.IsClass);
-        
-        foreach(Type assetType in assetTypes) {
-            IAsset? defaultAsset = (IAsset?) assetType.GetMethod(nameof(IAsset.Default), BindingFlags.Public | BindingFlags.Static)?.Invoke(null, new object?[] { assetType } );
-            
-            if(defaultAsset is null)
+        // instantiate assetImporters
+        IEnumerable<Type> assetImporterTypes = Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Application))!).
+            SelectMany(assembly => ReflectionHelper.GetDerivedTypes(typeof(AssetImporter<>), assembly));
+        foreach(Type assetImporterType in assetImporterTypes) {
+            IAssetImporter? assetImporter = (IAssetImporter?) Activator.CreateInstance(assetImporterType);
+            if(assetImporter is null) {
+                Console.LogWarning($"Failed to instantiate asset importer of type {assetImporterType.FullName}");
                 continue;
-            
-            _defaultAssets.Add(defaultAsset);
-            
-            string[] extensions = (string[]) assetType.GetProperty(nameof(IAsset.Extensions), BindingFlags.Public | BindingFlags.Static)!.GetValue(null)!;
-            for(int i = 0; i < extensions.Length; i++) {
-                string[] paths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension(extensions[i]);
-                assetType.GetMethod(nameof(IAsset.LoadAssets), BindingFlags.Public | BindingFlags.Static)!.Invoke(null, new object?[] { paths } );
+            }
+            _assetImporterCache.Add(assetImporter);
+        }
+        
+        //TODO: load default assets?
+        
+        // load assets with assetImporters
+        foreach(IAssetImporter assetImporter in _assetImporterCache) {
+            foreach(string extension in assetImporter.GetExtensions()) {
+                foreach(string path in AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension(extension)) {
+                    
+                    IAsset? asset = assetImporter.ImportInternal(path);
+                    if(asset is null)
+                        continue;
+                    
+                    Guid guid = AssetManager.Instance.GetGuidOfAsset(path);
+                    AssetDatabase.Load(guid, asset);
+                    
+                }
             }
         }
-//        
+        
+        //TODO: refactor default asset init
+        Load(Mesh.QuadGuid, new Model(new Mesh[] { Mesh.CreateDefault() }));
+        
 //        Console.Log($"Loading textures...");
 //        Texture2D.MissingTexture = Texture2D.CreateMissingTexture(); // TODO: refactor defaults
 //        string[] texturePaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("png");

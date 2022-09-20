@@ -1,18 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GameEngine.Core.Rendering.Geometry;
-
-//using System.Threading;
-//using Assimp;
-//using Assimp.Configs;
-//using GameEngine.Core.Rendering.Geometry;
-//using GameEngine.Core.Rendering.Shaders;
-//using GameEngine.Core.Rendering.Textures;
-//using Mesh = GameEngine.Core.Rendering.Geometry.Mesh;
-//using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
 namespace GameEngine.Core.AssetManagement;
 
@@ -43,18 +33,8 @@ public static class AssetDatabase {
     }
     
     public static T? Get<T>(Guid guid) where T : class, IAsset {
-        if(_assetCache.TryGetValue(guid, out IAsset? asset)) {
-            if(asset is T t)
-                return t;
-            
-            //TODO: return registered default asset instead
-            return default(T);
-        }
-        
-        //TODO: Refactor handling of defaults
-//        IAsset? result = _defaultAssets.FirstOrDefault(asset => asset.GetType() == typeof(T));
-//        result ??= _defaultAssets.FirstOrDefault(asset => asset.GetType().IsAssignableTo(typeof(T)));
-        
+        if(_assetCache.TryGetValue(guid, out IAsset? asset))
+            return (T) asset;
         return default(T);
     }
     
@@ -92,52 +72,7 @@ public static class AssetDatabase {
         }
         
         //TODO: refactor default asset init
-        Load(Mesh.QuadGuid, new Model(new Mesh[] { Mesh.CreateDefault() }));
-        
-//        Console.Log($"Loading textures...");
-//        Texture2D.MissingTexture = Texture2D.CreateMissingTexture(); // TODO: refactor defaults
-//        string[] texturePaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("png");
-//        for (int i = 0; i < texturePaths.Length; i++) {
-//            string texturePath = texturePaths[i];
-//            Guid guid = AssetManager.Instance.GetGuidOfAsset(texturePath);
-//            Load(guid, new Texture2D(texturePath));
-//            Console.LogSuccess($"Loading textures ({i + 1}/{texturePaths.Length}) '{texturePath}'");
-//        }
-//        
-//        Console.Log($"Compiling shaders...");
-//        Shader.InvalidShader = InvalidShader.Create(); // TODO: refactor defaults
-//        string[] shaderPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("glsl");
-//        for (int i = 0; i < shaderPaths.Length; i++) {
-//            Load(AssetManager.Instance.GetGuidOfAsset(shaderPaths[i]), new Shader(shaderPaths[i]));
-//            Console.LogSuccess($"Compiling shaders ({i + 1}/{shaderPaths.Length}) '{shaderPaths[i]}'");
-//        }
-//        
-//        Console.Log($"Loading Meshes");
-////        float[] quadVertexData = {
-////            -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // top left
-////            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,    // top right
-////            -0.5f, -0.5f, 0.0f, 0.0f , 0.0f, // bottom left
-////
-////            0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // top right
-////            0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
-////            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-////        };
-//        
-//        _Vertex[] quadVertexData = {
-//            new(new(-0.5f, 0.5f, 0.0f), new(0.0f, 1.0f), new()),
-//            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
-//            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
-//            
-//            new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),
-//            new(new(0.5f, -0.5f, 0.0f), new(1.0f, 0.0f), new()),
-//            new(new(-0.5f, -0.5f, 0.0f), new(0.0f, 0.0f), new()),
-//        };
-//        Load(Mesh.QuadGuid, new PosUvNormalMesh(quadVertexData));
-//        
-//        string[] objPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("obj");
-//        LoadModelsThreaded(objPaths);
-//        string[] fbxPaths = AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension("fbx");
-//        LoadModelsThreaded(fbxPaths);
+        Load(Mesh.QuadGuid, Mesh.CreateDefault());
     }
     
 }

@@ -15,7 +15,7 @@ public static class EditorResources {
         Console.Log($"Loading Editor Resources...");
         string[] paths = GetAllFilePathsOfAssetsWithExtension("png");
         for (int i = 0; i < paths.Length; i++) {
-            RegisterIcon(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), new Texture2D(paths[i]));
+            RegisterIcon(Path.GetFileNameWithoutExtension(paths[i]).ToLower(), Texture2D.Create(paths[i]));
             Console.LogSuccess($"Loading icons ({i + 1}/{paths.Length}) '{paths[i]}'");
         }
     }

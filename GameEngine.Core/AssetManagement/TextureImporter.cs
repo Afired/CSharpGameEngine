@@ -7,8 +7,8 @@ public class TextureImporter : AssetImporter<Texture2D> {
     
     public override string[] GetExtensions() => new[] { "png" };
     
-    public override Texture2D Import(string path) {
-        return new Texture2D(path);
+    public override Texture2D? Import(string path) {
+        return Texture2D.Create(path);
     }
     
     public override IEnumerable<Texture2D?> Import(string[] paths) {

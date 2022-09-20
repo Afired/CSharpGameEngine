@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,16 @@ namespace GameEngine.Core.Rendering.Geometry;
 public class Model : IAsset {
     
     public Mesh[] Meshes { get; }
+    
+    public static IAsset Default { get; }
+    
+    static Model() {
+        Default = CreateDefault();
+    }
+    
+    private static Model CreateDefault() {
+        return new Model(Array.Empty<Mesh>());
+    }
     
     public Model(Mesh[] meshes) {
         Meshes = meshes;
@@ -28,29 +39,29 @@ public class Model : IAsset {
             List<Vector3D> normalList = model.Meshes[i].Normals;
             List<Vector3D>[] textureCoordinateChannels = model.Meshes[i].TextureCoordinateChannels;
             
-            _Vertex[] vertexData = new _Vertex[posList.Count];
+            Vertex[] vertexData = new Vertex[posList.Count];
             
             for(int j = 0; j < posList.Count; j++) {
                 Vector3D position = posList[j];
                 Vector3D normal = normalList[j];
                 
-                _UV uv = new _UV(0, 0);
+                UV uv = new UV(0, 0);
                 if(textureCoordinateChannels.Length >= 1) {
                     List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                     if(uvChannel0.Count > j)
-                        uv = new _UV(uvChannel0[j].X, uvChannel0[j].Y);
+                        uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
                 }
                 
-                vertexData[j] = new _Vertex(
-                    new _Position(position.X, position.Y, position.Z),
+                vertexData[j] = new Vertex(
+                    new Position(position.X, position.Y, position.Z),
                     uv,
-                    new _Normal(normal.X, normal.Y, normal.Z)
+                    new Normal(normal.X, normal.Y, normal.Z)
                 );
             }
             
             uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
             
-            meshes[i] = new PosUvNormalMeshIndexedBuffer(vertexData, indices);
+            meshes[i] = new Mesh(vertexData, indices);
         }
         Meshes = meshes;
     }
@@ -66,7 +77,7 @@ public class Model : IAsset {
                 importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
                 Scene model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
                 
-                (_Vertex[] vertexData, uint[] indexData)[] meshData = new (_Vertex[], uint[])[model.MeshCount];
+                (Vertex[] vertexData, uint[] indexData)[] meshData = new (Vertex[], uint[])[model.MeshCount];
                 
                 for(int i = 0; i < model.Meshes.Count; i++) {
                     
@@ -74,23 +85,23 @@ public class Model : IAsset {
                     List<Vector3D> normalList = model.Meshes[i].Normals;
                     List<Vector3D>[] textureCoordinateChannels = model.Meshes[i].TextureCoordinateChannels;
                     
-                    _Vertex[] vertexData = new _Vertex[posList.Count];
+                    Vertex[] vertexData = new Vertex[posList.Count];
                     
                     for(int j = 0; j < posList.Count; j++) {
                         Vector3D position = posList[j];
                         Vector3D normal = normalList[j];
                         
-                        _UV uv = new _UV(0, 0);
+                        UV uv = new UV(0, 0);
                         if(textureCoordinateChannels.Length >= 1) {
                             List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                             if(uvChannel0.Count > j)
-                                uv = new _UV(uvChannel0[j].X, uvChannel0[j].Y);
+                                uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
                         }
                         
-                        vertexData[j] = new _Vertex(
-                            new _Position(position.X, position.Y, position.Z),
+                        vertexData[j] = new Vertex(
+                            new Position(position.X, position.Y, position.Z),
                             uv,
-                            new _Normal(normal.X, normal.Y, normal.Z)
+                            new Normal(normal.X, normal.Y, normal.Z)
                         );
                     }
                     
@@ -100,7 +111,7 @@ public class Model : IAsset {
                 Application.TaskQueue.Enqueue(() => {
                     Mesh[] meshes = new Mesh[meshData.Length];
                     for(int i = 0; i < meshData.Length; i++) {
-                        meshes[i] = new PosUvNormalMeshIndexedBuffer(meshData[i].vertexData, meshData[i].indexData);
+                        meshes[i] = new Mesh(meshData[i].vertexData, meshData[i].indexData);
                     }
                     AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(path), new Model(meshes));
                 });
@@ -122,37 +133,29 @@ public class Model : IAsset {
             List<Vector3D> normalList = model.Meshes[i].Normals;
             List<Vector3D>[] textureCoordinateChannels = model.Meshes[i].TextureCoordinateChannels;
 
-            _Vertex[] vertexData = new _Vertex[posList.Count];
+            Vertex[] vertexData = new Vertex[posList.Count];
             
             for(int j = 0; j < posList.Count; j++) {
                 Vector3D position = posList[j];
                 Vector3D normal = normalList[j];
                 
-                _UV uv = new _UV(0, 0);
+                UV uv = new UV(0, 0);
                 if(textureCoordinateChannels.Length >= 1) {
                     List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                     if(uvChannel0.Count > j)
-                        uv = new _UV(uvChannel0[j].X, uvChannel0[j].Y);
+                        uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
                 }
                 
-                vertexData[j] = new _Vertex(
-                    new _Position(position.X, position.Y, position.Z),
+                vertexData[j] = new Vertex(
+                    new Position(position.X, position.Y, position.Z),
                     uv,
-                    new _Normal(normal.X, normal.Y, normal.Z)
+                    new Normal(normal.X, normal.Y, normal.Z)
                 );
             }
 
             uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
 
-            meshes[i] = new PosUvNormalMeshIndexedBuffer(vertexData, indices);
-            
-//            Load(AssetManager.Instance.GetGuidOfAsset(filePath), new PosUvNormalMeshIndexedBuffer(vertexData, indices));
-//            continue;
-//            if(i == 0)
-////                Register(AssetManager.Instance.GetGuidOfAsset(filePath), new PosUvNormalGeometryIndexedBuffer(vertexData, indices));
-//                Load(AssetManager.Instance.GetGuidOfAsset(filePath + "_" + i), new PosUvNormalMeshIndexedBuffer(vertexData, indices));
-//            else
-//                Console.LogWarning("Loading of Models with more than 1 mesh is currently not supported");
+            meshes[i] = new Mesh(vertexData, indices);
         }
         AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(filePath), new Model(meshes));
     }

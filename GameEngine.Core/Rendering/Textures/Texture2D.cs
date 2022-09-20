@@ -1,24 +1,45 @@
 using System;
 using System.IO;
+using GameEngine.Core.AssetManagement;
 using Silk.NET.OpenGL;
 using StbImageSharp;
 
 namespace GameEngine.Core.Rendering.Textures;
 
-public class Texture2D : Texture {
+public class Texture2D : IAsset {
     
-    public uint Width { get; init; }
-    public uint Height { get; init; }
+    public uint Width { get; private set; }
+    public uint Height { get; private set; }
     public uint ID { get; private set; }
-    public static Guid MissingTexture2D { get; } = new Guid("7cba6a44-a877-4ed4-975a-552dd8d13c4d");
     
-    public unsafe Texture2D(string path) {
+    public static IAsset Default { get; }
+    
+    static Texture2D() {
+        Default = CreateDefault();
+    }
+    
+    private Texture2D() { }
+    
+    private static unsafe IAsset CreateDefault() {
+        fixed(void* data = new byte[] {
+                  204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255,
+                  0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255,
+                  204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255,
+                  0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255
+              }) {
+            return Texture2D.Create(data, 4, 4);
+        }
+    }
+    
+    public static unsafe Texture2D? Create(string path) {
+        Texture2D newTexture = new Texture2D();
+        
         using var stream = File.OpenRead(path);
         ImageInfo? info = ImageInfo.FromStream(stream);
         if(!info.HasValue)
             throw new Exception();
-        Width = (uint) info.Value.Width;
-        Height = (uint)info.Value.Height;
+        newTexture.Width = (uint) info.Value.Width;
+        newTexture.Height = (uint)info.Value.Height;
 //            info.Value.ColorComponents;
 //            info.Value.BitsPerChannel;
         
@@ -26,14 +47,17 @@ public class Texture2D : Texture {
         ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
         
         fixed(void* data = image.Data) {
-            Load(Gl, data, Width, Height);
+            newTexture.Load(Gl, data, newTexture.Width, newTexture.Height);
         }
+        return newTexture;
     }
     
-    public unsafe Texture2D(void* data, uint width, uint height) {
-        Width = width;
-        Height = height;
-        Load(Gl, data, Width, Height);
+    public static unsafe Texture2D? Create(void* data, uint width, uint height) {
+        Texture2D newTexture = new Texture2D();
+        newTexture.Width = width;
+        newTexture.Height = height;
+        newTexture.Load(Gl, data, width, height);
+        return newTexture;
     }
     
     private unsafe void Load(GL gl, void* data, uint width, uint height) {
@@ -62,10 +86,12 @@ public class Texture2D : Texture {
         //TODO: Gl.DeleteTexture(ID);
     }
     
-    public override void Bind(uint slot = 0) {
-        //When we bind a texture we can choose which textureslot we can bind it to.
-        TextureUnit textureSlot = TextureUnit.Texture0;
-        Gl.ActiveTexture((TextureUnit)slot);
+    public void Bind(uint slot = 0) {
+        //When we bind a texture we can choose which texture slot we can bind it to.
+        if(slot > 31)
+            Console.LogWarning($"Can't assign texture to texture slot {slot}");
+        
+        Gl.ActiveTexture((TextureUnit) slot + 33984);
         Gl.BindTexture(TextureTarget.Texture2D, ID);
     }
     

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Serialization;
 using JetBrains.Annotations;
 
@@ -32,7 +31,11 @@ public class Node {
             foreach(Node childNodes in ChildNodes)
                 childNodes.Awake();
         if(!HasBeenAwoken) {
-            OnAwake();
+            try {
+                OnAwake();
+            } catch(Exception e) {
+                Console.LogError($"{this.GetType()}: {e}");
+            }
             HasBeenAwoken = true;
         }
         if(AwakeThisNodeBeforeItsChildren)
@@ -41,26 +44,42 @@ public class Node {
     }
     
     internal void Update() {
-        OnUpdate();
+        try {
+            OnUpdate();
+        } catch(Exception e) {
+            Console.LogError($"{this.GetType()}: {e}");
+        }
         foreach(Node childNode in ChildNodes)
             childNode.Update();
     }
     
     internal void PrePhysicsUpdate() {
-        OnPrePhysicsUpdate();
+        try {
+            OnPrePhysicsUpdate();
+        } catch(Exception e) {
+            Console.LogError($"{this.GetType()}: {e}");
+        }
         foreach(Node childNode in ChildNodes) {
             childNode.PrePhysicsUpdate();
         }
     }
     
     internal void PhysicsUpdate() {
-        OnPhysicsUpdate();
+        try {
+            OnPhysicsUpdate();
+        } catch(Exception e) {
+            Console.LogError($"{this.GetType()}: {e}");
+        }
         foreach(Node childNode in ChildNodes)
             childNode.PhysicsUpdate();
     }
     
     internal void Draw() {
-        OnDraw();
+        try {
+            OnDraw();
+        } catch(Exception e) {
+            Console.LogError($"{this.GetType()}: {e}");
+        }
         foreach(Node childNode in ChildNodes)
             childNode.Draw();
     }

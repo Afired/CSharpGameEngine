@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
@@ -8,20 +7,20 @@ using GameEngine.Core.Serialization;
 using GlmNet;
 using Silk.NET.OpenGL;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
-using Texture = GameEngine.Core.Rendering.Textures.Texture;
 
 namespace GameEngine.Core.Nodes; 
 
 public partial class MeshRenderer : Transform {
     
-    [Serialized] public AssetRef<Texture> Texture { get; set; }
+    [Serialized] public AssetRef<Texture2D> Texture { get; set; }
     [Serialized] public AssetRef<Shader> Shader { get; set; }
     [Serialized] public AssetRef<Model> Model { get; set; }
     [Serialized] public Vector3 Rotation3D { get; private set; }
     
-    [Serialized] public List<AssetRef<Texture>>? Textures { get; set; } = new();
+    [Serialized] public List<AssetRef<Texture2D>>? Textures { get; set; } = new();
     
     protected override unsafe void OnDraw() {
+        
         Shader.Get().Use();
         
         mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
@@ -45,18 +44,18 @@ public partial class MeshRenderer : Transform {
         
         for(int i = 0; i < meshes.Length; i++) {
             
-            Texture texture = Textures.Count > i ? Textures[i].Get() : AssetDatabase.Get<Texture>(Texture2D.MissingTexture2D);
+            Texture2D texture = Textures.Count > i ? Textures[i].Get() : (Texture2D) Texture2D.Default;
             
             texture.Bind(0);
             
             Gl.BindVertexArray(meshes[i].Vao);
-            if(meshes[i] is PosUvNormalMeshIndexedBuffer posUvNormalGeometryEbo) {
+//            if(meshes[i] is PosUvNormalMeshIndexedBuffer posUvNormalGeometryEbo) {
                 // indexed drawing
-                Gl.DrawElements(PrimitiveType.Triangles, (uint) posUvNormalGeometryEbo.EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
-            } else {
-                // normal drawing
-                Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) meshes[i].VertexCount);
-            }
+                Gl.DrawElements(PrimitiveType.Triangles, (uint) meshes[i].EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
+//            } else {
+//                // normal drawing
+//                Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) meshes[i].VertexCount);
+//            }
             Gl.BindVertexArray(0);
         }
         

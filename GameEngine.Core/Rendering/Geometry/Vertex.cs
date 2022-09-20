@@ -4,16 +4,16 @@ namespace GameEngine.Core.Rendering.Geometry;
 
 
 [StructLayout(LayoutKind.Sequential)]
-public record struct _Vertex(_Position Position, _UV UV, _Normal Normal);
+public record struct Vertex(Position Position, UV UV, Normal Normal);
 
 
 [StructLayout(LayoutKind.Sequential)]
-public record struct _Position(float X, float Y, float Z);
+public record struct Position(float X, float Y, float Z);
 
 
 [StructLayout(LayoutKind.Sequential)]
-public record struct _UV(float U, float V);
+public record struct UV(float U, float V);
 
 
 [StructLayout(LayoutKind.Sequential)]
-public record struct _Normal(float X, float Y, float Z);
+public record struct Normal(float X, float Y, float Z);

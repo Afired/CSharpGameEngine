@@ -24,8 +24,12 @@ public static class StringExtension {
 
 public class Shader : IAsset {
     
-    private static Shader? _default;
-    public static Shader Default => _default ??= InvalidShader.Create();
+    public static IAsset Default { get; }
+    
+    static Shader() {
+        Default = InvalidShader.Create();
+    }
+    
     private uint _programID;
     
     public Shader(string vertexCode, string fragmentCode) {

@@ -136,4 +136,10 @@ public class Shader : IAsset {
         Gl.Uniform1(location, value);
     }
     
+    public void SetVector3(string uniformName, Vector3 vector3) {
+        int location = Gl.GetUniformLocation(_programID, uniformName);
+        var sysVector3 = new System.Numerics.Vector3(vector3.X, vector3.Y, vector3.Z);
+        Gl.Uniform3(location, sysVector3);
+    }
+    
 }

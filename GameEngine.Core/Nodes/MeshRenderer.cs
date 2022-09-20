@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
+using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
@@ -19,6 +20,9 @@ public partial class MeshRenderer : Transform {
     
     [Serialized] public List<AssetRef<Texture2D>>? Textures { get; set; } = new();
     
+    [Serialized] public Vector3 DirectionalLightRotation { get; set; } = Vector3.Down;
+    [Serialized] public Color DirectionalLightColor { get; set; } = new Color(1, 1, 1);
+    
     protected override unsafe void OnDraw() {
         
         Shader.Get().Use();
@@ -34,6 +38,8 @@ public partial class MeshRenderer : Transform {
         Texture.Get().Bind(0);
         Shader.Get().SetInt("u_Texture", 0);
         Shader.Get().SetFloat("time", Time.TotalTimeElapsed);
+        Shader.Get().SetVector3("lightDirection", DirectionalLightRotation);
+        Shader.Get().SetVector3("directionalLightColor", new Vector3(DirectionalLightColor.R, DirectionalLightColor.G, DirectionalLightColor.B));
         
         Model model = Model.Get();
         

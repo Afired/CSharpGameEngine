@@ -69,8 +69,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "Rotation3D": {
             "$id": "14",
-            "X": -18.0,
-            "Z": -10.0
+            "X": -16.0
           },
           "Textures": {
             "$id": "15",
@@ -97,8 +96,20 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
               }
             ]
           },
-          "Scale": {
+          "DirectionalLightRotation": {
             "$id": "21",
+            "X": -140.0,
+            "Y": 106.0,
+            "Z": -104.0
+          },
+          "DirectionalLightColor": {
+            "$id": "22",
+            "R": 0.99999,
+            "G": 1.0,
+            "B": 0.99999034
+          },
+          "Scale": {
+            "$id": "23",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -107,27 +118,27 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "22",
+            "$id": "24",
             "$values": []
           }
         },
         {
-          "$id": "23",
+          "$id": "25",
           "$type": "GameEngine.Core.Nodes.SpriteRenderer, GameEngine.Core",
           "Texture": {
-            "$id": "24",
+            "$id": "26",
             "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
           },
           "Shader": {
-            "$id": "25",
+            "$id": "27",
             "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
           },
           "LocalPosition": {
-            "$id": "26",
-            "X": -10.0
+            "$id": "28",
+            "X": -37.0
           },
           "Scale": {
-            "$id": "27",
+            "$id": "29",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -136,37 +147,37 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "28",
+            "$id": "30",
             "$values": []
           }
         },
         {
-          "$id": "29",
+          "$id": "31",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": {
-            "$id": "30",
+            "$id": "32",
             "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
           },
           "Shader": {
-            "$id": "31",
+            "$id": "33",
             "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
           },
           "Model": {
-            "$id": "32",
+            "$id": "34",
             "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
           },
           "Textures": {
-            "$id": "33",
+            "$id": "35",
             "$values": []
           },
           "LocalPosition": {
-            "$id": "34",
-            "X": 11.0,
+            "$id": "36",
+            "X": 43.0,
             "Y": -9.0,
             "Z": 12.0
           },
           "Scale": {
-            "$id": "35",
+            "$id": "37",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -175,7 +186,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "36",
+            "$id": "38",
             "$values": []
           }
         }
@@ -183,7 +194,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "37",
+    "$id": "39",
     "$values": [
       {
         "$ref": "4"
@@ -192,10 +203,10 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         "$ref": "10"
       },
       {
-        "$ref": "23"
+        "$ref": "25"
       },
       {
-        "$ref": "29"
+        "$ref": "31"
       }
     ]
   }

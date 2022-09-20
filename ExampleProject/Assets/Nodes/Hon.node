@@ -20,10 +20,10 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "FOV": 90.0,
           "FlyingSpeed": 10.0,
-          "RotationX": 0.012597491,
-          "RotationY": 0.9843426,
-          "RotationZ": -0.078915775,
-          "RotationW": 0.15713249,
+          "RotationX": -0.073584355,
+          "RotationY": -0.53764194,
+          "RotationZ": -0.047163866,
+          "RotationW": 0.83879864,
           "BackgroundColor": {
             "$id": "6",
             "R": 0.1143791,
@@ -34,9 +34,9 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "IsMainCamera": true,
           "LocalPosition": {
             "$id": "7",
-            "X": -0.34425768,
-            "Y": 7.14923,
-            "Z": -13.29426
+            "X": -10.516045,
+            "Y": 6.2442727,
+            "Z": 10.054749
           },
           "Scale": {
             "$id": "8",
@@ -61,31 +61,31 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "Shader": {
             "$id": "12",
-            "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
+            "Guid": "bbea6a36-1f3b-4cb3-a038-af0aced18cd6"
           },
-          "Mesh": {
+          "Model": {
             "$id": "13",
             "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
           },
-          "Model": {
-            "$id": "14",
-            "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
-          },
           "Rotation3D": {
-            "$id": "15",
-            "X": -15.0,
-            "Z": -6.0
+            "$id": "14",
+            "X": -18.0,
+            "Z": -10.0
           },
           "Textures": {
-            "$id": "16",
+            "$id": "15",
             "$values": [
               {
-                "$id": "17",
+                "$id": "16",
                 "Guid": "ae6b1a4c-61f4-44fd-8044-c394eb1e6be4"
               },
               {
-                "$id": "18",
+                "$id": "17",
                 "Guid": "555dfa02-7b12-4adc-bf19-2ac98697ac46"
+              },
+              {
+                "$id": "18",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
               },
               {
                 "$id": "19",
@@ -93,16 +93,12 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
               },
               {
                 "$id": "20",
-                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
-              },
-              {
-                "$id": "21",
                 "Guid": "3130215a-8c5a-4b30-902d-d32cfadeb869"
               }
             ]
           },
           "Scale": {
-            "$id": "22",
+            "$id": "21",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -111,27 +107,27 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "23",
+            "$id": "22",
             "$values": []
           }
         },
         {
-          "$id": "24",
+          "$id": "23",
           "$type": "GameEngine.Core.Nodes.SpriteRenderer, GameEngine.Core",
           "Texture": {
-            "$id": "25",
+            "$id": "24",
             "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
           },
           "Shader": {
-            "$id": "26",
+            "$id": "25",
             "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
           },
           "LocalPosition": {
-            "$id": "27",
+            "$id": "26",
             "X": -10.0
           },
           "Scale": {
-            "$id": "28",
+            "$id": "27",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -140,37 +136,37 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "29",
+            "$id": "28",
             "$values": []
           }
         },
         {
-          "$id": "30",
+          "$id": "29",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
           "Texture": {
-            "$id": "31",
+            "$id": "30",
             "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
           },
           "Shader": {
-            "$id": "32",
+            "$id": "31",
             "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
           },
           "Model": {
-            "$id": "33",
+            "$id": "32",
             "Guid": "cd864d91-9be5-4509-8294-c83ad0693131"
           },
           "Textures": {
-            "$id": "34",
+            "$id": "33",
             "$values": []
           },
           "LocalPosition": {
-            "$id": "35",
+            "$id": "34",
             "X": 11.0,
             "Y": -9.0,
             "Z": 12.0
           },
           "Scale": {
-            "$id": "36",
+            "$id": "35",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -179,7 +175,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "37",
+            "$id": "36",
             "$values": []
           }
         }
@@ -187,7 +183,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "38",
+    "$id": "37",
     "$values": [
       {
         "$ref": "4"
@@ -196,10 +192,10 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         "$ref": "10"
       },
       {
-        "$ref": "24"
+        "$ref": "23"
       },
       {
-        "$ref": "30"
+        "$ref": "29"
       }
     ]
   }

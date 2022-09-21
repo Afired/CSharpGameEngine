@@ -1,4 +1,5 @@
-﻿using GameEngine.Core.Numerics;
+/*
+using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Nodes;
@@ -76,3 +77,4 @@ public partial class Transform : Node {
     }
     
 }
+*/

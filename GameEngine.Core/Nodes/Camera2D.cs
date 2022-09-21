@@ -22,8 +22,8 @@ public partial class Camera2D : BaseCamera {
     }
     
     private mat4 GetViewMat() {
-        mat4 translationMatrix = glm.translate(new mat4(1f), new vec3(Position.X, Position.Y, Position.Z));
-        mat4 translationAndRotationMatrix = glm.rotate(translationMatrix, glm.radians(LocalRotation), new vec3(0, 0, 1));
+        mat4 translationMatrix = glm.translate(new mat4(1f), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z));
+        mat4 translationAndRotationMatrix = glm.rotate(translationMatrix, glm.radians(WorldRotation.Z), new vec3(0, 0, 1));
         return glm.inverse(translationAndRotationMatrix);
     }
     

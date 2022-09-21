@@ -1,14 +1,15 @@
 using System;
 using System.Globalization;
+using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core.Numerics;
 
 public partial struct Quaternion : IEquatable<Quaternion> {
     
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-    public float W { get; set; }
+    [Serialized] public float X { get; set; }
+    [Serialized] public float Y { get; set; }
+    [Serialized] public float Z { get; set; }
+    [Serialized] public float W { get; set; }
 
     /// <summary>
     /// Constructs a Quaternion from the given components.

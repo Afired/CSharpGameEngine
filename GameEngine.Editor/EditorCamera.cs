@@ -12,20 +12,14 @@ public class EditorCamera : BaseCamera {
     
     private static EditorCamera NewDefault() {
         return new EditorCamera {
-            Position = new Vector3(0, 0, -5),
+            WorldPosition = new Vector3(0, 0, -5),
             IsMainCamera = true
         };
     }
     
     public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
-    
     public float FOV = 90f;
     public float FlyingSpeed = 10f;
-    
-    public float RotationX = 0;
-    public float RotationY = 0;
-    public float RotationZ = 0;
-    public float RotationW = 1;
     
     internal void EditorUpdate(float deltaTime) {
         base.OnUpdate();
@@ -33,7 +27,7 @@ public class EditorCamera : BaseCamera {
         if(!Input.IsKeyDown(KeyCode.LeftControl))
             return;
         
-        quat orientation = new quat(RotationX, RotationY, RotationZ, RotationW);
+        quat orientation = new quat(LocalRotation.X, LocalRotation.Y, LocalRotation.Z, LocalRotation.W);
         quat orientationConj = orientation.Conjugate;
         // vec3 up = new vec3(orientation * vec4.UnitY * orientationConj);
         // vec3 forwards = new vec3(orientation * -vec4.UnitZ * orientationConj);
@@ -53,7 +47,7 @@ public class EditorCamera : BaseCamera {
         
         GlmSharp.vec3 moveRelative = new GlmSharp.vec3(x, y, z);
         GlmSharp.vec3 moveWorld = RotateVectorByQuaternion(moveRelative, orientation);
-        Position += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * deltaTime;
+        WorldPosition += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * deltaTime;
         
         float yaw = -Core.Input.Input.MouseDelta.X * 0.005f;
         float pitch = Core.Input.Input.MouseDelta.Y * 0.005f;
@@ -61,10 +55,7 @@ public class EditorCamera : BaseCamera {
         orientation = quat.FromAxisAngle(yaw, new GlmSharp.vec3(0, 1, 0)) * orientation;
         orientation = orientation * quat.FromAxisAngle(pitch, new GlmSharp.vec3(1, 0, 0));
         
-        RotationX = orientation.x;
-        RotationY = orientation.y;
-        RotationZ = orientation.z;
-        RotationW = orientation.w;
+        LocalRotation = new Quaternion(orientation.x, orientation.y, orientation.z, orientation.w);
     }
     
     private GlmSharp.vec3 RotateVectorByQuaternion(GlmSharp.vec3 v3, quat q4) {
@@ -96,7 +87,8 @@ public class EditorCamera : BaseCamera {
     }
     
     private GlmSharp.mat4 GetViewMat() {
-        GlmSharp.mat4 t = GlmSharp.mat4.Translate(Position.X, Position.Y, Position.Z) * new quat(RotationX, RotationY, RotationZ, RotationW).Normalized.ToMat4;
+        GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                          new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
         return t.Inverse;
     }
     

@@ -11,7 +11,7 @@ public partial class Stadium : Scene, Has<Camera2D>, Arr<Player>, Has<Ball> {
     }
     
     private void Start() {
-        Ball.Position = Vector3.Zero;
+        Ball.LocalPosition = Vector3.Zero;
         Ball.Velocity = new Vector2(5, 5);
     }
     

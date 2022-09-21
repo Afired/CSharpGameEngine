@@ -5,18 +5,21 @@ using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
-using GlmNet;
+using GlmSharp;
 using Silk.NET.OpenGL;
+using glm = GlmNet.glm;
+using mat4 = GlmNet.mat4;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
+using vec3 = GlmNet.vec3;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class MeshRenderer : Transform {
+public partial class MeshRenderer : Transform3D {
     
     [Serialized] public AssetRef<Texture2D> Texture { get; set; }
     [Serialized] public AssetRef<Shader> Shader { get; set; }
     [Serialized] public AssetRef<Model> Model { get; set; }
-    [Serialized] public Vector3 Rotation3D { get; private set; }
+//    [Serialized] public Vector3 Rotation3D { get; private set; }
     
     [Serialized] public List<AssetRef<Texture2D>>? Textures { get; set; } = new();
     
@@ -27,11 +30,29 @@ public partial class MeshRenderer : Transform {
         
         Shader.Get().Use();
         
-        mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
-                            glm.rotate(Rotation3D.X / 10, new vec3(1, 0, 0)) *
-                            glm.rotate(Rotation3D.Y / 10, new vec3(0, 1, 0)) *
-                            glm.rotate(Rotation3D.Z / 10, new vec3(0, 0, 1)) *
-                            glm.scale(new mat4(1), new vec3(Scale.X, Scale.Y, Scale.Z));
+//        mat4 transformMat = glm.translate(new mat4(1), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z)) *
+//                            glm.rotate(WorldRotation.X / 10, new vec3(1, 0, 0)) *
+//                            glm.rotate(WorldRotation.Y / 10, new vec3(0, 1, 0)) *
+//                            glm.rotate(WorldRotation.Z / 10, new vec3(0, 0, 1)) *
+//                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
+        
+        mat4 transformMat = Convert(GetViewMat());
+        
+        mat4 Convert(GlmSharp.mat4 mat4) {
+            return new GlmNet.mat4(
+                new GlmNet.vec4(mat4.m00, mat4.m01, mat4.m02, mat4.m03),
+                new GlmNet.vec4(mat4.m10, mat4.m11, mat4.m12, mat4.m13),
+                new GlmNet.vec4(mat4.m20, mat4.m21, mat4.m22, mat4.m23),
+                new GlmNet.vec4(mat4.m30, mat4.m31, mat4.m32, mat4.m33)
+            );
+        }
+        
+        GlmSharp.mat4 GetViewMat() {
+            GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                              new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
+            //todo: add rotation matrix
+            return t;
+        }
         
         Shader.Get().GLM_SetMat("model", transformMat);
         Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());

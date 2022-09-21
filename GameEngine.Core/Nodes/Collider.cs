@@ -2,13 +2,14 @@ using System;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
+using GameEngine.Core.Numerics;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Serialization;
 using Vector2 = System.Numerics.Vector2;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class Collider : Transform {
+public partial class Collider : Transform3D {
     
     [Serialized] private Numerics.Vector2 Size { get; init; } = Numerics.Vector2.One;
     [Serialized] protected BodyType BodyType = BodyType.Dynamic;
@@ -26,8 +27,8 @@ public partial class Collider : Transform {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(Position.X, Position.Y),
-            angle = LocalRotation,
+            position = new Vector2(WorldPosition.X, WorldPosition.Y),
+            angle = WorldRotation.Z,
         };
         
         if(Shape is null) {
@@ -51,13 +52,14 @@ public partial class Collider : Transform {
     }
     
     protected override void OnPrePhysicsUpdate() {
-        Body.SetTransform(new Vector2(LocalPosition.X, LocalPosition.Y), LocalRotation);
+        Body.SetTransform(new Vector2(LocalPosition.X, LocalPosition.Y), WorldRotation.Z);
     }
     
-    protected override void OnPhysicsUpdate() {
-        LocalPosition = new Numerics.Vector3(Body.GetPosition().X, Body.GetPosition().Y, Position.Z); // swap out for world pos
-        LocalRotation = Body.GetAngle();
-    }
+    // currently disabled because switched to quaternion representation of rotation
+//    protected override void OnPhysicsUpdate() {
+//        WorldPosition = new Numerics.Vector3(Body.GetPosition().X, Body.GetPosition().Y, WorldPosition.Z); // swap out for world pos
+//        WorldRotation = new Vector3(WorldRotation.X, WorldRotation.Y, Body.GetAngle());
+//    }
     
     internal void BeginCollision(Collider other) => OnBeginCollision(other);
     

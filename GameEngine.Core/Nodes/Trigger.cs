@@ -8,7 +8,7 @@ namespace GameEngine.Core.Nodes;
 
 public delegate void OnBeginTrigger(Trigger other);
 
-public partial class Trigger : Transform {
+public partial class Trigger : Transform3D {
     
     public event OnBeginTrigger OnBeginTrigger;
     protected Body Body { get; private set; }
@@ -20,15 +20,15 @@ public partial class Trigger : Transform {
     }
     
     protected override void OnPrePhysicsUpdate() {
-        Body.SetTransform(new Vector2(Position.X, Position.Y), LocalRotation);
+        Body.SetTransform(new Vector2(WorldPosition.X, WorldPosition.Y), WorldRotation.Z);
     }
     
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(Position.X, Position.Y),
-            angle = LocalRotation,
+            position = new Vector2(WorldPosition.X, WorldPosition.Y),
+            angle = WorldRotation.Z,
             awake = true,
             allowSleep = false,
             gravityScale = 0

@@ -9,18 +9,12 @@ public partial class Camera3D : BaseCamera {
     
     [Serialized] public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
     [Serialized] public float FOV = 90f;
-    // [Serialized] public Vector3 Rotation3D;
     [Serialized] public float FlyingSpeed = 10f;
-    
-    [Serialized] public float RotationX = 0;
-    [Serialized] public float RotationY = 0;
-    [Serialized] public float RotationZ = 0;
-    [Serialized] public float RotationW = 1;
     
     protected override void OnUpdate() {
         base.OnUpdate();
         
-        quat orientation = new quat(RotationX, RotationY, RotationZ, RotationW);
+        quat orientation = new quat(LocalRotation.X, LocalRotation.Y, LocalRotation.Z, LocalRotation.W);
         quat orientationConj = orientation.Conjugate;
         // vec3 up = new vec3(orientation * vec4.UnitY * orientationConj);
         // vec3 forwards = new vec3(orientation * -vec4.UnitZ * orientationConj);
@@ -40,7 +34,7 @@ public partial class Camera3D : BaseCamera {
 
         vec3 moveRelative = new vec3(x, y, z);
         vec3 moveWorld = RotateVectorByQuaternion(moveRelative, orientation);
-        Position += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * Time.DeltaTime;
+        WorldPosition += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * Time.DeltaTime;
         
         float yaw = -Input.Input.MouseDelta.X * 0.005f;
         float pitch = Input.Input.MouseDelta.Y * 0.005f;
@@ -48,10 +42,7 @@ public partial class Camera3D : BaseCamera {
         orientation = quat.FromAxisAngle(yaw, new vec3(0, 1, 0)) * orientation;
         orientation = orientation * quat.FromAxisAngle(pitch, new vec3(1, 0, 0));
         
-        RotationX = orientation.x;
-        RotationY = orientation.y;
-        RotationZ = orientation.z;
-        RotationW = orientation.w;
+        LocalRotation = new Quaternion(orientation.x, orientation.y, orientation.z, orientation.w);
     }
     
     private vec3 RotateVectorByQuaternion(vec3 v3, quat q4) {
@@ -82,9 +73,9 @@ public partial class Camera3D : BaseCamera {
         );
     }
     
-    
-    private mat4 GetViewMat() {
-        mat4 t = mat4.Translate(Position.X, Position.Y, Position.Z) * new quat(RotationX, RotationY, RotationZ, RotationW).Normalized.ToMat4;
+    private GlmSharp.mat4 GetViewMat() {
+        GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                          new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
         return t.Inverse;
     }
     

@@ -16,6 +16,6 @@ public partial class Scene : Node, Arr<Node?> {
 }
 
 
-public partial class MySpecialSceneNode : Scene, Has<Transform>, Arr<Transform> {
+public partial class MySpecialSceneNode : Scene, Has<Transform3D>, Arr<Transform3D> {
     
 }

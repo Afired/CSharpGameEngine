@@ -30,7 +30,7 @@ public partial class Player : Node, Has<Paddle>, Has<Trigger> {
         x += Input.IsKeyDown(MoveRightKey) ? 1 : 0;
         x += Input.IsKeyDown(MoveLeftKey) ? -1 : 0;
         x *= Time.DeltaTime * Speed;
-        Paddle.Position += new Vector3(x, 0, 0);
+        Paddle.LocalPosition += new Vector3(x, 0, 0);
     }
     
 }

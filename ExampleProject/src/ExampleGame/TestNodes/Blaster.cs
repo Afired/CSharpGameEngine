@@ -6,7 +6,7 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Blaster : Transform, Arr<Bullet> {
+public partial class Blaster : Transform3D, Arr<Bullet> {
     
     public bool IsShooting;
     [Serialized] public float Cooldown { get; set; } = 0.1f;
@@ -27,7 +27,7 @@ public partial class Blaster : Transform, Arr<Bullet> {
     
     private void Shoot() {
         Bullet bullet = New<Bullet>();
-        bullet.LocalPosition = this.Position;
+        bullet.LocalPosition = this.LocalPosition;
         // Hierarchy.AddEntity(bullet);
         Hierarchy.RegisterNode(bullet, Bullets);
         Console.LogSuccess("Spawned Bullet!");

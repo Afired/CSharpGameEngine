@@ -5,7 +5,7 @@ using GlmNet;
 namespace GameEngine.Core.Nodes; 
 
 //TODO: proper support for abstract classes: require component attribute without the generation of the component interface but partial extension class
-public abstract partial class BaseCamera : Transform {
+public abstract partial class BaseCamera : Transform3D {
     
     [Serialized] public bool IsMainCamera = true;
     [Serialized] public Color BackgroundColor { get; set; } = Configuration.DefaultBackgroundColor;

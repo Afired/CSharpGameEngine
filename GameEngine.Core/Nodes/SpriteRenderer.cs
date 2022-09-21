@@ -9,7 +9,7 @@ using Shader = GameEngine.Core.Rendering.Shaders.Shader;
 
 namespace GameEngine.Core.Nodes; 
 
-public partial class SpriteRenderer : Transform {
+public partial class SpriteRenderer : Transform3D {
     
     [Serialized] public AssetRef<Texture2D> Texture { get; set; }
     [Serialized] public AssetRef<Shader> Shader { get; set; }
@@ -21,9 +21,15 @@ public partial class SpriteRenderer : Transform {
         
         Shader.Get().Use();
         
-        mat4 transformMat = glm.translate(new mat4(1), new vec3(Position.X, Position.Y, Position.Z)) *
-                            glm.rotate(Rotation, new vec3(0, 0, 1)) *
-                            glm.scale(new mat4(1), new vec3(Scale.X, Scale.Y, Scale.Z));
+//        mat4 transformMat2D = glm.translate(new mat4(1), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z)) *
+//                            glm.rotate(WorldRotation, new vec3(0, 0, 1)) *
+//                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
+        
+        mat4 transformMat = glm.translate(new mat4(1), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z)) *
+                            glm.rotate(WorldRotation.X / 10, new vec3(1, 0, 0)) *
+                            glm.rotate(WorldRotation.Y / 10, new vec3(0, 1, 0)) *
+                            glm.rotate(WorldRotation.Z / 10, new vec3(0, 0, 1)) *
+                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
         
         Shader.Get().GLM_SetMat("model", transformMat);
         Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());

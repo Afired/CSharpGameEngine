@@ -58,24 +58,17 @@ public partial class Camera3D : BaseCamera {
                  + 2.0f * s * vec3.Cross(q3, v3);
     }
     
-    public override GlmNet.mat4 GLM_GetProjectionMatrix() {
-        
+    public override mat4 GLM_GetProjectionMatrix() {
         float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
-        // float aspectRatioWindow = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
         mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatioGameFrameBuffer, ClippingDistance.X, ClippingDistance.Y);
-        mat4 viewProjectionMat = projectionMatrix * GetViewMat();
         
-        return new GlmNet.mat4(
-            new GlmNet.vec4(viewProjectionMat.m00, viewProjectionMat.m01, viewProjectionMat.m02, viewProjectionMat.m03),
-            new GlmNet.vec4(viewProjectionMat.m10, viewProjectionMat.m11, viewProjectionMat.m12, viewProjectionMat.m13),
-            new GlmNet.vec4(viewProjectionMat.m20, viewProjectionMat.m21, viewProjectionMat.m22, viewProjectionMat.m23),
-            new GlmNet.vec4(viewProjectionMat.m30, viewProjectionMat.m31, viewProjectionMat.m32, viewProjectionMat.m33)
-        );
+        mat4 viewProjectionMat = projectionMatrix * GetViewMat();
+        return viewProjectionMat;
     }
     
-    private GlmSharp.mat4 GetViewMat() {
-        GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
-                          new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
+    private mat4 GetViewMat() {
+        mat4 t = mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                          new quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
         return t.Inverse;
     }
     

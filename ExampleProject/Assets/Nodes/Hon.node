@@ -195,12 +195,47 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$id": "40",
             "$values": []
           }
+        },
+        {
+          "$id": "41",
+          "$type": "GameEngine.Core.Nodes.Camera2D, GameEngine.Core",
+          "Zoom": 10.0,
+          "ClippingDistance": {
+            "$id": "42",
+            "X": 0.01,
+            "Y": 100.0
+          },
+          "BackgroundColor": {
+            "$id": "43",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalRotation": {
+            "$id": "44",
+            "W": 1.0
+          },
+          "LocalScale": {
+            "$id": "45",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "46",
+            "$values": []
+          }
         }
       ]
     }
   },
   "_childNodes": {
-    "$id": "41",
+    "$id": "47",
     "$values": [
       {
         "$ref": "4"
@@ -213,6 +248,9 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
       },
       {
         "$ref": "32"
+      },
+      {
+        "$ref": "41"
       }
     ]
   }

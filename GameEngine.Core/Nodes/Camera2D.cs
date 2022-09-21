@@ -1,7 +1,6 @@
-﻿using System;
-using GameEngine.Core.Numerics;
+﻿using GameEngine.Core.Numerics;
 using GameEngine.Core.Serialization;
-using GlmNet;
+using GlmSharp;
 
 namespace GameEngine.Core.Nodes;
 
@@ -14,17 +13,17 @@ public partial class Camera2D : BaseCamera {
     [Serialized] public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
     
     public override mat4 GLM_GetProjectionMatrix() {
-        // float aspectRatio = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
-        float aspectRatioGameWindow = (float) MainFrameBuffer1.Width / (float) MainFrameBuffer1.Height;
-        mat4 projectionMatrix = glm.ortho(-aspectRatioGameWindow * Zoom, aspectRatioGameWindow * Zoom, -Zoom, Zoom, -ClippingDistance.X, -ClippingDistance.Y);
-         mat4 viewProjectionMat = projectionMatrix * GetViewMat();
+        float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
+        mat4 projectionMatrix = mat4.Ortho(-aspectRatioGameFrameBuffer * Zoom, aspectRatioGameFrameBuffer * Zoom, -Zoom, Zoom, -ClippingDistance.X, -ClippingDistance.Y);
+        
+        mat4 viewProjectionMat = projectionMatrix * GetViewMat();
         return viewProjectionMat;
     }
     
     private mat4 GetViewMat() {
-        mat4 translationMatrix = glm.translate(new mat4(1f), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z));
-        mat4 translationAndRotationMatrix = glm.rotate(translationMatrix, glm.radians(WorldRotation.Z), new vec3(0, 0, 1));
-        return glm.inverse(translationAndRotationMatrix);
+        mat4 t = mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                        new quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
+        return t.Inverse;
     }
     
 }

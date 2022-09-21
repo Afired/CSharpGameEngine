@@ -10,7 +10,7 @@ public abstract partial class BaseCamera : Transform3D {
     [Serialized] public bool IsMainCamera = true;
     [Serialized] public Color BackgroundColor { get; set; } = Configuration.DefaultBackgroundColor;
     
-    public abstract mat4 GLM_GetProjectionMatrix();
+    public abstract GlmSharp.mat4 GLM_GetProjectionMatrix();
     
     protected override void OnAwake() {
         base.OnAwake();

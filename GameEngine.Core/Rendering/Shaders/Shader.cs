@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Numerics;
-using GlmNet;
+using GlmSharp;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Shaders;
@@ -116,14 +117,9 @@ public class Shader : IAsset {
         Gl.UseProgram(_programID);
     }
     
-    public void SetMatrix4x4(string uniformName, Matrix4x4 mat) {
+    public void SetMat(string uniformName, mat4 mat4) {
         int location = Gl.GetUniformLocation(_programID, uniformName);
-        Gl.UniformMatrix4(location, 1, false, mat.ToArray());
-    }
-    
-    public void GLM_SetMat(string uniformName, mat4 mat4) {
-        int location = Gl.GetUniformLocation(_programID, uniformName);
-        Gl.UniformMatrix4(location, 1, false, mat4.to_array());
+        Gl.UniformMatrix4(location, 1, false, mat4.ToArray());
     }
     
     public void SetInt(string uniformName, int value) {

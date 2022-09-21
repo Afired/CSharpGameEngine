@@ -14,11 +14,11 @@ public class EditorLayer : Layer {
         SetTheme();
         PushStyle();
     }
-
+    
     private static void PushStyle() {
         ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 4);
     }
-
+    
     private static void SetTheme() {
         RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
         

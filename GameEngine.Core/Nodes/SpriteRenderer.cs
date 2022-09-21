@@ -1,9 +1,8 @@
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Rendering.Geometry;
-using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
-using GlmNet;
+using GlmSharp;
 using Silk.NET.OpenGL;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
 
@@ -21,18 +20,12 @@ public partial class SpriteRenderer : Transform3D {
         
         Shader.Get().Use();
         
-//        mat4 transformMat2D = glm.translate(new mat4(1), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z)) *
-//                            glm.rotate(WorldRotation, new vec3(0, 0, 1)) *
-//                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
+        mat4 transformMat = mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
+                                     new quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4 *
+                                     mat4.Scale(WorldScale.X, WorldScale.Y, WorldScale.Z);
         
-        mat4 transformMat = glm.translate(new mat4(1), new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z)) *
-                            glm.rotate(WorldRotation.X / 10, new vec3(1, 0, 0)) *
-                            glm.rotate(WorldRotation.Y / 10, new vec3(0, 1, 0)) *
-                            glm.rotate(WorldRotation.Z / 10, new vec3(0, 0, 1)) *
-                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
-        
-        Shader.Get().GLM_SetMat("model", transformMat);
-        Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        Shader.Get().SetMat("model", transformMat);
+        Shader.Get().SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
         Texture.Get().Bind();
         Shader.Get().SetInt("u_Texture", 0);

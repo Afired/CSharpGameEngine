@@ -28,10 +28,6 @@ public class EditorCamera : BaseCamera {
             return;
         
         quat orientation = new quat(LocalRotation.X, LocalRotation.Y, LocalRotation.Z, LocalRotation.W);
-        quat orientationConj = orientation.Conjugate;
-        // vec3 up = new vec3(orientation * vec4.UnitY * orientationConj);
-        // vec3 forwards = new vec3(orientation * -vec4.UnitZ * orientationConj);
-        // vec3 right = new vec3(orientation * vec4.UnitX * orientationConj);
         
         float x = 0;
         x += Core.Input.Input.IsKeyDown(KeyCode.A) ? -1 : 0;
@@ -45,51 +41,47 @@ public class EditorCamera : BaseCamera {
         z += Core.Input.Input.IsKeyDown(KeyCode.W) ? -1 : 0;
         z += Core.Input.Input.IsKeyDown(KeyCode.S) ? 1 : 0;
         
-        GlmSharp.vec3 moveRelative = new GlmSharp.vec3(x, y, z);
-        GlmSharp.vec3 moveWorld = RotateVectorByQuaternion(moveRelative, orientation);
+        vec3 moveRelative = new vec3(x, y, z);
+        vec3 moveWorld = RotateVectorByQuaternion(moveRelative, orientation);
         WorldPosition += new Vector3(moveWorld.x, moveWorld.y, moveWorld.z) * FlyingSpeed * deltaTime;
         
         float yaw = -Core.Input.Input.MouseDelta.X * 0.005f;
         float pitch = Core.Input.Input.MouseDelta.Y * 0.005f;
         
-        orientation = quat.FromAxisAngle(yaw, new GlmSharp.vec3(0, 1, 0)) * orientation;
-        orientation = orientation * quat.FromAxisAngle(pitch, new GlmSharp.vec3(1, 0, 0));
+        orientation = quat.FromAxisAngle(yaw, new vec3(0, 1, 0)) * orientation;
+        orientation = orientation * quat.FromAxisAngle(pitch, new vec3(1, 0, 0));
         
         LocalRotation = new Quaternion(orientation.x, orientation.y, orientation.z, orientation.w);
     }
     
-    private GlmSharp.vec3 RotateVectorByQuaternion(GlmSharp.vec3 v3, quat q4) {
+    private vec3 RotateVectorByQuaternion(vec3 v3, quat q4) {
         // Extract the vector part of the quaternion
-        GlmSharp.vec3 q3 = new GlmSharp.vec3(q4.x, q4.y, q4.z);
+        vec3 q3 = new vec3(q4.x, q4.y, q4.z);
         
         // Extract the scalar part of the quaternion
         float s = q4.w;
         
         // Do the math
-        return 2.0f * GlmSharp.vec3.Dot(q3, v3) * q3
-                 + (s*s - GlmSharp.vec3.Dot(q3, q3)) * v3
-                 + 2.0f * s * GlmSharp.vec3.Cross(q3, v3);
+        return 2.0f * vec3.Dot(q3, v3) * q3
+                 + (s*s - vec3.Dot(q3, q3)) * v3
+                 + 2.0f * s * vec3.Cross(q3, v3);
     }
     
-    public override GlmNet.mat4 GLM_GetProjectionMatrix() {
+    public override mat4 GLM_GetProjectionMatrix() {
+        quat orientation = new quat(LocalRotation.X, LocalRotation.Y, LocalRotation.Z, LocalRotation.W);
+        vec3 relativeForward = RotateVectorByQuaternion(new vec3(0, 0, -1), orientation);
+        relativeForward = relativeForward.Normalized;
+        vec3 relativeUp = RotateVectorByQuaternion(new vec3(0, 1, 0), orientation);
+        relativeUp = relativeUp.Normalized;
         
-        float aspectRatioGameFrameBuffer = (float) Core.Rendering.Renderer.MainFrameBuffer2.Width / (float) Core.Rendering.Renderer.MainFrameBuffer2.Height;
-        // float aspectRatioWindow = (float) Configuration.WindowWidth / (float) Configuration.WindowHeight;
-        GlmSharp.mat4 projectionMatrix = GlmSharp.mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatioGameFrameBuffer, ClippingDistance.X, ClippingDistance.Y);
-        GlmSharp.mat4 viewProjectionMat = projectionMatrix * GetViewMat();
+        vec3 position = new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z);
+        mat4 viewMatrix = mat4.LookAt(position, position + relativeForward, relativeUp);
         
-        return new GlmNet.mat4(
-            new GlmNet.vec4(viewProjectionMat.m00, viewProjectionMat.m01, viewProjectionMat.m02, viewProjectionMat.m03),
-            new GlmNet.vec4(viewProjectionMat.m10, viewProjectionMat.m11, viewProjectionMat.m12, viewProjectionMat.m13),
-            new GlmNet.vec4(viewProjectionMat.m20, viewProjectionMat.m21, viewProjectionMat.m22, viewProjectionMat.m23),
-            new GlmNet.vec4(viewProjectionMat.m30, viewProjectionMat.m31, viewProjectionMat.m32, viewProjectionMat.m33)
-        );
-    }
-    
-    private GlmSharp.mat4 GetViewMat() {
-        GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
-                          new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
-        return t.Inverse;
+        float aspectRatio = (float) Core.Rendering.Renderer.MainFrameBuffer2.Width / (float) Core.Rendering.Renderer.MainFrameBuffer2.Height;
+        mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatio, ClippingDistance.X, ClippingDistance.Y);
+        
+        mat4 viewProjectionMat = projectionMatrix * viewMatrix;
+        return viewProjectionMat;
     }
     
 }

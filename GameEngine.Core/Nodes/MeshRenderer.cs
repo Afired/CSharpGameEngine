@@ -36,26 +36,26 @@ public partial class MeshRenderer : Transform3D {
 //                            glm.rotate(WorldRotation.Z / 10, new vec3(0, 0, 1)) *
 //                            glm.scale(new mat4(1), new vec3(WorldScale.X, WorldScale.Y, WorldScale.Z));
         
-        mat4 transformMat = Convert(GetViewMat());
+        GlmSharp.mat4 transformMat = GetViewMat();
         
-        mat4 Convert(GlmSharp.mat4 mat4) {
-            return new GlmNet.mat4(
-                new GlmNet.vec4(mat4.m00, mat4.m01, mat4.m02, mat4.m03),
-                new GlmNet.vec4(mat4.m10, mat4.m11, mat4.m12, mat4.m13),
-                new GlmNet.vec4(mat4.m20, mat4.m21, mat4.m22, mat4.m23),
-                new GlmNet.vec4(mat4.m30, mat4.m31, mat4.m32, mat4.m33)
-            );
-        }
+//        mat4 Convert(GlmSharp.mat4 mat4) {
+//            return new GlmNet.mat4(
+//                new GlmNet.vec4(mat4.m00, mat4.m01, mat4.m02, mat4.m03),
+//                new GlmNet.vec4(mat4.m10, mat4.m11, mat4.m12, mat4.m13),
+//                new GlmNet.vec4(mat4.m20, mat4.m21, mat4.m22, mat4.m23),
+//                new GlmNet.vec4(mat4.m30, mat4.m31, mat4.m32, mat4.m33)
+//            );
+//        }
         
         GlmSharp.mat4 GetViewMat() {
             GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
                               new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
-            //todo: add rotation matrix
+            //todo: add scale matrix
             return t;
         }
         
-        Shader.Get().GLM_SetMat("model", transformMat);
-        Shader.Get().GLM_SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        Shader.Get().SetMat("model", transformMat);
+        Shader.Get().SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         Texture.Get().Bind(0);
         Shader.Get().SetInt("u_Texture", 0);
         Shader.Get().SetFloat("time", Time.TotalTimeElapsed);

@@ -139,4 +139,20 @@ public partial class Transform3D : Node {
         }
     }
     
+    public Vector3 GetLocalEulerAngles() {
+        return LocalRotation.ToEulerAngles();
+    }
+    
+    public Vector3 GetWorldEulerAngles() {
+        return WorldRotation.ToEulerAngles();
+    }
+    
+    public void SetLocalEulerAngles(Vector3 eulerAngles) {
+        LocalRotation = Quaternion.CreateFromAxisAngle(eulerAngles, 1);
+    }
+    
+    public void SetWorldEulerAngles(Vector3 eulerAngles) {
+        WorldRotation = Quaternion.CreateFromAxisAngle(eulerAngles, 1);
+    }
+    
 }

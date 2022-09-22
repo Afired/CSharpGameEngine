@@ -4,14 +4,17 @@ using GameEngine.Core.Nodes;
 using GameEngine.Core.Serialization;
 using GameEngine.Editor.PropertyDrawers;
 using ImGuiNET;
+using JetBrains.Annotations;
 
 namespace GameEngine.Editor.NodeDrawers;
 
+[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public abstract class NodeDrawer {
     
     private static Dictionary<Type, NodeDrawer>? _nodeDrawerLookup;
     protected internal abstract Type NodeType { get; }
     protected internal abstract void DrawNodeInternal(Node node);
+    protected internal abstract bool DrawHeaderInternal(Node node);
     
     internal static void Draw(Node node) {
         _nodeDrawerLookup ??= BuildNodeDrawerLookup();
@@ -23,12 +26,22 @@ public abstract class NodeDrawer {
             if(memberInfos.Count == 0)
                 continue;
             
-            if(ImGui.CollapsingHeader(currentType.Name, ImGuiTreeNodeFlags.DefaultOpen)) {
-                if(_nodeDrawerLookup.TryGetValue(currentType, out NodeDrawer? nodeDrawer))
+            if(_nodeDrawerLookup.TryGetValue(currentType, out NodeDrawer? nodeDrawer)) {
+                if(nodeDrawer.DrawHeaderInternal(node)) {
                     nodeDrawer.DrawNodeInternal(node);
-                else
+                }
+            } else {
+                if(DrawDefaultHeader(currentType)) {
                     DrawDefaultDrawers(node, currentType);
+                }
             }
+            
+//            if(ImGui.CollapsingHeader(currentType.Name, ImGuiTreeNodeFlags.DefaultOpen)) {
+//                if(_nodeDrawerLookup.TryGetValue(currentType, out NodeDrawer? nodeDrawer))
+//                    nodeDrawer.DrawNodeInternal(node);
+//                else
+//                    DrawDefaultDrawers(node, currentType);
+//            }
             
         }
         
@@ -51,10 +64,8 @@ public abstract class NodeDrawer {
         return nodeDrawerLookup;
     }
     
-    private static void DrawDefaultHeader(Node node, Type type) {
-//        ImGui.CollapsingHeader(node.GetType().ToString());
-        ImGui.Text(type.ToString());
-        ImGui.Spacing();
+    protected static bool DrawDefaultHeader(Type type) {
+        return ImGui.CollapsingHeader(type.Name, ImGuiTreeNodeFlags.DefaultOpen);
     }
     
     protected static void DrawDefaultDrawers(Node node, Type type) {
@@ -134,7 +145,12 @@ public abstract class NodeDrawer<TNode> : NodeDrawer where TNode : Node {
     
     protected internal sealed override Type NodeType => typeof(TNode);
     protected internal sealed override void DrawNodeInternal(Node node) => DrawNode(node as TNode);
+    protected internal sealed override bool DrawHeaderInternal(Node node) => DrawHeader(node as TNode);
     
     protected abstract void DrawNode(TNode node);
+    
+    protected virtual bool DrawHeader(TNode node) {
+        return DrawDefaultHeader(typeof(TNode));
+    }
     
 }

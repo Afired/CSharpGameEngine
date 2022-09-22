@@ -42,8 +42,8 @@ public static class AssetDatabase {
         UnloadAll();
         
         // instantiate assetImporters
-        IEnumerable<Type> assetImporterTypes = Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Application))!).
-            SelectMany(assembly => ReflectionHelper.GetDerivedTypes(typeof(AssetImporter<>), assembly));
+        IEnumerable<Type> assetImporterTypes = Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Application))!)
+            .SelectMany(assembly => typeof(AssetImporter<>).GetDerivedTypes(assembly));
         foreach(Type assetImporterType in assetImporterTypes) {
             IAssetImporter? assetImporter = (IAssetImporter?) Activator.CreateInstance(assetImporterType);
             if(assetImporter is null) {

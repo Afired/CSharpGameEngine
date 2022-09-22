@@ -204,7 +204,7 @@ public abstract class PropertyDrawer {
     
     public static void GenerateLookUp() {
         foreach(Assembly editorAssembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(EditorApplication).Assembly)) {
-            List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(PropertyDrawer<>), editorAssembly);
+            List<Type> derivedTypes = typeof(PropertyDrawer<>).GetDerivedTypes(editorAssembly);
             foreach(Type type in derivedTypes) {
                 
                 if(type.IsGenericType) {

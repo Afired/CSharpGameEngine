@@ -55,7 +55,7 @@ public abstract class NodeDrawer {
     
     private static Dictionary<Type, NodeDrawer> BuildNodeDrawerLookup() {
         Dictionary<Type, NodeDrawer> nodeDrawerLookup = new();
-        List<Type> derivedTypes = ReflectionHelper.GetDerivedTypes(typeof(NodeDrawer<>), typeof(NodeDrawer<>).Assembly);
+        List<Type> derivedTypes = typeof(NodeDrawer<>).GetDerivedTypes(typeof(NodeDrawer<>).Assembly);
         foreach(Type type in derivedTypes) {
             NodeDrawer nodeDrawer = Activator.CreateInstance(type) as NodeDrawer ?? throw new NullReferenceException();
             if(!nodeDrawerLookup.TryAdd(nodeDrawer.NodeType, nodeDrawer))

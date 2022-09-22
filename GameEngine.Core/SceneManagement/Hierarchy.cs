@@ -36,7 +36,6 @@ public static class Hierarchy {
         if(RootNode is null)
             return;
         
-        Time.TotalTimeElapsed += elapsedTime;
         Time.DeltaTime = elapsedTime;
         RootNode.Update();
     }

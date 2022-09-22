@@ -98,6 +98,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
                     updateTime = (float) updateTimer.Elapsed.TotalSeconds;
                 }
             }
+            Time.TotalTimeElapsed += updateTime;
             updateTimer.Restart();
             
             if(PlayMode.Current == PlayMode.Mode.Playing) {

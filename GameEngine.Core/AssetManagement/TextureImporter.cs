@@ -11,10 +11,4 @@ public class TextureImporter : AssetImporter<Texture2D> {
         return Texture2D.Create(path);
     }
     
-    public override IEnumerable<Texture2D?> Import(string[] paths) {
-        for(int i = 0; i < paths.Length; i++) {
-            yield return Import(paths[i]);
-        }
-    }
-    
 }

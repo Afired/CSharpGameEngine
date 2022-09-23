@@ -11,10 +11,4 @@ public class ModelImporter : AssetImporter<Model> {
         return new Model(path);
     }
     
-    public override IEnumerable<Model?> Import(string[] paths) {
-        for(int i = 0; i < paths.Length; i++) {
-            yield return Import(paths[i]);
-        }
-    }
-    
 }

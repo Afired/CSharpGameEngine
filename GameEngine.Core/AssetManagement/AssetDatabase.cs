@@ -9,7 +9,7 @@ namespace GameEngine.Core.AssetManagement;
 public static class AssetDatabase {
     
     private static readonly Dictionary<Guid, IAsset> _assetCache = new();
-    private static readonly List<IAssetImporter> _assetImporterCache = new();
+    private static readonly List<AssetImporter> _assetImporterCache = new();
     
     public static void Load(Guid guid, IAsset asset) {
         if(_assetCache.ContainsKey(guid)) {
@@ -45,7 +45,7 @@ public static class AssetDatabase {
         IEnumerable<Type> assetImporterTypes = Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Application))!)
             .SelectMany(assembly => typeof(AssetImporter<>).GetDerivedTypes(assembly));
         foreach(Type assetImporterType in assetImporterTypes) {
-            IAssetImporter? assetImporter = (IAssetImporter?) Activator.CreateInstance(assetImporterType);
+            AssetImporter? assetImporter = (AssetImporter?) Activator.CreateInstance(assetImporterType);
             if(assetImporter is null) {
                 Console.LogWarning($"Failed to instantiate asset importer of type {assetImporterType.FullName}");
                 continue;
@@ -56,7 +56,7 @@ public static class AssetDatabase {
         //TODO: load default assets?
         
         // load assets with assetImporters
-        foreach(IAssetImporter assetImporter in _assetImporterCache) {
+        foreach(AssetImporter assetImporter in _assetImporterCache) {
             foreach(string extension in assetImporter.GetExtensions()) {
                 foreach(string path in AssetManager.Instance.GetAllFilePathsOfAssetsWithExtension(extension)) {
                     

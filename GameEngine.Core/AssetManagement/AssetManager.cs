@@ -8,6 +8,8 @@ public abstract class AssetManager {
     public static AssetManager Instance { get; protected set; }
     
     public abstract string[] GetAllFilePathsOfAssetsWithExtension(string fileExtension);
+    public abstract string? GetMetaPath(Guid guid);
+    public abstract string? GetAssetPath(Guid guid);
     
     public Guid GetGuidOfAsset(string assetPath) {
         string metaPath = assetPath + ".meta";

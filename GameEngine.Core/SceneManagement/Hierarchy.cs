@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Serialization;
 
@@ -7,12 +8,28 @@ namespace GameEngine.Core.SceneManagement;
 
 public static class Hierarchy {
     
-    
     private static readonly Stack<(Node node, INodeArr nodeArr)> RegisteredNodes = new();
+    public static AssetRef<Node>? CurrentlyLoadedNodeRef { get; private set; }
     public static Node? RootNode { get; private set; }
     
-    public static void SetRootNode(Node? newRootNode) {
-        RootNode = newRootNode;
+//    public static void SetRootNode(Node? newRootNode) {
+//        RootNode = newRootNode;
+//    }
+    
+    public static void Open(AssetRef<Node> assetRef) {
+        string? assetPath = AssetManager.Instance.GetAssetPath(assetRef.Guid);
+        if(assetPath is null) {
+            Console.LogWarning($"Can't open node with guid {assetRef.Guid}, because it failed to resolve to a valid asset path!");
+            return;
+        }
+        Node node = Serializer.DeserializeNode(assetPath);
+        RootNode = node;
+        CurrentlyLoadedNodeRef = assetRef;
+    }
+    
+    public static void Close() {
+        RootNode = null;
+        CurrentlyLoadedNodeRef = null;
     }
     
     public static void Clear() {
@@ -69,15 +86,22 @@ public static class Hierarchy {
             return;
         }
 
-        if(CurrentlyLoadedNodesAssetPath is null) {
+        if(CurrentlyLoadedNodeRef is null) {
+            Console.LogWarning($"There is no AssetRef defined in Hierarchy, therefore saving is skipped!");
+            return;
+        }
+        
+        string? nodeAssetPath = AssetManager.Instance.GetAssetPath(CurrentlyLoadedNodeRef.Value.Guid);
+        
+        if(nodeAssetPath is null) {
             Console.LogWarning($"Could not save node of type {RootNode.GetType()} because there is no asset path defined");
             return;
         }
         
-        File.WriteAllText(CurrentlyLoadedNodesAssetPath, Serializer.SerializeNode(RootNode));
-        Console.LogSuccess($"Saved node of type {RootNode.GetType()} to {CurrentlyLoadedNodesAssetPath}");
+        File.WriteAllText(nodeAssetPath, Serializer.SerializeNode(RootNode));
+        Console.LogSuccess($"Saved node of type {RootNode.GetType()} to {nodeAssetPath}");
     }
     
-    public static string? CurrentlyLoadedNodesAssetPath { get; set; } //TODO: replace with managed asset reference
+    //public static string? CurrentlyLoadedNodesAssetPath { get; set; } //TODO: replace with managed asset reference
     
 }

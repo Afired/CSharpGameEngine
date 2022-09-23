@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Serialization;
 using JetBrains.Annotations;
 
 namespace GameEngine.Core.Nodes; 
 
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
-public class Node {
+public class Node : IAsset {
+    
+    public static IAsset Default => throw new Exception();
     
     public IReadOnlyList<Node> ChildNodes => _childNodes;
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }

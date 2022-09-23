@@ -59,8 +59,9 @@ public class AssetBrowserWindow : EditorWindow {
         
         if(ImGui.IsItemHovered() && ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left)) {
             if(Path.GetExtension(filePath) == ".node") {
-                Hierarchy.SetRootNode(Serializer.DeserializeNode(filePath));
-                Hierarchy.CurrentlyLoadedNodesAssetPath = filePath;
+//                Hierarchy.SetRootNode(Serializer.DeserializeNode(filePath));
+//                Hierarchy.CurrentlyLoadedNodesAssetPath = filePath;
+                Hierarchy.Open(new AssetRef<Node>(AssetManager.Instance.GetGuidOfAsset(filePath)));
             }
         }
         
@@ -71,6 +72,13 @@ public class AssetBrowserWindow : EditorWindow {
                 Process.Start("explorer.exe" , filePath);
             if(ImGui.MenuItem("Delete File"))
                 Console.LogWarning("Deleting is not implemented yet");
+            if(ImGui.MenuItem("Reimport")) {
+//                Guid guid = AssetManager.Instance.GetGuidOfAsset(filePath);
+//                AssetDatabase.Unload(guid);
+//                AssetImport.Import(filePath);
+//                AssetDatabase.Load(guid, IAssetImporter.Import);
+                Console.LogWarning("Reimporting is not implemented yet");
+            }
             ImGui.EndPopup();
         }
     }

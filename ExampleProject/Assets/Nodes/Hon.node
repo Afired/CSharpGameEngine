@@ -1,7 +1,7 @@
 GameEngine.Core::GameEngine.Core.Nodes.Scene
 {
   "$id": "1",
-  "Name": "New Scene",
+  "Name": "3D Rendering Scene",
   "Nodes": {
     "$id": "2",
     "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
@@ -133,7 +133,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "LocalPosition": {
             "$id": "28",
-            "X": -37.0
+            "X": -6.0
           },
           "LocalRotation": {
             "$id": "29",

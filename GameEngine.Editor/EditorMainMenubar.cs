@@ -235,7 +235,10 @@ public class EditorMainMenubar {
         }
         
         if(ImGui.BeginMenu("Hierarchy")) {
-            if(ImGui.MenuItem("New Scene")) Hierarchy.SetRootNode(Node.New<Scene>());
+            if(ImGui.MenuItem("New Scene")) {
+                Console.LogWarning("New scene functionality is currently disabled");
+                //Hierarchy.SetRootNode(Node.New<Scene>());
+            }
             if(ImGui.MenuItem("Save"))
                 Hierarchy.SaveCurrentRootNode();
             ImGui.EndMenu();

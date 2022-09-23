@@ -24,7 +24,7 @@ public class HierarchyWindow : EditorWindow {
                 ImGui.Text("none");
             else {
                 Type nodeType = Hierarchy.RootNode.GetType();
-                ImGui.Text(Hierarchy.CurrentlyLoadedNodesAssetPath ?? "null");
+                //ImGui.Text(Hierarchy.CurrentlyLoadedNodesAssetPath ?? "null");
                 if(ImGui.Button("Save"))
                     Hierarchy.SaveCurrentRootNode();
             }

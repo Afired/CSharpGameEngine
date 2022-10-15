@@ -18,19 +18,14 @@ public class EditorGui {
         ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
         ImGui.GetIO().MouseDrawCursor = true;
         
-        new EditorDockSpace();
         new EditorMainMenubar();
+        new EditorDockSpace();
         new HierarchyWindow();
         new ViewportWindow();
         new InspectorWindow();
         new ConsoleWindow();
         new AssetBrowserWindow();
         new TerminalWindow();
-        //Program.EditorLayer.OnDraw += RenderDemoWindow;
-    }
-    
-    private void RenderDemoWindow() {
-        ImGui.ShowDemoWindow();
     }
     
 }

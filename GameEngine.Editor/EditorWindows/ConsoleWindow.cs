@@ -27,6 +27,7 @@ public class ConsoleWindow : EditorWindow {
             _logMessages.RemoveAt(0);
         
         _logCount++;
+        Title = $"Console ({_logCount})";
     }
     
     protected override void Draw() {

@@ -1,4 +1,3 @@
-using System.Numerics;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -10,30 +9,31 @@ public class EditorWindow {
     
     public EditorWindow() {
         EditorApplication.Instance.EditorLayer.OnDraw += DrawWindow;
+        // ReSharper disable once VirtualMemberCallInConstructor
         _id = GetHashCode();
     }
     
     private void DrawWindow() {
         bool opened = true;
         
-        PreWindowDraw();
+        PreDraw();
         
         // push id doesnt work with windows since it cant be handled with the id stack, c++ uses ## or ### to set an identifier
         ImGui.Begin(Title + "##" + _id, ref opened, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar);
-
+        
         DrawToolbar();
         
         Draw();
         ImGui.End();
         
-        PostWindowDraw();
+        PostDraw();
         
         if(!opened)
             EditorApplication.Instance.EditorLayer.OnDraw -= DrawWindow;
     }
 
-    protected virtual void PreWindowDraw() { }
-    protected virtual void PostWindowDraw() { }
+    protected virtual void PreDraw() { }
+    protected virtual void PostDraw() { }
     
     private void DrawToolbar() {
 //        ImGui.PushID(Title + "Menubar");

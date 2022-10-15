@@ -11,10 +11,10 @@ public class ViewportWindow : EditorWindow {
         Title = "Viewport";
     }
     
-    protected override void PreWindowDraw() => 
+    protected override void PreDraw() => 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
     
-    protected override void PostWindowDraw() =>
+    protected override void PostDraw() =>
         ImGui.PopStyleVar(1);
     
     protected override void Draw() {

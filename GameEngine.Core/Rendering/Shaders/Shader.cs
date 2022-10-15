@@ -25,10 +25,10 @@ public static class StringExtension {
 
 public class Shader : IAsset {
     
-    public static IAsset Default { get; }
+    public static Shader Invalid { get; }
     
     static Shader() {
-        Default = InvalidShader.Create();
+        Invalid = new Shader(InvalidShader.VERTEX_SHADER, InvalidShader.FRAGMENT_SHADER);
     }
     
     private uint _programID;

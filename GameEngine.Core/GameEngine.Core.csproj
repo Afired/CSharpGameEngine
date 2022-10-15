@@ -8,6 +8,10 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;TRY_CATCH</DefineConstants>
+    </PropertyGroup>
     
     <ItemGroup>
       <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />

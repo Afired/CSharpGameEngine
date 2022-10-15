@@ -72,7 +72,7 @@ public static class AssetDatabase {
         }
         
         //TODO: refactor default asset init
-        Load(Mesh.QuadGuid, Mesh.CreateDefault());
+        Load(Mesh.QuadGuid, Mesh.CreateQuad());
     }
     
 }

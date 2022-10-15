@@ -14,13 +14,13 @@ public class Mesh : IAsset {
     
     public static readonly Guid QuadGuid = new("605b3a35-5e06-4cc4-8da2-3f2d07471b51");
     
-    public static IAsset Default { get; }
+    public static Mesh Quad { get; }
     
     static Mesh() {
-        Default = CreateDefault();
+        Quad = CreateQuad();
     }
     
-    internal static Mesh CreateDefault() {
+    internal static Mesh CreateQuad() {
         Vertex[] quadVertexData = {
             new(new(-0.5f, 0.5f, 0.0f), new(0.0f, 1.0f), new()),
             new(new(0.5f, 0.5f, 0.0f), new(1.0f, 1.0f), new()),

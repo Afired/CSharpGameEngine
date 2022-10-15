@@ -2,7 +2,7 @@ namespace GameEngine.Core.Rendering.Shaders;
 
 internal static class InvalidShader {
     
-    private const string VERTEX_SHADER = @"
+    internal const string VERTEX_SHADER = @"
 
 #version 330 core
 layout (location = 0) in vec3 aPosition;
@@ -21,7 +21,7 @@ void main()
 
 ";
 
-    private const string FRAGMENT_SHADER = @"
+    internal const string FRAGMENT_SHADER = @"
 
 #version 330 core
 out vec4 FragColor;
@@ -37,8 +37,4 @@ void main()
 
 ";
 
-    internal static Shader Create() {
-        return new Shader(VERTEX_SHADER, FRAGMENT_SHADER);
-    }
-    
 }

@@ -12,15 +12,15 @@ public class Texture2D : IAsset {
     public uint Height { get; private set; }
     public uint ID { get; private set; }
     
-    public static IAsset Default { get; }
+    public static Texture2D Missing { get; }
     
     static Texture2D() {
-        Default = CreateDefault();
+        Missing = CreateMissing();
     }
     
     private Texture2D() { }
     
-    private static unsafe IAsset CreateDefault() {
+    private static unsafe Texture2D CreateMissing() {
         fixed(void* data = new byte[] {
                   204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255,
                   0, 0, 0, 255, 204, 0, 255, 255, 0, 0, 0, 255, 204, 0, 255, 255,

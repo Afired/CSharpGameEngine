@@ -11,8 +11,6 @@ namespace GameEngine.Core.Nodes;
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors)]
 public class Node : IAsset {
     
-    public static IAsset Default => throw new Exception();
-    
     public IReadOnlyList<Node> ChildNodes => _childNodes;
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] private readonly List<Node> _childNodes = null!;
@@ -34,11 +32,15 @@ public class Node : IAsset {
             foreach(Node childNodes in ChildNodes)
                 childNodes.Awake();
         if(!HasBeenAwoken) {
+#if TRY_CATCH
             try {
+#endif
                 OnAwake();
+#if TRY_CATCH
             } catch(Exception e) {
                 Console.LogError($"{this.GetType()}: {e}");
             }
+#endif
             HasBeenAwoken = true;
         }
         if(AwakeThisNodeBeforeItsChildren)
@@ -47,42 +49,58 @@ public class Node : IAsset {
     }
     
     internal void Update() {
+#if TRY_CATCH
         try {
+#endif
             OnUpdate();
+#if TRY_CATCH
         } catch(Exception e) {
             Console.LogError($"{this.GetType()}: {e}");
         }
+#endif
         foreach(Node childNode in ChildNodes)
             childNode.Update();
     }
     
     internal void PrePhysicsUpdate() {
+#if TRY_CATCH
         try {
+#endif
             OnPrePhysicsUpdate();
+#if TRY_CATCH
         } catch(Exception e) {
             Console.LogError($"{this.GetType()}: {e}");
         }
+#endif
         foreach(Node childNode in ChildNodes) {
             childNode.PrePhysicsUpdate();
         }
     }
     
     internal void PhysicsUpdate() {
+#if TRY_CATCH
         try {
+#endif
             OnPhysicsUpdate();
+#if TRY_CATCH
         } catch(Exception e) {
             Console.LogError($"{this.GetType()}: {e}");
         }
+#endif
         foreach(Node childNode in ChildNodes)
             childNode.PhysicsUpdate();
     }
     
     internal void Draw() {
+#if TRY_CATCH
         try {
+#endif
             OnDraw();
+#if TRY_CATCH
         } catch(Exception e) {
             Console.LogError($"{this.GetType()}: {e}");
         }
+#endif
         foreach(Node childNode in ChildNodes)
             childNode.Draw();
     }

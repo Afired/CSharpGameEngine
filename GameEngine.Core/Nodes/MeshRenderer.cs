@@ -71,7 +71,7 @@ public partial class MeshRenderer : Transform3D {
         
         for(int i = 0; i < meshes.Length; i++) {
             
-            Texture2D texture = Textures.Count > i ? Textures[i].Get() : (Texture2D) Texture2D.Default;
+            Texture2D texture = Textures.Count > i ? Textures[i].Get() : (Texture2D) Texture2D.Missing;
             
             texture.Bind(0);
             

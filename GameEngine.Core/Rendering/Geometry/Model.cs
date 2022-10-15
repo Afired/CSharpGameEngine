@@ -12,13 +12,13 @@ public class Model : IAsset {
     
     public Mesh[] Meshes { get; }
     
-    public static IAsset Default { get; }
+    public static Model Empty { get; }
     
     static Model() {
-        Default = CreateDefault();
+        Empty = CreateEmpty();
     }
     
-    private static Model CreateDefault() {
+    private static Model CreateEmpty() {
         return new Model(Array.Empty<Mesh>());
     }
     
@@ -45,11 +45,11 @@ public class Model : IAsset {
                 Vector3D position = posList[j];
                 Vector3D normal = normalList[j];
                 
-                UV uv = new UV(0, 0);
+                Uv uv = new Uv(0, 0);
                 if(textureCoordinateChannels.Length >= 1) {
                     List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                     if(uvChannel0.Count > j)
-                        uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
+                        uv = new Uv(uvChannel0[j].X, uvChannel0[j].Y);
                 }
                 
                 vertexData[j] = new Vertex(
@@ -91,11 +91,11 @@ public class Model : IAsset {
                         Vector3D position = posList[j];
                         Vector3D normal = normalList[j];
                         
-                        UV uv = new UV(0, 0);
+                        Uv uv = new Uv(0, 0);
                         if(textureCoordinateChannels.Length >= 1) {
                             List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                             if(uvChannel0.Count > j)
-                                uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
+                                uv = new Uv(uvChannel0[j].X, uvChannel0[j].Y);
                         }
                         
                         vertexData[j] = new Vertex(
@@ -139,11 +139,11 @@ public class Model : IAsset {
                 Vector3D position = posList[j];
                 Vector3D normal = normalList[j];
                 
-                UV uv = new UV(0, 0);
+                Uv uv = new Uv(0, 0);
                 if(textureCoordinateChannels.Length >= 1) {
                     List<Vector3D> uvChannel0 = textureCoordinateChannels[0];
                     if(uvChannel0.Count > j)
-                        uv = new UV(uvChannel0[j].X, uvChannel0[j].Y);
+                        uv = new Uv(uvChannel0[j].X, uvChannel0[j].Y);
                 }
                 
                 vertexData[j] = new Vertex(

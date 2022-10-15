@@ -16,7 +16,7 @@ public partial class SpriteRenderer : Transform3D {
     // new indexed drawing
     protected override unsafe void OnDraw() {
         
-        Mesh mesh = AssetDatabase.Get<Mesh>(Mesh.QuadGuid) ?? (Mesh) Mesh.Default;
+        Mesh mesh = AssetDatabase.Get<Mesh>(Mesh.QuadGuid) ?? (Mesh) Mesh.Quad;
         
         Shader.Get().Use();
         

@@ -6,6 +6,7 @@ using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using GameEngine.Editor.PropertyDrawers;
+using ImGuiNET;
 
 namespace GameEngine.Editor;
 
@@ -17,10 +18,16 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         EditorAssetManager.Init();
         // CompileExternalAssemblies();
         base.Initialize();
+        ImGui.LoadIniSettingsFromDisk("ImGui");
         EditorResources.Load();
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
         EditorGui editorGui = new();
+    }
+    
+    public override void Terminate() {
+        base.Terminate();
+        ImGui.SaveIniSettingsToDisk("ImGui");
     }
     
     protected override void CompileExternalAssemblies() {

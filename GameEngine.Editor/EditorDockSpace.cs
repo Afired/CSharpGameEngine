@@ -25,7 +25,7 @@ public class EditorDockSpace {
         ImGui.Begin("##DockSpace", windowFlags);
         ImGui.PopStyleVar(3);
         
-        _id = ImGui.GetID("MyDockSpace");
+        _id = ImGui.GetID("MainDockSpace");
         ImGui.DockSpace(_id, Vector2.Zero, ImGuiDockNodeFlags.PassthruCentralNode);
         
         ImGui.End();

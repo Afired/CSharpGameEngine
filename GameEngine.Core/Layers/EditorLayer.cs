@@ -19,6 +19,10 @@ public class EditorLayer : Layer {
         ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 4);
     }
     
+    private static void PopStyle() {
+        ImGui.PopStyleVar();
+    }
+    
     private static void SetTheme() {
         RangeAccessor<Vector4> colors = ImGui.GetStyle().Colors;
         
@@ -72,7 +76,7 @@ public class EditorLayer : Layer {
 
     protected override void OnDetach() {
         GlfwWindow.ImGuiController.Render();
-        ImGui.PopStyleVar();
+        PopStyle();
     }
     
 }

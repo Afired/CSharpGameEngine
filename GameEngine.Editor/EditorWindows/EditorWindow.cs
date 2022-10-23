@@ -8,12 +8,12 @@ public class EditorWindow {
     private readonly int _id;
     
     public EditorWindow() {
-        EditorApplication.Instance.EditorLayer.OnDraw += DrawWindow;
+        //EditorApplication.Instance.EditorLayer.OnDraw += DrawWindow;
         // ReSharper disable once VirtualMemberCallInConstructor
         _id = GetHashCode();
     }
     
-    private void DrawWindow() {
+    internal void DrawWindow() {
         bool opened = true;
         
         PreDraw();
@@ -29,9 +29,18 @@ public class EditorWindow {
         PostDraw();
         
         if(!opened)
-            EditorApplication.Instance.EditorLayer.OnDraw -= DrawWindow;
+            Destroy();
     }
-
+    
+    public static void Create<T>() where T : EditorWindow, new() {
+        T newWindow = new T();
+        EditorGui.Instance.AddWindow(newWindow);
+    }
+    
+    public void Destroy() {
+        EditorGui.Instance.RemoveWindow(this);
+    }
+    
     protected virtual void PreDraw() { }
     protected virtual void PostDraw() { }
     

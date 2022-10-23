@@ -26,13 +26,13 @@ public class EditorMainMenubar {
     private Position _windowPosRef;
     private Position _mousePosRef;
 
-    private bool _dragging;
+    private static bool _dragging;
     
     public EditorMainMenubar() {
         EditorApplication.Instance.EditorLayer.OnDraw += Draw;
     }
     
-    private void Draw() {
+    internal static void Draw() {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
         ImGui.PushStyleColor(ImGuiCol.MenuBarBg, new Vector4(0.11f, 0.11f, 0.11f, 1.0f));
         if(ImGui.BeginMainMenuBar()) {
@@ -127,7 +127,7 @@ public class EditorMainMenubar {
     public const int WM_LBUTTONDOWN = 0x201;
     public const int WM_LBUTTONUP = 0x0202;
 
-    private unsafe void InstallDragArea() {
+    private static unsafe void InstallDragArea() {
         // push style to make invisible
         ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0);
         

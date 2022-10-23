@@ -4,28 +4,60 @@ using ImGuiNET;
 namespace GameEngine.Editor; 
 
 public class EditorGui {
+
+    public static EditorGui Instance { get; private set; } 
+    private readonly List<EditorWindow> _editorWindows = new();
+    private readonly EditorDockSpace _editorDockSpace;
     
     public EditorGui() {
-        Initialize();
+        Instance = this;
+        
+        ImGuiIOPtr io = ImGui.GetIO();
+        io.ConfigFlags = ImGuiConfigFlags.DockingEnable;
+        io.BackendFlags = ImGuiBackendFlags.HasMouseCursors;
+        io.ConfigInputTextCursorBlink = true;
+        io.ConfigWindowsResizeFromEdges = true;
+        io.ConfigWindowsMoveFromTitleBarOnly = true;
+        io.MouseDrawCursor = true;
+        
+        //ImGui.GetIO().ConfigFlags = ImGuiConfigFlags.ViewportsEnable;
+        //ImGui.GetIO().ConfigFlags = ImGuiConfigFlags.NoMouseCursorChange;
+        
+        //ImGui.GetIO().BackendFlags = ImGuiBackendFlags.HasMouseCursors;
+        
+        //ImGui.GetIO().ConfigViewportsNoDecoration = true;
+        //ImGui.GetIO().ConfigViewportsNoTaskBarIcon = true;
+        
+        _editorDockSpace = new EditorDockSpace();
+        EditorApplication.Instance.EditorLayer.OnDraw += OnDraw;
+        
+        EditorWindow.Create<HierarchyWindow>();
+        EditorWindow.Create<ViewportWindow>();
+        EditorWindow.Create<InspectorWindow>();
+        EditorWindow.Create<ConsoleWindow>();
+        EditorWindow.Create<AssetBrowserWindow>();
+        EditorWindow.Create<TerminalWindow>();
     }
     
-    private void Initialize() {
-        // todo: make windows stay docked https://github.com/mellinoe/ImGui.NET/issues/202
-        ImGui.GetIO().ConfigFlags = ImGuiConfigFlags.DockingEnable;
-        ImGui.GetIO().BackendFlags = ImGuiBackendFlags.HasMouseCursors;
-        ImGui.GetIO().ConfigInputTextCursorBlink = true;
-        ImGui.GetIO().ConfigWindowsResizeFromEdges = true;
-        ImGui.GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
-        ImGui.GetIO().MouseDrawCursor = true;
-        
-        new EditorMainMenubar();
-        new EditorDockSpace();
-        new HierarchyWindow();
-        new ViewportWindow();
-        new InspectorWindow();
-        new ConsoleWindow();
-        new AssetBrowserWindow();
-        new TerminalWindow();
+    private void OnDraw() {
+        EditorMainMenubar.Draw();
+        _editorDockSpace.Draw();
+        foreach(EditorWindow editorWindow in _editorWindows) {
+            editorWindow.DrawWindow();
+        }
+    }
+    
+    public void AddWindow(EditorWindow window) {
+        if(_editorWindows.Contains(window)) {
+            Console.LogWarning("Tried to register editor window to editor gui twice");
+            return;
+        }
+        _editorWindows.Add(window);
+    }
+    
+    public void RemoveWindow(EditorWindow window) {
+        if(!_editorWindows.Remove(window))
+            Console.LogWarning("Tried to remove editor window from editor gui but it's not listed");
     }
     
 }

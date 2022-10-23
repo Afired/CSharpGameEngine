@@ -20,10 +20,6 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           },
           "FOV": 90.0,
           "FlyingSpeed": 10.0,
-          "RotationX": 0.011813007,
-          "RotationY": 0.9786456,
-          "RotationZ": -0.058789246,
-          "RotationW": 0.19664611,
           "BackgroundColor": {
             "$id": "6",
             "R": 0.1143791,
@@ -37,7 +33,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "Y": 10.0,
             "Z": -15.0
           },
-          "Scale": {
+          "LocalScale": {
             "$id": "8",
             "X": 1.0,
             "Y": 1.0,
@@ -54,13 +50,39 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
         {
           "$id": "10",
           "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
-          "Mesh": "b3185240-3baf-4248-be0e-70f1b16c95f3",
-          "Rotation3D": {
+          "Texture": {
             "$id": "11",
-            "Y": -37.0
+            "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
           },
-          "Scale": {
+          "Shader": {
             "$id": "12",
+            "Guid": "4c03acc7-7578-4d3b-9f01-fcc931d04be9"
+          },
+          "Model": {
+            "$id": "13",
+            "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
+          },
+          "Textures": {
+            "$id": "14",
+            "$values": [
+              {
+                "$id": "15",
+                "Guid": "c5857218-9fc9-4395-8be7-98048bd8df17"
+              }
+            ]
+          },
+          "DirectionalLightRotation": {
+            "$id": "16",
+            "X": 1.0
+          },
+          "DirectionalLightColor": {
+            "$id": "17",
+            "R": 1.0,
+            "G": 1.0,
+            "B": 1.0
+          },
+          "LocalScale": {
+            "$id": "18",
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0
@@ -69,7 +91,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
             "$ref": "1"
           },
           "_childNodes": {
-            "$id": "13",
+            "$id": "19",
             "$values": []
           }
         }
@@ -77,7 +99,7 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
     }
   },
   "_childNodes": {
-    "$id": "14",
+    "$id": "20",
     "$values": [
       {
         "$ref": "4"

@@ -26,16 +26,16 @@ public class ViewportWindow : EditorWindow {
         
         Vector2 desiredSize = ImGui.GetContentRegionAvail();
         
-        if(desiredSize != new Vector2(Renderer.MainFrameBuffer1.Width, Renderer.MainFrameBuffer1.Height)) {
-            Renderer.MainFrameBuffer1.Resize((int) desiredSize.X, (int) desiredSize.Y);
-            Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
+        if(desiredSize != new Vector2(Application.Instance!.Renderer.MainFrameBuffer1.Width, Application.Instance!.Renderer.MainFrameBuffer1.Height)) {
+            Application.Instance!.Renderer.MainFrameBuffer1.Resize((int) desiredSize.X, (int) desiredSize.Y);
+            Application.Instance!.Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
         }
         
         Vector2 size = new Vector2(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight);
         // size = size / Configuration.WindowHeight * desiredSize.Y;
         
         // ImGui.Image((IntPtr) Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
-        ImGui.Image((IntPtr) Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
+        ImGui.Image((IntPtr) Application.Instance!.Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
         
         // ImGui.PopStyleVar(1);
     }

@@ -52,9 +52,9 @@ public class Shader : IAsset {
             ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
             
-            shaderIDs[i] = Gl.CreateShader(type);
-            Gl.ShaderSource(shaderIDs[i], src);
-            Gl.CompileShader(shaderIDs[i]);
+            shaderIDs[i] = Application.Instance!.Renderer.Gl.CreateShader(type);
+            Application.Instance!.Renderer.Gl.ShaderSource(shaderIDs[i], src);
+            Application.Instance!.Renderer.Gl.CompileShader(shaderIDs[i]);
             
             //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             //if(status[0] == 0) {
@@ -64,16 +64,16 @@ public class Shader : IAsset {
             
         }
         
-        _programID = Gl.CreateProgram();
+        _programID = Application.Instance!.Renderer.Gl.CreateProgram();
         for(int i = 0; i < shaderIDs.Length; i++) {
-            Gl.AttachShader(_programID, shaderIDs[i]);
+            Application.Instance!.Renderer.Gl.AttachShader(_programID, shaderIDs[i]);
         }
-        Gl.LinkProgram(_programID);
+        Application.Instance!.Renderer.Gl.LinkProgram(_programID);
         
         // Delete Shaders
         for(int i = 0; i < shaderIDs.Length; i++) {
-            Gl.DetachShader(_programID, shaderIDs[i]);
-            Gl.DeleteShader(shaderIDs[i]);
+            Application.Instance!.Renderer.Gl.DetachShader(_programID, shaderIDs[i]);
+            Application.Instance!.Renderer.Gl.DeleteShader(shaderIDs[i]);
         }
     }
 
@@ -114,28 +114,28 @@ public class Shader : IAsset {
     };
     
     public void Use() {
-        Gl.UseProgram(_programID);
+        Application.Instance!.Renderer.Gl.UseProgram(_programID);
     }
     
     public void SetMat(string uniformName, mat4 mat4) {
-        int location = Gl.GetUniformLocation(_programID, uniformName);
-        Gl.UniformMatrix4(location, 1, false, mat4.ToArray());
+        int location = Application.Instance!.Renderer.Gl.GetUniformLocation(_programID, uniformName);
+        Application.Instance!.Renderer.Gl.UniformMatrix4(location, 1, false, mat4.ToArray());
     }
     
     public void SetInt(string uniformName, int value) {
-        int location = Gl.GetUniformLocation(_programID, uniformName);
-        Gl.Uniform1(location, value);
+        int location = Application.Instance!.Renderer.Gl.GetUniformLocation(_programID, uniformName);
+        Application.Instance!.Renderer.Gl.Uniform1(location, value);
     }
     
     public void SetFloat(string uniformName, float value) {
-        int location = Gl.GetUniformLocation(_programID, uniformName);
-        Gl.Uniform1(location, value);
+        int location = Application.Instance!.Renderer.Gl.GetUniformLocation(_programID, uniformName);
+        Application.Instance!.Renderer.Gl.Uniform1(location, value);
     }
     
     public void SetVector3(string uniformName, Vector3 vector3) {
-        int location = Gl.GetUniformLocation(_programID, uniformName);
+        int location = Application.Instance!.Renderer.Gl.GetUniformLocation(_programID, uniformName);
         var sysVector3 = new System.Numerics.Vector3(vector3.X, vector3.Y, vector3.Z);
-        Gl.Uniform3(location, sysVector3);
+        Application.Instance!.Renderer.Gl.Uniform3(location, sysVector3);
     }
     
 }

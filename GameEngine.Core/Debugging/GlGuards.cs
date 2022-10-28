@@ -14,7 +14,7 @@ public static class GlGuards {
         #if DEBUG_GL
         Console.LogError("some error in debug build");
         GLEnum err;
-        while((err = Gl.GetError()) != GLEnum.NoError) {
+        while((err = Application.Instance!.Renderer.Gl.GetError()) != GLEnum.NoError) {
             Console.Log(err.ToString());
         }
         #endif

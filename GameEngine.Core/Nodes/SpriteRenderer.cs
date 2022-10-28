@@ -25,14 +25,14 @@ public partial class SpriteRenderer : Transform3D {
                                      mat4.Scale(WorldScale.X, WorldScale.Y, WorldScale.Z);
         
         Shader.Get().SetMat("model", transformMat);
-        Shader.Get().SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        Shader.Get().SetMat("projection", Application.Instance!.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         
         Texture.Get().Bind();
         Shader.Get().SetInt("u_Texture", 0);
         
-        Gl.BindVertexArray(mesh.Vao);
-        Gl.DrawElements(PrimitiveType.Triangles, (uint) mesh.EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
-        Gl.BindVertexArray(0);
+        Application.Instance!.Renderer.Gl.BindVertexArray(mesh.Vao);
+        Application.Instance!.Renderer.Gl.DrawElements(PrimitiveType.Triangles, (uint) mesh.EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
+        Application.Instance!.Renderer.Gl.BindVertexArray(0);
     }
     
 //    protected override void OnDraw() {

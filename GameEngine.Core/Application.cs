@@ -15,25 +15,26 @@ using GameEngine.Core.Serialization;
 namespace GameEngine.Core;
 
 public abstract class Application : IDisposable {
-
-    public static Application? Instance { get; private set; }
+    
+    private static Application? _instance;
+    public static Application Instance => _instance ?? throw new Exception();
+    
     public bool IsRunning { get; protected set; }
     public Configuration Config { get; }
+    public Renderer Renderer { get; private set; }
     public static readonly ConcurrentQueue<Action> TaskQueue = new();
     
     protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
     public IEnumerable<Assembly> ExternalAssemblies => _ealcm.ExternalAssemblies;
     
-    public static IEnumerable<Assembly> GetExternalAssembliesStatic => NonGenericAppInstance._ealcm.ExternalAssemblies;
-    private static Application NonGenericAppInstance { get; set; } = null!;
+    public static IEnumerable<Assembly> GetExternalAssembliesStatic => Instance._ealcm.ExternalAssemblies;
     
     public bool IsReloadingExternalAssemblies { get; private set; }
     public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
-
+    
     protected Application(Configuration config) {
-        Instance = this;
+        _instance = this;
         Config = config;
-        NonGenericAppInstance = this;
     }
     
     protected void ExecuteQueuedTasks() {
@@ -52,6 +53,7 @@ public abstract class Application : IDisposable {
         Console.LogSuccess("Initialized physics engine (2/3)");
         
         Console.Log("Initializing render engine...");
+        Renderer = new Renderer();
         Renderer.Initialize();
         Console.LogSuccess("Initialized render engine (3/3)");
         
@@ -217,11 +219,11 @@ public abstract class Application : IDisposable {
             Renderer.Render();
             
             // handle input
-            Glfw.PollEvents();
+            Renderer.Glfw.PollEvents();
             
             Renderer.InputHandler.HandleMouseInput(Renderer.WindowHandle);
             
-            if(Glfw.WindowShouldClose(Renderer.WindowHandle))
+            if(Renderer.Glfw.WindowShouldClose(Renderer.WindowHandle))
                 Terminate();
         }
         
@@ -233,9 +235,8 @@ public abstract class Application : IDisposable {
     }
     
     public virtual void Dispose() {
-        ((IDisposable)_ealcm).Dispose();
-        Renderer.Gl.Dispose();
-        Renderer.Glfw.Dispose();
+        _ealcm.Dispose();
+        Renderer.Dispose();
     }
     
 }

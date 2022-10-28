@@ -1,6 +1,5 @@
 ﻿using GameEngine.Core.Rendering;
 using GameEngine.Core.Serialization;
-using GlmNet;
 
 namespace GameEngine.Core.Nodes; 
 
@@ -14,13 +13,13 @@ public abstract partial class BaseCamera : Transform3D {
     
     protected override void OnAwake() {
         base.OnAwake();
-        SetActiveCamera(this);
+        Application.Instance!.Renderer.SetActiveCamera(this);
     }
     
     protected override void OnUpdate() {
         base.OnUpdate();
         if(IsMainCamera)
-            SetActiveCamera(this);
+            Application.Instance!.Renderer.SetActiveCamera(this);
     }
     
 }

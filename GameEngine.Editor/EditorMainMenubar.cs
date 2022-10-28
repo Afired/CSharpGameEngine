@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using GameEngine.Core;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Geometry;
@@ -140,7 +141,7 @@ public class EditorMainMenubar {
 //                Glfw.GetWindowPos(GlfwWindow.Handle, out int x, out int y);
 //                _windowPosRef = new Position(x, y);
                 
-                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Renderer.GlfwWindow.Handle);
+                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Application.Instance!.Renderer.GlfwWindow.Handle);
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
@@ -170,7 +171,7 @@ public class EditorMainMenubar {
         Texture2D minimizeIcon = EditorResources.GetIcon("MinimizeIcon");
         if(ImGui.ImageButton((IntPtr) minimizeIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Renderer.GlfwWindow.Glfw.IconifyWindow(Renderer.GlfwWindow.Handle);
+                Application.Instance!.Renderer.GlfwWindow.Glfw.IconifyWindow(Application.Instance!.Renderer.GlfwWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -184,7 +185,7 @@ public class EditorMainMenubar {
         Texture2D fullscreenIcon = EditorResources.GetIcon("MaximizeIcon");
         if(ImGui.ImageButton((IntPtr) fullscreenIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Renderer.GlfwWindow.Glfw.MaximizeWindow(Renderer.GlfwWindow.Handle);
+                Application.Instance!.Renderer.GlfwWindow.Glfw.MaximizeWindow(Application.Instance!.Renderer.GlfwWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);

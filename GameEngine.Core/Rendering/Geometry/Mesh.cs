@@ -42,46 +42,46 @@ public class Mesh : IAsset {
     
     private unsafe void InitializeGeometry(Vertex[] vertexData, uint[] indexData) {
         
-        Vao = Gl.GenVertexArray();
-        Vbo = Gl.GenBuffer();
-        Ebo = Gl.GenBuffer();
+        Vao = Application.Instance!.Renderer.Gl.GenVertexArray();
+        Vbo = Application.Instance!.Renderer.Gl.GenBuffer();
+        Ebo = Application.Instance!.Renderer.Gl.GenBuffer();
         
-        Gl.BindVertexArray(Vao);
+        Application.Instance!.Renderer.Gl.BindVertexArray(Vao);
         
         // vbo
-        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
+        Application.Instance!.Renderer.Gl.BindBuffer(BufferTargetARB.ArrayBuffer, Vbo);
         fixed(Vertex* vertexDataPtr = &vertexData[0]) {
-            Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(Vertex) * vertexData.Length), vertexDataPtr, BufferUsageARB.StaticDraw);
+            Application.Instance!.Renderer.Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(Vertex) * vertexData.Length), vertexDataPtr, BufferUsageARB.StaticDraw);
         }
         
         // ebo
-        Gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, Ebo);
+        Application.Instance!.Renderer.Gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, Ebo);
         fixed(uint* indexDataPtr = &indexData[0]) {
-            Gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint) (sizeof(uint) * indexData.Length), indexDataPtr, BufferUsageARB.StaticDraw);
+            Application.Instance!.Renderer.Gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint) (sizeof(uint) * indexData.Length), indexDataPtr, BufferUsageARB.StaticDraw);
         }
         
         // position:xyz
         //                     index in shader, how many elements, element type, should be normalized, size, offset from start
-        Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), (void*) (0 * sizeof(float)));
-        Gl.EnableVertexAttribArray(0);
+        Application.Instance!.Renderer.Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), (void*) (0 * sizeof(float)));
+        Application.Instance!.Renderer.Gl.EnableVertexAttribArray(0);
         
         // texture:uv
-        Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), (void*) (3 * sizeof(float)));
-        Gl.EnableVertexAttribArray(1);
+        Application.Instance!.Renderer.Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+        Application.Instance!.Renderer.Gl.EnableVertexAttribArray(1);
         
         // normal:xyz
-        Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, true, 8 * sizeof(float), (void*) (5 * sizeof(float)));
-        Gl.EnableVertexAttribArray(2);
+        Application.Instance!.Renderer.Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, true, 8 * sizeof(float), (void*) (5 * sizeof(float)));
+        Application.Instance!.Renderer.Gl.EnableVertexAttribArray(2);
         
         
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+        Application.Instance!.Renderer.Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         
         // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
         //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
         // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-        Gl.BindVertexArray(0);
+        Application.Instance!.Renderer.Gl.BindVertexArray(0);
     }
     
 }

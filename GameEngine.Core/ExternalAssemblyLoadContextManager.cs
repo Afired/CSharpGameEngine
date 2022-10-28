@@ -105,7 +105,7 @@ public class ExternalAssemblyLoadContextManager : IDisposable {
         _unloadDelegates = new List<Func<bool>>();
     }
     
-    void IDisposable.Dispose() {
+    public void Dispose() {
         Unload();
     }
     

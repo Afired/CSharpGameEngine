@@ -13,7 +13,7 @@ public partial class Camera2D : BaseCamera {
     [Serialized] public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
     
     public override mat4 GLM_GetProjectionMatrix() {
-        float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
+        float aspectRatioGameFrameBuffer = (float) Application.Instance!.Renderer.MainFrameBuffer2.Width / (float) Application.Instance!.Renderer.MainFrameBuffer2.Height;
         mat4 projectionMatrix = mat4.Ortho(-aspectRatioGameFrameBuffer * Zoom, aspectRatioGameFrameBuffer * Zoom, -Zoom, Zoom, -ClippingDistance.X, -ClippingDistance.Y);
         
         mat4 viewProjectionMat = projectionMatrix * GetViewMat();

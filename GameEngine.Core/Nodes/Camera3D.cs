@@ -59,7 +59,7 @@ public partial class Camera3D : BaseCamera {
     }
     
     public override mat4 GLM_GetProjectionMatrix() {
-        float aspectRatioGameFrameBuffer = (float) Rendering.Renderer.MainFrameBuffer2.Width / (float) Rendering.Renderer.MainFrameBuffer2.Height;
+        float aspectRatioGameFrameBuffer = (float) Application.Instance!.Renderer.MainFrameBuffer2.Width / (float) Application.Instance!.Renderer.MainFrameBuffer2.Height;
         mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatioGameFrameBuffer, ClippingDistance.X, ClippingDistance.Y);
         
         mat4 viewProjectionMat = projectionMatrix * GetViewMat();

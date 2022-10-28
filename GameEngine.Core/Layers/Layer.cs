@@ -10,7 +10,7 @@ public abstract class Layer {
 
     internal void Attach() {
         if(SwapBuffers)
-            Renderer.SwapActiveFrameBuffer();
+            Application.Instance!.Renderer.SwapActiveFrameBuffer();
         OnAttach();
     }
     

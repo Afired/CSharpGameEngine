@@ -15,9 +15,9 @@ namespace GameEngine.Core.Rendering.Window;
 
 public delegate void OnResize(uint width, uint height);
 
-public sealed unsafe class GlfwWindow : IDisposable {
-
-    public event OnResize OnResize;
+public unsafe class GlfwWindow : IDisposable {
+    
+    public event OnResize? OnResize;
     
     public WindowHandle* Handle => GlfwWindowing.GetHandle(_window);
     private readonly IWindow _window;
@@ -26,8 +26,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
     public readonly GL Gl;
     private readonly IInputContext _inputContext;
     
-    
-    WindowOptions windowOptions = new WindowOptions() {
+    private readonly WindowOptions _windowOptions = new WindowOptions() {
         Position = new Vector2D<int>(-1, -1), // ? doesnt work
         Samples = 1, // multisample anti aliasing?
         Size = new Vector2D<int>((int) Application.Instance!.Config.WindowWidth, (int) Application.Instance!.Config.WindowHeight), // size of the window in pixel
@@ -56,7 +55,7 @@ public sealed unsafe class GlfwWindow : IDisposable {
         GlfwWindowing.Use();
         
         // create and initialize window
-        _window = Silk.NET.Windowing.Window.Create(windowOptions);
+        _window = Silk.NET.Windowing.Window.Create(_windowOptions);
         _window.Initialize();
         
         // once window has been initialized, create ImGUI controller, get gl context, get input context and initialize glfw api

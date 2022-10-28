@@ -39,7 +39,7 @@ public partial class MeshRenderer : Transform3D {
         }
         
         shader.SetMat("model", transformMat);
-        shader.SetMat("projection", Rendering.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        shader.SetMat("projection", Application.Instance!.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
         texture2D.Bind(0);
         shader.SetInt("u_Texture", 0);
         shader.SetFloat("time", Time.TotalTimeElapsed);
@@ -59,15 +59,15 @@ public partial class MeshRenderer : Transform3D {
             
             texture.Bind(0);
             
-            Gl.BindVertexArray(meshes[i].Vao);
+            Application.Instance!.Renderer.Gl.BindVertexArray(meshes[i].Vao);
 //            if(meshes[i] is PosUvNormalMeshIndexedBuffer posUvNormalGeometryEbo) {
                 // indexed drawing
-                Gl.DrawElements(PrimitiveType.Triangles, (uint) meshes[i].EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
+                Application.Instance!.Renderer.Gl.DrawElements(PrimitiveType.Triangles, (uint) meshes[i].EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
 //            } else {
 //                // normal drawing
 //                Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) meshes[i].VertexCount);
 //            }
-            Gl.BindVertexArray(0);
+            Application.Instance!.Renderer.Gl.BindVertexArray(0);
         }
         
     }

@@ -10,7 +10,7 @@ public partial class Scene : Node, Arr<Node?> {
     
     protected override void OnAwake() {
         base.OnAwake();
-        PhysicsEngine.InitializeWorld();
+        Application.Instance.PhysicsEngine.InitializeWorld();
     }
     
 }

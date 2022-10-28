@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
@@ -7,18 +8,21 @@ using GameEngine.Core.SceneManagement;
 
 namespace GameEngine.Core.Physics;
 
-public static class PhysicsEngine {
+public class PhysicsEngine : IDisposable {
     
-    public static bool IsInit { get; private set; }
-    public static World World;
+    public bool IsInit { get; private set; }
+    public World World;
     
+    public PhysicsEngine() {
+        
+    }
     
-    public static void Initialize() {
+    public void Initialize() {
         InitializeWorld();
         IsInit = true;
     }
     
-    internal static void InitializeWorld() {
+    internal void InitializeWorld() {
         //world
         Vector2 gravity = new Vector2(0, -9.81f);
         World = new World(gravity);
@@ -56,11 +60,15 @@ public static class PhysicsEngine {
 //        dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    public static void DoStep() {
+    public void DoStep() {
         int velocityIterations = 6;
         int positionIterations = 2;
         
         World.Step(Application.Instance!.Config.FixedTimeStep, velocityIterations, positionIterations);
+    }
+    
+    public void Dispose() {
+        
     }
     
 }

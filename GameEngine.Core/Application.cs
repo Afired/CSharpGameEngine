@@ -22,6 +22,7 @@ public abstract class Application : IDisposable {
     public bool IsRunning { get; protected set; }
     public Configuration Config { get; }
     public Renderer Renderer { get; private set; }
+    public PhysicsEngine PhysicsEngine { get; private set; }
     public static readonly ConcurrentQueue<Action> TaskQueue = new();
     
     protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
@@ -49,6 +50,7 @@ public abstract class Application : IDisposable {
         Console.LogSuccess("Initialized engine (1/3)");
         
         Console.Log("Initializing physics engine...");
+        PhysicsEngine = new PhysicsEngine();
         PhysicsEngine.Initialize();
         Console.LogSuccess("Initialized physics engine (2/3)");
         
@@ -237,6 +239,7 @@ public abstract class Application : IDisposable {
     public virtual void Dispose() {
         _ealcm.Dispose();
         Renderer.Dispose();
+        PhysicsEngine.Dispose();
     }
     
 }

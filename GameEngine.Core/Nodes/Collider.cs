@@ -44,7 +44,7 @@ public partial class Collider : Transform3D {
             isSensor = false,
         };
         
-        Body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
+        Body = Application.Instance.PhysicsEngine.World.CreateBody(dynamicBodyDef);
         
         Body.SetUserData(this);
         

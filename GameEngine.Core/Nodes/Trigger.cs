@@ -44,7 +44,7 @@ public partial class Trigger : Transform3D {
             isSensor = true,
         };
         
-        Body = PhysicsEngine.World.CreateBody(dynamicBodyDef);
+        Body = Application.Instance.PhysicsEngine.World.CreateBody(dynamicBodyDef);
         
         Body.SetUserData(this);
         

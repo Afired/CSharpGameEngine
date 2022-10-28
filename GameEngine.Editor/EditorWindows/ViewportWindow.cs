@@ -31,7 +31,7 @@ public class ViewportWindow : EditorWindow {
             Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
         }
         
-        Vector2 size = new Vector2(Configuration.WindowWidth, Configuration.WindowHeight);
+        Vector2 size = new Vector2(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight);
         // size = size / Configuration.WindowHeight * desiredSize.Y;
         
         // ImGui.Image((IntPtr) Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));

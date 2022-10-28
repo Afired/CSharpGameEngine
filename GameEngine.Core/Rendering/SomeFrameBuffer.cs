@@ -20,10 +20,10 @@ public class SomeFrameBuffer {
         TextureColorBuffer = Gl.GenTexture();
         Gl.BindTexture(TextureTarget.Texture2D, TextureColorBuffer);
         unsafe {
-            if(Configuration.UseHDR)
-                Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb16f, Configuration.WindowWidth, Configuration.WindowHeight, 0, PixelFormat.Rgb, PixelType.Float, null);
+            if(Application.Instance!.Config.UseHDR)
+                Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb16f, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, 0, PixelFormat.Rgb, PixelType.Float, null);
             else
-                Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, Configuration.WindowWidth, Configuration.WindowHeight, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
+                Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
         }
         Gl.TextureParameterI(TextureColorBuffer, TextureParameterName.TextureMinFilter, (int) GLEnum.Linear);
         Gl.TextureParameterI(TextureColorBuffer, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
@@ -38,7 +38,7 @@ public class SomeFrameBuffer {
         // attach render buffer object
         uint rbo = Gl.GenRenderbuffer();
         Gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
-        Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.Depth24Stencil8, Configuration.WindowWidth, Configuration.WindowHeight);
+        Gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.Depth24Stencil8, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight);
         
         Gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 

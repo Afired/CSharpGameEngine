@@ -61,9 +61,9 @@ public static unsafe class Renderer {
     
     private static void Setup() {
         GlfwWindow = new GlfwWindow();
-        MainFrameBuffer1 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer1
-        MainFrameBuffer2 = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, false); // game frame buffer2
-        FinalFrameBuffer = new FrameBuffer(Configuration.WindowWidth, Configuration.WindowHeight, true); // final framebuffer
+        MainFrameBuffer1 = new FrameBuffer(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, false); // game frame buffer1
+        MainFrameBuffer2 = new FrameBuffer(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, false); // game frame buffer2
+        FinalFrameBuffer = new FrameBuffer(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, true); // final framebuffer
         ActiveFrameBuffer = MainFrameBuffer1;
         _inactiveFrameBuffer = MainFrameBuffer2;
         _fullscreenVao = GetFullScreenRenderQuadVao();
@@ -74,7 +74,7 @@ public static unsafe class Renderer {
     private static void LoadResources() {
         AssetDatabase.Reload();
     }
-
+    
     public static void Render() {
         // bind default framebuffer to render to
         Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);

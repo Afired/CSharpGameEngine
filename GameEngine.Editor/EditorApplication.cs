@@ -10,9 +10,13 @@ using ImGuiNET;
 
 namespace GameEngine.Editor;
 
-public unsafe class EditorApplication : Application<EditorApplication> {
+public class EditorApplication : Application<EditorApplication> {
     
     internal EditorLayer EditorLayer { get; private set; }
+    
+    public EditorApplication(Configuration config) : base(config) {
+        
+    }
     
     public override void Initialize() {
         EditorAssetManager.Init();
@@ -34,15 +38,15 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         // base.CompileExternalAssemblies();
         foreach(string externalGameAssemblyDirectory in Project.Current.GetExternalGameAssemblyDirectories()) {
             CompileExternalAssembly(externalGameAssemblyDirectory, new DotnetBuildProperty[] {
-                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location),
-                new("GamEngineSourceGeneratorDLL", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location) + @"\..\..\..\..\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"),
+                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
+                new("GamEngineSourceGeneratorDLL", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location) + @"\..\..\..\..\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"),
                 new("ProjectRoot", Project.Current.ProjectDirectory),
             });
         }
         
         foreach(string externalEditorAssemblyDirectory in Project.Current.GetExternalEditorAssemblyDirectories()) {
             CompileExternalAssembly(externalEditorAssemblyDirectory, new DotnetBuildProperty[] {
-                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application<>))!.Location),
+                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
                 new("GameEngineEditorDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Editor.EditorApplication))!.Location),
                 new("ProjectRoot", Project.Current.ProjectDirectory),
             });
@@ -55,9 +59,6 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         foreach(string externalEditorAssemblyName in Project.Current.GetExternalEditorAssemblyNames()) {
             _ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
         }
-        
-        
-        // base.LoadExternalAssemblies();
         
         // _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
         foreach(string externalGameAssemblyName in Project.Current.GetExternalGameAssemblyNames()) {
@@ -84,7 +85,7 @@ public unsafe class EditorApplication : Application<EditorApplication> {
         });
     }
     
-    protected override void Loop() {
+    protected override unsafe void Loop() {
         Stopwatch updateTimer = new();
         Stopwatch physicsTimer = new();
         updateTimer.Start();
@@ -98,8 +99,8 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             ExecuteQueuedTasks();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
-            if(Configuration.TargetFrameRate > 0) {
-                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - updateTime);
+            if(Application.Instance!.Config.TargetFrameRate > 0) {
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Application.Instance!.Config.TargetFrameRate - updateTime);
                 if(timeOut.TotalSeconds > 0) {
                     Thread.Sleep(timeOut);
                     updateTime = (float) updateTimer.Elapsed.TotalSeconds;
@@ -117,11 +118,11 @@ public unsafe class EditorApplication : Application<EditorApplication> {
             Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
-            if(physicsTime > Configuration.FixedTimeStep) {
+            if(physicsTime > Application.Instance!.Config.FixedTimeStep) {
                 if(PlayMode.Current == PlayMode.Mode.Playing) {
                     Hierarchy.PrePhysicsUpdate();
                     PhysicsEngine.DoStep();
-                    Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
+                    Hierarchy.PhysicsUpdate(Application.Instance!.Config.FixedTimeStep);
                 }
                 physicsTimer.Restart();
             }
@@ -136,6 +137,11 @@ public unsafe class EditorApplication : Application<EditorApplication> {
                 Terminate();
         }
         
+    }
+    
+    public override void Dispose() {
+        base.Dispose();
+        EditorResources.Unload();
     }
     
 }

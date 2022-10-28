@@ -30,8 +30,8 @@ public sealed unsafe class GlfwWindow : IDisposable {
     WindowOptions windowOptions = new WindowOptions() {
         Position = new Vector2D<int>(-1, -1), // ? doesnt work
         Samples = 1, // multisample anti aliasing?
-        Size = new Vector2D<int>((int) Configuration.WindowWidth, (int) Configuration.WindowHeight), // size of the window in pixel
-        Title = Configuration.WindowTitle, // title of the window
+        Size = new Vector2D<int>((int) Application.Instance!.Config.WindowWidth, (int) Application.Instance!.Config.WindowHeight), // size of the window in pixel
+        Title = Application.Instance!.Config.WindowTitle, // title of the window
         IsVisible = true, // ?
         TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
         VideoMode = VideoMode.Default,
@@ -73,8 +73,8 @@ public sealed unsafe class GlfwWindow : IDisposable {
         Glfw.GetMonitorWorkarea(monitor, out int width, out int height, out int x, out int y);
         int middleMonitorX = (x + width) / 2;
         int middleMonitorY = (y + height) / 2;
-        int windowOffsetX = ((int)Configuration.WindowWidth / 2);
-        int windowOffsetY = ((int)Configuration.WindowHeight / 2);
+        int windowOffsetX = ((int)Application.Instance!.Config.WindowWidth / 2);
+        int windowOffsetY = ((int)Application.Instance!.Config.WindowHeight / 2);
         Glfw.SetWindowPos(Handle, (middleMonitorX - windowOffsetX), (middleMonitorY - windowOffsetY));
 
         // Handle resizes

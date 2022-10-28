@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using GameEngine.Core.Guard;
 using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
@@ -15,8 +14,11 @@ using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core;
 
-public abstract class Application {
-    
+public abstract class Application : IDisposable {
+
+    public static Application? Instance { get; private set; }
+    public bool IsRunning { get; protected set; }
+    public Configuration Config { get; }
     public static readonly ConcurrentQueue<Action> TaskQueue = new();
     
     protected readonly ExternalAssemblyLoadContextManager _ealcm = new();
@@ -25,7 +27,12 @@ public abstract class Application {
     public static IEnumerable<Assembly> GetExternalAssembliesStatic => NonGenericAppInstance._ealcm.ExternalAssemblies;
     private static Application NonGenericAppInstance { get; set; } = null!;
     
-    public Application() {
+    public bool IsReloadingExternalAssemblies { get; private set; }
+    public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
+
+    protected Application(Configuration config) {
+        Instance = this;
+        Config = config;
         NonGenericAppInstance = this;
     }
     
@@ -33,20 +40,6 @@ public abstract class Application {
         while(TaskQueue.TryDequeue(out Action? task)) {
             task.Invoke();
         }
-    }
-    
-}
-
-public abstract unsafe class Application<T> : Application where T : Application<T> {
-    
-    public static T Instance { get; private set; } = null!;
-    public bool IsRunning { get; protected set; }
-    
-    public bool IsReloadingExternalAssemblies { get; private set; }
-    public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
-    
-    public Application() : base() {
-        Instance = (this as T)!;
     }
     
     public virtual void Initialize() {
@@ -88,15 +81,15 @@ public abstract unsafe class Application<T> : Application where T : Application<
         
         var reflectTypeDescriptionProviderType = typeConverterAssembly.GetType("System.ComponentModel.ReflectTypeDescriptionProvider");
         var reflectTypeDescriptorProviderTable = reflectTypeDescriptionProviderType.GetField("s_attributeCache", BindingFlags.Static | BindingFlags.NonPublic);
-        var attributeCacheTable = (Hashtable)reflectTypeDescriptorProviderTable.GetValue(null);
+        var attributeCacheTable = (Hashtable) reflectTypeDescriptorProviderTable.GetValue(null);
         attributeCacheTable?.Clear();
         
         var reflectTypeDescriptorType = typeConverterAssembly.GetType("System.ComponentModel.TypeDescriptor");
         var reflectTypeDescriptorTypeTable = reflectTypeDescriptorType.GetField("s_defaultProviders", BindingFlags.Static | BindingFlags.NonPublic);
-        var defaultProvidersTable = (Hashtable)reflectTypeDescriptorTypeTable.GetValue(null);
+        var defaultProvidersTable = (Hashtable) reflectTypeDescriptorTypeTable.GetValue(null);
         defaultProvidersTable?.Clear();
         
-        var providerTableWeakTable = (Hashtable)reflectTypeDescriptorType.GetField("s_providerTable", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        var providerTableWeakTable = (Hashtable) reflectTypeDescriptorType.GetField("s_providerTable", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
         providerTableWeakTable?.Clear();
     }
     
@@ -189,7 +182,7 @@ public abstract unsafe class Application<T> : Application where T : Application<
         Loop();
     }
     
-    protected virtual void Loop() {
+    protected virtual unsafe void Loop() {
         Stopwatch updateTimer = new();
         Stopwatch physicsTimer = new();
         updateTimer.Start();
@@ -198,8 +191,8 @@ public abstract unsafe class Application<T> : Application where T : Application<
         while(IsRunning) {
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
-            if(Configuration.TargetFrameRate > 0) {
-                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Configuration.TargetFrameRate - updateTime);
+            if(Config.TargetFrameRate > 0) {
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Config.TargetFrameRate - updateTime);
                 if(timeOut.TotalSeconds > 0) {
                     Thread.Sleep(timeOut);
                     updateTime = (float) updateTimer.Elapsed.TotalSeconds;
@@ -210,13 +203,14 @@ public abstract unsafe class Application<T> : Application where T : Application<
             
             Hierarchy.Awake();
             Hierarchy.Update(updateTime);
+            
             Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
-            if(physicsTime > Configuration.FixedTimeStep) {
+            if(physicsTime > Config.FixedTimeStep) {
                 Hierarchy.PrePhysicsUpdate();
                 PhysicsEngine.DoStep();
-                Hierarchy.PhysicsUpdate(Configuration.FixedTimeStep);
+                Hierarchy.PhysicsUpdate(Config.FixedTimeStep);
                 physicsTimer.Restart();
             }
             
@@ -224,6 +218,7 @@ public abstract unsafe class Application<T> : Application where T : Application<
             
             // handle input
             Glfw.PollEvents();
+            
             Renderer.InputHandler.HandleMouseInput(Renderer.WindowHandle);
             
             if(Glfw.WindowShouldClose(Renderer.WindowHandle))
@@ -235,6 +230,22 @@ public abstract unsafe class Application<T> : Application where T : Application<
     public virtual void Terminate() {
         IsRunning = false;
         Console.Log("Is terminating...");
+    }
+    
+    public virtual void Dispose() {
+        ((IDisposable)_ealcm).Dispose();
+        Renderer.Gl.Dispose();
+        Renderer.Glfw.Dispose();
+    }
+    
+}
+
+public abstract class Application<T> : Application where T : Application<T> {
+    
+    public new static T? Instance { get; private set; }
+    
+    protected Application(Configuration config) : base(config) {
+        Instance = (this as T)!;
     }
     
 }

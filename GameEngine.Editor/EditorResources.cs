@@ -11,6 +11,10 @@ public static class EditorResources {
     
     private static readonly Dictionary<string, Texture2D> _iconRegister = new();
     
+    public static void Unload() {
+        _iconRegister.Clear();
+    }
+    
     public static void Load() {
         Console.Log($"Loading Editor Resources...");
         string[] paths = GetAllFilePathsOfAssetsWithExtension("png");

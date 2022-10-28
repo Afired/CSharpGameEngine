@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
@@ -36,26 +37,35 @@ public class ExternalAssemblyLoadContextManager : IDisposable {
             return;
         
         InvokeUnloadDelegate();
-        
-        UnloadInternal(out WeakReference externalAssemblyLoadContextRef);
-        
-        const int MAX_GC_ATTEMPTS = 10;
-        for(int i = 0; externalAssemblyLoadContextRef.IsAlive; i++) {
-            if(i >= MAX_GC_ATTEMPTS) {
-                Console.LogError($"Failed to unload external assemblies!");
-                _externalAssemblyLoadContext = externalAssemblyLoadContextRef.Target as ExternalAssemblyLoadContext1;
-                return;
+
+        if(UnloadInternal(out WeakReference? externalAssemblyLoadContextRef)) {
+            
+            const int MAX_GC_ATTEMPTS = 10;
+            for(int i = 0; externalAssemblyLoadContextRef.IsAlive; i++) {
+                if(i >= MAX_GC_ATTEMPTS) {
+                    Console.LogError($"Failed to unload external assemblies!");
+                    _externalAssemblyLoadContext = externalAssemblyLoadContextRef.Target as ExternalAssemblyLoadContext1;
+                    return;
+                }
+                Console.Log($"GC Attempt ({i + 1}/{MAX_GC_ATTEMPTS})...");
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
-            Console.Log($"GC Attempt ({i + 1}/{MAX_GC_ATTEMPTS})...");
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            
+            Console.LogSuccess($"Successfully unloaded external assemblies!");
+            
         }
         
-        Console.LogSuccess($"Successfully unloaded external assemblies!");
     }
     
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void UnloadInternal(out WeakReference externalAssemblyLoadContextRef) {
+    private bool UnloadInternal([MaybeNullWhen(false)] out WeakReference externalAssemblyLoadContextRef) {
+        
+        if(_externalAssemblyLoadContext is null) {
+            externalAssemblyLoadContextRef = null;
+            return false;
+        }
+        
         foreach(Assembly assembly in ExternalAssemblies) {
             Console.Log($"Unloading external assembly from: '{assembly.Location}'...");
         }
@@ -65,6 +75,7 @@ public class ExternalAssemblyLoadContextManager : IDisposable {
         
         externalAssemblyLoadContextRef = new WeakReference(_externalAssemblyLoadContext);
         _externalAssemblyLoadContext = null;
+        return true;
     }
     
     public void AddUnloadTask(Func<bool> @delegate) {
@@ -91,11 +102,11 @@ public class ExternalAssemblyLoadContextManager : IDisposable {
             if(!result)
                 Console.LogError("some unload delegate returned with failure");
         }
-        _unloadDelegates = new();
+        _unloadDelegates = new List<Func<bool>>();
     }
     
     void IDisposable.Dispose() {
-        UnloadInternal(out WeakReference _);
+        Unload();
     }
     
     private class ExternalAssemblyLoadContext1 : AssemblyLoadContext {

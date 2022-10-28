@@ -60,7 +60,7 @@ public static class PhysicsEngine {
         int velocityIterations = 6;
         int positionIterations = 2;
         
-        World.Step(Configuration.FixedTimeStep, velocityIterations, positionIterations);
+        World.Step(Application.Instance!.Config.FixedTimeStep, velocityIterations, positionIterations);
     }
     
 }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using GameEngine.Core;
 using GameEngine.Core.Rendering;
@@ -11,14 +12,21 @@ public class ViewportWindow : EditorWindow {
         Title = "Viewport";
     }
     
-    protected override void PreDraw() => 
+    protected override void PreDraw() {
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
+    }
     
-    protected override void PostDraw() =>
+    protected override void PostDraw() {
         ImGui.PopStyleVar(1);
+    }
     
     protected override void Draw() {
         DrawViewport();
+        Vector2 windowPos = ImGui.GetWindowPos();
+        ImGui.SetCursorScreenPos(windowPos + new Vector2(25, 50));
+        ImGui.Text((1f / Time.DeltaTime).ToString("F1"));
+        ImGui.SetCursorScreenPos( windowPos + new Vector2(25, 65));
+        ImGui.Text(Time.DeltaTime.ToString(CultureInfo.InvariantCulture));
     }
     
     private void DrawViewport() {

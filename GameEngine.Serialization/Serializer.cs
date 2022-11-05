@@ -47,7 +47,7 @@ public static class Serializer {
     }
     
     public static Type GetTypeFromString(string assemblyName, string typeAsString) {
-        foreach(Assembly assembly in Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Node)))) {
+        foreach(Assembly assembly in Application.Instance.Ealcm.ExternalAssemblies.Append(Assembly.GetAssembly(typeof(Node)))) {
             foreach(TypeInfo typeInfo in assembly.DefinedTypes) {
                 if(typeInfo.FullName == typeAsString)
                     return typeInfo.AsType();

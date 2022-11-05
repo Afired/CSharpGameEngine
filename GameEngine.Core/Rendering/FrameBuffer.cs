@@ -30,15 +30,15 @@ public class FrameBuffer : IDisposable {
         AutomaticResize = automaticResize;
         Update();
         if(AutomaticResize)
-            rendererCtx.GlfwWindow.OnResize += Resize;
+            rendererCtx.MainWindow.OnResize += Resize;
     }
 
     public void Bind() {
-        _rendererCtx.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ID);
+        _rendererCtx.MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ID);
     }
 
     public void Unbind() {
-        _rendererCtx.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        _rendererCtx.MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
     }
     
     public void Update() {
@@ -47,16 +47,16 @@ public class FrameBuffer : IDisposable {
             Dispose();
         }
         
-        ID = _rendererCtx.Gl.CreateFramebuffer();
+        ID = _rendererCtx.MainWindow.Gl.CreateFramebuffer();
 
         uint currentFrameBuffer = _rendererCtx.FinalFrameBuffer?.ID ?? 0;  //todo: which framebuffer is currently in use?
         
-        _rendererCtx.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ID);
+        _rendererCtx.MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ID);
         
         ColorAttachment = CreateColorAttachment();
         DepthAttachment = CreateRenderBuffer();
 
-        _rendererCtx.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, currentFrameBuffer);
+        _rendererCtx.MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, currentFrameBuffer);
     }
 
     public void Resize(uint width, uint height) {
@@ -80,38 +80,38 @@ public class FrameBuffer : IDisposable {
     }
 
     private uint CreateColorAttachment() {
-        uint colorAttachment = _rendererCtx.Gl.GenTexture();
-        _rendererCtx.Gl.BindTexture(TextureTarget.Texture2D, colorAttachment);
+        uint colorAttachment = _rendererCtx.MainWindow.Gl.GenTexture();
+        _rendererCtx.MainWindow.Gl.BindTexture(TextureTarget.Texture2D, colorAttachment);
         unsafe {
-            _rendererCtx.Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null);
+            _rendererCtx.MainWindow.Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, Width, Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null);
         }
-        _rendererCtx.Gl.TextureParameterI(colorAttachment, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-        _rendererCtx.Gl.TextureParameterI(colorAttachment, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
+        _rendererCtx.MainWindow.Gl.TextureParameterI(colorAttachment, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
+        _rendererCtx.MainWindow.Gl.TextureParameterI(colorAttachment, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
 
-        _rendererCtx.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, colorAttachment, 0);
+        _rendererCtx.MainWindow.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, colorAttachment, 0);
         return colorAttachment;
     }
 
     private uint CreateRenderBuffer() {
-        uint depthAttachment = _rendererCtx.Gl.GenTexture();
-        _rendererCtx.Gl.BindTexture(TextureTarget.Texture2D, depthAttachment);
-        _rendererCtx.Gl.TexStorage2D(TextureTarget.Texture2D, 1, GLEnum.Depth24Stencil8, Width, Height);
+        uint depthAttachment = _rendererCtx.MainWindow.Gl.GenTexture();
+        _rendererCtx.MainWindow.Gl.BindTexture(TextureTarget.Texture2D, depthAttachment);
+        _rendererCtx.MainWindow.Gl.TexStorage2D(TextureTarget.Texture2D, 1, GLEnum.Depth24Stencil8, Width, Height);
         //unsafe {
         //    Gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Depth24Stencil8, Config.Width, Config.Height, 0, PixelFormat.DepthStencil, PixelType.UnsignedInt, null);
         //}
-        _rendererCtx.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2D, depthAttachment, 0);
+        _rendererCtx.MainWindow.Gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, TextureTarget.Texture2D, depthAttachment, 0);
         
-        Throw.If((FramebufferStatus) _rendererCtx.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferStatus.FramebufferComplete, "Creation of framebuffer incomplete");
+        Throw.If((FramebufferStatus) _rendererCtx.MainWindow.Gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferStatus.FramebufferComplete, "Creation of framebuffer incomplete");
         
-        _rendererCtx.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        _rendererCtx.MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
         return depthAttachment;
     }
 
     public void Dispose() {
-        _rendererCtx.Gl.DeleteFramebuffer(ID);
-        _rendererCtx.Gl.DeleteTextures(1, ColorAttachment);
-        _rendererCtx.Gl.DeleteTextures(1, DepthAttachment);
+        _rendererCtx.MainWindow.Gl.DeleteFramebuffer(ID);
+        _rendererCtx.MainWindow.Gl.DeleteTextures(1, ColorAttachment);
+        _rendererCtx.MainWindow.Gl.DeleteTextures(1, DepthAttachment);
     }
     
 }

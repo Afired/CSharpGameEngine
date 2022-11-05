@@ -100,7 +100,7 @@ public class AssetBrowserWindow : EditorWindow {
                 Process.Start("explorer.exe" , currentPath);
             
             if(ImGui.BeginMenu("Create Node")) {
-                foreach(Assembly assembly in EditorApplication.Instance.ExternalAssemblies.Append(typeof(Application<>).Assembly)) {
+                foreach(Assembly assembly in EditorApplication.Instance.Ealcm.ExternalAssemblies.Append(typeof(Application).Assembly)) {
                     foreach(Type type in assembly.GetTypes().Where(type => !type.IsAbstract && type.IsAssignableTo(typeof(Node)))) {
                         if(ImGui.MenuItem(type.Name)) {
                             Node newNode = Node.New(type);

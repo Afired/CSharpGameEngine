@@ -9,7 +9,6 @@ using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.SceneManagement;
 using ImGuiNET;
 using Silk.NET.GLFW;
-using Renderer = GameEngine.Core.Rendering.Renderer;
 
 namespace GameEngine.Editor.EditorWindows; 
 
@@ -23,10 +22,10 @@ public class EditorMainMenubar {
             Y = y;
         }
     }
-
+    
     private Position _windowPosRef;
     private Position _mousePosRef;
-
+    
     private static bool _dragging;
     
     public EditorMainMenubar() {
@@ -50,16 +49,16 @@ public class EditorMainMenubar {
                 EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
             
             DrawWindowHandleButtons();
-
+            
             InstallDragArea();
-
+            
             ImGui.EndMainMenuBar();   
         }
         // pop main menu bar size
         ImGui.PopStyleVar();
         ImGui.PopStyleColor();
     }
-
+    
     private static void DrawPlayControls() {
         
         void AlignForWidth(float width, float alignment = 0.5f) {
@@ -109,10 +108,10 @@ public class EditorMainMenubar {
     
     public const int WM_NCLBUTTONDOWN = 0xA1;
     public const int HTCAPTION = 0x2;
-
+    
     [DllImport("User32.dll")]
     public static extern bool ReleaseCapture();
-
+    
     [DllImport("User32.dll")]
     public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
     
@@ -127,7 +126,7 @@ public class EditorMainMenubar {
     
     public const int WM_LBUTTONDOWN = 0x201;
     public const int WM_LBUTTONUP = 0x0202;
-
+    
     private static unsafe void InstallDragArea() {
         // push style to make invisible
         ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0);
@@ -141,7 +140,7 @@ public class EditorMainMenubar {
 //                Glfw.GetWindowPos(GlfwWindow.Handle, out int x, out int y);
 //                _windowPosRef = new Position(x, y);
                 
-                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Application.Instance!.Renderer.GlfwWindow.Handle);
+                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Application.Instance!.Renderer.MainWindow.Handle);
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
@@ -156,11 +155,11 @@ public class EditorMainMenubar {
         } else {
             _dragging = false;
         }
-
+        
         //pop button drag area alpha
         ImGui.PopStyleVar();
     }
-
+    
     private static void DrawWindowHandleButtons() {
         
         ImGui.PushID("minimize");
@@ -171,7 +170,7 @@ public class EditorMainMenubar {
         Texture2D minimizeIcon = EditorResources.GetIcon("MinimizeIcon");
         if(ImGui.ImageButton((IntPtr) minimizeIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Application.Instance!.Renderer.GlfwWindow.Glfw.IconifyWindow(Application.Instance!.Renderer.GlfwWindow.Handle);
+                Application.Instance!.Renderer.MainWindow.Glfw.IconifyWindow(Application.Instance!.Renderer.MainWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -185,7 +184,7 @@ public class EditorMainMenubar {
         Texture2D fullscreenIcon = EditorResources.GetIcon("MaximizeIcon");
         if(ImGui.ImageButton((IntPtr) fullscreenIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Application.Instance!.Renderer.GlfwWindow.Glfw.MaximizeWindow(Application.Instance!.Renderer.GlfwWindow.Handle);
+                Application.Instance!.Renderer.MainWindow.Glfw.MaximizeWindow(Application.Instance!.Renderer.MainWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -237,15 +236,15 @@ public class EditorMainMenubar {
         
         if(ImGui.BeginMenu("Hierarchy")) {
             if(ImGui.MenuItem("New Scene")) {
-                Console.LogWarning("New scene functionality is currently disabled");
-                //Hierarchy.SetRootNode(Node.New<Scene>());
+                Console.LogWarning("New scene functionality is currently unstable!");
+                Hierarchy.Open(Node.New<Scene>());
             }
             if(ImGui.MenuItem("Save"))
                 Hierarchy.SaveCurrentRootNode();
             ImGui.EndMenu();
         }
         
-        ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
+        //ImGui.Text(CursorPosition.GetCursorPosition().X + " " + CursorPosition.GetCursorPosition().Y);
     }
     
 }

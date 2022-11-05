@@ -18,14 +18,12 @@ public unsafe class Renderer : IDisposable {
     public WindowHandle* WindowHandle;
     public InputHandler InputHandler;
     
-    public event OnLoad OnLoad;
+    public event OnLoad? OnLoad;
     public bool IsInit { get; private set; }
     public BaseCamera? CurrentCamera => _currentCameraRef.Target as BaseCamera;
     private readonly WeakReference _currentCameraRef = new(null);
     
-    public GlfwWindow GlfwWindow;
-    public GL Gl => GlfwWindow.Gl;
-    public Glfw Glfw => GlfwWindow.Glfw;
+    public GlfwWindow MainWindow { get; }
     
     // this frame buffer is the main frame buffer to render to, it is also used for any drawing of post processing when ping ponging (ping pong frame buffer 1)
     public FrameBuffer MainFrameBuffer1 { get; private set; }
@@ -39,8 +37,8 @@ public unsafe class Renderer : IDisposable {
     internal void SwapActiveFrameBuffer() {
         // Swap via deconstruction
         (ActiveFrameBuffer, InactiveFrameBuffer) = (InactiveFrameBuffer, ActiveFrameBuffer);
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
-        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
+        MainWindow.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
     
     private uint _fullscreenVao;
@@ -49,25 +47,24 @@ public unsafe class Renderer : IDisposable {
     
     public LayerStack LayerStack { get; private set; }
     
-    
-    public Renderer() { }
-    
-    public void Initialize() {
-        GlfwWindow = new GlfwWindow();
-        MainFrameBuffer1 = new FrameBuffer(this, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, false); // game frame buffer1
-        MainFrameBuffer2 = new FrameBuffer(this, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, false); // game frame buffer2
-        FinalFrameBuffer = new FrameBuffer(this, Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight, true); // final framebuffer
+    public Renderer(Application applicationCtx) {
+        MainWindow = new GlfwWindow();
+        MainFrameBuffer1 = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer1
+        MainFrameBuffer2 = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer2
+        FinalFrameBuffer = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, true); // final framebuffer
         ActiveFrameBuffer = MainFrameBuffer1;
         InactiveFrameBuffer = MainFrameBuffer2;
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LayerStack = new LayerStack();
-        LoadResources();
+        //LoadResources();
+        
+        applicationCtx.OnFinishedInit += LoadResources;
         
         InputHandler = new InputHandler();
-        Glfw.SetKeyCallback(GlfwWindow.Handle, InputHandler.OnKeyAction);
+        MainWindow.Glfw.SetKeyCallback(MainWindow.Handle, InputHandler.OnKeyAction);
         IsInit = true;
         OnLoad?.Invoke();
-        WindowHandle = GlfwWindow.Handle;
+        WindowHandle = MainWindow.Handle;
     }
     
     private void LoadResources() {
@@ -76,15 +73,15 @@ public unsafe class Renderer : IDisposable {
     
     public void Render() {
         // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
-        Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-        Gl.Enable(EnableCap.DepthTest); // reenable depth
+        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
+        MainWindow.Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        MainWindow.Gl.Enable(EnableCap.DepthTest); // reenable depth
         
         // render and draw frame
         if(CurrentCamera is not null) {
             
             //draw background
-            Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
+            MainWindow.Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
             
 //            foreach(Layer layer in LayerStack.GetNormalLayers()) {
 //                layer.Draw();
@@ -104,19 +101,19 @@ public unsafe class Renderer : IDisposable {
         }
         
         DrawToBackBuffer();
-        Glfw.SwapBuffers(WindowHandle);
+        MainWindow.Glfw.SwapBuffers(WindowHandle);
     }
     
     private void DrawToBackBuffer() {
         // bind default framebuffer to render to
-        Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-        Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        MainWindow.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
         // use default screen shader
         AssetDatabase.Get<Shader>(ScreenShader).Use();
-        Gl.BindVertexArray(_fullscreenVao);
-        Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+        MainWindow.Gl.BindVertexArray(_fullscreenVao);
+        MainWindow.Gl.Disable(EnableCap.DepthTest);
+        MainWindow.Gl.BindTexture(TextureTarget.Texture2D, FinalFrameBuffer.ColorAttachment);
+        MainWindow.Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
     private void DoPostProcessing() {
@@ -124,10 +121,10 @@ public unsafe class Renderer : IDisposable {
         // use screen shader
         AssetDatabase.Get<Shader>(ScreenShader).Use();
         AssetDatabase.Get<Shader>(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
-        Gl.BindVertexArray(_fullscreenVao);
-        Gl.Disable(EnableCap.DepthTest);
-        Gl.BindTexture(TextureTarget.Texture2D, InactiveFrameBuffer.ColorAttachment);
-        Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+        MainWindow.Gl.BindVertexArray(_fullscreenVao);
+        MainWindow.Gl.Disable(EnableCap.DepthTest);
+        MainWindow.Gl.BindTexture(TextureTarget.Texture2D, InactiveFrameBuffer.ColorAttachment);
+        MainWindow.Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
     private uint GetFullScreenRenderQuadVao() {
@@ -142,26 +139,26 @@ public unsafe class Renderer : IDisposable {
             -1f, -1f, 0f, 0f, 0f,  // bottom left
         };
         
-        uint vao = Gl.GenVertexArray();
-        uint vbo = Gl.GenBuffer();
+        uint vao = MainWindow.Gl.GenVertexArray();
+        uint vbo = MainWindow.Gl.GenBuffer();
         
-        Gl.BindVertexArray(vao);
-        Gl.BindBuffer(GLEnum.ArrayBuffer, vbo);
+        MainWindow.Gl.BindVertexArray(vao);
+        MainWindow.Gl.BindBuffer(GLEnum.ArrayBuffer, vbo);
         
         fixed(float* v = &vertexData[0]) {
-            Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
+            MainWindow.Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
         }
         
         // xyz
-        Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
-        Gl.EnableVertexAttribArray(0);
+        MainWindow.Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (0 * sizeof(float)));
+        MainWindow.Gl.EnableVertexAttribArray(0);
         
         // texture coordinates
-        Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
-        Gl.EnableVertexAttribArray(1);
+        MainWindow.Gl.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*) (3 * sizeof(float)));
+        MainWindow.Gl.EnableVertexAttribArray(1);
         
-        Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
-        Gl.BindVertexArray(0);
+        MainWindow.Gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
+        MainWindow.Gl.BindVertexArray(0);
         
         return vao;
     }
@@ -171,14 +168,10 @@ public unsafe class Renderer : IDisposable {
     }
     
     public void Dispose() {
-        Gl.Dispose();
-        Glfw.Dispose();
-        GlfwWindow.Dispose();
         MainFrameBuffer1.Dispose();
         MainFrameBuffer2.Dispose();
         FinalFrameBuffer.Dispose();
-        ActiveFrameBuffer.Dispose();
-        InactiveFrameBuffer.Dispose();
+        MainWindow.Dispose();
     }
     
 }

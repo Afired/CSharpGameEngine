@@ -30,9 +30,9 @@ public partial class SpriteRenderer : Transform3D {
         Texture.Get().Bind();
         Shader.Get().SetInt("u_Texture", 0);
         
-        Application.Instance!.Renderer.Gl.BindVertexArray(mesh.Vao);
-        Application.Instance!.Renderer.Gl.DrawElements(PrimitiveType.Triangles, (uint) mesh.EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
-        Application.Instance!.Renderer.Gl.BindVertexArray(0);
+        Application.Instance.Renderer.MainWindow.Gl.BindVertexArray(mesh.Vao);
+        Application.Instance.Renderer.MainWindow.Gl.DrawElements(PrimitiveType.Triangles, (uint) mesh.EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
+        Application.Instance.Renderer.MainWindow.Gl.BindVertexArray(0);
     }
     
 //    protected override void OnDraw() {

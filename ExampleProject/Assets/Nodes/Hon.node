@@ -30,16 +30,16 @@ GameEngine.Core::GameEngine.Core.Nodes.Scene
           "IsMainCamera": true,
           "LocalPosition": {
             "$id": "7",
-            "X": 4.837477,
+            "X": 1.1184958,
             "Y": 6.6531243,
-            "Z": 24.149803
+            "Z": 24.284199
           },
           "LocalRotation": {
             "$id": "8",
-            "X": -0.010692582,
-            "Y": -0.9578314,
-            "Z": 0.035935674,
-            "W": -0.2849972
+            "X": -0.09873205,
+            "Y": -0.74227935,
+            "Z": 0.112184614,
+            "W": -0.6532681
           },
           "ParentNode": {
             "$ref": "1"

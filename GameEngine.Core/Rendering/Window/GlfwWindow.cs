@@ -50,7 +50,6 @@ public unsafe class GlfwWindow : IDisposable {
     };
     
     public GlfwWindow() {
-        
         // use glfw for window api
         GlfwWindowing.Use();
         

@@ -15,13 +15,9 @@ public class EditorApplication : Application<EditorApplication> {
     internal EditorLayer EditorLayer { get; private set; }
     
     public EditorApplication(Configuration config) : base(config) {
-        
-    }
-    
-    public override void Initialize() {
         EditorAssetManager.Init();
         // CompileExternalAssemblies();
-        base.Initialize();
+        //base();
         ImGui.LoadIniSettingsFromDisk("ImGui");
         EditorResources.Load();
         EditorLayer = new EditorLayer();
@@ -36,37 +32,41 @@ public class EditorApplication : Application<EditorApplication> {
     
     protected override void CompileExternalAssemblies() {
         // base.CompileExternalAssemblies();
-        foreach(string externalGameAssemblyDirectory in Project.Current.GetExternalGameAssemblyDirectories()) {
-            CompileExternalAssembly(externalGameAssemblyDirectory, new DotnetBuildProperty[] {
-                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
-                new("GamEngineSourceGeneratorDLL", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location) + @"\..\..\..\..\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"),
-                new("ProjectRoot", Project.Current.ProjectDirectory),
-            });
-        }
+        if(Project.Current is not null) {
+            foreach(string externalGameAssemblyDirectory in Project.Current.GetExternalGameAssemblyDirectories()) {
+                CompileExternalAssembly(externalGameAssemblyDirectory, new DotnetBuildProperty[] {
+                    new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
+                    new("GamEngineSourceGeneratorDLL", Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location) + @"\..\..\..\..\GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll"),
+                    new("ProjectRoot", Project.Current.ProjectDirectory),
+                });
+            }
         
-        foreach(string externalEditorAssemblyDirectory in Project.Current.GetExternalEditorAssemblyDirectories()) {
-            CompileExternalAssembly(externalEditorAssemblyDirectory, new DotnetBuildProperty[] {
-                new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
-                new("GameEngineEditorDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Editor.EditorApplication))!.Location),
-                new("ProjectRoot", Project.Current.ProjectDirectory),
-            });
+            foreach(string externalEditorAssemblyDirectory in Project.Current.GetExternalEditorAssemblyDirectories()) {
+                CompileExternalAssembly(externalEditorAssemblyDirectory, new DotnetBuildProperty[] {
+                    new("GameEngineCoreDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Core.Application))!.Location),
+                    new("GameEngineEditorDLL", System.Reflection.Assembly.GetAssembly(typeof(GameEngine.Editor.EditorApplication))!.Location),
+                    new("ProjectRoot", Project.Current.ProjectDirectory),
+                });
+            }
         }
     }
     
     public override void LoadExternalAssemblies() {
+
+        if(Project.Current is not null) {
+            // _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
+            foreach(string externalEditorAssemblyName in Project.Current.GetExternalEditorAssemblyNames()) {
+                Ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
+            }
         
-        // _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
-        foreach(string externalEditorAssemblyName in Project.Current.GetExternalEditorAssemblyNames()) {
-            _ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
-        }
-        
-        // _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
-        foreach(string externalGameAssemblyName in Project.Current.GetExternalGameAssemblyNames()) {
-            _ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalGameAssemblyName + ".dll", true);
+            // _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
+            foreach(string externalGameAssemblyName in Project.Current.GetExternalGameAssemblyNames()) {
+                Ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalGameAssemblyName + ".dll", true);
+            }
         }
         Serializer.LoadAssemblyIfNotLoadedAlready();
         
-        _ealcm.AddUnloadTask(() => {
+        Ealcm.AddUnloadTask(() => {
             Hierarchy.SaveCurrentRootNode();
             Hierarchy.Clear();
             Renderer.SetActiveCamera(null);
@@ -78,7 +78,7 @@ public class EditorApplication : Application<EditorApplication> {
         
         
         PropertyDrawer.GenerateLookUp();
-        _ealcm.AddUnloadTask(() => {
+        Ealcm.AddUnloadTask(() => {
             Selection.Clear();
             PropertyDrawer.ClearLookUp();
             return true;
@@ -130,10 +130,10 @@ public class EditorApplication : Application<EditorApplication> {
             Renderer.Render();
             
             // handle input
-            Renderer.Glfw.PollEvents();
+            Renderer.MainWindow.Glfw.PollEvents();
             Renderer.InputHandler.HandleMouseInput(Renderer.WindowHandle);
             
-            if(Renderer.Glfw.WindowShouldClose(Renderer.WindowHandle))
+            if(Renderer.MainWindow.Glfw.WindowShouldClose(Renderer.WindowHandle))
                 Terminate();
         }
         

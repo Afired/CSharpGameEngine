@@ -10,7 +10,7 @@ public class EditorLayer : Layer {
     }
     
     protected override void OnAttach() {
-        Application.Instance!.Renderer.GlfwWindow.ImGuiController.Update(Time.DeltaTime);
+        Application.Instance!.Renderer.MainWindow.ImGuiController.Update(Time.DeltaTime);
         SetTheme();
         PushStyle();
     }
@@ -75,7 +75,7 @@ public class EditorLayer : Layer {
     }
 
     protected override void OnDetach() {
-        Application.Instance!.Renderer.GlfwWindow.ImGuiController.Render();
+        Application.Instance!.Renderer.MainWindow.ImGuiController.Render();
         PopStyle();
     }
     

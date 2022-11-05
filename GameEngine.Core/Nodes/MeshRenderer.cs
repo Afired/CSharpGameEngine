@@ -59,15 +59,15 @@ public partial class MeshRenderer : Transform3D {
             
             texture.Bind(0);
             
-            Application.Instance!.Renderer.Gl.BindVertexArray(meshes[i].Vao);
+            Application.Instance.Renderer.MainWindow.Gl.BindVertexArray(meshes[i].Vao);
 //            if(meshes[i] is PosUvNormalMeshIndexedBuffer posUvNormalGeometryEbo) {
                 // indexed drawing
-                Application.Instance!.Renderer.Gl.DrawElements(PrimitiveType.Triangles, (uint) meshes[i].EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
+                Application.Instance.Renderer.MainWindow.Gl.DrawElements(PrimitiveType.Triangles, (uint) meshes[i].EboLength, DrawElementsType.UnsignedInt, null); // can't use indices here, just pass in nullptr and it will use last bound
 //            } else {
 //                // normal drawing
 //                Gl.DrawArrays(PrimitiveType.Triangles, 0, (uint) meshes[i].VertexCount);
 //            }
-            Application.Instance!.Renderer.Gl.BindVertexArray(0);
+            Application.Instance.Renderer.MainWindow.Gl.BindVertexArray(0);
         }
         
     }

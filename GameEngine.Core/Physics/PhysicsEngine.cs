@@ -14,10 +14,6 @@ public class PhysicsEngine : IDisposable {
     public World World;
     
     public PhysicsEngine() {
-        
-    }
-    
-    public void Initialize() {
         InitializeWorld();
         IsInit = true;
     }

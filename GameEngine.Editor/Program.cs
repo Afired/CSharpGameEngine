@@ -14,7 +14,7 @@ public static class Program {
 
         while(true) {
             using(EditorApplication editorApplication = new(configuration)) {
-                editorApplication.Initialize();
+                editorApplication.InvokeFinishedInit();
                 editorApplication.Run();
             }
         }

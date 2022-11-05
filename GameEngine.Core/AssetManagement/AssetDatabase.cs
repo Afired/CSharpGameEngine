@@ -42,7 +42,7 @@ public static class AssetDatabase {
         UnloadAll();
         
         // instantiate assetImporters
-        IEnumerable<Type> assetImporterTypes = Application.GetExternalAssembliesStatic.Append(Assembly.GetAssembly(typeof(Application))!)
+        IEnumerable<Type> assetImporterTypes = Application.Instance.Ealcm.ExternalAssemblies.Append(Assembly.GetAssembly(typeof(Application))!)
             .SelectMany(assembly => typeof(AssetImporter<>).GetDerivedTypes(assembly));
         foreach(Type assetImporterType in assetImporterTypes) {
             AssetImporter? assetImporter = (AssetImporter?) Activator.CreateInstance(assetImporterType);

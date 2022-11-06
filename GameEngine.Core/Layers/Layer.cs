@@ -2,27 +2,27 @@ using GameEngine.Core.Rendering;
 
 namespace GameEngine.Core.Layers; 
 
-public delegate void OnDraw();
+public delegate void OnDraw(Renderer renderer);
 
 public abstract class Layer {
     
     protected bool SwapBuffers = false;
 
-    internal void Attach() {
+    internal void Attach(Renderer renderer) {
         if(SwapBuffers)
-            Application.Instance!.Renderer.SwapActiveFrameBuffer();
-        OnAttach();
+            renderer.SwapActiveFrameBuffer();
+        OnAttach(renderer);
     }
     
-    public virtual void Draw() {
-        OnDraw?.Invoke();
+    public virtual void Draw(Renderer renderer) {
+        OnDraw?.Invoke(renderer);
     }
 
-    internal void Detach() {
-        OnDetach();
+    internal void Detach(Renderer renderer) {
+        OnDetach(renderer);
     }
 
-    public event OnDraw OnDraw;
-    protected virtual void OnAttach() { }
-    protected virtual void OnDetach() { }
+    public event OnDraw? OnDraw;
+    protected virtual void OnAttach(Renderer renderer) { }
+    protected virtual void OnDetach(Renderer renderer) { }
 }

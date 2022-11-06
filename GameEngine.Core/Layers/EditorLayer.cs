@@ -1,4 +1,5 @@
 using System.Numerics;
+using GameEngine.Core.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Core.Layers; 
@@ -9,8 +10,8 @@ public class EditorLayer : Layer {
         SwapBuffers = false;
     }
     
-    protected override void OnAttach() {
-        Application.Instance!.Renderer.MainWindow.ImGuiController.Update(Time.DeltaTime);
+    protected override void OnAttach(Renderer renderer) {
+        renderer.MainWindow.ImGuiController.Update(Time.DeltaTime);
         SetTheme();
         PushStyle();
     }
@@ -74,8 +75,8 @@ public class EditorLayer : Layer {
         colors[(int)ImGuiCol.WindowBg] = new Vector4(0.16f, 0.16f, 0.16f, 1.0f);
     }
 
-    protected override void OnDetach() {
-        Application.Instance!.Renderer.MainWindow.ImGuiController.Render();
+    protected override void OnDetach(Renderer renderer) {
+        renderer.MainWindow.ImGuiController.Render();
         PopStyle();
     }
     

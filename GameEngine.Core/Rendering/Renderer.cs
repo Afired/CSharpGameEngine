@@ -67,8 +67,8 @@ public unsafe class Renderer : IDisposable {
         WindowHandle = MainWindow.Handle;
     }
     
-    private void LoadResources() {
-        AssetDatabase.Reload();
+    private void LoadResources(Application application) {
+        AssetDatabase.Reload(application);
     }
     
     public void Render() {
@@ -95,9 +95,9 @@ public unsafe class Renderer : IDisposable {
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
         FinalFrameBuffer.Bind();
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
-            layer.Attach();
-            layer.Draw();
-            layer.Detach();
+            layer.Attach(this);
+            layer.Draw(this);
+            layer.Detach(this);
         }
         
         DrawToBackBuffer();

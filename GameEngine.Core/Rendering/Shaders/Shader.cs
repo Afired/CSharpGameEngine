@@ -26,25 +26,24 @@ public static class StringExtension {
 public class Shader : IAsset {
     
     public static Shader Invalid { get; }
+    private uint _programID;
     
     static Shader() {
         Invalid = new Shader(InvalidShader.VERTEX_SHADER, InvalidShader.FRAGMENT_SHADER);
     }
     
-    private uint _programID;
-    
     public Shader(string vertexCode, string fragmentCode) {
         (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
-        Compile(shaderInfo);
+        Compile(shaderInfo, Application.Instance.Renderer);
     }
     
     public Shader(string filePath) {
         string contents = ReadFileWithFileStream(filePath);
         (ShaderType, string)[] shaderInfo = SplitIntoShader(contents);
-        Compile(shaderInfo);
+        Compile(shaderInfo, Application.Instance.Renderer);
     }
     
-    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo) {
+    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo, Renderer renderer) {
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
         for(int i = 0; i < shaderInfo.Length; i++) {
@@ -52,9 +51,9 @@ public class Shader : IAsset {
             ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
             
-            shaderIDs[i] = Application.Instance.Renderer.MainWindow.Gl.CreateShader(type);
-            Application.Instance.Renderer.MainWindow.Gl.ShaderSource(shaderIDs[i], src);
-            Application.Instance.Renderer.MainWindow.Gl.CompileShader(shaderIDs[i]);
+            shaderIDs[i] = renderer.MainWindow.Gl.CreateShader(type);
+            renderer.MainWindow.Gl.ShaderSource(shaderIDs[i], src);
+            renderer.MainWindow.Gl.CompileShader(shaderIDs[i]);
             
             //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             //if(status[0] == 0) {
@@ -64,16 +63,16 @@ public class Shader : IAsset {
             
         }
         
-        _programID = Application.Instance.Renderer.MainWindow.Gl.CreateProgram();
+        _programID = renderer.MainWindow.Gl.CreateProgram();
         for(int i = 0; i < shaderIDs.Length; i++) {
-            Application.Instance.Renderer.MainWindow.Gl.AttachShader(_programID, shaderIDs[i]);
+            renderer.MainWindow.Gl.AttachShader(_programID, shaderIDs[i]);
         }
-        Application.Instance.Renderer.MainWindow.Gl.LinkProgram(_programID);
+        renderer.MainWindow.Gl.LinkProgram(_programID);
         
         // Delete Shaders
         for(int i = 0; i < shaderIDs.Length; i++) {
-            Application.Instance.Renderer.MainWindow.Gl.DetachShader(_programID, shaderIDs[i]);
-            Application.Instance.Renderer.MainWindow.Gl.DeleteShader(shaderIDs[i]);
+            renderer.MainWindow.Gl.DetachShader(_programID, shaderIDs[i]);
+            renderer.MainWindow.Gl.DeleteShader(shaderIDs[i]);
         }
     }
 

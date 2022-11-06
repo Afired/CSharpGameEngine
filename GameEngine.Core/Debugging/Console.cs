@@ -9,25 +9,25 @@ public static class Console {
     public static event OnLog? OnLog;
     
     public static void Log(string message) {
-        if(!Application.Instance!.Config.DoDebugLogs) 
+        if(!Application.Instance.Config.DoDebugLogs) 
             return;
         Log("", message, ConsoleColor.White, LogSeverity.Normal);
     }
     
     public static void LogWarning(string message) {
-        if(!Application.Instance!.Config.DoDebugWarnings) 
+        if(!Application.Instance.Config.DoDebugWarnings) 
             return;
         Log("Warning: ", message, ConsoleColor.Yellow, LogSeverity.Warning);
     }
     
     public static void LogError(string message) {
-        if(!Application.Instance!.Config.DoDebugErrors) 
+        if(!Application.Instance.Config.DoDebugErrors) 
             return;
         Log("Error: ", message, ConsoleColor.Red, LogSeverity.Error);
     }
     
     public static void LogSuccess(string message) {
-        if(!Application.Instance!.Config.DoDebugSuccess) 
+        if(!Application.Instance.Config.DoDebugSuccess) 
             return;
         Log("Success: ", message, ConsoleColor.Green, LogSeverity.Success);
     }

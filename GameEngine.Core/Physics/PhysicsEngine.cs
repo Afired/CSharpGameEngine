@@ -11,7 +11,7 @@ namespace GameEngine.Core.Physics;
 public class PhysicsEngine : IDisposable {
     
     public bool IsInit { get; private set; }
-    public World World;
+    public World? World;
     
     public PhysicsEngine() {
         InitializeWorld();
@@ -56,11 +56,11 @@ public class PhysicsEngine : IDisposable {
 //        dynamicBody.CreateFixture(dynamicFixtureDef);
     }
     
-    public void DoStep() {
+    public void DoStep(float stepTime) {
         int velocityIterations = 6;
         int positionIterations = 2;
         
-        World.Step(Application.Instance!.Config.FixedTimeStep, velocityIterations, positionIterations);
+        World.Step(stepTime, velocityIterations, positionIterations);
     }
     
     public void Dispose() {

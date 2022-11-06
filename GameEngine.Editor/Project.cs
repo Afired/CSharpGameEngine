@@ -1,3 +1,4 @@
+using GameEngine.Core;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
@@ -40,10 +41,7 @@ public class Project {
         // Reload Assemblies
         EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
         
-//        TextureRegister.Reload();
-//        ShaderRegister.Reload();
-//        MeshRegister.Reload();
-        AssetDatabase.Reload();
+        AssetDatabase.Reload(Application.Instance);
     }
     
     public static void OpenProjectWithFileExplorer() {

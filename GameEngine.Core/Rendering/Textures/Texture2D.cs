@@ -47,7 +47,7 @@ public class Texture2D : IAsset {
         ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
         
         fixed(void* data = image.Data) {
-            newTexture.Load(Application.Instance!.Renderer.MainWindow.Gl, data, newTexture.Width, newTexture.Height);
+            newTexture.Load(Application.Instance.Renderer.MainWindow.Gl, data, newTexture.Width, newTexture.Height);
         }
         return newTexture;
     }
@@ -56,7 +56,7 @@ public class Texture2D : IAsset {
         Texture2D newTexture = new Texture2D();
         newTexture.Width = width;
         newTexture.Height = height;
-        newTexture.Load(Application.Instance!.Renderer.MainWindow.Gl, data, width, height);
+        newTexture.Load(Application.Instance.Renderer.MainWindow.Gl, data, width, height);
         return newTexture;
     }
     
@@ -91,8 +91,8 @@ public class Texture2D : IAsset {
         if(slot > 31)
             Console.LogWarning($"Can't assign texture to texture slot {slot}");
         
-        Application.Instance!.Renderer.MainWindow.Gl.ActiveTexture((TextureUnit) slot + 33984);
-        Application.Instance!.Renderer.MainWindow.Gl.BindTexture(TextureTarget.Texture2D, ID);
+        Application.Instance.Renderer.MainWindow.Gl.ActiveTexture((TextureUnit) slot + 33984);
+        Application.Instance.Renderer.MainWindow.Gl.BindTexture(TextureTarget.Texture2D, ID);
     }
     
 }

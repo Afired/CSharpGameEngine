@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using GameEngine.Core;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Nodes;
+using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Shaders;
 using GameEngine.Core.Rendering.Textures;
@@ -32,7 +33,7 @@ public class EditorMainMenubar {
         EditorApplication.Instance.EditorLayer.OnDraw += Draw;
     }
     
-    internal static void Draw() {
+    internal static void Draw(Renderer renderer) {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
         ImGui.PushStyleColor(ImGuiCol.MenuBarBg, new Vector4(0.11f, 0.11f, 0.11f, 1.0f));
         if(ImGui.BeginMainMenuBar()) {
@@ -48,9 +49,9 @@ public class EditorMainMenubar {
             if(ImGui.Button("recompile external assemblies"))
                 EditorApplication.Instance.RegisterReloadOfExternalAssemblies();
             
-            DrawWindowHandleButtons();
+            DrawWindowHandleButtons(renderer);
             
-            InstallDragArea();
+            InstallDragArea(renderer);
             
             ImGui.EndMainMenuBar();   
         }
@@ -127,7 +128,7 @@ public class EditorMainMenubar {
     public const int WM_LBUTTONDOWN = 0x201;
     public const int WM_LBUTTONUP = 0x0202;
     
-    private static unsafe void InstallDragArea() {
+    private static unsafe void InstallDragArea(Renderer renderer) {
         // push style to make invisible
         ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0);
         
@@ -140,7 +141,7 @@ public class EditorMainMenubar {
 //                Glfw.GetWindowPos(GlfwWindow.Handle, out int x, out int y);
 //                _windowPosRef = new Position(x, y);
                 
-                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), Application.Instance!.Renderer.MainWindow.Handle);
+                GlfwNativeWindow test = new GlfwNativeWindow(Silk.NET.GLFW.Glfw.GetApi(), renderer.MainWindow.Handle);
                 IntPtr hwnd = test.Win32.Value.Hwnd;
                 ReleaseCapture();
                 SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
@@ -160,7 +161,7 @@ public class EditorMainMenubar {
         ImGui.PopStyleVar();
     }
     
-    private static void DrawWindowHandleButtons() {
+    private static void DrawWindowHandleButtons(Renderer renderer) {
         
         ImGui.PushID("minimize");
         ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0.0f));
@@ -170,7 +171,7 @@ public class EditorMainMenubar {
         Texture2D minimizeIcon = EditorResources.GetIcon("MinimizeIcon");
         if(ImGui.ImageButton((IntPtr) minimizeIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Application.Instance!.Renderer.MainWindow.Glfw.IconifyWindow(Application.Instance!.Renderer.MainWindow.Handle);
+                renderer.MainWindow.Glfw.IconifyWindow(renderer.MainWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -184,7 +185,7 @@ public class EditorMainMenubar {
         Texture2D fullscreenIcon = EditorResources.GetIcon("MaximizeIcon");
         if(ImGui.ImageButton((IntPtr) fullscreenIcon.ID, new Vector2(16, 16))) {
             unsafe {
-                Application.Instance!.Renderer.MainWindow.Glfw.MaximizeWindow(Application.Instance!.Renderer.MainWindow.Handle);
+                renderer.MainWindow.Glfw.MaximizeWindow(renderer.MainWindow.Handle);
             }
         }
         ImGui.PopStyleColor(3);
@@ -197,7 +198,7 @@ public class EditorMainMenubar {
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
         Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
         if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
-            EditorApplication.Instance.Terminate();
+            Application.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
         ImGui.PopID();
@@ -213,24 +214,24 @@ public class EditorMainMenubar {
             // if(ImGui.MenuItem("Reload Editor Assemblies")) ExternalEditorAssemblyManager.RegisterReloadOfEditorAssemblies();
             // if(ImGui.MenuItem("Unload Editor Assemblies")) ExternalEditorAssemblyManager.TryToUnloadEditorAssemblies();
             // if(ImGui.MenuItem("Load Editor Assemblies")) ExternalEditorAssemblyManager.LoadEditorAssemblies();
-            if(ImGui.MenuItem("Quit")) EditorApplication.Instance.Terminate();
+            if(ImGui.MenuItem("Quit")) Application.Instance.Terminate();
             ImGui.EndMenu();
         }
         
         if(ImGui.BeginMenu("Project")) {
-            if(ImGui.MenuItem("Project Settings")) { new ProjectSettingsWindow(); }
-            if(ImGui.MenuItem("Reload Asset Database")) { AssetDatabase.Reload(); }
+            if(ImGui.MenuItem("Project Settings")) { EditorWindow.Create<ProjectSettingsWindow>(); }
+            if(ImGui.MenuItem("Reload Asset Database")) { AssetDatabase.Reload(Application.Instance); }
             if(ImGui.MenuItem("Open Project")) { Project.OpenProjectWithFileExplorer(); }
             ImGui.EndMenu();
         }
         
         if(ImGui.BeginMenu("Window")) {
-            if(ImGui.MenuItem("Asset Browser")) { new AssetBrowserWindow(); }
-            if(ImGui.MenuItem("Console")) { new ConsoleWindow(); }
-            if(ImGui.MenuItem("Hierarchy")) { new HierarchyWindow(); }
-            if(ImGui.MenuItem("Inspector")) { new InspectorWindow(); }
-            if(ImGui.MenuItem("Viewport")) { new ViewportWindow(); }
-            if(ImGui.MenuItem("Terminal")) { new TerminalWindow(); }
+            if(ImGui.MenuItem("Asset Browser")) EditorWindow.Create<AssetBrowserWindow>();
+            if(ImGui.MenuItem("Console")) EditorWindow.Create<ConsoleWindow>();
+            if(ImGui.MenuItem("Hierarchy")) EditorWindow.Create<HierarchyWindow>();
+            if(ImGui.MenuItem("Inspector")) EditorWindow.Create<InspectorWindow>();
+            if(ImGui.MenuItem("Viewport")) EditorWindow.Create<ViewportWindow>();
+            if(ImGui.MenuItem("Terminal")) EditorWindow.Create<TerminalWindow>();
             ImGui.EndMenu();
         }
         

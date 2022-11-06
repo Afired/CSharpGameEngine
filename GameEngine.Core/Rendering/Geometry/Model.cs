@@ -26,7 +26,7 @@ public class Model : IAsset {
         Meshes = meshes;
     }
     
-    public Model(string path) {
+    public Model(string path, Renderer renderer) {
         AssimpContext importer = new AssimpContext();
         importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
         Scene model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
@@ -61,16 +61,16 @@ public class Model : IAsset {
             
             uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
             
-            meshes[i] = new Mesh(vertexData, indices);
+            meshes[i] = new Mesh(vertexData, indices, renderer);
         }
         Meshes = meshes;
     }
     
-    public static void LoadModelsThreaded(string[] paths) {
+    public static void LoadModelsThreaded(string[] paths, Renderer renderer) {
         Thread thread = new Thread(new ThreadStart(() => LoadMeshData(paths)));
         thread.Start();
         
-        static void LoadMeshData(string[] paths) {
+        void LoadMeshData(string[] paths) {
             
             foreach(string path in paths) {
                 AssimpContext importer = new AssimpContext();
@@ -111,7 +111,7 @@ public class Model : IAsset {
                 Application.TaskQueue.Enqueue(() => {
                     Mesh[] meshes = new Mesh[meshData.Length];
                     for(int i = 0; i < meshData.Length; i++) {
-                        meshes[i] = new Mesh(meshData[i].vertexData, meshData[i].indexData);
+                        meshes[i] = new Mesh(meshData[i].vertexData, meshData[i].indexData, renderer);
                     }
                     AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(path), new Model(meshes));
                 });
@@ -120,7 +120,7 @@ public class Model : IAsset {
         
     }
     
-    public static void LoadModel(string filePath) {
+    public static void LoadModel(string filePath, Renderer renderer) {
         AssimpContext importer = new AssimpContext();
         importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
         Scene model = importer.ImportFile(filePath, PostProcessPreset.TargetRealTimeMaximumQuality);
@@ -155,7 +155,7 @@ public class Model : IAsset {
 
             uint[] indices = model.Meshes[i].GetIndices().Cast<uint>().ToArray();
 
-            meshes[i] = new Mesh(vertexData, indices);
+            meshes[i] = new Mesh(vertexData, indices, renderer);
         }
         AssetDatabase.Load(AssetManager.Instance.GetGuidOfAsset(filePath), new Model(meshes));
     }

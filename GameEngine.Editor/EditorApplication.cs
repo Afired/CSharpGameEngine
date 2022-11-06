@@ -56,17 +56,17 @@ public class EditorApplication : Application<EditorApplication> {
         if(Project.Current is not null) {
             // _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
             foreach(string externalEditorAssemblyName in Project.Current.GetExternalEditorAssemblyNames()) {
-                Ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
+                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
             }
         
             // _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
             foreach(string externalGameAssemblyName in Project.Current.GetExternalGameAssemblyNames()) {
-                Ealcm.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalGameAssemblyName + ".dll", true);
+                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalGameAssemblyName + ".dll", true);
             }
         }
         Serializer.LoadAssemblyIfNotLoadedAlready();
         
-        Ealcm.AddUnloadTask(() => {
+        AssemblyLoadContextManager.AddUnloadTask(() => {
             Hierarchy.SaveCurrentRootNode();
             Hierarchy.Clear();
             Renderer.SetActiveCamera(null);
@@ -78,7 +78,7 @@ public class EditorApplication : Application<EditorApplication> {
         
         
         PropertyDrawer.GenerateLookUp();
-        Ealcm.AddUnloadTask(() => {
+        AssemblyLoadContextManager.AddUnloadTask(() => {
             Selection.Clear();
             PropertyDrawer.ClearLookUp();
             return true;
@@ -121,8 +121,8 @@ public class EditorApplication : Application<EditorApplication> {
             if(physicsTime > Application.Instance!.Config.FixedTimeStep) {
                 if(PlayMode.Current == PlayMode.Mode.Playing) {
                     Hierarchy.PrePhysicsUpdate();
-                    PhysicsEngine.DoStep();
-                    Hierarchy.PhysicsUpdate(Application.Instance!.Config.FixedTimeStep);
+                    PhysicsEngine.DoStep(Config.FixedTimeStep);
+                    Hierarchy.PhysicsUpdate(Config.FixedTimeStep);
                 }
                 physicsTimer.Restart();
             }

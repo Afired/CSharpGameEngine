@@ -25,31 +25,33 @@ public unsafe class GlfwWindow : IDisposable {
     public readonly ImGuiController ImGuiController;
     public readonly GL Gl;
     private readonly IInputContext _inputContext;
-    
-    private readonly WindowOptions _windowOptions = new WindowOptions() {
-        Position = new Vector2D<int>(-1, -1), // ? doesnt work
-        Samples = 1, // multisample anti aliasing?
-        Size = new Vector2D<int>((int) Application.Instance!.Config.WindowWidth, (int) Application.Instance!.Config.WindowHeight), // size of the window in pixel
-        Title = Application.Instance!.Config.WindowTitle, // title of the window
-        IsVisible = true, // ?
-        TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
-        VideoMode = VideoMode.Default,
-        VSync = true, // vertical synchronisation
-        WindowBorder = WindowBorder.Resizable, // window border type
-        WindowClass = "idk", // ?
-        WindowState = WindowState.Normal, // window state
-        API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
-        FramesPerSecond = -1, // fps
-        IsEventDriven = true, // ?
-        PreferredBitDepth = null, // ?
-        ShouldSwapAutomatically = false, // if true swaps frame buffers at the end of rendering automatically
-        UpdatesPerSecond = 1, // ? polling?
-        IsContextControlDisabled = true, // ?
-        PreferredDepthBufferBits = null, // ?
-        PreferredStencilBufferBits = null, // ?
-    };
+    private readonly WindowOptions _windowOptions;
     
     public GlfwWindow() {
+        
+        _windowOptions = new WindowOptions() {
+            Position = new Vector2D<int>(-1, -1), // ? doesnt work
+            Samples = 1, // multisample anti aliasing?
+            Size = new Vector2D<int>((int) Application.Instance!.Config.WindowWidth, (int) Application.Instance!.Config.WindowHeight), // size of the window in pixel
+            Title = Application.Instance!.Config.WindowTitle, // title of the window
+            IsVisible = true, // ?
+            TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
+            VideoMode = VideoMode.Default,
+            VSync = true, // vertical synchronisation
+            WindowBorder = WindowBorder.Resizable, // window border type
+            WindowClass = "idk", // ?
+            WindowState = WindowState.Normal, // window state
+            API = new GraphicsAPI(ContextAPI.OpenGL, ContextProfile.Core, ContextFlags.Debug, new APIVersion(3, 3)), // graphics api
+            FramesPerSecond = -1, // fps
+            IsEventDriven = true, // ?
+            PreferredBitDepth = null, // ?
+            ShouldSwapAutomatically = false, // if true swaps frame buffers at the end of rendering automatically
+            UpdatesPerSecond = 1, // ? polling?
+            IsContextControlDisabled = true, // ?
+            PreferredDepthBufferBits = null, // ?
+            PreferredStencilBufferBits = null, // ?
+        };
+        
         // use glfw for window api
         GlfwWindowing.Use();
         

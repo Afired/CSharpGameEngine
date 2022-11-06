@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -14,13 +13,12 @@ using GameEngine.Core.Serialization;
 
 namespace GameEngine.Core;
 
-public delegate void OnFinishedInit();
+public delegate void OnFinishedInit(Application application);
 
 public abstract class Application : IDisposable {
     
     public event OnFinishedInit? OnFinishedInit;
-    private static Application? _instance;
-    public static Application Instance => _instance ?? throw new Exception();
+    public static Application? Instance { get; private set; }
     
     public bool IsRunning { get; protected set; }
     public Configuration Config { get; }
@@ -28,13 +26,13 @@ public abstract class Application : IDisposable {
     public PhysicsEngine PhysicsEngine { get; private set; }
     public static readonly ConcurrentQueue<Action> TaskQueue = new();
     
-    public readonly ExternalAssemblyLoadContextManager Ealcm = new();
+    public readonly ExternalAssemblyLoadContextManager AssemblyLoadContextManager = new();
     
     public bool IsReloadingExternalAssemblies { get; private set; }
     public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
     
     protected Application(Configuration config) {
-        _instance = this;
+        Instance = this;
         Config = config;
         
         Console.Log("Initializing...");
@@ -50,12 +48,12 @@ public abstract class Application : IDisposable {
         Console.LogSuccess("Initialized render engine (3/3)");
         
         Console.LogSuccess("Initialization complete");
-
+        
         LoadExternalAssemblies();
     }
     
     public void InvokeFinishedInit() {
-        OnFinishedInit?.Invoke();
+        OnFinishedInit?.Invoke(this);
     }
     
     protected void ExecuteQueuedTasks() {
@@ -69,7 +67,7 @@ public abstract class Application : IDisposable {
         Serializer.LoadAssemblyIfNotLoadedAlready();
         // Hierarchy.SetRootNode(Serializer.Deserialize("Test"));
         
-        Ealcm.AddUnloadTask(() => {
+        AssemblyLoadContextManager.AddUnloadTask(() => {
             Hierarchy.SaveCurrentRootNode();
             Hierarchy.Clear();
             Renderer.SetActiveCamera(null);
@@ -98,7 +96,7 @@ public abstract class Application : IDisposable {
     }
     
     protected virtual void ReloadExternalAssemblies() {
-        Ealcm.Unload();
+        AssemblyLoadContextManager.Unload();
         CompileExternalAssemblies();
         LoadExternalAssemblies();
         IsReloadingExternalAssemblies = false;
@@ -213,7 +211,7 @@ public abstract class Application : IDisposable {
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
             if(physicsTime > Config.FixedTimeStep) {
                 Hierarchy.PrePhysicsUpdate();
-                PhysicsEngine.DoStep();
+                PhysicsEngine.DoStep(Config.FixedTimeStep);
                 Hierarchy.PhysicsUpdate(Config.FixedTimeStep);
                 physicsTimer.Restart();
             }
@@ -237,7 +235,7 @@ public abstract class Application : IDisposable {
     }
     
     public virtual void Dispose() {
-        Ealcm.Dispose();
+        AssemblyLoadContextManager.Dispose();
         Renderer.Dispose();
         PhysicsEngine.Dispose();
     }
@@ -245,12 +243,10 @@ public abstract class Application : IDisposable {
 }
 
 public abstract class Application<T> : Application where T : Application<T> {
-
+    
     public new static T Instance => (Application.Instance as T) ?? throw new Exception("wrong application type");
-
-    protected Application(Configuration config) : base(config) {
-        //Instance = (this as T)!;
-    }
+    
+    protected Application(Configuration config) : base(config) { }
     
 }
 

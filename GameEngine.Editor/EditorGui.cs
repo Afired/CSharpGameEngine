@@ -1,3 +1,4 @@
+using GameEngine.Core.Rendering;
 using GameEngine.Editor.EditorWindows;
 using ImGuiNET;
 
@@ -39,8 +40,8 @@ public class EditorGui {
         EditorWindow.Create<TerminalWindow>();
     }
     
-    private void OnDraw() {
-        EditorMainMenubar.Draw();
+    private void OnDraw(Renderer renderer) {
+        EditorMainMenubar.Draw(renderer);
         _editorDockSpace.Draw();
         foreach(EditorWindow editorWindow in _editorWindows) {
             editorWindow.DrawWindow();

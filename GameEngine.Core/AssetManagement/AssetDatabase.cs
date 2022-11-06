@@ -38,11 +38,11 @@ public static class AssetDatabase {
         return default(T);
     }
     
-    public static void Reload() {
+    public static void Reload(Application application) {
         UnloadAll();
         
         // instantiate assetImporters
-        IEnumerable<Type> assetImporterTypes = Application.Instance.Ealcm.ExternalAssemblies.Append(Assembly.GetAssembly(typeof(Application))!)
+        IEnumerable<Type> assetImporterTypes = application.AssemblyLoadContextManager.ExternalAssemblies.Append(Assembly.GetAssembly(typeof(Application))!)
             .SelectMany(assembly => typeof(AssetImporter<>).GetDerivedTypes(assembly));
         foreach(Type assetImporterType in assetImporterTypes) {
             AssetImporter? assetImporter = (AssetImporter?) Activator.CreateInstance(assetImporterType);
@@ -72,7 +72,7 @@ public static class AssetDatabase {
         }
         
         //TODO: refactor default asset init
-        Load(Mesh.QuadGuid, Mesh.CreateQuad());
+        Load(Mesh.QuadGuid, Mesh.CreateQuad(application.Renderer));
     }
     
 }

@@ -35,20 +35,15 @@ public abstract class Application : IDisposable {
         Instance = this;
         Config = config;
         
-        Console.Log("Initializing...");
-        Console.Log("Initializing engine...");
-        Console.LogSuccess("Initialized engine (1/3)");
+        Console.Log("[0/3] Initializing...");
         
-        Console.Log("Initializing physics engine...");
         PhysicsEngine = new PhysicsEngine();
-        Console.LogSuccess("Initialized physics engine (2/3)");
+        Console.LogSuccess("[1/3] Initialized physics engine");
         
-        Console.Log("Initializing render engine...");
         Renderer = new Renderer(this);
-        Console.LogSuccess("Initialized render engine (3/3)");
+        Console.LogSuccess("[2/3] Initialized render engine");
         
-        Console.LogSuccess("Initialization complete");
-        
+        Console.LogSuccess("[3/3] Initialized engine");
         LoadExternalAssemblies();
     }
     

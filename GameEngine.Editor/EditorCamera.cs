@@ -78,7 +78,7 @@ public class EditorCamera : BaseCamera {
         vec3 position = new vec3(WorldPosition.X, WorldPosition.Y, WorldPosition.Z);
         mat4 viewMatrix = mat4.LookAt(position, position + relativeForward, relativeUp);
         
-        float aspectRatio = (float) Application.Instance!.Renderer.MainFrameBuffer2.Width / (float) Application.Instance!.Renderer.MainFrameBuffer2.Height;
+        float aspectRatio = (float) Application.Instance.Renderer.MainFrameBuffer2.Width / (float) Application.Instance.Renderer.MainFrameBuffer2.Height;
         mat4 projectionMatrix = mat4.Perspective(GlmNet.glm.radians(FOV), aspectRatio, ClippingDistance.X, ClippingDistance.Y);
         
         mat4 viewProjectionMat = projectionMatrix * viewMatrix;

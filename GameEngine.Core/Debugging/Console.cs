@@ -35,7 +35,8 @@ public static class Console {
     private static void Log(string prefix, string message, ConsoleColor color, LogSeverity logSeverity) {
         ConsoleColor prevColor = System.Console.ForegroundColor;
         System.Console.ForegroundColor = color;
-        System.Console.WriteLine($"{prefix}{message}");
+        //System.Console.WriteLine($"{prefix}{message}");
+        System.Console.WriteLine(message);
         System.Console.ForegroundColor = prevColor;
         OnLog?.Invoke(message, logSeverity);
     }

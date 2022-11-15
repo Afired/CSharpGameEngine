@@ -83,7 +83,7 @@ public unsafe class GlfwWindow : IDisposable {
             Gl.Viewport(s);
             OnResize?.Invoke((uint) s.X, (uint) s.Y);
         };
-
+        
         // dispose components when window is closing
         //_window.Closing += Dispose;
 

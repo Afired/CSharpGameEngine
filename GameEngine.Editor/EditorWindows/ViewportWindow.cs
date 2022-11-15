@@ -1,7 +1,5 @@
-using System.Globalization;
 using System.Numerics;
 using GameEngine.Core;
-using GameEngine.Core.Rendering;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
@@ -24,28 +22,20 @@ public class ViewportWindow : EditorWindow {
         DrawViewport();
         Vector2 windowPos = ImGui.GetWindowPos();
         ImGui.SetCursorScreenPos(windowPos + new Vector2(25, 50));
-        ImGui.Text((1f / Time.DeltaTime).ToString("F1"));
+        ImGui.Text((1f / Application.Instance.Renderer.FrameTime).ToString("F1") + " FPS");
         ImGui.SetCursorScreenPos( windowPos + new Vector2(25, 65));
-        ImGui.Text(Time.DeltaTime.ToString(CultureInfo.InvariantCulture));
+        ImGui.Text(Application.Instance.Renderer.FrameTime.ToString("F3") + " s");
     }
     
     private void DrawViewport() {
-        // ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(0, 0));
-        
         Vector2 desiredSize = ImGui.GetContentRegionAvail();
         
-        if(desiredSize != new Vector2(Application.Instance!.Renderer.MainFrameBuffer1.Width, Application.Instance!.Renderer.MainFrameBuffer1.Height)) {
-            Application.Instance!.Renderer.MainFrameBuffer1.Resize((int) desiredSize.X, (int) desiredSize.Y);
-            Application.Instance!.Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
+        if(desiredSize != new Vector2(Application.Instance.Renderer.MainFrameBuffer1.Width, Application.Instance.Renderer.MainFrameBuffer1.Height)) {
+            Application.Instance.Renderer.MainFrameBuffer1.Resize((int) desiredSize.X, (int) desiredSize.Y);
+            Application.Instance.Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
         }
         
-        Vector2 size = new Vector2(Application.Instance!.Config.WindowWidth, Application.Instance!.Config.WindowHeight);
-        // size = size / Configuration.WindowHeight * desiredSize.Y;
-        
-        // ImGui.Image((IntPtr) Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
-        ImGui.Image((IntPtr) Application.Instance!.Renderer.MainFrameBuffer1.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
-        
-        // ImGui.PopStyleVar(1);
+        ImGui.Image((IntPtr) Application.Instance.Renderer.ActiveFrameBuffer.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
     }
     
 }

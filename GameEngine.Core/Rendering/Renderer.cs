@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
@@ -71,7 +72,16 @@ public unsafe class Renderer : IDisposable {
         AssetDatabase.Reload(application);
     }
     
+    private readonly Stopwatch _stopwatch = new();
+    public float FrameTime { get; private set; }
+    
     public void Render() {
+        
+        _stopwatch.Stop();
+        FrameTime = _stopwatch.ElapsedMilliseconds * 0.001f;
+        _stopwatch.Reset();
+        _stopwatch.Start();
+        
         // bind default framebuffer to render to
         MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
         MainWindow.Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);

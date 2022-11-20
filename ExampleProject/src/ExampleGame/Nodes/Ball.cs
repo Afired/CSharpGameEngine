@@ -2,6 +2,7 @@
 
 namespace ExampleGame.Nodes; 
 
-public partial class Ball : RigidBody, Has<SpriteRenderer> {
+[Has<SpriteRenderer>]
+public partial class Ball : RigidBody {
     
 }

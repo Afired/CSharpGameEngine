@@ -6,7 +6,9 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Player : Node, Has<Paddle>, Has<Trigger> {
+[Has<Paddle>]
+[Has<Trigger>]
+public partial class Player : Node {
     
     [Serialized] public int Score { get; private set; }
     [Serialized] public string? Name { get; init; }

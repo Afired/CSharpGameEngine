@@ -8,7 +8,7 @@
 //
 // [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 // public class Arr<T> : Attribute where T : Node {
-//     public Has(string name) { }
+//     public Arr(string name) { }
 // }
 //
 // public class Component {
@@ -17,14 +17,14 @@
 //
 // [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 // public class ValidOn<T> : Attribute where T : Node {
-//     public Has(string name) { }
+//     public ValidOn(string name) { }
 // }
 //
 //
 //
 // [Has<Trigger>]
 // [Has<Trigger>("Trigger2")]
-// [Arr<Transform>("SpawnLocations")]
+// [Arr<Transform3D>("SpawnLocations")]
 // public partial class Spawner : Node {
 //     
 // }

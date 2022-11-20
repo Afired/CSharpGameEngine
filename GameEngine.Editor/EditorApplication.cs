@@ -56,12 +56,12 @@ public class EditorApplication : Application<EditorApplication> {
         if(Project.Current is not null) {
             // _ealcm.LoadExternalAssembly(EXTERNAL_EDITOR_ASSEMBLY_DLL, true);
             foreach(string externalEditorAssemblyName in Project.Current.GetExternalEditorAssemblyNames()) {
-                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalEditorAssemblyName + ".dll", true);
+                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net7.0\" + externalEditorAssemblyName + ".dll", true);
             }
         
             // _ealcm.LoadExternalAssembly(EXTERNAL_ASSEMBLY_DLL, true);
             foreach(string externalGameAssemblyName in Project.Current.GetExternalGameAssemblyNames()) {
-                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net6.0\" + externalGameAssemblyName + ".dll", true);
+                AssemblyLoadContextManager.LoadExternalAssembly(Project.Current.ProjectDirectory + @"\bin\Debug\net7.0\" + externalGameAssemblyName + ".dll", true);
             }
         }
         Serializer.LoadAssemblyIfNotLoadedAlready();

@@ -3,7 +3,10 @@ using GameEngine.Core.Numerics;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Stadium : Scene, Has<Camera2D>, Arr<Player>, Has<Ball> {
+[Has<Camera2D>]
+[Arr<Player>]
+[Has<Ball>]
+public partial class Stadium : Scene {
     
     protected override void OnAwake() {
         base.OnAwake();

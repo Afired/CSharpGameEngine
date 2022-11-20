@@ -6,7 +6,8 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Blaster : Transform3D, Arr<Bullet> {
+[Arr<Bullet>]
+public partial class Blaster : Transform3D {
     
     public bool IsShooting;
     [Serialized] public float Cooldown { get; set; } = 0.1f;

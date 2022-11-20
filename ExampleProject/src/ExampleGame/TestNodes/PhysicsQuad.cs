@@ -2,6 +2,7 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class PhysicsQuad : RigidBody, Has<SpriteRenderer> {
+[Has<SpriteRenderer>]
+public partial class PhysicsQuad : RigidBody {
     
 }

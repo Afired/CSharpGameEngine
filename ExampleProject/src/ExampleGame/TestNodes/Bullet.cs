@@ -1,9 +1,9 @@
-using GameEngine.Core.Debugging;
 using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Bullet : RigidBody, Has<SpriteRenderer> {
+[Has<SpriteRenderer>]
+public partial class Bullet : RigidBody {
     
     protected override void OnBeginCollision(Collider other) {
         base.OnBeginCollision(other);

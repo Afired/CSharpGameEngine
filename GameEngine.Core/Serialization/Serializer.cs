@@ -9,8 +9,8 @@ namespace GameEngine.Core.Serialization;
 
 public static class Serializer {
     
-    private const string SERIALIZATION_ASSEMBLY_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\GameEngine.Serialization.dll";
-    private const string NEWTONSOFT_JSON_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net6.0\Newtonsoft.Json.dll";
+    private const string SERIALIZATION_ASSEMBLY_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net7.0\GameEngine.Serialization.dll";
+    private const string NEWTONSOFT_JSON_DLL_PATH = @"D:\Dev\C#\CSharpGameEngine\GameEngine.Serialization\bin\Debug\net7.0\Newtonsoft.Json.dll";
     
     private static readonly ExternalAssemblyLoadContextManager _ealcm = new();
     

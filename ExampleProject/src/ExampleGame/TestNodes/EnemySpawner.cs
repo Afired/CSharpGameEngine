@@ -5,7 +5,8 @@ using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes;
 
-public partial class PhysicsSpawner : Transform3D, Arr<PhysicsQuad> {
+[Arr<PhysicsQuad>]
+public partial class PhysicsSpawner : Transform3D {
     
     [Serialized] private float SpawnInterval { get; set; } = 0.1f;
     [Serialized] private float TimeUntilNextSpawn { get; set; } = 0f;

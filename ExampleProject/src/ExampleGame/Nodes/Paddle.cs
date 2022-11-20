@@ -2,6 +2,7 @@
 
 namespace ExampleGame.Nodes; 
 
-public partial class Paddle : Collider, Has<SpriteRenderer> {
+[Has<SpriteRenderer>]
+public partial class Paddle : Collider {
     
 }

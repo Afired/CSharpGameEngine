@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using GameEngine.SourceGenerator.Extensions;
@@ -70,51 +71,37 @@ public static class PartialNodeGenerator {
             return;
         //todo: ignore if its not the main partial class
         
-        foreach(BaseTypeSyntax baseTypeSyntax in classDeclarationSyntax.BaseList.Types) { // use classSymbol.AllInterfaces
+        foreach(AttributeSyntax attributeSyntax in classDeclarationSyntax.AttributeLists.SelectMany(attributeList => attributeList.Attributes)) {
+            ISymbol? attributeSymbol = semanticModel.GetSymbolInfo(attributeSyntax).Symbol;
             
-            if(baseTypeSyntax.Type is not GenericNameSyntax baseNameSyntax)
+            if(attributeSymbol is null)
+                continue;
+            if(attributeSymbol.ContainingAssembly.Name != "GameEngine.Core")
+                continue;
+            if(attributeSymbol.ContainingNamespace.ToDisplayString() != "GameEngine.Core.Nodes")
                 continue;
             
-            ISymbol? interfaceSymbol = semanticModel.GetSymbolInfo(baseTypeSyntax.Type).Symbol;
+            INamedTypeSymbol? attributeTypeSymbol = attributeSymbol.ContainingType;
             
-            if(interfaceSymbol is null)
-                continue;
-            if(interfaceSymbol.ContainingAssembly.Name != "GameEngine.Core")
-                continue;
-            if(interfaceSymbol.ContainingNamespace.ToDisplayString() != "GameEngine.Core.Nodes")
-                continue;
+            ISymbol? _ = attributeTypeSymbol.OriginalDefinition;
             
-            if(interfaceSymbol.Name == "Has") {
+            if(attributeTypeSymbol.Name == "Has") {
                 
-                var typeArgumentListSyntax = baseNameSyntax.TypeArgumentList.Arguments;
-                
-                if(typeArgumentListSyntax.Count != 1)
+                ImmutableArray<ITypeSymbol> typeArguments = attributeTypeSymbol.TypeArguments;
+                if(typeArguments.Length != 1)
                     continue;
+                //TODO: filter invalid type
+                ITypeSymbol firstType = typeArguments[0];
+                hasNodes.Add(firstType);
                 
-                ISymbol? symbol = semanticModel.GetSymbolInfo(typeArgumentListSyntax[0]).Symbol;
+            } else if(attributeTypeSymbol.Name == "Arr") {
                 
-                if(symbol is not null) { // if its null, its invalid type
-                    // string symbolName = symbol.Name; // "TestNode2"
-                    // INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
-                    hasNodes.Add(symbol);
-                }
-                
-            } else if(interfaceSymbol.Name == "Arr") {
-                
-                var typeArgumentListSyntax = baseNameSyntax.TypeArgumentList.Arguments;
-                
-                if(typeArgumentListSyntax.Count != 1)
+                ImmutableArray<ITypeSymbol> typeArguments = attributeTypeSymbol.TypeArguments;
+                if(typeArguments.Length != 1)
                     continue;
-                
-                ISymbol? symbol = semanticModel.GetSymbolInfo(typeArgumentListSyntax[0]).Symbol;
-                
-                if(symbol is not null) { // if its null, its invalid type
-                    // string symbolName = symbol.Name; // "TestNode3"
-                    // INamespaceSymbol symbolNamespace = symbol.ContainingNamespace; // {GameEngine.Core.Nodes}
-                    // nullable?
-                    arrNodes.Add(symbol);
-                }
-                
+                //TODO: filter invalid type
+                ITypeSymbol firstType = typeArguments[0];
+                arrNodes.Add(firstType);
             }
             
         }
@@ -123,7 +110,7 @@ public static class PartialNodeGenerator {
         
     }
     
-    private static void GeneratePartialNode(INamedTypeSymbol nodeSymbol, List<ISymbol> hasNodes, List<ISymbol> arrNodes, GeneratorExecutionContext context) {
+    private static void GeneratePartialNode(ISymbol nodeSymbol, List<ISymbol> hasNodes, List<ISymbol> arrNodes, GeneratorExecutionContext context) {
         
         StringBuilder propertiesSb = new();
         

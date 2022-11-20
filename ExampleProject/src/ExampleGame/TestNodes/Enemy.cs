@@ -3,7 +3,9 @@ using GameEngine.Core.Nodes;
 
 namespace ExampleGame.Nodes; 
 
-public partial class Enemy : RigidBody, Has<SpriteRenderer>/*, Has<Trigger>*/ {
+[Has<SpriteRenderer>]
+//[Has<Trigger>]
+public partial class Enemy : RigidBody {
     
     // protected override void OnAwake() {
     //     base.OnAwake();

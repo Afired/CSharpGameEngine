@@ -6,7 +6,7 @@ namespace GameEngine.Core.Nodes;
 public partial class Scene : Node {
     
     [Serialized] public string Name { get; private set; } = "New Scene";
-    protected sealed override bool AwakeThisNodeBeforeItsChildren => true;
+    protected sealed override bool AwakeThisBeforeItsChildren => true;
     
     protected override void OnAwake() {
         base.OnAwake();

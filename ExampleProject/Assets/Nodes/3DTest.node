@@ -1,0 +1,110 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "New Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera3D, GameEngine.Core",
+          "FOV": 90.0,
+          "FlyingSpeed": 10.0,
+          "BackgroundColor": {
+            "$id": "5",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalPosition": {
+            "$id": "6"
+          },
+          "LocalScale": {
+            "$id": "7"
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "8",
+            "$values": []
+          }
+        },
+        {
+          "$id": "9",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Shader": {
+            "$id": "10",
+            "Guid": "bbea6a36-1f3b-4cb3-a038-af0aced18cd6"
+          },
+          "Model": {
+            "$id": "11",
+            "Guid": "9bb0342b-f294-462f-94e8-043bfb75f3e2"
+          },
+          "Textures": {
+            "$id": "12",
+            "$values": [
+              {
+                "$id": "13",
+                "Guid": "555dfa02-7b12-4adc-bf19-2ac98697ac46"
+              },
+              {
+                "$id": "14",
+                "Guid": "ae6b1a4c-61f4-44fd-8044-c394eb1e6be4"
+              },
+              {
+                "$id": "15",
+                "Guid": "3130215a-8c5a-4b30-902d-d32cfadeb869"
+              },
+              {
+                "$id": "16",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+              }
+            ]
+          },
+          "DirectionalLightRotation": {
+            "$id": "17"
+          },
+          "DirectionalLightColor": {
+            "$id": "18",
+            "R": 1.0,
+            "G": 1.0,
+            "B": 1.0,
+            "A": 1.0
+          },
+          "LocalPosition": {
+            "$id": "19"
+          },
+          "LocalScale": {
+            "$id": "20"
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "21",
+            "$values": []
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "22",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "9"
+      }
+    ]
+  }
+}

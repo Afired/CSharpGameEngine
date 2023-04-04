@@ -1,14 +1,14 @@
+using GameEngine.Core.Input;
 using ImGuiNET;
 
 namespace GameEngine.Editor.EditorWindows; 
 
-public class EditorWindow {
-
+public abstract class EditorWindow {
+    
     protected string Title = "Title";
     private readonly int _id;
-    
-    public EditorWindow() {
-        //EditorApplication.Instance.EditorLayer.OnDraw += DrawWindow;
+
+    protected EditorWindow() {
         // ReSharper disable once VirtualMemberCallInConstructor
         _id = GetHashCode();
     }
@@ -18,12 +18,15 @@ public class EditorWindow {
         
         PreDraw();
         
-        // push id doesnt work with windows since it cant be handled with the id stack, c++ uses ## or ### to set an identifier
+        // push id doesn't work with windows since it can't be handled with the id stack, use ## or ### to set an identifier
         ImGui.Begin(Title + "###" + _id, ref opened, ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.MenuBar);
         
         DrawToolbar();
         
         Draw();
+//        if(ImGui.IsWindowFocused() && !ImGui.IsWindowAppearing() && Input.IsKeyDown(KeyCode.LeftControl) && Input.IsKeyDown(KeyCode.W)) {
+//            opened = false;
+//        }
         ImGui.End();
         
         PostDraw();

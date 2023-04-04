@@ -7,7 +7,6 @@ public static class Program {
     public static int Main(string[] args) {
         
         while(true) {
-            
             Configuration configuration = new Configuration() {
                 TargetFrameRate = -1,
                 WindowTitle = "GameEngine-Editor",

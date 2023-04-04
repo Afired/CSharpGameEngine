@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
@@ -10,6 +11,7 @@ using GameEngine.Core.Physics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
+using GameEngine.Numerics;
 
 namespace GameEngine.Core;
 
@@ -29,6 +31,24 @@ public abstract class Application : IDisposable {
     public readonly ExternalAssemblyLoadContextManager AssemblyLoadContextManager = new();
     
     public bool IsReloadingExternalAssemblies { get; private set; }
+
+    private Vec2<float> __inGameResolution;
+    public Vec2<float> InGameResolution {
+        get => __inGameResolution;
+        set {
+            if(__inGameResolution != InGameResolution) {
+                __inGameResolution = value;
+                foreach(WeakReference<FrameBuffer> frameBufferRef in InGameFrameBuffers) {
+                    if(frameBufferRef.TryGetTarget(out FrameBuffer? frameBuffer)) {
+                        frameBuffer.Resize((uint) __inGameResolution.X, (uint) __inGameResolution.Y);
+                    } 
+                }
+                InGameFrameBuffers.RemoveWhere(weakRef => !weakRef.TryGetTarget(out _));
+            }
+        }
+    }
+    public HashSet<WeakReference<FrameBuffer>> InGameFrameBuffers = new();
+    
     public void RegisterReloadOfExternalAssemblies() => IsReloadingExternalAssemblies = true;
     
     protected Application(Configuration config) {
@@ -128,7 +148,7 @@ public abstract class Application : IDisposable {
         
         Process process = Process.Start(processInfo) ?? throw new Exception();
 
-        process.OutputDataReceived += (sender, dataArgs) => {
+        process.OutputDataReceived += (_, dataArgs) => {
             string? data = dataArgs.Data;
             
             if(data is null)
@@ -143,7 +163,7 @@ public abstract class Application : IDisposable {
         };
         process.BeginOutputReadLine();
 
-        process.ErrorDataReceived += (sender, dataArgs) => {
+        process.ErrorDataReceived += (_, dataArgs) => {
             if(dataArgs.Data is not null)
                 Console.LogError(dataArgs.Data);
         };

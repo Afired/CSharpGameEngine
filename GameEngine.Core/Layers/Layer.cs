@@ -9,8 +9,8 @@ public abstract class Layer {
     protected bool SwapBuffers = false;
 
     internal void Attach(Renderer renderer) {
-        if(SwapBuffers)
-            renderer.SwapActiveFrameBuffer();
+//        if(SwapBuffers)
+//            renderer.SwapActiveFrameBuffer();
         OnAttach(renderer);
     }
     

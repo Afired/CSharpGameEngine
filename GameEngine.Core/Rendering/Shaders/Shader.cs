@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using GameEngine.Core.AssetManagement;
-using GameEngine.Core.Numerics;
-using GlmSharp;
+using GameEngine.Numerics;
 using Silk.NET.OpenGL;
 
 namespace GameEngine.Core.Rendering.Shaders;
@@ -17,33 +15,35 @@ public static class StringExtension {
     /// </summary>
     /// <param name="contents"></param>
     /// <returns></returns>
-    public static string GetFirstWord(this string contents) {
+    public static string? GetFirstWord(this string contents) {
         string[] splits = contents.Split(new string[]{" ", "\r\n"}, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         return splits.Length > 0 ? splits[0] : default;
     }
 }
 
-public class Shader : IAsset {
+public class Shader : IAsset, IDisposable {
     
-    public static Shader Invalid { get; }
-    private uint _programID;
-    
-    static Shader() {
-        Invalid = new Shader(InvalidShader.VERTEX_SHADER, InvalidShader.FRAGMENT_SHADER);
+    private static Shader? _invalidShader;
+    public static Shader GetInvalidShader(GL gl) {
+        return _invalidShader ??= new Shader(gl, InvalidShader.VERTEX_SHADER, InvalidShader.FRAGMENT_SHADER);
     }
+    private readonly GL _gl;
+    private uint _id;
     
-    public Shader(string vertexCode, string fragmentCode) {
+    public Shader(GL gl, string vertexCode, string fragmentCode) {
+        _gl = gl;
         (ShaderType shaderType, string shaderSrc)[] shaderInfo = { (ShaderType.VertexShader, vertexCode), (ShaderType.FragmentShader, fragmentCode) };
-        Compile(shaderInfo, Application.Instance.Renderer);
+        Compile(shaderInfo);
     }
     
-    public Shader(string filePath) {
+    public Shader(GL gl, string filePath) {
+        _gl = gl;
         string contents = ReadFileWithFileStream(filePath);
         (ShaderType, string)[] shaderInfo = SplitIntoShader(contents);
-        Compile(shaderInfo, Application.Instance.Renderer);
+        Compile(shaderInfo);
     }
     
-    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo, Renderer renderer) {
+    private void Compile((ShaderType shaderType, string shaderSrc)[] shaderInfo) {
         uint[] shaderIDs = new uint[shaderInfo.Length];
         
         for(int i = 0; i < shaderInfo.Length; i++) {
@@ -51,9 +51,9 @@ public class Shader : IAsset {
             ShaderType type = shaderInfo[i].shaderType;
             string src = shaderInfo[i].shaderSrc;
             
-            shaderIDs[i] = renderer.MainWindow.Gl.CreateShader(type);
-            renderer.MainWindow.Gl.ShaderSource(shaderIDs[i], src);
-            renderer.MainWindow.Gl.CompileShader(shaderIDs[i]);
+            shaderIDs[i] = _gl.CreateShader(type);
+            _gl.ShaderSource(shaderIDs[i], src);
+            _gl.CompileShader(shaderIDs[i]);
             
             //int[] status = GL.GetShaderiv(shaderIDs[i], GL.GL_COMPILE_STATUS, 1);
             //if(status[0] == 0) {
@@ -63,16 +63,16 @@ public class Shader : IAsset {
             
         }
         
-        _programID = renderer.MainWindow.Gl.CreateProgram();
+        _id = _gl.CreateProgram();
         for(int i = 0; i < shaderIDs.Length; i++) {
-            renderer.MainWindow.Gl.AttachShader(_programID, shaderIDs[i]);
+            _gl.AttachShader(_id, shaderIDs[i]);
         }
-        renderer.MainWindow.Gl.LinkProgram(_programID);
+        _gl.LinkProgram(_id);
         
         // Delete Shaders
         for(int i = 0; i < shaderIDs.Length; i++) {
-            renderer.MainWindow.Gl.DetachShader(_programID, shaderIDs[i]);
-            renderer.MainWindow.Gl.DeleteShader(shaderIDs[i]);
+            _gl.DetachShader(_id, shaderIDs[i]);
+            _gl.DeleteShader(shaderIDs[i]);
         }
     }
 
@@ -90,7 +90,7 @@ public class Shader : IAsset {
         sr.Dispose();
         return result;
     }
-
+    
     private static (ShaderType shaderType, string shaderSrc)[] SplitIntoShader(string contents) {
         const string SHADER_TYPE_KEYWORD = "#type";
         string[] shaderSrcs = contents.Split(SHADER_TYPE_KEYWORD, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
@@ -113,28 +113,50 @@ public class Shader : IAsset {
     };
     
     public void Use() {
-        Application.Instance.Renderer.MainWindow.Gl.UseProgram(_programID);
+        _gl.UseProgram(_id);
     }
     
-    public void SetMat(string uniformName, mat4 mat4) {
-        int location = Application.Instance.Renderer.MainWindow.Gl.GetUniformLocation(_programID, uniformName);
-        Application.Instance.Renderer.MainWindow.Gl.UniformMatrix4(location, 1, false, mat4.ToArray());
+    public void SetMat4x4(string uniformName, Matrix<float> matrix) {
+        int location = _gl.GetUniformLocation(_id, uniformName);
+        _gl.UniformMatrix4(location, 1, false, Matrix<float>.ToFloatArray(matrix));
     }
     
     public void SetInt(string uniformName, int value) {
-        int location = Application.Instance.Renderer.MainWindow.Gl.GetUniformLocation(_programID, uniformName);
-        Application.Instance.Renderer.MainWindow.Gl.Uniform1(location, value);
+        int location = _gl.GetUniformLocation(_id, uniformName);
+        _gl.Uniform1(location, value);
     }
     
     public void SetFloat(string uniformName, float value) {
-        int location = Application.Instance.Renderer.MainWindow.Gl.GetUniformLocation(_programID, uniformName);
-        Application.Instance.Renderer.MainWindow.Gl.Uniform1(location, value);
+        int location = _gl.GetUniformLocation(_id, uniformName);
+        _gl.Uniform1(location, value);
     }
     
-    public void SetVector3(string uniformName, Vector3 vector3) {
-        int location = Application.Instance.Renderer.MainWindow.Gl.GetUniformLocation(_programID, uniformName);
-        var sysVector3 = new System.Numerics.Vector3(vector3.X, vector3.Y, vector3.Z);
-        Application.Instance.Renderer.MainWindow.Gl.Uniform3(location, sysVector3);
+    public void SetVector3(string uniformName, Vec3<float> vec3) {
+        int location = _gl.GetUniformLocation(_id, uniformName);
+        _gl.Uniform3(location, new System.Numerics.Vector3(vec3.X, vec3.Y, vec3.Z));
     }
     
+    public int GetAttributeLocation(ReadOnlySpan<byte> attributeName) {
+        return _gl.GetAttribLocation(_id, attributeName);
+    }
+    
+    public int GetAttributeLocation(ReadOnlySpan<char> attributeName) {
+        Span<byte> bytes = default;
+        Encoding.UTF8.GetBytes(attributeName, bytes);
+        return _gl.GetAttribLocation(_id, bytes);
+    }
+    
+    public int GetUniformLocation(ReadOnlySpan<byte> attributeName) {
+        return _gl.GetUniformLocation(_id, attributeName);
+    }
+    
+    public int GetUniformLocation(ReadOnlySpan<char> attributeName) {
+        Span<byte> bytes = default;
+        Encoding.UTF8.GetBytes(attributeName, bytes);
+        return _gl.GetUniformLocation(_id, bytes);
+    }
+    
+    public void Dispose() {
+        _gl.DeleteShader(_id);
+    }
 }

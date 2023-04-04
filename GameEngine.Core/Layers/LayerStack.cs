@@ -7,8 +7,8 @@ namespace GameEngine.Core.Layers;
 
 public class LayerStack : IEnumerable<Layer> {
     
-    private List<Layer> _normalLayers;
-    private List<Layer> _overlayedLayers;
+    private readonly List<Layer> _normalLayers;
+    private readonly List<Layer> _overlayLayers;
 
     public DefaultNormalLayer DefaultNormalLayer { get; private set; }
     public DefaultOverlayLayer DefaultOverlayLayer { get; private set; }
@@ -16,7 +16,7 @@ public class LayerStack : IEnumerable<Layer> {
 
     internal LayerStack() {
         _normalLayers = new List<Layer>();
-        _overlayedLayers = new List<Layer>();
+        _overlayLayers = new List<Layer>();
 
         DefaultNormalLayer = new DefaultNormalLayer();
         Push(DefaultNormalLayer, LayerType.Normal);
@@ -44,7 +44,7 @@ public class LayerStack : IEnumerable<Layer> {
             Count--;
             return true;
         }
-        if(_overlayedLayers.Remove(layer)) {
+        if(_overlayLayers.Remove(layer)) {
             Count--;
             return true;
         }
@@ -53,7 +53,7 @@ public class LayerStack : IEnumerable<Layer> {
     
     private List<Layer> GetLayerListFromEnum(LayerType layerType) => layerType switch {
         LayerType.Normal => _normalLayers,
-        LayerType.Overlay => _overlayedLayers,
+        LayerType.Overlay => _overlayLayers,
         _ => throw new InvalidEnumArgumentException("The provided layer type is not implemented")
     };
 
@@ -63,15 +63,15 @@ public class LayerStack : IEnumerable<Layer> {
     }
 
     public IEnumerable<Layer> GetOverlayLayers() {
-        foreach(Layer overlayedLayer in _overlayedLayers)
-            yield return overlayedLayer;
+        foreach(Layer overlayLayer in _overlayLayers)
+            yield return overlayLayer;
     }
 
     public IEnumerator<Layer> GetEnumerator() {
         foreach(Layer normalLayer in _normalLayers)
             yield return normalLayer;
-        foreach(Layer overlayedLayer in _overlayedLayers)
-            yield return overlayedLayer;
+        foreach(Layer overlayLayer in _overlayLayers)
+            yield return overlayLayer;
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
@@ -89,7 +89,7 @@ public class LayerStack : IEnumerable<Layer> {
                 throw new ArgumentOutOfRangeException();
             if(index < _normalLayers.Count)
                 return _normalLayers[index];
-            return _overlayedLayers[index];
+            return _overlayLayers[index];
         }
     }
     

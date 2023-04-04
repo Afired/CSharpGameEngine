@@ -21,6 +21,6 @@ public class Configuration {
     public bool DoDebugErrors { get; init; } = true;
     public bool DoDebugSuccess { get; init; } = true;
     
-    public bool UseHDR { get; init; } = true;
+    public bool UseHdr { get; init; } = true;
     
 }

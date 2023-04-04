@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using GameEngine.Core;
 using GameEngine.Core.Layers;
-using GameEngine.Core.Physics;
-using GameEngine.Core.Rendering;
 using GameEngine.Core.SceneManagement;
 using GameEngine.Core.Serialization;
 using GameEngine.Editor.PropertyDrawers;
@@ -22,7 +20,7 @@ public class EditorApplication : Application<EditorApplication> {
         EditorResources.Load();
         EditorLayer = new EditorLayer();
         Renderer.LayerStack.Push(EditorLayer, LayerType.Overlay);
-        EditorGui editorGui = new();
+        EditorGui editorGui = new EditorGui(Renderer.MainWindow.Gl, Renderer);
     }
     
     public override void Terminate() {
@@ -99,8 +97,8 @@ public class EditorApplication : Application<EditorApplication> {
             ExecuteQueuedTasks();
             
             float updateTime = (float) updateTimer.Elapsed.TotalSeconds;
-            if(Application.Instance!.Config.TargetFrameRate > 0) {
-                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Application.Instance!.Config.TargetFrameRate - updateTime);
+            if(Config.TargetFrameRate > 0) {
+                TimeSpan timeOut = TimeSpan.FromSeconds(1 / Config.TargetFrameRate - updateTime);
                 if(timeOut.TotalSeconds > 0) {
                     Thread.Sleep(timeOut);
                     updateTime = (float) updateTimer.Elapsed.TotalSeconds;
@@ -108,17 +106,18 @@ public class EditorApplication : Application<EditorApplication> {
             }
             Time.TotalTimeElapsed += updateTime;
             updateTimer.Restart();
-            
+
             if(PlayMode.Current == PlayMode.Mode.Playing) {
                 Hierarchy.Awake();
                 Hierarchy.Update(updateTime);
-            } else
-                EditorCamera.Instance.EditorUpdate(updateTime);
+            }
+            
+            EditorGui.Instance.EditorUpdate(updateTime);
             
             Renderer.InputHandler.ResetMouseDelta(Renderer.WindowHandle);
             
             float physicsTime = (float) physicsTimer.Elapsed.TotalSeconds;
-            if(physicsTime > Application.Instance!.Config.FixedTimeStep) {
+            if(physicsTime > Config.FixedTimeStep) {
                 if(PlayMode.Current == PlayMode.Mode.Playing) {
                     Hierarchy.PrePhysicsUpdate();
                     PhysicsEngine.DoStep(Config.FixedTimeStep);
@@ -142,6 +141,7 @@ public class EditorApplication : Application<EditorApplication> {
     public override void Dispose() {
         base.Dispose();
         EditorResources.Unload();
+        ImGui.DestroyContext();
     }
     
 }

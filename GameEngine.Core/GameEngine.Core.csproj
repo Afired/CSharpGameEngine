@@ -10,28 +10,28 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;TRY_CATCH</DefineConstants>
+        <DefineConstants>TRACE;TRY_CATCH</DefineConstants>
     </PropertyGroup>
     
     <ItemGroup>
-      <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
-      <PackageReference Include="Box2D.NetStandard" Version="2.4.2-alpha" />
-      <PackageReference Include="GlmNet" Version="0.7.0" />
-      <PackageReference Include="GlmSharp" Version="0.9.8" />
-      <PackageReference Include="ImGui.NET" Version="1.87.3" />
-      <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
-      <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
-      <PackageReference Include="NativeFileDialogSharp" Version="0.5.0" />
-      <PackageReference Include="Silk.NET.GLFW" Version="2.16.0" />
-      <PackageReference Include="Silk.NET.Input.Glfw" Version="2.11.0" />
-      <PackageReference Include="Silk.NET.OpenGL" Version="2.11.0" />
-      <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.11.0" />
-      <PackageReference Include="Silk.NET.Windowing.Glfw" Version="2.16.0" />
-      <PackageReference Include="StbImageSharp" Version="2.27.11" />
+        <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
+        <PackageReference Include="Box2D.NetStandard" Version="2.4.2-alpha" />
+        <PackageReference Include="ImGui.NET" Version="1.87.3" />
+        <PackageReference Include="ImGui.NET.Docking" Version="1.75.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
+        <PackageReference Include="NativeFileDialogSharp" Version="0.5.0" />
+        <PackageReference Include="Silk.NET.GLFW" Version="2.16.0" />
+        <PackageReference Include="Silk.NET.Input.Glfw" Version="2.11.0" />
+        <PackageReference Include="Silk.NET.OpenGL" Version="2.11.0" />
+        <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.11.0" />
+        <PackageReference Include="Silk.NET.Windowing.Glfw" Version="2.16.0" />
+        <PackageReference Include="StbImageSharp" Version="2.27.11" />
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\GameEngine.SourceGenerator\GameEngine.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\GameEngine.Numerics\GameEngine.Numerics.csproj" />
+        <ProjectReference Include="..\GameEngine.SerializationAttributes\GameEngine.SerializationAttributes.csproj" />
+        <ProjectReference Include="..\GameEngine.SourceGenerator\GameEngine.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">

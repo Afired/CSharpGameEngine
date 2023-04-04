@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using GameEngine.Core.Numerics;
+using GameEngine.Numerics;
 using Silk.NET.GLFW;
 
 namespace GameEngine.Core.Input; 
 
 public static class Input {
     
-    public static Vector2 MouseDelta { get; internal set; }
+    public static Vec2<float> MouseDelta { get; internal set; }
+    public static Vec2<double> ScrollDelta { get; internal set; }
+    
     private static Dictionary<Keys, bool> _inputData;
     
     

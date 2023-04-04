@@ -10,7 +10,7 @@ public class BaseCameraDrawer : NodeDrawer<BaseCamera> {
         DrawDefaultDrawers(node, typeof(BaseCamera));
 //        ImGui.Spacing();
         if(ImGui.Button("Set active"))
-            Application.Instance!.Renderer.SetActiveCamera(node);
+            Application.Instance.Renderer.SetActiveCamera(node);
     }
     
 }

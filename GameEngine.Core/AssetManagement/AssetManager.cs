@@ -5,7 +5,7 @@ namespace GameEngine.Core.AssetManagement;
 
 public abstract class AssetManager {
     
-    public static AssetManager Instance { get; protected set; }
+    public static AssetManager? Instance { get; protected set; }
     
     public abstract string[] GetAllFilePathsOfAssetsWithExtension(string fileExtension);
     public abstract string? GetMetaPath(Guid guid);

@@ -6,7 +6,6 @@ using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
-using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.Windowing;
 using Silk.NET.Windowing.Glfw;
 using VideoMode = Silk.NET.Windowing.VideoMode;
@@ -20,11 +19,11 @@ public unsafe class GlfwWindow : IDisposable {
     public event OnResize? OnResize;
     
     public WindowHandle* Handle => GlfwWindowing.GetHandle(_window);
-    private readonly IWindow _window;
+    private readonly IWindow? _window;
     public readonly Glfw Glfw;
     public readonly ImGuiController ImGuiController;
-    public readonly GL Gl;
-    private readonly IInputContext _inputContext;
+    public readonly GL? Gl;
+    private readonly IInputContext? _inputContext;
     private readonly WindowOptions _windowOptions;
     
     public GlfwWindow() {
@@ -32,8 +31,8 @@ public unsafe class GlfwWindow : IDisposable {
         _windowOptions = new WindowOptions() {
             Position = new Vector2D<int>(-1, -1), // ? doesnt work
             Samples = 1, // multisample anti aliasing?
-            Size = new Vector2D<int>((int) Application.Instance!.Config.WindowWidth, (int) Application.Instance!.Config.WindowHeight), // size of the window in pixel
-            Title = Application.Instance!.Config.WindowTitle, // title of the window
+            Size = new Vector2D<int>((int) Application.Instance.Config.WindowWidth, (int) Application.Instance.Config.WindowHeight), // size of the window in pixel
+            Title = Application.Instance.Config.WindowTitle, // title of the window
             IsVisible = true, // ?
             TransparentFramebuffer = false, // makes window transparent as long as no color is drawn
             VideoMode = VideoMode.Default,
@@ -63,8 +62,7 @@ public unsafe class GlfwWindow : IDisposable {
         Gl = _window.CreateOpenGL();
         _inputContext = _window.CreateInput();
         ImGuiController = new ImGuiController(Gl, _window, _inputContext);
-        //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.ViewportsEnable; // enable ImGui multi window viewports || currently not supported with OpenGl as rendering context?
-        ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable; // enable ImGui docking
+        
         Glfw = Glfw.GetApi();
         Glfw.Init();
         
@@ -73,10 +71,10 @@ public unsafe class GlfwWindow : IDisposable {
         Glfw.GetMonitorWorkarea(monitor, out int width, out int height, out int x, out int y);
         int middleMonitorX = (x + width) / 2;
         int middleMonitorY = (y + height) / 2;
-        int windowOffsetX = ((int)Application.Instance!.Config.WindowWidth / 2);
-        int windowOffsetY = ((int)Application.Instance!.Config.WindowHeight / 2);
+        int windowOffsetX = (int) Application.Instance.Config.WindowWidth / 2;
+        int windowOffsetY = (int) Application.Instance.Config.WindowHeight / 2;
         Glfw.SetWindowPos(Handle, (middleMonitorX - windowOffsetX), (middleMonitorY - windowOffsetY));
-
+        
         // Handle resizes
         _window.FramebufferResize += s => {
             // Adjust the viewport to the new window size
@@ -86,7 +84,6 @@ public unsafe class GlfwWindow : IDisposable {
         
         // dispose components when window is closing
         //_window.Closing += Dispose;
-
     }
 
     public void Dispose() {

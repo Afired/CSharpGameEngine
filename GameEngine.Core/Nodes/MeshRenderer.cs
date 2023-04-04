@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using GameEngine.Core.AssetManagement;
-using GameEngine.Core.Numerics;
 using GameEngine.Core.Rendering;
 using GameEngine.Core.Rendering.Geometry;
 using GameEngine.Core.Rendering.Textures;
 using GameEngine.Core.Serialization;
+using GameEngine.Numerics;
 using Silk.NET.OpenGL;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
 
@@ -19,32 +19,27 @@ public partial class MeshRenderer : Transform3D {
     
     [Serialized] public List<AssetRef<Texture2D>>? Textures { get; set; } = new();
     
-    [Serialized] public Vector3 DirectionalLightRotation { get; set; } = Vector3.Down;
+    [Serialized] public Vec3<float> DirectionalLightRotation { get; set; } = Vec3<float>.Down;
     [Serialized] public Color DirectionalLightColor { get; set; } = new Color(1, 1, 1);
     
     protected override unsafe void OnDraw() {
         
-        Shader shader = Shader.Get() ?? Rendering.Shaders.Shader.Invalid;
-        Texture2D texture2D = Texture.Get() ?? Texture2D.Missing;
+        Shader shader = Shader.Get() ?? Rendering.Shaders.Shader.GetInvalidShader(Application.Instance.Renderer.MainWindow.Gl);
+        Texture2D texture2D = Texture.Get() ?? Texture2D.GetMissingTexture2D(Application.Instance.Renderer.MainWindow.Gl);
         
         shader.Use();
         
-        GlmSharp.mat4 transformMat = GetViewMat();
+        Quaternion<float> normalized = LocalRotation;
+        normalized.Normalize();
         
-        GlmSharp.mat4 GetViewMat() {
-            GlmSharp.mat4 t = GlmSharp.mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
-                              new GlmSharp.quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
-            //todo: add scale matrix
-            return t;
-        }
-        
-        shader.SetMat("model", transformMat);
-        shader.SetMat("projection", Application.Instance!.Renderer.CurrentCamera.GLM_GetProjectionMatrix());
+        shader.SetMat4x4("model", LocalToWorldMatrix);
+        shader.SetMat4x4("view", Renderer.ViewMatrix);
+        shader.SetMat4x4("projection", Renderer.ProjectionMatrix);
         texture2D.Bind(0);
         shader.SetInt("u_Texture", 0);
         shader.SetFloat("time", Time.TotalTimeElapsed);
         shader.SetVector3("lightDirection", DirectionalLightRotation);
-        shader.SetVector3("directionalLightColor", new Vector3(DirectionalLightColor.R, DirectionalLightColor.G, DirectionalLightColor.B));
+        shader.SetVector3("directionalLightColor", new Vec3<float>(DirectionalLightColor.R, DirectionalLightColor.G, DirectionalLightColor.B));
         
         Model model = Model.Get() ?? Rendering.Geometry.Model.Empty;
         
@@ -55,7 +50,7 @@ public partial class MeshRenderer : Transform3D {
         
         for(int i = 0; i < meshes.Length; i++) {
             
-            Texture2D texture = Textures.Count > i ? Textures[i].Get() ?? Texture2D.Missing : Texture2D.Missing;
+            Texture2D texture = Textures.Count > i ? Textures[i].Get() ?? Texture2D.GetMissingTexture2D(Application.Instance.Renderer.MainWindow.Gl) : Texture2D.GetMissingTexture2D(Application.Instance.Renderer.MainWindow.Gl);
             
             texture.Bind(0);
             

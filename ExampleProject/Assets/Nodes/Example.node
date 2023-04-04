@@ -1,0 +1,195 @@
+GameEngine.Core::GameEngine.Core.Nodes.Scene
+{
+  "$id": "1",
+  "Name": "Example Scene",
+  "Nodes": {
+    "$id": "2",
+    "GameEngine.Core.Nodes.INodeArr.ContainingNode": {
+      "$ref": "1"
+    },
+    "_list": {
+      "$id": "3",
+      "$values": [
+        {
+          "$id": "4",
+          "$type": "GameEngine.Core.Nodes.Camera3D, GameEngine.Core",
+          "ClippingDistance": {
+            "$id": "5",
+            "X": 0.01,
+            "Y": 10000.0
+          },
+          "Fov": 90.0,
+          "FlyingSpeed": 10.0,
+          "BackgroundColor": {
+            "$id": "6",
+            "R": 0.1,
+            "G": 0.1,
+            "B": 0.1,
+            "A": 1.0
+          },
+          "IsMainCamera": true,
+          "LocalPosition": {
+            "$id": "7",
+            "X": -4.0478487,
+            "Y": -0.25809756,
+            "Z": -16.2441
+          },
+          "LocalRotation": {
+            "$id": "8",
+            "X": -0.062806875,
+            "Y": 0.13344464,
+            "Z": 0.008472476,
+            "W": 0.9891795
+          },
+          "LocalScale": {
+            "$id": "9",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "10",
+            "$values": []
+          }
+        },
+        {
+          "$id": "11",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Shader": {
+            "$id": "12",
+            "Guid": "4c03acc7-7578-4d3b-9f01-fcc931d04be9"
+          },
+          "Model": {
+            "$id": "13",
+            "Guid": "50a78e58-ca5d-4ce3-854b-64b0c27ff353"
+          },
+          "Textures": {
+            "$id": "14",
+            "$values": [
+              {
+                "$id": "15",
+                "Guid": "ae6b1a4c-61f4-44fd-8044-c394eb1e6be4"
+              },
+              {
+                "$id": "16",
+                "Guid": "555dfa02-7b12-4adc-bf19-2ac98697ac46"
+              },
+              {
+                "$id": "17",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+              },
+              {
+                "$id": "18",
+                "Guid": "820d1e27-035c-4e02-af7c-7e85edc0f8a7"
+              },
+              {
+                "$id": "19",
+                "Guid": "3130215a-8c5a-4b30-902d-d32cfadeb869"
+              }
+            ]
+          },
+          "DirectionalLightRotation": {
+            "$id": "20",
+            "X": -1.0,
+            "Y": 1.0,
+            "Z": -1.0
+          },
+          "DirectionalLightColor": {
+            "$id": "21",
+            "R": 1.0,
+            "G": 1.0,
+            "B": 1.0,
+            "A": 1.0
+          },
+          "LocalRotation": {
+            "$id": "22",
+            "W": 1.0
+          },
+          "LocalScale": {
+            "$id": "23",
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "24",
+            "$values": []
+          }
+        },
+        {
+          "$id": "25",
+          "$type": "GameEngine.Core.Nodes.MeshRenderer, GameEngine.Core",
+          "Texture": {
+            "$id": "26",
+            "Guid": "da0f7be4-6404-4f4c-8055-b93b1e9d7620"
+          },
+          "Shader": {
+            "$id": "27",
+            "Guid": "323c767d-3a34-4443-975b-9b5f64895926"
+          },
+          "Model": {
+            "$id": "28",
+            "Guid": "f373b888-2452-4ba0-9d25-6ebb0a902809"
+          },
+          "Textures": {
+            "$id": "29",
+            "$values": [
+              {
+                "$id": "30",
+                "Guid": "da0f7be4-6404-4f4c-8055-b93b1e9d7620"
+              }
+            ]
+          },
+          "DirectionalLightRotation": {
+            "$id": "31",
+            "Y": -1.0
+          },
+          "DirectionalLightColor": {
+            "$id": "32",
+            "R": 1.0,
+            "G": 1.0,
+            "B": 1.0,
+            "A": 1.0
+          },
+          "LocalRotation": {
+            "$id": "33",
+            "W": 1.0
+          },
+          "LocalScale": {
+            "$id": "34",
+            "X": 10.0,
+            "Y": 10.0,
+            "Z": 10.0
+          },
+          "ParentNode": {
+            "$ref": "1"
+          },
+          "_childNodes": {
+            "$id": "35",
+            "$values": []
+          }
+        }
+      ]
+    }
+  },
+  "_childNodes": {
+    "$id": "36",
+    "$values": [
+      {
+        "$ref": "4"
+      },
+      {
+        "$ref": "11"
+      },
+      {
+        "$ref": "25"
+      }
+    ]
+  }
+}

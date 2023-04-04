@@ -16,7 +16,9 @@ cscript /nologo %SCRIPT%
 del %SCRIPT%
 
 
+setx GameEngineSerializationAttributesDLL %~dp0GameEngine.SerializationAttributes\bin\Debug\net7.0\GameEngine.SerializationAttributes.dll
 setx GameEngineCoreDLL %~dp0GameEngine.Core\bin\Debug\net7.0\GameEngine.Core.dll
+setx GameEngineNumericsDLL %~dp0GameEngine.Numerics\bin\Debug\net7.0\GameEngine.Numerics.dll
 setx GameEngineSourceGeneratorDLL %~dp0GameEngine.SourceGenerator\bin\Debug\netstandard2.0\GameEngine.SourceGenerator.dll
 setx GameEngineEditorDLL %~dp0GameEngine.Editor\bin\Debug\net7.0\GameEngine.Editor.dll
 

@@ -5,10 +5,10 @@ namespace GameEngine.Core.AssetManagement;
 
 public class TextureImporter : AssetImporter<Texture2D> {
     
-    public override string[] GetExtensions() => new[] { "png" };
+    public override string[] GetExtensions() => new[] { "png", "hdr" };
     
     public override Texture2D? Import(string path) {
-        return Texture2D.Create(path);
+        return new Texture2D(Application.Instance.Renderer.MainWindow.Gl, path);
     }
     
 }

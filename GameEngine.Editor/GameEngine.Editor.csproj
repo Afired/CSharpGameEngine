@@ -14,6 +14,7 @@
       <ProjectReference Include="..\GameEngine.Core\GameEngine.Core.csproj">
 <!--          <ExcludeAssets>compile</ExcludeAssets>-->
       </ProjectReference>
+      <ProjectReference Include="..\GameEngine.Numerics\GameEngine.Numerics.csproj" />
     </ItemGroup>
 
 <!--    <ItemGroup>-->

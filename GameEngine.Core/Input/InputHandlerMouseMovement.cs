@@ -1,4 +1,5 @@
-﻿using GameEngine.Core.Numerics;
+﻿using System.Numerics;
+using GameEngine.Numerics;
 using WindowHandle = Silk.NET.GLFW.WindowHandle;
 
 namespace GameEngine.Core.Input; 
@@ -11,7 +12,7 @@ public partial class InputHandler {
     public unsafe void ResetMouseDelta(WindowHandle* window) {
         _catchCursor = Input.IsKeyDown(KeyCode.LeftControl);
         
-        Input.MouseDelta = Vector2.Zero;
+        Input.MouseDelta = Vec2<float>.Zero;
         if(_catchCursor)
             Application.Instance.Renderer.MainWindow.Glfw.SetCursorPos(window, (double) Application.Instance.Config.WindowWidth / 2d, (double) Application.Instance.Config.WindowHeight / 2d); //todo: not config but current glfw window size
     }
@@ -19,12 +20,12 @@ public partial class InputHandler {
     public unsafe void HandleMouseInput(WindowHandle* window) {
         if(_catchCursorOld) {
             Application.Instance.Renderer.MainWindow.Glfw.GetCursorPos(window, out double x, out double y);
-            Vector2 mousePos = new Vector2((int) x, -(int) y);
-        
-            Vector2 windowCenter = new Vector2((float) Application.Instance.Config.WindowWidth / 2, (float) -Application.Instance.Config.WindowHeight / 2); //todo: not config but current glfw window size
+            Vec2<float> mousePos = new Vec2<float>((int) x, -(int) y);
+            
+            Vec2<float> windowCenter = new Vec2<float>(Application.Instance.Config.WindowWidth / 2.0f, -Application.Instance.Config.WindowHeight / 2.0f); //todo: not config but current glfw window size
             Input.MouseDelta += mousePos - windowCenter;
         }  else
-            Input.MouseDelta = Vector2.Zero;
+            Input.MouseDelta = Vec2<float>.Zero;
         
         _catchCursorOld = _catchCursor;
     }

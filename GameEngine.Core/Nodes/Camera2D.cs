@@ -1,6 +1,6 @@
-﻿using GameEngine.Core.Numerics;
+﻿using System;
 using GameEngine.Core.Serialization;
-using GlmSharp;
+using GameEngine.Numerics;
 
 namespace GameEngine.Core.Nodes;
 
@@ -10,20 +10,22 @@ namespace GameEngine.Core.Nodes;
 public partial class Camera2D : BaseCamera {
     
     [Serialized] public float Zoom { get; set; } = 10;
-    [Serialized] public Vector2 ClippingDistance { get; set; } = new Vector2(0.01f, 100f);
+    [Serialized] public Vec2<float> ClippingDistance { get; set; } = new Vec2<float>(0.01f, 100f);
     
-    public override mat4 GLM_GetProjectionMatrix() {
-        float aspectRatioGameFrameBuffer = (float) Application.Instance!.Renderer.MainFrameBuffer2.Width / (float) Application.Instance!.Renderer.MainFrameBuffer2.Height;
-        mat4 projectionMatrix = mat4.Ortho(-aspectRatioGameFrameBuffer * Zoom, aspectRatioGameFrameBuffer * Zoom, -Zoom, Zoom, -ClippingDistance.X, -ClippingDistance.Y);
-        
-        mat4 viewProjectionMat = projectionMatrix * GetViewMat();
-        return viewProjectionMat;
-    }
+    public override Matrix<float> ViewMatrix =>
+        Matrix<float>.Invert(
+            Matrix<float>.CreateTranslation(-LocalPosition) *
+            Matrix<float>.CreateFromQuaternion(LocalRotation.Normalized())
+        );
     
-    private mat4 GetViewMat() {
-        mat4 t = mat4.Translate(WorldPosition.X, WorldPosition.Y, WorldPosition.Z) *
-                        new quat(WorldRotation.X, WorldRotation.Y, WorldRotation.Z, WorldRotation.W).Normalized.ToMat4;
-        return t.Inverse;
-    }
+    public override Matrix<float> ProjectionMatrix =>
+        Matrix<float>.CreateOrthographic(
+//            Application.Instance.Renderer.MainFrameBuffer2.Width,
+//            Application.Instance.Renderer.MainFrameBuffer2.Height,
+1,
+1,
+            ClippingDistance.X,
+            ClippingDistance.Y
+        );
     
 }

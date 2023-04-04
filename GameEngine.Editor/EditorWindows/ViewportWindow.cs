@@ -1,13 +1,24 @@
 using System.Numerics;
 using GameEngine.Core;
+using GameEngine.Core.Rendering;
+using GameEngine.Core.SceneManagement;
+using GameEngine.Numerics;
 using ImGuiNET;
+using Silk.NET.OpenGL;
 
 namespace GameEngine.Editor.EditorWindows; 
 
-public class ViewportWindow : EditorWindow {
+public class ViewportWindow : EditorWindow, IEditorUpdate {
     
-    public ViewportWindow() {
-        Title = "Viewport";
+    private EditorCamera EditorCamera { get; }
+    
+    public ViewportWindow(GL gl, Renderer renderer) {
+        Title = " Viewport";
+        EditorCamera = new EditorCamera(gl, renderer);
+    }
+    
+    public void EditorUpdate(float deltaTime) {
+        EditorCamera.EditorUpdate(deltaTime);
     }
     
     protected override void PreDraw() {
@@ -30,12 +41,31 @@ public class ViewportWindow : EditorWindow {
     private void DrawViewport() {
         Vector2 desiredSize = ImGui.GetContentRegionAvail();
         
-        if(desiredSize != new Vector2(Application.Instance.Renderer.MainFrameBuffer1.Width, Application.Instance.Renderer.MainFrameBuffer1.Height)) {
-            Application.Instance.Renderer.MainFrameBuffer1.Resize((int) desiredSize.X, (int) desiredSize.Y);
-            Application.Instance.Renderer.MainFrameBuffer2.Resize((int) desiredSize.X, (int) desiredSize.Y);
+        Renderer renderer = Application.Instance.Renderer;
+        GL gl = renderer.MainWindow.Gl;
+        
+        FrameBuffer activeFrameBuffer = renderer.FinalFrameBuffer;
+        
+        if((int)desiredSize.X != EditorCamera.FrameBuffer.Width
+           || (int)desiredSize.Y != EditorCamera.FrameBuffer.Height) {
+            EditorCamera.FrameBuffer.Resize((int)desiredSize.X, (int)desiredSize.Y);
         }
         
-        ImGui.Image((IntPtr) Application.Instance.Renderer.ActiveFrameBuffer.ColorAttachment, desiredSize, new Vector2(0, 1) , new Vector2(1, 0));
+        EditorCamera.FrameBuffer.Bind();
+        gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+        gl.Enable(EnableCap.DepthTest); // reenable depth
+        gl.Viewport(0, 0, EditorCamera.FrameBuffer.Width, EditorCamera.FrameBuffer.Height);
+        gl.ClearColor(EditorCamera.BackgroundColor.R, EditorCamera.BackgroundColor.G, EditorCamera.BackgroundColor.B, EditorCamera.BackgroundColor.A);
+        Renderer.ViewMatrix = EditorCamera.ViewMatrix;
+        Renderer.ProjectionMatrix = EditorCamera.ProjectionMatrix;
+        Hierarchy.Draw();
+        //todo: post processing stack
+//        DoPostProcessing();
+        
+        activeFrameBuffer.Bind();
+        gl.Viewport(0, 0, activeFrameBuffer.Width, activeFrameBuffer.Height);
+        
+        ImGui.Image((nint) EditorCamera.FrameBuffer.ColorAttachment, desiredSize, new Vector2(0, 1), new Vector2(1, 0));
     }
     
 }

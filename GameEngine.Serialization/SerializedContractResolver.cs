@@ -13,16 +13,27 @@ public class SerializedContractResolver : DefaultContractResolver {
     protected override List<MemberInfo> GetSerializableMembers(Type type) {
         List<MemberInfo> members = new List<MemberInfo>();
         for(Type? currentType = type; currentType is not null; currentType = currentType.BaseType) {
-            members.AddRange(
-                currentType
-                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(prop => prop.GetCustomAttribute<Serialized>(false) is not null)
-            );
-            members.AddRange(
-                currentType
-                    .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(prop => prop.GetCustomAttribute<Serialized>(false) is not null)
-            );
+            
+            PropertyInfo[] propertyInfos = currentType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach(PropertyInfo propertyInfo in propertyInfos) {
+                object[] customAttributes = propertyInfo.GetCustomAttributes(false);
+                foreach(object customAttribute in customAttributes) {
+                    bool isSerializedAttribute = customAttribute.GetType().GUID == typeof(Serialized).GUID;
+                    if(isSerializedAttribute)
+                        members.Add(propertyInfo);
+                }
+            }
+            
+            FieldInfo[] fieldInfos = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach(FieldInfo fieldInfo in fieldInfos) {
+                object[] customAttributes = fieldInfo.GetCustomAttributes(false);
+                foreach(object customAttribute in customAttributes) {
+                    bool isSerializedAttribute = customAttribute.GetType().GUID == typeof(Serialized).GUID;
+                    if(isSerializedAttribute)
+                        members.Add(fieldInfo);
+                }
+            }
+            
         }
         return members;
     }

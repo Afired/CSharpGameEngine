@@ -78,7 +78,7 @@ public static class Hierarchy {
         RootNode.PhysicsUpdate();
     }
 
-    internal static void Draw() {
+    public static void Draw() {
         if(RootNode is null)
             return;
         RootNode.Draw();

@@ -36,13 +36,14 @@ public class EditorMainMenubar {
     internal static void Draw(Renderer renderer) {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(8, 8));
         ImGui.PushStyleColor(ImGuiCol.MenuBarBg, new Vector4(0.11f, 0.11f, 0.11f, 1.0f));
+        //TODO: NoNav
         if(ImGui.BeginMainMenuBar()) {
             
             DrawPlayControls();
             
             Texture2D appIcon = EditorResources.GetIcon("AppIcon");
             ImGui.SetCursorPos(new Vector2(8, 8));
-            ImGui.Image((IntPtr) appIcon.ID, new Vector2(16, 16));
+            ImGui.Image((nint) appIcon.Id, new Vector2(16, 16));
             
             DrawMenuItems();
             
@@ -169,7 +170,7 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 96, 0));
         Texture2D minimizeIcon = EditorResources.GetIcon("MinimizeIcon");
-        if(ImGui.ImageButton((IntPtr) minimizeIcon.ID, new Vector2(16, 16))) {
+        if(ImGui.ImageButton((IntPtr) minimizeIcon.Id, new Vector2(16, 16))) {
             unsafe {
                 renderer.MainWindow.Glfw.IconifyWindow(renderer.MainWindow.Handle);
             }
@@ -183,7 +184,7 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 1f, 1f, 0.2f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 64, 0));
         Texture2D fullscreenIcon = EditorResources.GetIcon("MaximizeIcon");
-        if(ImGui.ImageButton((IntPtr) fullscreenIcon.ID, new Vector2(16, 16))) {
+        if(ImGui.ImageButton((IntPtr) fullscreenIcon.Id, new Vector2(16, 16))) {
             unsafe {
                 renderer.MainWindow.Glfw.MaximizeWindow(renderer.MainWindow.Handle);
             }
@@ -197,7 +198,7 @@ public class EditorMainMenubar {
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(1f, 0.4f, 0.4f, 0.75f));
         ImGui.SetCursorPos(new Vector2(ImGui.GetWindowSize().X - 32, 0));
         Texture2D exitIcon = EditorResources.GetIcon("ExitIcon");
-        if(ImGui.ImageButton((IntPtr) exitIcon.ID, new Vector2(16, 16))) {
+        if(ImGui.ImageButton((IntPtr) exitIcon.Id, new Vector2(16, 16))) {
             Application.Instance.Terminate();
         }
         ImGui.PopStyleColor(3);
@@ -230,7 +231,7 @@ public class EditorMainMenubar {
             if(ImGui.MenuItem("Console")) EditorWindow.Create<ConsoleWindow>();
             if(ImGui.MenuItem("Hierarchy")) EditorWindow.Create<HierarchyWindow>();
             if(ImGui.MenuItem("Inspector")) EditorWindow.Create<InspectorWindow>();
-            if(ImGui.MenuItem("Viewport")) EditorWindow.Create<ViewportWindow>();
+            if(ImGui.MenuItem("Viewport")) EditorGui.Instance.AddWindow(new ViewportWindow(Application.Instance.Renderer.MainWindow.Gl, Application.Instance.Renderer));
             if(ImGui.MenuItem("Terminal")) EditorWindow.Create<TerminalWindow>();
             ImGui.EndMenu();
         }

@@ -1,7 +1,7 @@
 ﻿using GameEngine.Core;
 using GameEngine.Core.Input;
 using GameEngine.Core.Nodes;
-using GameEngine.Core.Numerics;
+using GameEngine.Numerics;
 using GameEngine.Core.Serialization;
 
 namespace ExampleGame.Nodes; 
@@ -32,7 +32,7 @@ public partial class Player : Node {
         x += Input.IsKeyDown(MoveRightKey) ? 1 : 0;
         x += Input.IsKeyDown(MoveLeftKey) ? -1 : 0;
         x *= Time.DeltaTime * Speed;
-        Paddle.LocalPosition += new Vector3(x, 0, 0);
+        Paddle.LocalPosition += new Vec3<float>(x, 0, 0);
     }
     
 }

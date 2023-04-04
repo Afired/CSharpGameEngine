@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using GameEngine.Core.Rendering;
 using ImGuiNET;
@@ -11,7 +12,7 @@ public class EditorLayer : Layer {
     }
     
     protected override void OnAttach(Renderer renderer) {
-        renderer.MainWindow.ImGuiController.Update(Time.DeltaTime);
+        renderer.MainWindow.ImGuiController.Update(renderer.FrameTime);
         SetTheme();
         PushStyle();
     }
@@ -77,6 +78,17 @@ public class EditorLayer : Layer {
 
     protected override void OnDetach(Renderer renderer) {
         renderer.MainWindow.ImGuiController.Render();
+
+        ImGuiIOPtr io = ImGui.GetIO();
+        // Update and Render additional Platform Windows
+        ImGuiConfigFlags configFlags = io.ConfigFlags;
+        if ((configFlags & ImGuiConfigFlags.ViewportsEnable) == ImGuiConfigFlags.ViewportsEnable)
+        {
+            ImGui.UpdatePlatformWindows();
+            ImGui.RenderPlatformWindowsDefault();
+        }
+        
+        
         PopStyle();
     }
     

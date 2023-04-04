@@ -20,15 +20,15 @@ public partial class Trigger : Transform3D {
     }
     
     protected override void OnPrePhysicsUpdate() {
-        Body.SetTransform(new Vector2(WorldPosition.X, WorldPosition.Y), WorldRotation.Z);
+        Body.SetTransform(new Vector2(LocalPosition.X, LocalPosition.Y), LocalRotation.Z);
     }
     
     private void CreateBody() {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(WorldPosition.X, WorldPosition.Y),
-            angle = WorldRotation.Z,
+            position = new Vector2(LocalPosition.X, LocalPosition.Y),
+            angle = LocalRotation.Z,
             awake = true,
             allowSleep = false,
             gravityScale = 0

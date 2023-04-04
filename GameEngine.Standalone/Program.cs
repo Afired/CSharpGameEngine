@@ -1,26 +1,25 @@
 ﻿using GameEngine.Core;
-using GameEngine.Core.SceneManagement;
-using GameEngine.Core.Serialization;
 
 namespace GameEngine.Standalone;
 
-internal class Program {
+public static class Program {
     
     public static int Main(string[] args) {
         
-        SetConfig();
-        StandaloneApplication standaloneApplication = new();
-        standaloneApplication.Initialize();
-        Hierarchy.LoadScene(SceneSerializer.LoadJson("somePath"));
-        standaloneApplication.Run();
+        while(true) {
+            Configuration configuration = new Configuration() {
+                TargetFrameRate = -1,
+                WindowTitle = "GameEngine-Standalone",
+                DoUseVsync = true
+            };
+            
+            using(StandaloneApplication standaloneApplication = new(configuration)) {
+                standaloneApplication.InvokeFinishedInit();
+                standaloneApplication.Run();
+            }
+        }
         
         return 0;
-    }
-    
-    private static void SetConfig() {
-        Configuration.TargetFrameRate = -1;
-        Configuration.WindowTitle = "Example Game";
-        Configuration.DoUseVsync = false;
     }
     
 }

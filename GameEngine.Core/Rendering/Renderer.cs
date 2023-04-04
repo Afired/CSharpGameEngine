@@ -1,11 +1,15 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Reflection.Metadata;
 using GameEngine.Core.AssetManagement;
 using GameEngine.Core.Input;
 using GameEngine.Core.Layers;
 using GameEngine.Core.Nodes;
 using GameEngine.Core.Rendering.Window;
 using GameEngine.Core.SceneManagement;
+using GameEngine.Numerics;
+using ImGuiNET;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using Shader = GameEngine.Core.Rendering.Shaders.Shader;
@@ -21,26 +25,26 @@ public unsafe class Renderer : IDisposable {
     
     public event OnLoad? OnLoad;
     public bool IsInit { get; private set; }
-    public BaseCamera? CurrentCamera => _currentCameraRef.Target as BaseCamera;
+    public ICamera? CurrentCamera => _currentCameraRef.Target as ICamera;
     private readonly WeakReference _currentCameraRef = new(null);
     
     public GlfwWindow MainWindow { get; }
     
     // this frame buffer is the main frame buffer to render to, it is also used for any drawing of post processing when ping ponging (ping pong frame buffer 1)
-    public FrameBuffer MainFrameBuffer1 { get; private set; }
+//    public FrameBuffer MainFrameBuffer1 { get; private set; }
     // this frame buffer is used for post processing (ping pong frame buffer 2)
-    public FrameBuffer MainFrameBuffer2 { get; private set; }
+//    public FrameBuffer MainFrameBuffer2 { get; private set; }
     public FrameBuffer FinalFrameBuffer { get; private set; }
 
-    public FrameBuffer ActiveFrameBuffer { get; private set; }
-    public FrameBuffer InactiveFrameBuffer { get; private set; }
+//    public FrameBuffer ActiveFrameBuffer { get; private set; }
+//    public FrameBuffer InactiveFrameBuffer { get; private set; }
 
-    internal void SwapActiveFrameBuffer() {
-        // Swap via deconstruction
-        (ActiveFrameBuffer, InactiveFrameBuffer) = (InactiveFrameBuffer, ActiveFrameBuffer);
-        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.ID);
-        MainWindow.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-    }
+//    internal void SwapActiveFrameBuffer() {
+//        // Swap via deconstruction
+//        (ActiveFrameBuffer, InactiveFrameBuffer) = (InactiveFrameBuffer, ActiveFrameBuffer);
+//        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, ActiveFrameBuffer.Id);
+//        MainWindow.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+//    }
     
     private uint _fullscreenVao;
     
@@ -50,11 +54,11 @@ public unsafe class Renderer : IDisposable {
     
     public Renderer(Application applicationCtx) {
         MainWindow = new GlfwWindow();
-        MainFrameBuffer1 = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer1
-        MainFrameBuffer2 = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer2
-        FinalFrameBuffer = new FrameBuffer(this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, true); // final framebuffer
-        ActiveFrameBuffer = MainFrameBuffer1;
-        InactiveFrameBuffer = MainFrameBuffer2;
+//        MainFrameBuffer1 = new FrameBuffer(MainWindow.Gl, this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer1
+//        MainFrameBuffer2 = new FrameBuffer(MainWindow.Gl, this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, false); // game frame buffer2
+        FinalFrameBuffer = new FrameBuffer(MainWindow.Gl, this, applicationCtx.Config.WindowWidth, applicationCtx.Config.WindowHeight, true); // final framebuffer
+//        ActiveFrameBuffer = MainFrameBuffer1;
+//        InactiveFrameBuffer = MainFrameBuffer2;
         _fullscreenVao = GetFullScreenRenderQuadVao();
         LayerStack = new LayerStack();
         //LoadResources();
@@ -63,6 +67,9 @@ public unsafe class Renderer : IDisposable {
         
         InputHandler = new InputHandler();
         MainWindow.Glfw.SetKeyCallback(MainWindow.Handle, InputHandler.OnKeyAction);
+        MainWindow.Glfw.SetScrollCallback(MainWindow.Handle, (handle, offsetX, offsetY) => {
+            Input.Input.ScrollDelta += new Vec2<double>(offsetX, offsetY);
+        });
         IsInit = true;
         OnLoad?.Invoke();
         WindowHandle = MainWindow.Handle;
@@ -74,8 +81,19 @@ public unsafe class Renderer : IDisposable {
     
     private readonly Stopwatch _stopwatch = new();
     public float FrameTime { get; private set; }
+    public static Matrix<float> ViewMatrix { get; set; }
+    public static Matrix<float> ProjectionMatrix { get; set; }
     
     public void Render() {
+        ImGuiMouseCursor imGuiMouseCursor = ImGui.GetMouseCursor();
+
+        if(imGuiMouseCursor == ImGuiMouseCursor.Arrow) {
+            MainWindow.Glfw.SetInputMode(MainWindow.Handle, CursorStateAttribute.Cursor, CursorModeValue.CursorNormal);
+//            MainWindow.Glfw.SetCursor(MainWindow.Handle, Glfw.CreateCursor());
+        } else {
+            MainWindow.Glfw.SetInputMode(MainWindow.Handle, CursorStateAttribute.Cursor, CursorModeValue.CursorHidden);
+//            MainWindow.Glfw.SetCursor(MainWindow.Handle, Glfw.CreateCursor());
+        }
         
         _stopwatch.Stop();
         FrameTime = _stopwatch.ElapsedMilliseconds * 0.001f;
@@ -83,27 +101,30 @@ public unsafe class Renderer : IDisposable {
         _stopwatch.Start();
         
         // bind default framebuffer to render to
-        MainWindow.Gl.BindFramebuffer(FramebufferTarget.Framebuffer, MainFrameBuffer1.ID);
-        MainWindow.Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
-        MainWindow.Gl.Enable(EnableCap.DepthTest); // reenable depth
+//        FinalFrameBuffer.Bind();
+//        MainWindow.Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+//        MainWindow.Gl.Enable(EnableCap.DepthTest); // reenable depth
         
-        // render and draw frame
-        if(CurrentCamera is not null) {
-            
-            //draw background
-            MainWindow.Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
-            
-//            foreach(Layer layer in LayerStack.GetNormalLayers()) {
-//                layer.Draw();
-//            }
-            Hierarchy.Draw();
-        }
+//        // render and draw frame
+//        if(CurrentCamera is not null) {
+//            
+//            //draw background
+//            MainWindow.Gl.ClearColor(CurrentCamera.BackgroundColor.R, CurrentCamera.BackgroundColor.G, CurrentCamera.BackgroundColor.B, CurrentCamera.BackgroundColor.A);
+//            
+////            foreach(Layer layer in LayerStack.GetNormalLayers()) {
+////                layer.Draw();
+////            }
+//            MainWindow.Gl.Viewport(new Size((int) ActiveFrameBuffer.Width, (int) ActiveFrameBuffer.Height));
+//            Hierarchy.Draw();
+//        }
         
         //todo: post processing stack
-        // DoPostProcessing();
+//        DoPostProcessing();
         
         //todo: implement in game GUI and Editor GUI as two separate things, so that they dont interfere
         FinalFrameBuffer.Bind();
+        MainWindow.Gl.Viewport(new Size((int) FinalFrameBuffer.Width, (int) FinalFrameBuffer.Height));
+        MainWindow.Gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
         foreach(Layer layer in LayerStack.GetOverlayLayers()) {
             layer.Attach(this);
             layer.Draw(this);
@@ -112,6 +133,7 @@ public unsafe class Renderer : IDisposable {
         
         DrawToBackBuffer();
         MainWindow.Glfw.SwapBuffers(WindowHandle);
+        Input.Input.ScrollDelta = Vec2<double>.Zero;
     }
     
     private void DrawToBackBuffer() {
@@ -126,16 +148,17 @@ public unsafe class Renderer : IDisposable {
         MainWindow.Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
     }
     
-    private void DoPostProcessing() {
-        SwapActiveFrameBuffer();
-        // use screen shader
-        AssetDatabase.Get<Shader>(ScreenShader).Use();
-        AssetDatabase.Get<Shader>(ScreenShader).SetFloat("time", Time.TotalTimeElapsed);
-        MainWindow.Gl.BindVertexArray(_fullscreenVao);
-        MainWindow.Gl.Disable(EnableCap.DepthTest);
-        MainWindow.Gl.BindTexture(TextureTarget.Texture2D, InactiveFrameBuffer.ColorAttachment);
-        MainWindow.Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
-    }
+//    private void DoPostProcessing() {
+//        SwapActiveFrameBuffer();
+//        // use screen shader
+//        Guid postProcessingScreenShader = new Guid("64d26782-4348-439a-b5bb-26f6aea4925a");
+//        AssetDatabase.Get<Shader>(postProcessingScreenShader)?.Use();
+//        AssetDatabase.Get<Shader>(postProcessingScreenShader)?.SetFloat("time", Time.TotalTimeElapsed);
+//        MainWindow.Gl.BindVertexArray(_fullscreenVao);
+//        MainWindow.Gl.Disable(EnableCap.DepthTest);
+//        MainWindow.Gl.BindTexture(TextureTarget.Texture2D, InactiveFrameBuffer.ColorAttachment);
+//        MainWindow.Gl.DrawArrays(PrimitiveType.Triangles, 0, 6);
+//    }
     
     private uint GetFullScreenRenderQuadVao() {
         
@@ -156,7 +179,7 @@ public unsafe class Renderer : IDisposable {
         MainWindow.Gl.BindBuffer(GLEnum.ArrayBuffer, vbo);
         
         fixed(float* v = &vertexData[0]) {
-            MainWindow.Gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
+            MainWindow.Gl.BufferData(BufferTargetARB.ArrayBuffer,  (nuint) (sizeof(float) * vertexData.Length), v, BufferUsageARB.StaticDraw);
         }
         
         // xyz
@@ -173,13 +196,13 @@ public unsafe class Renderer : IDisposable {
         return vao;
     }
     
-    public void SetActiveCamera(BaseCamera? baseCamera) {
+    public void SetActiveCamera(ICamera? baseCamera) {
         _currentCameraRef.Target = baseCamera;
     }
     
     public void Dispose() {
-        MainFrameBuffer1.Dispose();
-        MainFrameBuffer2.Dispose();
+//        MainFrameBuffer1.Dispose();
+//        MainFrameBuffer2.Dispose();
         FinalFrameBuffer.Dispose();
         MainWindow.Dispose();
     }

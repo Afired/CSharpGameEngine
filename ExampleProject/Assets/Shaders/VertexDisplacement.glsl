@@ -8,7 +8,9 @@ out vec2 vTexCoord;
 out vec3 vNormal;
 
 uniform mat4 projection;
+uniform mat4 view;
 uniform mat4 model;
+
 uniform float time;
 
 vec3 hueShift(vec3 color, float hueAdjust){
@@ -45,7 +47,7 @@ void main()
     //vec3 offset = vec3(hueShift(vec3(1.0, 0.0, 0.0), sin(time * 5.0)));
     vec3 offset = vec3(0.0, sin(time), 0.0);
 
-    gl_Position = projection * model * vec4(aPosition.xyz + offset, 1.0);
+    gl_Position = projection * view * model * vec4(aPosition.xyz + offset, 1.0);
 }
 
 

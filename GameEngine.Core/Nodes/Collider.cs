@@ -1,17 +1,14 @@
-using System;
 using Box2D.NetStandard.Collision.Shapes;
 using Box2D.NetStandard.Dynamics.Bodies;
 using Box2D.NetStandard.Dynamics.Fixtures;
-using GameEngine.Core.Numerics;
-using GameEngine.Core.Physics;
 using GameEngine.Core.Serialization;
-using Vector2 = System.Numerics.Vector2;
+using GameEngine.Numerics;
 
 namespace GameEngine.Core.Nodes; 
 
 public partial class Collider : Transform3D {
     
-    [Serialized] private Numerics.Vector2 Size { get; init; } = Numerics.Vector2.One;
+    [Serialized] private Vec2<float> Size { get; init; } = Vec2<float>.One;
     [Serialized] protected BodyType BodyType = BodyType.Dynamic;
     [Serialized] public Shape? Shape { get; private set; }
     [Serialized] protected float Density = 1.0f;
@@ -27,8 +24,8 @@ public partial class Collider : Transform3D {
         //dynamic object
         BodyDef dynamicBodyDef = new BodyDef() {
             type = BodyType,
-            position = new Vector2(WorldPosition.X, WorldPosition.Y),
-            angle = WorldRotation.Z,
+            position = new System.Numerics.Vector2(LocalPosition.X, LocalPosition.Y),
+            angle = LocalPosition.Z,
         };
         
         if(Shape is null) {
@@ -52,7 +49,7 @@ public partial class Collider : Transform3D {
     }
     
     protected override void OnPrePhysicsUpdate() {
-        Body.SetTransform(new Vector2(LocalPosition.X, LocalPosition.Y), WorldRotation.Z);
+        Body.SetTransform(new System.Numerics.Vector2(LocalPosition.X, LocalPosition.Y), LocalPosition.Z);
     }
     
     // currently disabled because switched to quaternion representation of rotation

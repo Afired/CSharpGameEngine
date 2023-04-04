@@ -15,7 +15,7 @@ public class Node : IAsset {
     [Serialized(Editor.Hidden)] public Node? ParentNode { get; internal set; }
     [Serialized(Editor.Hidden)] private readonly List<Node> _childNodes = null!;
     internal bool HasBeenAwoken { get; private set; } = false;
-    protected virtual bool AwakeThisNodeBeforeItsChildren => false;
+    protected virtual bool AwakeThisBeforeItsChildren => false;
     
     public Node GetRootNode() {
         Node currentNode = this;
@@ -28,7 +28,7 @@ public class Node : IAsset {
     }
     
     internal void Awake() {
-        if(!AwakeThisNodeBeforeItsChildren)
+        if(!AwakeThisBeforeItsChildren)
             foreach(Node childNodes in ChildNodes)
                 childNodes.Awake();
         if(!HasBeenAwoken) {
@@ -43,7 +43,7 @@ public class Node : IAsset {
 #endif
             HasBeenAwoken = true;
         }
-        if(AwakeThisNodeBeforeItsChildren)
+        if(AwakeThisBeforeItsChildren)
             foreach(Node childNodes in ChildNodes)
                 childNodes.Awake();
     }

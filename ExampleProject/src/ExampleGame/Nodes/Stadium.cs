@@ -1,5 +1,5 @@
 ﻿using GameEngine.Core.Nodes;
-using GameEngine.Core.Numerics;
+using GameEngine.Numerics;
 
 namespace ExampleGame.Nodes; 
 
@@ -14,8 +14,8 @@ public partial class Stadium : Scene {
     }
     
     private void Start() {
-        Ball.LocalPosition = Vector3.Zero;
-        Ball.Velocity = new Vector2(5, 5);
+        Ball.LocalPosition = Vec3<float>.Zero;
+        Ball.Velocity = new Vec2<float>(5, 5);
     }
     
 }

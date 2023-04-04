@@ -1,12 +1,13 @@
 using System.Numerics;
 using Box2D.NetStandard.Dynamics.Bodies;
 using GameEngine.Core.Serialization;
+using GameEngine.Numerics;
 
 namespace GameEngine.Core.Nodes; 
 
 public partial class RigidBody : Collider {
     
-    [Serialized] public GameEngine.Core.Numerics.Vector2 Velocity { get; set; }
+    [Serialized] public Vec2<float> Velocity { get; set; }
     [Serialized] public float Gravity { get; set; } = 0f;
     protected override bool TransformIsIndependent => true;
     
@@ -23,8 +24,7 @@ public partial class RigidBody : Collider {
     
     protected override void OnPhysicsUpdate() {
         base.OnPhysicsUpdate();
-        Vector2 vec2 = Body.GetLinearVelocity();
-        Velocity = new Numerics.Vector2(vec2.X, vec2.Y);
+        Velocity = Body.GetLinearVelocity();
         Gravity = Body.GetGravityScale();
     }
     

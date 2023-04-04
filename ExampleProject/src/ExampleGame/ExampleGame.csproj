@@ -26,12 +26,20 @@
     </ItemGroup>
     
     <ItemGroup>
+        <Reference Include="GameEngine.SerializationAttributes">
+            <HintPath>$(GameEngineSerializationAttributesDLL)</HintPath>
+            <Private>false</Private>
+        </Reference>
         <Reference Include="GameEngine.Core">
             <HintPath>$(GameEngineCoreDLL)</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="GameEngine.Numerics">
+            <HintPath>$(GameEngineNumericsDLL)</HintPath>
+            <Private>false</Private>
+        </Reference>
     </ItemGroup>
-    
+        
     <ItemGroup>
         <Analyzer Include="$(GameEngineSourceGeneratorDLL)" />
     </ItemGroup>

@@ -26,6 +26,7 @@ public partial class RigidBody : Collider {
         base.OnPhysicsUpdate();
         Velocity = Body.GetLinearVelocity();
         Gravity = Body.GetGravityScale();
+        LocalPosition = new Vec3<float>(Body.Position.X, Body.Position.Y, LocalPosition.Z);
     }
     
 }
